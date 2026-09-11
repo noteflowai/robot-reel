@@ -148,3 +148,32 @@ test('driving replay distinguishes contact outcomes and displays linear units',a
     assert.equal(await page.locator('#unit').textContent(),'MEASURED / M');
   }finally{await page.close();}
 });
+test('comparison seeks both videos, steps frames, reads channels and shares time',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/compare/microduck/#t=5');
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>Math.abs(v.currentTime-5)<.001));
+    assert.match(await page.locator('#status').textContent(),/Frame 150/);
+    await page.locator('#next').click();
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>Math.abs(v.currentTime-151/30)<.001));
+    await page.locator('#joint').selectOption('3');
+    const expected=await page.evaluate(()=>{const d=JSON.parse(document.querySelector('#comparison-data').textContent);return d.traces[1].frames[151].qpos[3].toFixed(3);});
+    assert.ok((await page.locator('#reading-1').textContent()).includes(expected));
+    await page.locator('#share').click();assert.ok(page.url().endsWith('#t=5.033'));
+    await page.locator('#play').click();await page.waitForFunction(()=>document.querySelector('#left').currentTime>5.3);await page.locator('#play').click();
+    const times=await page.locator('video').evaluateAll(v=>v.map(x=>x.currentTime));
+    assert.ok(times[0]>5.1);assert.ok(Math.abs(times[0]-times[1])<.001);
+    await page.setViewportSize({width:390,height:844});
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  }finally{await page.close();}
+});
+test('braking comparison exposes contact evidence and runs from a local file',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(pathToFileURL(resolve('docs/compare/braking/index.html')).href+'#t=4');
+    await page.waitForFunction(()=>document.querySelector('#left').currentTime===4);
+    assert.match(await page.locator('#metrics-0').textContent(),/None recorded/);
+    assert.match(await page.locator('#metrics-1').textContent(),/Recorded/);
+    assert.equal(await page.locator('#joint option').count(),3);
+  }finally{await page.close();}
+});

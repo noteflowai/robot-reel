@@ -1,0 +1,7024 @@
+{
+  "schema": 1,
+  "family": "braking",
+  "fps": 30,
+  "duration": 6.0,
+  "labels": [
+    "Early braking / 14 m trigger",
+    "Late braking / 2 m trigger"
+  ],
+  "metrics": [
+    [
+      [
+        "Brake trigger",
+        "14.00 m"
+      ],
+      [
+        "Contact in trial",
+        "None recorded"
+      ],
+      [
+        "Minimum gap",
+        "8.661 m"
+      ],
+      [
+        "Final gap",
+        "8.661 m"
+      ]
+    ],
+    [
+      [
+        "Brake trigger",
+        "2.00 m"
+      ],
+      [
+        "Contact in trial",
+        "Recorded"
+      ],
+      [
+        "Minimum gap",
+        "-0.031 m"
+      ],
+      [
+        "Final gap",
+        "0.023 m"
+      ]
+    ]
+  ],
+  "traces": [
+    {
+      "robot": "braking_early",
+      "kind": "braking",
+      "fps": 30,
+      "timestep": 0.002,
+      "display_name": "EARLY BRAKE",
+      "eyebrow": "AUTOMOTIVE / CONTROL TEST",
+      "description": "Scripted longitudinal controller",
+      "disclaimer": "1D surrogate / no driving AI",
+      "joints": [
+        "speed",
+        "gap",
+        "position"
+      ],
+      "display_joints": [
+        "speed",
+        "gap",
+        "position"
+      ],
+      "units": [
+        "m/s",
+        "m",
+        "m"
+      ],
+      "limits": [
+        [
+          0,
+          8
+        ],
+        [
+          -1,
+          29
+        ],
+        [
+          0,
+          31
+        ]
+      ],
+      "home": [
+        8,
+        28.5,
+        0
+      ],
+      "frames": [
+        {
+          "frame": 0,
+          "sim_time": 0.034000000000000016,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            28.228,
+            0.27200000000000013
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 1,
+          "sim_time": 0.06600000000000004,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            27.972,
+            0.5280000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 2,
+          "sim_time": 0.10000000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            27.7,
+            0.8000000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 3,
+          "sim_time": 0.1340000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            27.428,
+            1.0720000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 4,
+          "sim_time": 0.16600000000000012,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            27.172,
+            1.328000000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 5,
+          "sim_time": 0.20000000000000015,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            26.9,
+            1.6000000000000012
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 6,
+          "sim_time": 0.23400000000000018,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            26.628,
+            1.8720000000000014
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 7,
+          "sim_time": 0.2660000000000002,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            26.372,
+            2.1280000000000014
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 8,
+          "sim_time": 0.3000000000000002,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            26.099999999999998,
+            2.4000000000000017
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 9,
+          "sim_time": 0.33400000000000024,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            25.828,
+            2.672000000000002
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 10,
+          "sim_time": 0.36600000000000027,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            25.572,
+            2.928000000000002
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 11,
+          "sim_time": 0.4000000000000003,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            25.299999999999997,
+            3.2000000000000024
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 12,
+          "sim_time": 0.43400000000000033,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            25.028,
+            3.4720000000000026
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 13,
+          "sim_time": 0.46600000000000036,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            24.772,
+            3.728000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 14,
+          "sim_time": 0.5000000000000003,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            24.499999999999996,
+            4.000000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 15,
+          "sim_time": 0.5340000000000004,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            24.227999999999998,
+            4.272000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 16,
+          "sim_time": 0.5660000000000004,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            23.971999999999998,
+            4.528000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 17,
+          "sim_time": 0.6000000000000004,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            23.699999999999996,
+            4.800000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 18,
+          "sim_time": 0.6340000000000005,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            23.427999999999997,
+            5.072000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 19,
+          "sim_time": 0.6660000000000005,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            23.171999999999997,
+            5.328000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 20,
+          "sim_time": 0.7000000000000005,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            22.899999999999995,
+            5.600000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 21,
+          "sim_time": 0.7340000000000005,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            22.627999999999997,
+            5.872000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 22,
+          "sim_time": 0.7660000000000006,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            22.371999999999996,
+            6.1280000000000046
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 23,
+          "sim_time": 0.8000000000000006,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            22.099999999999994,
+            6.400000000000005
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 24,
+          "sim_time": 0.8340000000000006,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            21.827999999999996,
+            6.672000000000005
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 25,
+          "sim_time": 0.8660000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            21.571999999999996,
+            6.928000000000005
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 26,
+          "sim_time": 0.9000000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            21.299999999999994,
+            7.2000000000000055
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 27,
+          "sim_time": 0.9340000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            21.027999999999995,
+            7.472000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 28,
+          "sim_time": 0.9660000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            20.771999999999995,
+            7.728000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 29,
+          "sim_time": 1.0000000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            20.499999999999993,
+            8.000000000000005
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 30,
+          "sim_time": 1.0340000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            20.227999999999994,
+            8.272000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 31,
+          "sim_time": 1.0660000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            19.971999999999994,
+            8.528000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 32,
+          "sim_time": 1.1000000000000008,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            19.699999999999996,
+            8.800000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 33,
+          "sim_time": 1.1340000000000008,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            19.427999999999994,
+            9.072000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 34,
+          "sim_time": 1.1660000000000008,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            19.171999999999993,
+            9.328000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 35,
+          "sim_time": 1.2000000000000008,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            18.89999999999999,
+            9.600000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 36,
+          "sim_time": 1.2340000000000009,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            18.627999999999993,
+            9.872000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 37,
+          "sim_time": 1.266000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            18.371999999999993,
+            10.128000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 38,
+          "sim_time": 1.300000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            18.099999999999994,
+            10.400000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 39,
+          "sim_time": 1.334000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            17.827999999999992,
+            10.672000000000008
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 40,
+          "sim_time": 1.366000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            17.571999999999992,
+            10.928000000000008
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 41,
+          "sim_time": 1.400000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            17.29999999999999,
+            11.200000000000008
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 42,
+          "sim_time": 1.434000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            17.02799999999999,
+            11.472000000000008
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 43,
+          "sim_time": 1.466000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            16.77199999999999,
+            11.728000000000009
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 44,
+          "sim_time": 1.500000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            16.499999999999993,
+            12.000000000000009
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 45,
+          "sim_time": 1.5340000000000011,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            16.22799999999999,
+            12.27200000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 46,
+          "sim_time": 1.5660000000000012,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            15.97199999999999,
+            12.52800000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 47,
+          "sim_time": 1.6000000000000012,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            15.69999999999999,
+            12.80000000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 48,
+          "sim_time": 1.6340000000000012,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            15.42799999999999,
+            13.07200000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 49,
+          "sim_time": 1.6660000000000013,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            15.17199999999999,
+            13.32800000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 50,
+          "sim_time": 1.7000000000000013,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            14.89999999999999,
+            13.60000000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 51,
+          "sim_time": 1.7340000000000013,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            14.62799999999999,
+            13.87200000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 52,
+          "sim_time": 1.7660000000000013,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            14.37199999999999,
+            14.12800000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 53,
+          "sim_time": 1.8000000000000014,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            14.099999999999989,
+            14.400000000000011
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 54,
+          "sim_time": 1.8340000000000014,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.880000000000004,
+            13.829319999999989,
+            14.670680000000011
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 55,
+          "sim_time": 1.8660000000000014,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.688000000000011,
+            13.580423999999988,
+            14.919576000000012
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 56,
+          "sim_time": 1.9000000000000015,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.484000000000019,
+            13.322703999999987,
+            15.177296000000013
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 57,
+          "sim_time": 1.9340000000000015,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.280000000000026,
+            13.071919999999986,
+            15.428080000000014
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 58,
+          "sim_time": 1.9660000000000015,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.088000000000033,
+            12.842223999999984,
+            15.657776000000016
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 59,
+          "sim_time": 2.0000000000000013,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.88400000000004,
+            12.604903999999983,
+            15.895096000000017
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 60,
+          "sim_time": 2.0339999999999976,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.680000000000048,
+            12.374519999999979,
+            16.12548000000002
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 61,
+          "sim_time": 2.065999999999994,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.488000000000055,
+            12.164023999999973,
+            16.335976000000027
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 62,
+          "sim_time": 2.0999999999999903,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.284000000000062,
+            11.947103999999971,
+            16.55289600000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 63,
+          "sim_time": 2.1339999999999866,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.080000000000069,
+            11.737119999999969,
+            16.76288000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 64,
+          "sim_time": 2.165999999999983,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.888000000000076,
+            11.545823999999968,
+            16.954176000000032
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 65,
+          "sim_time": 2.1999999999999793,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.684000000000084,
+            11.349303999999965,
+            17.150696000000035
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 66,
+          "sim_time": 2.2339999999999756,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.480000000000091,
+            11.159719999999961,
+            17.34028000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 67,
+          "sim_time": 2.265999999999972,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.288000000000098,
+            10.987623999999958,
+            17.512376000000042
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 68,
+          "sim_time": 2.2999999999999683,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.084000000000105,
+            10.811503999999953,
+            17.688496000000047
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 69,
+          "sim_time": 2.3339999999999645,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.880000000000113,
+            10.642319999999948,
+            17.85768000000005
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 70,
+          "sim_time": 2.365999999999961,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.68800000000012,
+            10.489423999999943,
+            18.010576000000057
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 71,
+          "sim_time": 2.3999999999999573,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.484000000000127,
+            10.333703999999937,
+            18.166296000000063
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 72,
+          "sim_time": 2.4339999999999535,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.280000000000134,
+            10.18491999999993,
+            18.31508000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 73,
+          "sim_time": 2.46599999999995,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.088000000000141,
+            10.051223999999923,
+            18.448776000000077
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 74,
+          "sim_time": 2.4999999999999463,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.8840000000001442,
+            9.915903999999916,
+            18.584096000000084
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 75,
+          "sim_time": 2.5339999999999425,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.680000000000144,
+            9.787519999999908,
+            18.71248000000009
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 76,
+          "sim_time": 2.565999999999939,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.488000000000144,
+            9.673023999999906,
+            18.826976000000094
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 77,
+          "sim_time": 2.5999999999999353,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.2840000000001437,
+            9.5581039999999,
+            18.9418960000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 78,
+          "sim_time": 2.6339999999999315,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.0800000000001435,
+            9.450119999999895,
+            19.049880000000105
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 79,
+          "sim_time": 2.665999999999928,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.8880000000001433,
+            9.354823999999894,
+            19.145176000000106
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 80,
+          "sim_time": 2.6999999999999242,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.684000000000143,
+            9.260303999999891,
+            19.23969600000011
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 81,
+          "sim_time": 2.7339999999999205,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.480000000000143,
+            9.172719999999888,
+            19.327280000000112
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 82,
+          "sim_time": 2.765999999999917,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.288000000000143,
+            9.096623999999885,
+            19.403376000000115
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 83,
+          "sim_time": 2.7999999999999132,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.0840000000001426,
+            9.02250399999988,
+            19.47749600000012
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 84,
+          "sim_time": 2.8339999999999095,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.8800000000001424,
+            8.955319999999876,
+            19.544680000000124
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 85,
+          "sim_time": 2.865999999999906,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.6880000000001423,
+            8.89842399999987,
+            19.60157600000013
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 86,
+          "sim_time": 2.899999999999902,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.484000000000142,
+            8.844703999999865,
+            19.655296000000135
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 87,
+          "sim_time": 2.9339999999998985,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.280000000000142,
+            8.79791999999986,
+            19.70208000000014
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 88,
+          "sim_time": 2.965999999999895,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.0880000000001417,
+            8.760223999999852,
+            19.73977600000015
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 89,
+          "sim_time": 2.999999999999891,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.8840000000001416,
+            8.726903999999845,
+            19.773096000000155
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 90,
+          "sim_time": 3.0339999999998875,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.6800000000001414,
+            8.700519999999841,
+            19.79948000000016
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 91,
+          "sim_time": 3.065999999999884,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.4880000000001412,
+            8.682023999999839,
+            19.81797600000016
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 92,
+          "sim_time": 3.09999999999988,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.28400000000014103,
+            8.669103999999834,
+            19.830896000000166
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 93,
+          "sim_time": 3.1339999999998764,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.0800000000001409,
+            8.663119999999829,
+            19.83688000000017
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 94,
+          "sim_time": 3.165999999999873,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.02588086014969226,
+            8.661914281287004,
+            19.838085718712996
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -269.59229322596104
+        },
+        {
+          "frame": 95,
+          "sim_time": 3.199999999999869,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.012929736302192458,
+            8.661292627342323,
+            19.838707372657677
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -134.6847531478381
+        },
+        {
+          "frame": 96,
+          "sim_time": 3.2339999999998654,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.006459525683354128,
+            8.66098205723262,
+            19.83901794276738
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -67.28672586827217
+        },
+        {
+          "frame": 97,
+          "sim_time": 3.265999999999862,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.0033615560575756824,
+            8.660833354690588,
+            19.83916664530941
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -35.01620893308003
+        },
+        {
+          "frame": 98,
+          "sim_time": 3.299999999999858,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.0016793890596409754,
+            8.660752610674688,
+            19.839247389325312
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -17.493636037926827
+        },
+        {
+          "frame": 99,
+          "sim_time": 3.3339999999998544,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.0008390006191584393,
+            8.660712272029542,
+            19.839287727970458
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -8.739589782900408
+        },
+        {
+          "frame": 100,
+          "sim_time": 3.365999999999851,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.0004366183760070332,
+            8.660692957681874,
+            19.839307042318126
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -4.5481080834065954
+        },
+        {
+          "frame": 101,
+          "sim_time": 3.399999999999847,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.0002181287806436983,
+            8.660682470181293,
+            19.839317529818707
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.272174798371857
+        },
+        {
+          "frame": 102,
+          "sim_time": 3.4339999999998434,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            0.0001089742611848756,
+            8.660677230764364,
+            19.839322769235636
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.1351485540091208
+        },
+        {
+          "frame": 103,
+          "sim_time": 3.46599999999984,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.6710524233977345e-05,
+            8.660674722105,
+            19.839325277895
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.590734627437264
+        },
+        {
+          "frame": 104,
+          "sim_time": 3.499999999999836,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.8331829763901452e-05,
+            8.660673359927667,
+            19.839326640072333
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.2951232267073068
+        },
+        {
+          "frame": 105,
+          "sim_time": 3.5339999999998324,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.4154208387475463e-05,
+            8.660672679401841,
+            19.83932732059816
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.1474396707028694
+        },
+        {
+          "frame": 106,
+          "sim_time": 3.565999999999829,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.365891441180949e-06,
+            8.660672353562624,
+            19.839327646437376
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.07672803584563488
+        },
+        {
+          "frame": 107,
+          "sim_time": 3.599999999999825,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.679902190815654e-06,
+            8.660672176635146,
+            19.839327823364854
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.03833231448766306
+        },
+        {
+          "frame": 108,
+          "sim_time": 3.6339999999998214,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.8384305880835463e-06,
+            8.660672088244507,
+            19.839327911755493
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.019150318625870272
+        },
+        {
+          "frame": 109,
+          "sim_time": 3.665999999999818,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            9.567246548349809e-07,
+            8.660672045922624,
+            19.839327954077376
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.009965881821197717
+        },
+        {
+          "frame": 110,
+          "sim_time": 3.699999999999814,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.779670161375798e-07,
+            8.660672022942254,
+            19.839327977057746
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.004978823084766455
+        },
+        {
+          "frame": 111,
+          "sim_time": 3.7339999999998104,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.387860157684195e-07,
+            8.66067201146156,
+            19.83932798853844
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.002487354330921036
+        },
+        {
+          "frame": 112,
+          "sim_time": 3.765999999999807,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.2426494097534e-07,
+            8.660672005964546,
+            19.839327994035454
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.001294426468493125
+        },
+        {
+          "frame": 113,
+          "sim_time": 3.799999999999803,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.208112516839059e-08,
+            8.66067200297972,
+            19.83932799702028
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.0006466783871707353
+        },
+        {
+          "frame": 114,
+          "sim_time": 3.8339999999997993,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.1014911140047195e-08,
+            8.660672001488539,
+            19.83932799851146
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.0003230719910421583
+        },
+        {
+          "frame": 115,
+          "sim_time": 3.865999999999796,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.6140250465551325e-08,
+            8.660672000774557,
+            19.839327999225443
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -0.00016812760901615964
+        },
+        {
+          "frame": 116,
+          "sim_time": 3.899999999999792,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.063456205237415e-09,
+            8.660672000386874,
+            19.839327999613126
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -8.399433547122308e-05
+        },
+        {
+          "frame": 117,
+          "sim_time": 3.9339999999997883,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.028396344440546e-09,
+            8.660672000193195,
+            19.839327999806805
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -4.196246192125569e-05
+        },
+        {
+          "frame": 118,
+          "sim_time": 3.965999999999785,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.096389239362588e-09,
+            8.660672000100462,
+            19.839327999899538
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.1837387910026953e-05
+        },
+        {
+          "frame": 119,
+          "sim_time": 3.999999999999781,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.0473284077474684e-09,
+            8.66067200005011,
+            19.83932799994989
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.090967091403613e-05
+        },
+        {
+          "frame": 120,
+          "sim_time": 4.033999999999778,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.232314558189401e-10,
+            8.660672000024949,
+            19.83932799997505
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -5.450327664780626e-06
+        },
+        {
+          "frame": 121,
+          "sim_time": 4.065999999999774,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.7229117988567266e-10,
+            8.660672000012909,
+            19.83932799998709
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.8363664571424233e-06
+        },
+        {
+          "frame": 122,
+          "sim_time": 4.0999999999997705,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.360330813184531e-10,
+            8.660672000006365,
+            19.839327999993635
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.4170112637338863e-06
+        },
+        {
+          "frame": 123,
+          "sim_time": 4.133999999999767,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.796033283473449e-11,
+            8.660672000003093,
+            19.839327999996907
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -7.07920133695151e-07
+        },
+        {
+          "frame": 124,
+          "sim_time": 4.165999999999763,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.5366755968502744e-11,
+            8.66067200000153,
+            19.83932799999847
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3.684037080052369e-07
+        },
+        {
+          "frame": 125,
+          "sim_time": 4.1999999999997595,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.7668764712295287e-11,
+            8.66067200000068,
+            19.83932799999932
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.8404963241974257e-07
+        },
+        {
+          "frame": 126,
+          "sim_time": 4.233999999999756,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.827081758261347e-12,
+            8.660672000000257,
+            19.839327999999743
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -9.194876831522236e-08
+        },
+        {
+          "frame": 127,
+          "sim_time": 4.265999999999752,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.593639163269276e-12,
+            8.660672000000051,
+            19.83932799999995
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -4.785040795072162e-08
+        },
+        {
+          "frame": 128,
+          "sim_time": 4.2999999999997485,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.2949215252106683e-12,
+            8.660671999999945,
+            19.839328000000055
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.3905432554277794e-08
+        },
+        {
+          "frame": 129,
+          "sim_time": 4.333999999999745,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.1465125186556872e-12,
+            8.660671999999884,
+            19.839328000000116
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.1942838735996741e-08
+        },
+        {
+          "frame": 130,
+          "sim_time": 4.365999999999741,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.966484678751434e-13,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -6.215088207032744e-09
+        },
+        {
+          "frame": 131,
+          "sim_time": 4.3999999999997375,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.980777033727948e-13,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3.1049760767999456e-09
+        },
+        {
+          "frame": 132,
+          "sim_time": 4.433999999999734,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.4891568826854504e-13,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.5512050861306775e-09
+        },
+        {
+          "frame": 133,
+          "sim_time": 4.46599999999973,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.74961597036716e-14,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -8.072516635799125e-10
+        },
+        {
+          "frame": 134,
+          "sim_time": 4.499999999999726,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.8716059033802306e-14,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -4.032922816021074e-10
+        },
+        {
+          "frame": 135,
+          "sim_time": 4.533999999999723,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.9342032338640505e-14,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.0147950352750527e-10
+        },
+        {
+          "frame": 136,
+          "sim_time": 4.565999999999719,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.0065650198022012e-14,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.0485052289606263e-10
+        },
+        {
+          "frame": 137,
+          "sim_time": 4.599999999999715,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.028666049651503e-15,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -5.238193801720316e-11
+        },
+        {
+          "frame": 138,
+          "sim_time": 4.633999999999712,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.512255218633255e-15,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.6169325194096405e-11
+        },
+        {
+          "frame": 139,
+          "sim_time": 4.665999999999708,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.3073849632853547e-15,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.3618593367555777e-11
+        },
+        {
+          "frame": 140,
+          "sim_time": 4.699999999999704,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.531522802163209e-16,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -6.803669585586676e-12
+        },
+        {
+          "frame": 141,
+          "sim_time": 4.733999999999701,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.2630626260206293e-16,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3.399023568771489e-12
+        },
+        {
+          "frame": 142,
+          "sim_time": 4.765999999999697,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.698107333950996e-16,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.768861806198954e-12
+        },
+        {
+          "frame": 143,
+          "sim_time": 4.799999999999693,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.483520220662574e-17,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -8.837000229856848e-13
+        },
+        {
+          "frame": 144,
+          "sim_time": 4.83399999999969,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.238254784927964e-17,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -4.414848734299963e-13
+        },
+        {
+          "frame": 145,
+          "sim_time": 4.865999999999686,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.205600185558185e-17,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.297500193289776e-13
+        },
+        {
+          "frame": 146,
+          "sim_time": 4.899999999999682,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.1018887557210186e-17,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.1478007872093944e-13
+        },
+        {
+          "frame": 147,
+          "sim_time": 4.933999999999679,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.5048908588894584e-18,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -5.734261311343185e-14
+        },
+        {
+          "frame": 148,
+          "sim_time": 4.965999999999675,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.8647613029358054e-18,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.9841263572247976e-14
+        },
+        {
+          "frame": 149,
+          "sim_time": 4.999999999999671,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.4311969540983628e-18,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.490830160519128e-14
+        },
+        {
+          "frame": 150,
+          "sim_time": 5.033999999999668,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.15007117459074e-19,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -7.447990806865354e-15
+        },
+        {
+          "frame": 151,
+          "sim_time": 5.065999999999664,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.7209179508304637e-19,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3.875956198781733e-15
+        },
+        {
+          "frame": 152,
+          "sim_time": 5.09999999999966,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.8589215206939052e-19,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.936376584056151e-15
+        },
+        {
+          "frame": 153,
+          "sim_time": 5.133999999999657,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            9.286926682507729e-20,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -9.673881960945552e-16
+        },
+        {
+          "frame": 154,
+          "sim_time": 5.165999999999653,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.8329438067401246e-20,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -5.034316465354297e-16
+        },
+        {
+          "frame": 155,
+          "sim_time": 5.199999999999649,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.414474968105226e-20,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.515078091776277e-16
+        },
+        {
+          "frame": 156,
+          "sim_time": 5.233999999999646,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.2062398415385102e-20,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.2564998349359482e-16
+        },
+        {
+          "frame": 157,
+          "sim_time": 5.265999999999642,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.277307413858632e-21,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -6.538861889436075e-17
+        },
+        {
+          "frame": 158,
+          "sim_time": 5.299999999999638,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.1360599717144607e-21,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3.266729137202563e-17
+        },
+        {
+          "frame": 159,
+          "sim_time": 5.333999999999635,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.5667341899612746e-21,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.632014781209661e-17
+        },
+        {
+          "frame": 160,
+          "sim_time": 5.365999999999631,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.153330546308042e-22,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -8.49305265240421e-18
+        },
+        {
+          "frame": 161,
+          "sim_time": 5.399999999999627,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.073296379588345e-22,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -4.243017062071193e-18
+        },
+        {
+          "frame": 162,
+          "sim_time": 5.433999999999624,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.0349651350122852e-22,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.1197553489711305e-18
+        },
+        {
+          "frame": 163,
+          "sim_time": 5.46599999999962,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.0590018078546968e-22,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.1031268831819759e-18
+        },
+        {
+          "frame": 164,
+          "sim_time": 5.499999999999616,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.290633325132796e-23,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -5.511076380346663e-19
+        },
+        {
+          "frame": 165,
+          "sim_time": 5.533999999999613,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.643130613507531e-23,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.7532610557370114e-19
+        },
+        {
+          "frame": 166,
+          "sim_time": 5.565999999999609,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.3754929015448073e-23,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.432805105775841e-19
+        },
+        {
+          "frame": 167,
+          "sim_time": 5.599999999999605,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.871781076690145e-24,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -7.158105288218901e-20
+        },
+        {
+          "frame": 168,
+          "sim_time": 5.6339999999996015,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.433051171178182e-24,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3.5760949699772737e-20
+        },
+        {
+          "frame": 169,
+          "sim_time": 5.665999999999598,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.786569870010785e-24,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.8610102812612344e-20
+        },
+        {
+          "frame": 170,
+          "sim_time": 5.699999999999594,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.92546738055628e-25,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -9.297361854746124e-21
+        },
+        {
+          "frame": 171,
+          "sim_time": 5.7339999999995905,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            4.459045755702421e-25,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -4.6448393288566894e-21
+        },
+        {
+          "frame": 172,
+          "sim_time": 5.765999999999587,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.3205004524891616e-25,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.4171879713428766e-21
+        },
+        {
+          "frame": 173,
+          "sim_time": 5.799999999999583,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.1592914132786236e-25,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.207595222165233e-21
+        },
+        {
+          "frame": 174,
+          "sim_time": 5.8339999999995795,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            5.791666963304872e-26,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -6.032986420109241e-22
+        },
+        {
+          "frame": 175,
+          "sim_time": 5.865999999999576,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.014000426398045e-26,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3.139583777497964e-22
+        },
+        {
+          "frame": 176,
+          "sim_time": 5.899999999999572,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.505754851369797e-26,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -1.5684946368435386e-22
+        },
+        {
+          "frame": 177,
+          "sim_time": 5.9339999999995685,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.522552593442293e-27,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -7.835992284835723e-23
+        },
+        {
+          "frame": 178,
+          "sim_time": 5.965999999999565,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            3.914758370584728e-27,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -4.077873302692425e-23
+        },
+        {
+          "frame": 179,
+          "sim_time": 5.999999999999561,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            1.955761637198254e-27,
+            8.660671999999863,
+            19.839328000000137
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -2.0372517054148476e-23
+        }
+      ],
+      "actions": [],
+      "config": {
+        "initial_speed_mps": 8.0,
+        "mass_kg": 500.0,
+        "max_deceleration_mps2": 6.0,
+        "obstacle_x_m": 30.0,
+        "obstacle_half_length_m": 0.4,
+        "car_half_length_m": 1.1,
+        "early_trigger_gap_m": 14.0,
+        "late_trigger_gap_m": 2.0,
+        "duration_s": 6.0,
+        "trigger_gap_m": 14.0
+      },
+      "outcome": {
+        "collision": false,
+        "first_contact_time_s": null,
+        "minimum_gap_m": 8.660671999999863,
+        "final_gap_m": 8.660671999999863,
+        "final_speed_mps": 1.955761637198254e-27
+      },
+      "reference_note": "References show nominal early-braking standstill values; they are not a learned trajectory."
+    },
+    {
+      "robot": "braking_late",
+      "kind": "braking",
+      "fps": 30,
+      "timestep": 0.002,
+      "display_name": "LATE BRAKE",
+      "eyebrow": "AUTOMOTIVE / CONTROL TEST",
+      "description": "Scripted longitudinal controller",
+      "disclaimer": "1D surrogate / no driving AI",
+      "joints": [
+        "speed",
+        "gap",
+        "position"
+      ],
+      "display_joints": [
+        "speed",
+        "gap",
+        "position"
+      ],
+      "units": [
+        "m/s",
+        "m",
+        "m"
+      ],
+      "limits": [
+        [
+          0,
+          8
+        ],
+        [
+          -1,
+          29
+        ],
+        [
+          0,
+          31
+        ]
+      ],
+      "home": [
+        8,
+        28.5,
+        0
+      ],
+      "frames": [
+        {
+          "frame": 0,
+          "sim_time": 0.034000000000000016,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            28.228,
+            0.27200000000000013
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 1,
+          "sim_time": 0.06600000000000004,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            27.972,
+            0.5280000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 2,
+          "sim_time": 0.10000000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            27.7,
+            0.8000000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 3,
+          "sim_time": 0.1340000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            27.428,
+            1.0720000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 4,
+          "sim_time": 0.16600000000000012,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            27.172,
+            1.328000000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 5,
+          "sim_time": 0.20000000000000015,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            26.9,
+            1.6000000000000012
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 6,
+          "sim_time": 0.23400000000000018,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            26.628,
+            1.8720000000000014
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 7,
+          "sim_time": 0.2660000000000002,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            26.372,
+            2.1280000000000014
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 8,
+          "sim_time": 0.3000000000000002,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            26.099999999999998,
+            2.4000000000000017
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 9,
+          "sim_time": 0.33400000000000024,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            25.828,
+            2.672000000000002
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 10,
+          "sim_time": 0.36600000000000027,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            25.572,
+            2.928000000000002
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 11,
+          "sim_time": 0.4000000000000003,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            25.299999999999997,
+            3.2000000000000024
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 12,
+          "sim_time": 0.43400000000000033,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            25.028,
+            3.4720000000000026
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 13,
+          "sim_time": 0.46600000000000036,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            24.772,
+            3.728000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 14,
+          "sim_time": 0.5000000000000003,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            24.499999999999996,
+            4.000000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 15,
+          "sim_time": 0.5340000000000004,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            24.227999999999998,
+            4.272000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 16,
+          "sim_time": 0.5660000000000004,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            23.971999999999998,
+            4.528000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 17,
+          "sim_time": 0.6000000000000004,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            23.699999999999996,
+            4.800000000000003
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 18,
+          "sim_time": 0.6340000000000005,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            23.427999999999997,
+            5.072000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 19,
+          "sim_time": 0.6660000000000005,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            23.171999999999997,
+            5.328000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 20,
+          "sim_time": 0.7000000000000005,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            22.899999999999995,
+            5.600000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 21,
+          "sim_time": 0.7340000000000005,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            22.627999999999997,
+            5.872000000000004
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 22,
+          "sim_time": 0.7660000000000006,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            22.371999999999996,
+            6.1280000000000046
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 23,
+          "sim_time": 0.8000000000000006,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            22.099999999999994,
+            6.400000000000005
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 24,
+          "sim_time": 0.8340000000000006,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            21.827999999999996,
+            6.672000000000005
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 25,
+          "sim_time": 0.8660000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            21.571999999999996,
+            6.928000000000005
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 26,
+          "sim_time": 0.9000000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            21.299999999999994,
+            7.2000000000000055
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 27,
+          "sim_time": 0.9340000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            21.027999999999995,
+            7.472000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 28,
+          "sim_time": 0.9660000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            20.771999999999995,
+            7.728000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 29,
+          "sim_time": 1.0000000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            20.499999999999993,
+            8.000000000000005
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 30,
+          "sim_time": 1.0340000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            20.227999999999994,
+            8.272000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 31,
+          "sim_time": 1.0660000000000007,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            19.971999999999994,
+            8.528000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 32,
+          "sim_time": 1.1000000000000008,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            19.699999999999996,
+            8.800000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 33,
+          "sim_time": 1.1340000000000008,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            19.427999999999994,
+            9.072000000000006
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 34,
+          "sim_time": 1.1660000000000008,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            19.171999999999993,
+            9.328000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 35,
+          "sim_time": 1.2000000000000008,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            18.89999999999999,
+            9.600000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 36,
+          "sim_time": 1.2340000000000009,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            18.627999999999993,
+            9.872000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 37,
+          "sim_time": 1.266000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            18.371999999999993,
+            10.128000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 38,
+          "sim_time": 1.300000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            18.099999999999994,
+            10.400000000000007
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 39,
+          "sim_time": 1.334000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            17.827999999999992,
+            10.672000000000008
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 40,
+          "sim_time": 1.366000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            17.571999999999992,
+            10.928000000000008
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 41,
+          "sim_time": 1.400000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            17.29999999999999,
+            11.200000000000008
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 42,
+          "sim_time": 1.434000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            17.02799999999999,
+            11.472000000000008
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 43,
+          "sim_time": 1.466000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            16.77199999999999,
+            11.728000000000009
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 44,
+          "sim_time": 1.500000000000001,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            16.499999999999993,
+            12.000000000000009
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 45,
+          "sim_time": 1.5340000000000011,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            16.22799999999999,
+            12.27200000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 46,
+          "sim_time": 1.5660000000000012,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            15.97199999999999,
+            12.52800000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 47,
+          "sim_time": 1.6000000000000012,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            15.69999999999999,
+            12.80000000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 48,
+          "sim_time": 1.6340000000000012,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            15.42799999999999,
+            13.07200000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 49,
+          "sim_time": 1.6660000000000013,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            15.17199999999999,
+            13.32800000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 50,
+          "sim_time": 1.7000000000000013,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            14.89999999999999,
+            13.60000000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 51,
+          "sim_time": 1.7340000000000013,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            14.62799999999999,
+            13.87200000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 52,
+          "sim_time": 1.7660000000000013,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            14.37199999999999,
+            14.12800000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 53,
+          "sim_time": 1.8000000000000014,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            14.099999999999989,
+            14.400000000000011
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 54,
+          "sim_time": 1.8340000000000014,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            13.827999999999989,
+            14.672000000000011
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 55,
+          "sim_time": 1.8660000000000014,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            13.571999999999989,
+            14.928000000000011
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 56,
+          "sim_time": 1.9000000000000015,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            13.299999999999988,
+            15.200000000000012
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 57,
+          "sim_time": 1.9340000000000015,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            13.027999999999988,
+            15.472000000000012
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 58,
+          "sim_time": 1.9660000000000015,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            12.771999999999988,
+            15.728000000000012
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 59,
+          "sim_time": 2.0000000000000013,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            12.49999999999999,
+            16.00000000000001
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 60,
+          "sim_time": 2.0339999999999976,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            12.22800000000002,
+            16.27199999999998
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 61,
+          "sim_time": 2.065999999999994,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            11.972000000000047,
+            16.527999999999953
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 62,
+          "sim_time": 2.0999999999999903,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            11.700000000000077,
+            16.799999999999923
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 63,
+          "sim_time": 2.1339999999999866,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            11.428000000000107,
+            17.071999999999893
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 64,
+          "sim_time": 2.165999999999983,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            11.172000000000136,
+            17.327999999999864
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 65,
+          "sim_time": 2.1999999999999793,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            10.900000000000166,
+            17.599999999999834
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 66,
+          "sim_time": 2.2339999999999756,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            10.628000000000196,
+            17.871999999999804
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 67,
+          "sim_time": 2.265999999999972,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            10.372000000000224,
+            18.127999999999776
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 68,
+          "sim_time": 2.2999999999999683,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            10.100000000000254,
+            18.399999999999746
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 69,
+          "sim_time": 2.3339999999999645,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            9.828000000000284,
+            18.671999999999716
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 70,
+          "sim_time": 2.365999999999961,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            9.572000000000312,
+            18.927999999999688
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 71,
+          "sim_time": 2.3999999999999573,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            9.300000000000342,
+            19.19999999999966
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 72,
+          "sim_time": 2.4339999999999535,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            9.028000000000372,
+            19.47199999999963
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 73,
+          "sim_time": 2.46599999999995,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            8.7720000000004,
+            19.7279999999996
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 74,
+          "sim_time": 2.4999999999999463,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            8.50000000000043,
+            19.99999999999957
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 75,
+          "sim_time": 2.5339999999999425,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            8.22800000000046,
+            20.27199999999954
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 76,
+          "sim_time": 2.565999999999939,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            7.972000000000488,
+            20.527999999999512
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 77,
+          "sim_time": 2.5999999999999353,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            7.700000000000518,
+            20.799999999999482
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 78,
+          "sim_time": 2.6339999999999315,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            7.428000000000548,
+            21.071999999999452
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 79,
+          "sim_time": 2.665999999999928,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            7.172000000000576,
+            21.327999999999424
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 80,
+          "sim_time": 2.6999999999999242,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            6.900000000000606,
+            21.599999999999394
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 81,
+          "sim_time": 2.7339999999999205,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            6.628000000000636,
+            21.871999999999364
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 82,
+          "sim_time": 2.765999999999917,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            6.372000000000664,
+            22.127999999999336
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 83,
+          "sim_time": 2.7999999999999132,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            6.100000000000694,
+            22.399999999999306
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 84,
+          "sim_time": 2.8339999999999095,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            5.828000000000724,
+            22.671999999999276
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 85,
+          "sim_time": 2.865999999999906,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            5.572000000000752,
+            22.927999999999248
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 86,
+          "sim_time": 2.899999999999902,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            5.300000000000782,
+            23.199999999999218
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 87,
+          "sim_time": 2.9339999999998985,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            5.028000000000812,
+            23.471999999999188
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 88,
+          "sim_time": 2.965999999999895,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            4.7720000000008405,
+            23.72799999999916
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 89,
+          "sim_time": 2.999999999999891,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            4.50000000000087,
+            23.99999999999913
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 90,
+          "sim_time": 3.0339999999998875,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            4.2280000000009,
+            24.2719999999991
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 91,
+          "sim_time": 3.065999999999884,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            3.9720000000009286,
+            24.52799999999907
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 92,
+          "sim_time": 3.09999999999988,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            3.7000000000009585,
+            24.79999999999904
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 93,
+          "sim_time": 3.1339999999998764,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            3.4280000000009885,
+            25.07199999999901
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 94,
+          "sim_time": 3.165999999999873,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            3.1720000000010167,
+            25.327999999998983
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 95,
+          "sim_time": 3.199999999999869,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            2.9000000000010466,
+            25.599999999998953
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 96,
+          "sim_time": 3.2339999999998654,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            2.6280000000010766,
+            25.871999999998923
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 97,
+          "sim_time": 3.265999999999862,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            2.372000000001105,
+            26.127999999998895
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 98,
+          "sim_time": 3.299999999999858,
+          "label": "Same road. Same speed.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            8.0,
+            2.1000000000011347,
+            26.399999999998865
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": 0.0
+        },
+        {
+          "frame": 99,
+          "sim_time": 3.3339999999998544,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.880000000000004,
+            1.8293200000011538,
+            26.670679999998846
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 100,
+          "sim_time": 3.365999999999851,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.688000000000011,
+            1.5804240000011553,
+            26.919575999998845
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 101,
+          "sim_time": 3.399999999999847,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.484000000000019,
+            1.3227040000011563,
+            27.177295999998844
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 102,
+          "sim_time": 3.4339999999998434,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.280000000000026,
+            1.0719200000011568,
+            27.428079999998843
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 103,
+          "sim_time": 3.46599999999984,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            7.088000000000033,
+            0.8422240000011527,
+            27.657775999998847
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 104,
+          "sim_time": 3.499999999999836,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.88400000000004,
+            0.6049040000011487,
+            27.89509599999885
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 105,
+          "sim_time": 3.5339999999998324,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.680000000000048,
+            0.3745200000011444,
+            28.125479999998856
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 106,
+          "sim_time": 3.565999999999829,
+          "label": "Brake before the hazard.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            6.488000000000055,
+            0.16402400000113815,
+            28.335975999998862
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": false,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 107,
+          "sim_time": 3.599999999999825,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            2.2266013560856988,
+            -0.03070268917852914,
+            28.53070268917853
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": -3000.0
+        },
+        {
+          "frame": 108,
+          "sim_time": 3.6339999999998214,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.6996103005566734,
+            -0.02438400840914312,
+            28.524384008409143
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 7116.103005566734
+        },
+        {
+          "frame": 109,
+          "sim_time": 3.665999999999818,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.5076103005566732,
+            -0.0052604787913281825,
+            28.505260478791328
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 5196.1030055667325
+        },
+        {
+          "frame": 110,
+          "sim_time": 3.699999999999814,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.30361030055667304,
+            0.008326271427598897,
+            28.4916737285724
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 3156.1030055667306
+        },
+        {
+          "frame": 111,
+          "sim_time": 3.7339999999998104,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.15175485327256175,
+            0.01562255349834274,
+            28.484377446501657
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1580.779721589185
+        },
+        {
+          "frame": 112,
+          "sim_time": 3.765999999999807,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.07897366947537254,
+            0.01911605032060848,
+            28.48088394967939
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 822.642390368464
+        },
+        {
+          "frame": 113,
+          "sim_time": 3.799999999999803,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.03945420342396213,
+            0.021012984691079595,
+            28.47898701530892
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 410.98128566627213
+        },
+        {
+          "frame": 114,
+          "sim_time": 3.8339999999997993,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.019710799538127214,
+            0.021960668077607437,
+            28.478039331922393
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 205.32082852215848
+        },
+        {
+          "frame": 115,
+          "sim_time": 3.865999999999796,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.010257557727155961,
+            0.022414423684530504,
+            28.47758557631547
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 106.8495596578746
+        },
+        {
+          "frame": 116,
+          "sim_time": 3.899999999999792,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.005124540519501254,
+            0.022660808510497787,
+            28.477339191489502
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 53.380630411471394
+        },
+        {
+          "frame": 117,
+          "sim_time": 3.9339999999997883,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.0025601528389634855,
+            0.022783899119161788,
+            28.477216100880838
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 26.668258739202976
+        },
+        {
+          "frame": 118,
+          "sim_time": 3.965999999999785,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.001332311024989771,
+            0.022842835526230232,
+            28.47715716447377
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 13.878239843643449
+        },
+        {
+          "frame": 119,
+          "sim_time": 3.999999999999781,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.0006656050118112603,
+            0.02287483741486085,
+            28.47712516258514
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 6.933385539700628
+        },
+        {
+          "frame": 120,
+          "sim_time": 4.033999999999778,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.0003325274830264722,
+            0.022890825136240522,
+            28.47710917486376
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 3.463827948192419
+        },
+        {
+          "frame": 121,
+          "sim_time": 4.065999999999774,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -0.000173048274698957,
+            0.02289848013823459,
+            28.477101519861765
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.802586194780802
+        },
+        {
+          "frame": 122,
+          "sim_time": 4.0999999999997705,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -8.645263513135141e-05,
+            0.022902636728929338,
+            28.47709736327107
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.9005482826182437
+        },
+        {
+          "frame": 123,
+          "sim_time": 4.133999999999767,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -4.319059600077957e-05,
+            0.02290471330681143,
+            28.47709528669319
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.4499020416747872
+        },
+        {
+          "frame": 124,
+          "sim_time": 4.165999999999763,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.2476512476893753e-05,
+            0.022905707582818735,
+            28.47709429241718
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.2341303383009766
+        },
+        {
+          "frame": 125,
+          "sim_time": 4.1999999999997595,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.1228969116106856e-05,
+            0.022906247464902663,
+            28.477093752535097
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.11696842829277974
+        },
+        {
+          "frame": 126,
+          "sim_time": 4.233999999999756,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -5.609844834251044e-06,
+            0.022906517182864405,
+            28.477093482817136
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.05843588369011504
+        },
+        {
+          "frame": 127,
+          "sim_time": 4.265999999999752,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.9193796586693463e-06,
+            0.022906646325189683,
+            28.47709335367481
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.03041020477780569
+        },
+        {
+          "frame": 128,
+          "sim_time": 4.2999999999997485,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.4584835640800033e-06,
+            0.02290671644820108,
+            28.4770932835518
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.015192537125833367
+        },
+        {
+          "frame": 129,
+          "sim_time": 4.333999999999745,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -7.28639147832206e-07,
+            0.02290675148072907,
+            28.47709324851927
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.007589991123252146
+        },
+        {
+          "frame": 130,
+          "sim_time": 4.365999999999741,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -3.791859435583665e-07,
+            0.022906768254490117,
+            28.47709323174551
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.003949853578732985
+        },
+        {
+          "frame": 131,
+          "sim_time": 4.3999999999997375,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.8943629505938237e-07,
+            0.022906777362475594,
+            28.477093222637524
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.0019732947402018998
+        },
+        {
+          "frame": 132,
+          "sim_time": 4.433999999999734,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -9.463987390740811e-08,
+            0.02290678191270601,
+            28.477093218087294
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.0009858320198688345
+        },
+        {
+          "frame": 133,
+          "sim_time": 4.46599999999973,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -4.925086717148137e-08,
+            0.02290678409137925,
+            28.47709321590862
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.0005130298663695976
+        },
+        {
+          "frame": 134,
+          "sim_time": 4.499999999999726,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.460508350566292e-08,
+            0.022906785274379615,
+            28.47709321472562
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.0002563029531839888
+        },
+        {
+          "frame": 135,
+          "sim_time": 4.533999999999723,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.2292375121289383e-08,
+            0.0229067858653913,
+            28.47709321413461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 0.00012804557418009775
+        },
+        {
+          "frame": 136,
+          "sim_time": 4.565999999999719,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -6.396987964216382e-09,
+            0.022906786148364944,
+            28.477093213851635
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 6.663529129392064e-05
+        },
+        {
+          "frame": 137,
+          "sim_time": 4.599999999999715,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -3.195850795809053e-09,
+            0.022906786302012705,
+            28.477093213697987
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 3.329011245634431e-05
+        },
+        {
+          "frame": 138,
+          "sim_time": 4.633999999999712,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.5966048968992373e-09,
+            0.022906786378772637,
+            28.477093213621227
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.6631301009367057e-05
+        },
+        {
+          "frame": 139,
+          "sim_time": 4.665999999999708,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -8.308778578831751e-10,
+            0.022906786415529012,
+            28.47709321358447
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 8.654977686283075e-06
+        },
+        {
+          "frame": 140,
+          "sim_time": 4.699999999999704,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -4.1509561659169744e-10,
+            0.022906786435484605,
+            28.477093213564515
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 4.323912672830182e-06
+        },
+        {
+          "frame": 141,
+          "sim_time": 4.733999999999701,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.0737629397493005e-10,
+            0.022906786445457072,
+            28.477093213554543
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 2.1601697289055214e-06
+        },
+        {
+          "frame": 142,
+          "sim_time": 4.765999999999697,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.079192298910478e-10,
+            0.022906786450235472,
+            28.477093213549765
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.1241586446984145e-06
+        },
+        {
+          "frame": 143,
+          "sim_time": 4.799999999999693,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -5.391502354853251e-11,
+            0.022906786452832506,
+            28.477093213547167
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 5.616148286305469e-07
+        },
+        {
+          "frame": 144,
+          "sim_time": 4.83399999999969,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.693523450059334e-11,
+            0.022906786454129247,
+            28.47709321354587
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 2.805753593811806e-07
+        },
+        {
+          "frame": 145,
+          "sim_time": 4.865999999999686,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.4017174810686054e-11,
+            0.02290678645475097,
+            28.47709321354525
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.4601223761131306e-07
+        },
+        {
+          "frame": 146,
+          "sim_time": 4.899999999999682,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -7.0027956163605435e-12,
+            0.022906786455084927,
+            28.477093213544915
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 7.294578767042232e-08
+        },
+        {
+          "frame": 147,
+          "sim_time": 4.933999999999679,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -3.4985043068117574e-12,
+            0.022906786455251904,
+            28.477093213544748
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 3.6442753195955806e-08
+        },
+        {
+          "frame": 148,
+          "sim_time": 4.965999999999675,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.8206318732230888e-12,
+            0.022906786455330064,
+            28.47709321354467
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.896491534607384e-08
+        },
+        {
+          "frame": 149,
+          "sim_time": 4.999999999999671,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -9.095636655036426e-13,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 9.474621515662943e-09
+        },
+        {
+          "frame": 150,
+          "sim_time": 5.033999999999668,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -4.5440600803051465e-13,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 4.733395916984528e-09
+        },
+        {
+          "frame": 151,
+          "sim_time": 5.065999999999664,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.3647421556509656e-13,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 2.463273078803089e-09
+        },
+        {
+          "frame": 152,
+          "sim_time": 5.09999999999966,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.1813939845275475e-13,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.2306187338828619e-09
+        },
+        {
+          "frame": 153,
+          "sim_time": 5.133999999999657,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -5.90208849342253e-14,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 6.148008847315135e-10
+        },
+        {
+          "frame": 154,
+          "sim_time": 5.165999999999653,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -3.071464113617421e-14,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 3.199441785018147e-10
+        },
+        {
+          "frame": 155,
+          "sim_time": 5.199999999999649,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.534462951425236e-14,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.598398907734621e-10
+        },
+        {
+          "frame": 156,
+          "sim_time": 5.233999999999646,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -7.665974474054787e-15,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 7.985390077140403e-11
+        },
+        {
+          "frame": 157,
+          "sim_time": 5.265999999999642,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -3.989395536716636e-15,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 4.155620350746496e-11
+        },
+        {
+          "frame": 158,
+          "sim_time": 5.299999999999638,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.9930493807603614e-15,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 2.07609310495871e-11
+        },
+        {
+          "frame": 159,
+          "sim_time": 5.333999999999635,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -9.957011776822984e-16,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.0371887267523942e-11
+        },
+        {
+          "frame": 160,
+          "sim_time": 5.365999999999631,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -5.181658049597191e-16,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 5.397560468330408e-12
+        },
+        {
+          "frame": 161,
+          "sim_time": 5.399999999999627,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.5886880034866713e-16,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 2.696550003631949e-12
+        },
+        {
+          "frame": 162,
+          "sim_time": 5.433999999999624,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.2932743757409368e-16,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.3471608080634757e-12
+        },
+        {
+          "frame": 163,
+          "sim_time": 5.46599999999962,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -6.7302376753179e-17,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 7.010664245122812e-13
+        },
+        {
+          "frame": 164,
+          "sim_time": 5.499999999999616,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -3.362337955138481e-17,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 3.502435369935918e-13
+        },
+        {
+          "frame": 165,
+          "sim_time": 5.533999999999613,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.6797796853483072e-17,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.7497705055711535e-13
+        },
+        {
+          "frame": 166,
+          "sim_time": 5.565999999999609,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -8.741622610505864e-18,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 9.105856885943609e-14
+        },
+        {
+          "frame": 167,
+          "sim_time": 5.599999999999605,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -4.367199333924303e-18,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 4.549165972837816e-14
+        },
+        {
+          "frame": 168,
+          "sim_time": 5.6339999999996015,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.181795173736652e-18,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 2.272703305975679e-14
+        },
+        {
+          "frame": 169,
+          "sim_time": 5.665999999999598,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.1354125894357487e-18,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.1827214473289048e-14
+        },
+        {
+          "frame": 170,
+          "sim_time": 5.699999999999594,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -5.672371509556768e-19,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 5.908720322454967e-15
+        },
+        {
+          "frame": 171,
+          "sim_time": 5.7339999999995905,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.833841974433392e-19,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 2.951918723368117e-15
+        },
+        {
+          "frame": 172,
+          "sim_time": 5.765999999999587,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.4747396515377482e-19,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.5361871370184877e-15
+        },
+        {
+          "frame": 173,
+          "sim_time": 5.799999999999583,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -7.367604746705847e-20,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 7.674588277818591e-16
+        },
+        {
+          "frame": 174,
+          "sim_time": 5.8339999999995795,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -3.680758135653417e-20,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 3.8341230579723095e-16
+        },
+        {
+          "frame": 175,
+          "sim_time": 5.865999999999576,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.915477298783952e-20,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.9952888528999497e-16
+        },
+        {
+          "frame": 176,
+          "sim_time": 5.899999999999572,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -9.569471888826273e-21,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 9.968199884194034e-17
+        },
+        {
+          "frame": 177,
+          "sim_time": 5.9339999999995685,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -4.7807819121204345e-21,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 4.9799811584587865e-17
+        },
+        {
+          "frame": 178,
+          "sim_time": 5.965999999999565,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -2.4879328892600456e-21,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 2.5915967596458808e-17
+        },
+        {
+          "frame": 179,
+          "sim_time": 5.999999999999561,
+          "label": "Impact detected.",
+          "mode": "physics",
+          "source": "scripted",
+          "qpos": [
+            -1.242938449867042e-21,
+            0.02290678645539046,
+            28.47709321354461
+          ],
+          "target": [
+            0.0,
+            8.666666666666668,
+            19.833333333333332
+          ],
+          "collision": true,
+          "brake_force_n": 1.2947275519448353e-17
+        }
+      ],
+      "actions": [],
+      "config": {
+        "initial_speed_mps": 8.0,
+        "mass_kg": 500.0,
+        "max_deceleration_mps2": 6.0,
+        "obstacle_x_m": 30.0,
+        "obstacle_half_length_m": 0.4,
+        "car_half_length_m": 1.1,
+        "early_trigger_gap_m": 14.0,
+        "late_trigger_gap_m": 2.0,
+        "duration_s": 6.0,
+        "trigger_gap_m": 2.0
+      },
+      "outcome": {
+        "collision": true,
+        "first_contact_time_s": 3.593999999999826,
+        "minimum_gap_m": -0.03070268917852914,
+        "final_gap_m": 0.02290678645539046,
+        "final_speed_mps": -1.242938449867042e-21
+      },
+      "reference_note": "References show nominal early-braking standstill values; they are not a learned trajectory."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schema": 2,
+  "arm_director": "scripted",
+  "model_id": null,
+  "region": null,
+  "simulation_only": true,
+  "editing": "Simulation frames sampled at 30 fps and retained in order.",
+  "versions": {
+    "strands-robots": "0.5.1",
+    "mujoco": "3.13.0",
+    "strands-agents": "1.55.1"
+  },
+  "sha256": {
+    "MICRODUCK-MEDIA-NOTICE.txt": "5f4084f1eb0364aa92ef48bdfad876f23c68e997739286225a9a782ed811c7c1",
+    "index.html": "4c38fe01eca678c8a51aa7381f2f4ae66bcc6b84875c59ed9f9ae74e7902d7df",
+    "microduck-raw.mp4": "ad0a602bdc563ba514fc2457799f12be2c4d6e4f82e579afa51dab26655fe95a",
+    "microduck-trace.json": "dcc3200bd954bdcd2f2914d609aec30c6e9bcee57a41fe97a600861f18eb0241",
+    "poster.png": "5f5a7ff21611de327a75c9a55a04a7a5c583f3a38fa2ce8baba5ed92753686eb",
+    "robot-reel-vertical.mp4": "f9dca7c586239f35e7020fa48fd0b1299f0529c5023d66687a68dfc4b636e3fb",
+    "robot-reel.mp4": "6323466ef0a5f52d9e48ae03c2af3bc0971da44615060399786a0f3fe9c3d462",
+    "soundtrack.wav": "4a200d597c55a8b48a3807cb40b1e60683ba6f647cb4b9ce5160af2d0ebf28f3"
+  },
+  "scenes": [
+    "microduck"
+  ],
+  "pack": "microduck"
+}

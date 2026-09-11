@@ -1,0 +1,5 @@
+Robot model: Pollen Robotics / Microduck RL.
+Source: https://github.com/pollen-robotics/microduck_rl/tree/53b8971b61baf5b7f3c16d135dd7cac37623de4b
+The source README identifies the 3D models as Creative Commons BY-SA-NC, without specifying a version.
+Microduck footage depicts those models; keep this attribution and the upstream noncommercial/share-alike terms with this footage.
+The Robot Reel recorder code is Apache-2.0; it does not relicense the downloaded robot assets.

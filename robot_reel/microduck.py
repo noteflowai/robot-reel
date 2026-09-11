@@ -70,7 +70,14 @@ def ensure_assets():
     return model_dir, policy
 
 
-def record_microduck(output):
+def validate_speed(speed):
+    if type(speed) not in (int, float) or not np.isfinite(speed) or not 0 <= speed <= .6:
+        raise ValueError("Microduck speed must be a finite number between 0 and 0.6 m/s")
+    return float(speed)
+
+
+def record_microduck(output, speed=.5):
+    speed = validate_speed(speed)
     try:
         import onnxruntime as ort
     except ImportError as exc:
@@ -114,7 +121,7 @@ def record_microduck(output):
         for step in range(2000):  # 10 simulated seconds; 200 Hz physics / 50 Hz policy.
             if step % 4 == 0:
                 t = step*.005
-                command[0] = .5 if 1 <= t < 8 else 0
+                command[0] = speed if 1 <= t < 8 else 0
                 label = "Find the balance." if t < 1 else ("A tiny duck. A real policy." if t < 8 else "Come to a stop.")
                 gravity = data.xmat[trunk].reshape(3, 3).T @ np.array([0, 0, -1])
                 observation = np.concatenate([
@@ -139,6 +146,8 @@ def record_microduck(output):
                     "source": "policy", "mode": "physics", "qpos": data.qpos[qindices].tolist(),
                     "target": data.ctrl.tolist(), "policy_step": len(policy_steps)-1,
                     "base_position_m": data.qpos[:3].tolist(),
+                    "commanded_forward_speed_mps": float(command[0]),
+                    "measured_forward_speed_mps": float((data.xmat[trunk].reshape(3, 3).T @ data.qvel[:3])[0]),
                 })
                 camera.lookat[:] = [float(data.qpos[0]), float(data.qpos[1]), .13]
                 renderer.update_scene(data, camera=camera)
@@ -167,6 +176,7 @@ def record_microduck(output):
                    "file": "alpha_walking.onnx", "sha256": POLICY_SHA256,
                    "model_commit": MODEL_COMMIT, "control_hz": 50, "runtime": ort.__version__,
                    "actuators": "XML position-actuator fallback, not the official BAM motor model"},
+        "requested_speed_mps": speed,
         "asset_license": "Upstream identifies 3D models as Creative Commons BY-SA-NC; see Microduck media notice.",
     }
     (output/"microduck-trace.json").write_text(json.dumps(trace, indent=2))

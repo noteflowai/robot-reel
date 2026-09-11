@@ -6,8 +6,12 @@ from pathlib import Path
 
 
 def main():
+    if sys.argv[1:2] == ["compare"]:
+        from .compare import main as compare_main
+        return compare_main(sys.argv[2:])
     ap = argparse.ArgumentParser(description="Record a robot simulation and export shareable films.")
     ap.add_argument("--pack", choices=["studio", "microduck", "braking"], default="studio")
+    ap.add_argument("--speed", type=float, help="Microduck forward command in m/s (0–0.6; default 0.5)")
     ap.add_argument("--output", type=Path, default=Path("artifacts/demo"))
     director = ap.add_mutually_exclusive_group()
     director.add_argument("--shots", type=Path, help="Four-shot JSON plan for the scripted arm")
@@ -16,6 +20,14 @@ def main():
     ap.add_argument("--region", default="us-west-2")
     ap.add_argument("--render-only", action="store_true", help="Re-edit an existing capture without a model call")
     args = ap.parse_args()
+    if args.speed is not None:
+        if args.pack != "microduck":
+            ap.error("--speed applies only to a new Microduck capture")
+        from .microduck import validate_speed
+        try:
+            validate_speed(args.speed)
+        except ValueError as exc:
+            ap.error(str(exc))
     if args.agent and not args.model:
         ap.error("--agent requires an explicit --model")
     if args.render_only and (args.agent or args.shots):
@@ -25,7 +37,7 @@ def main():
             ap.error("Demo packs use their own recorded controller; omit --agent, --shots, and --render-only")
         os.environ.setdefault("MUJOCO_GL", "glfw" if sys.platform == "darwin" else "egl")
         from .packs import run_pack
-        run_pack(args.output, args.pack)
+        run_pack(args.output, args.pack, speed=.5 if args.speed is None else args.speed)
         return
     shot_plan = None
     if args.shots:

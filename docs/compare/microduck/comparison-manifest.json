@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "sha256": {
+    "MICRODUCK-MEDIA-NOTICE.txt": "5f4084f1eb0364aa92ef48bdfad876f23c68e997739286225a9a782ed811c7c1",
+    "comparison.json": "ce0c7effb959b072270c0c9afd59cdcd7dcfa46cedad19663bb1992d7764b156",
+    "comparison.mp4": "78cd24f6ddaa72c2e2ae190ae91f803cf2024790e5e642f0fcb467c37df3b030",
+    "index.html": "7d7029b596a02b866fc6e2b285fb2cdaf42649098bca607bc6cf832ada0af004",
+    "left-source-manifest.json": "f5fb9d881b0e27674d83626b9052272059b358e9448f2d4d0652c417b8b5c74c",
+    "left-trace.json": "bc43190d4b75915e3010f4a0ca979eb6d08105f4cbbd84a97d3e45e53da38247",
+    "left.mp4": "2ebc06ed04546e3631ed006c2c77b9d0df28f83e65694509e6951e98ccbcef2d",
+    "poster.png": "474383c67de90816891431c43eca73460bf568b25d2674c65ed20645e4064cf2",
+    "right-source-manifest.json": "3d7645f95b212c0ba8859312a78331819e0ee8f519807e15f95bc420210af19a",
+    "right-trace.json": "dcc3200bd954bdcd2f2914d609aec30c6e9bcee57a41fe97a600861f18eb0241",
+    "right.mp4": "ad0a602bdc563ba514fc2457799f12be2c4d6e4f82e579afa51dab26655fe95a"
+  }
+}

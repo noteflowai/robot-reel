@@ -13,7 +13,17 @@ agent direct an arm. Open the replay in a browser; no account or install needed 
 
 ![Microduck official-policy simulation recorded with Robot Reel](docs/microduck/media/preview.gif)
 
-[Download videos + evidence](https://github.com/noteflowai/robot-reel/releases/tag/v0.2.0)
+[Download videos + evidence](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+
+## New: two runs, one clock
+
+[**Compare Microduck speeds →**](https://noteflowai.github.io/robot-reel/compare/microduck/) ·
+[**Compare braking triggers →**](https://noteflowai.github.io/robot-reel/compare/braking/)
+
+Synchronized raw videos, shared frame stepping, measured channels and downloadable
+source traces. The CLI checks timestamps, model configuration and engine versions;
+it rejects mismatched captures instead of silently trimming them. These are individual
+trials, not a statistical benchmark. [Reproduce the comparisons](docs/comparison.md).
 
 ## Three scenes, one recording workflow
 
