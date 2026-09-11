@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.egg-info/
+artifacts/
+dist/
+build/
+MUJOCO_LOG.TXT

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robot-reel"
+version = "0.1.0"
+description = "Turn robot simulation runs into shareable films with verifiable motion traces."
+requires-python = ">=3.12"
+license = "Apache-2.0"
+dependencies = [
+  "strands-robots[sim-mujoco]==0.5.1",
+  "mujoco==3.13.0",
+  "imageio-ffmpeg>=0.6,<0.7",
+  "Pillow>=10",
+  "numpy>=1.26",
+]
+
+[project.scripts]
+robot-reel = "robot_reel.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["robot_reel*"]

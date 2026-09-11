@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Robot Reel turns a robot simulation into a shareable film with inspectable motion traces.">
+<title>Robot Reel — Words in. Motion out.</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,sans-serif;background:#080e1b;color:#edf5ff}
+*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:auto;padding:40px 24px 70px}
+nav{display:flex;justify-content:space-between;align-items:center}a{color:#57edcf;text-underline-offset:5px}
+.brand{letter-spacing:.16em;font-size:14px;font-weight:750}h1{font-size:clamp(44px,8vw,88px);line-height:1.04;letter-spacing:-.055em;margin:70px 0 24px}
+.accent{color:#57edcf}.lede{color:#9aabc3;font-size:20px;line-height:1.65;max-width:760px}
+video{width:100%;border-radius:18px;border:1px solid #26354e;background:#0c1423;margin-top:28px}
+.links{display:flex;gap:14px;flex-wrap:wrap;margin:24px 0 42px}.links a{border:1px solid #30445c;border-radius:9px;padding:12px 17px;text-decoration:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.card{padding:24px;border:1px solid #25344b;border-radius:14px;background:#0d1728}
+h2{font-size:23px}p{line-height:1.7;color:#a1b2c9}.tag{font-size:12px;color:#57edcf;letter-spacing:.09em}
+pre{padding:20px;overflow:auto;background:#0d1728;border:1px solid #25344b;border-radius:12px;color:#cde1ed}
+footer{margin-top:50px;font-size:13px;color:#8294ad}
+@media(max-width:660px){.grid{grid-template-columns:1fr}h1{margin-top:48px}}
+</style>
+<main>
+<nav><span class="brand">ROBOT REEL / 001</span><a href="https://github.com/noteflowai/robot-reel">Source ↗</a></nav>
+<h1>Words in.<br><span class="accent">Motion out.</span></h1>
+<p class="lede">A robot demo you can share. A motion trace you can inspect.<br>31 seconds of recorded simulation, directed with Strands and rendered in MuJoCo.</p>
+<video controls playsinline preload="metadata" poster="media/poster.png" aria-label="Robot Reel: agent-directed SO-100 arm and scripted G1 pose showcase">
+<source src="media/robot-reel.mp4" type="video/mp4">
+Your browser cannot play this video. Use the download below.
+</video>
+<div class="links">
+<a href="media/robot-reel.mp4" download>↓ Landscape film</a>
+<a href="media/robot-reel-vertical.mp4" download>↓ Vertical film</a>
+<a href="https://github.com/noteflowai/robot-reel/releases/tag/v0.1.0">Evidence bundle ↗</a>
+</div>
+<div class="grid">
+<article class="card"><span class="tag">01 / AGENT TOOL CALLS</span><h2>SO-100. Four deliberate moves.</h2>
+<p>A live agent reads the joint limits and home pose, then controls position actuators. 480 recorded frames. Final home error: 0.00894 rad. Inference pauses omitted.</p></article>
+<article class="card"><span class="tag">02 / SCRIPTED KINEMATICS</span><h2>G1. A different embodiment.</h2>
+<p>A 29-actuator model, animated with a fixed root. 300 recorded frames. This segment is a pose showcase, not a walking or balancing policy.</p></article>
+</div>
+<h2>Make your own film.</h2>
+<p>Python 3.12+, OpenGL, and a first-run asset download. The default scripted demo needs no model account.</p>
+<pre>git clone https://github.com/noteflowai/robot-reel.git
+cd robot-reel
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+robot-reel --output artifacts/demo
+python -m robot_reel.verify artifacts/demo</pre>
+<footer>Independent open-source preview · Built on Strands Robots and MuJoCo · Robot models: MuJoCo Menagerie / Trossen / Unitree · Original synthesized soundtrack<br>
+Simulation only. Checksums establish file consistency, not authenticity or autonomous task success.</footer>
+</main>
+</html>
