@@ -36,3 +36,20 @@ media notice when distributing its clip.
 
 Useful feedback to ask for: reproduction failures, missing telemetry, and which
 real policy/simulator logs people want to inspect next.
+
+## v0.3 update draft
+
+Two runs. One clock. Robot Reel now compares two official Microduck policy runs
+with different speed commands, or early/late braking in a toy vehicle simulation.
+Watch synchronized raw footage, pause on a shared frame, inspect a channel, and
+download the comparison film with source traces and checksums.
+
+Microduck uses a MuJoCo PD approximation, not hardware. Braking uses scripted
+controllers, not an autonomous-driving model. This is a reproducible demo tool,
+not a safety benchmark. Code is Apache-2.0; Microduck model media retains upstream
+BY-SA-NC terms.
+
+Demo: https://noteflowai.github.io/robot-reel/compare/microduck/
+
+Suggested feedback prompt: Which two compatible runs would you want to inspect
+on one timeline?

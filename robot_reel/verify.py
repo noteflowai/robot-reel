@@ -63,6 +63,19 @@ def verify_trace(trace, director):
                 raise ValueError("Frame target disagrees with its policy step")
             if not 0 <= frame["sim_time"]-step["sim_time"] <= .020001:
                 raise ValueError("Frame and policy timestamps disagree")
+        if "requested_speed_mps" in trace:
+            speed = trace["requested_speed_mps"]
+            if not finite([speed]) or not 0 <= speed <= .6:
+                raise ValueError("Invalid requested speed")
+            for frame in frames:
+                measured = frame.get("measured_forward_speed_mps")
+                command = frame.get("commanded_forward_speed_mps")
+                if not finite([measured, command]):
+                    raise ValueError("Invalid speed telemetry")
+                if command != steps[frame["policy_step"]]["command"][0]:
+                    raise ValueError("Frame speed command disagrees with policy input")
+            if not math.isclose(max(step["command"][0] for step in steps), speed, abs_tol=1e-7):
+                raise ValueError("Requested speed disagrees with policy input")
         if trace["outcome"]["final_position_m"] != frames[-1]["base_position_m"]:
             raise ValueError("Microduck endpoint disagrees with recorded frame")
     if name.startswith("braking_"):
@@ -139,7 +152,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path)
     args = parser.parse_args()
-    print(json.dumps(verify(args.directory), indent=2))
+    if (args.directory / "comparison-manifest.json").exists():
+        from .compare import verify_comparison
+        result = verify_comparison(args.directory)
+    else:
+        result = verify(args.directory)
+    print(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":

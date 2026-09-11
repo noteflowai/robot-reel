@@ -1,0 +1,30 @@
+{
+  "schema": 2,
+  "arm_director": "scripted",
+  "model_id": null,
+  "region": null,
+  "simulation_only": true,
+  "editing": "Simulation frames sampled at 30 fps and retained in order.",
+  "versions": {
+    "strands-robots": "0.5.1",
+    "mujoco": "3.13.0",
+    "strands-agents": "1.55.1"
+  },
+  "sha256": {
+    "braking_early-raw.mp4": "52be064a614a611d9ebb703ab763ba13d0483246e9e95208994add5bc2f3dba6",
+    "braking_early-trace.json": "9dbcd4d59923ec3e3e7ef8ed7e85429847b638b656bbc041d78aad3f5f537568",
+    "braking_late-raw.mp4": "da5b861518f7e5c609185b1fd4d367ec4b03208e955acf23fd2ad62f28945011",
+    "braking_late-trace.json": "29b333064b8e933afe1afaf762b9af9de7922d82c722e7dde3a3636ea0122b77",
+    "index.html": "b78f0b6830e2840a0c16ed79f5917786fbcb6c94acedbfa9cab848410cf2d095",
+    "poster.png": "da7f1882d474bcc699ebfce3b6fbb0d277050e48877e0d4f77f0634f23ffc3cb",
+    "robot-reel-vertical.mp4": "13e961f23eb587972181a1e26310fc918e0ad46f55e919f7f6f69c4da7536283",
+    "robot-reel.mp4": "ea237c036243e0de14b6da46a51c92633d32868cf1d1341029d11269baa41a2c",
+    "soundtrack.wav": "93d21c31a24941360fd971b318c140778872870b652209c82758fd79a958c7c5",
+    "vehicle.xml": "2fce4ded6f6a2662ffd0b827f4bca392899f2ecad2f1d8c453f3ad293f660ab2"
+  },
+  "scenes": [
+    "braking_late",
+    "braking_early"
+  ],
+  "pack": "braking"
+}

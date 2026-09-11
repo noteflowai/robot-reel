@@ -13,7 +13,7 @@ Strands Agent 控制机械臂。
 
 ![Microduck 官方策略仿真](docs/microduck/media/preview.gif)
 
-[视频与证据包下载](https://github.com/noteflowai/robot-reel/releases/tag/v0.2.0)
+[视频与证据包下载](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
 
 ## 已实现的三种场景
 
@@ -99,3 +99,11 @@ robot-reel --agent --model YOUR_BEDROCK_MODEL_OR_INFERENCE_PROFILE \
 
 欢迎贡献真实策略对比、公共后端适配和 AlpaSim/CARLA 录制导入。
 详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## v0.3：两次运行，同一时钟
+
+[Microduck 速度对比](https://noteflowai.github.io/robot-reel/compare/microduck/) · [汽车早晚制动对比](https://noteflowai.github.io/robot-reel/compare/braking/)
+
+同步查看两段原始仿真视频，逐帧检查同一关节或物理量，并下载并排视频和原始轨迹。工具校验时间戳、模型配置、引擎版本和文件校验和；不兼容的录制会被拒绝。这些是单次仿真记录，不代表硬件测试或自动驾驶能力。
+
+复现命令见 [comparison.md](docs/comparison.md)。

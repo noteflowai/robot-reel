@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "sha256": {
+    "comparison.json": "582f154b258ec2d5450ab46bbda336c9e2036840845f90f25d20f0402a64f5fc",
+    "comparison.mp4": "ed4cd564c35a19dc3f172a152474e66fd5d10195ce2cc0b49de04f77ec80718b",
+    "index.html": "4a166c64d8846def8901c66fe6267ba9bb972f119f80529150bc644b5adbeac5",
+    "left-source-manifest.json": "dbb065ea57ac72fadad9c86c1186ac5c971679cd046bebf89468b1c930f8bb46",
+    "left-trace.json": "9dbcd4d59923ec3e3e7ef8ed7e85429847b638b656bbc041d78aad3f5f537568",
+    "left.mp4": "52be064a614a611d9ebb703ab763ba13d0483246e9e95208994add5bc2f3dba6",
+    "poster.png": "b42071f6c69645d72c3dd50ec1c21dff98b1d249a275342ad9bd56bd2eee04b9",
+    "right-source-manifest.json": "dbb065ea57ac72fadad9c86c1186ac5c971679cd046bebf89468b1c930f8bb46",
+    "right-trace.json": "29b333064b8e933afe1afaf762b9af9de7922d82c722e7dde3a3636ea0122b77",
+    "right.mp4": "da5b861518f7e5c609185b1fd4d367ec4b03208e955acf23fd2ad62f28945011"
+  }
+}

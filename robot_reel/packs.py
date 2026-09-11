@@ -111,7 +111,7 @@ def brake_trial(output, early):
     return trace
 
 
-def run_pack(output: Path, pack: str):
+def run_pack(output: Path, pack: str, speed=.5):
     from .capture import manifest
     from .film import render
     from .viewer import export_viewer
@@ -126,7 +126,7 @@ def run_pack(output: Path, pack: str):
         names = [late["robot"], early["robot"]]
     else:
         from .microduck import record_microduck
-        names = record_microduck(output)
+        names = record_microduck(output, speed=speed)
     render(output, names=names)
     manifest(output, "scripted", None, None, scene_names=names, pack=pack)
     export_viewer(output)
