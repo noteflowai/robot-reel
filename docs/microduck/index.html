@@ -37,7 +37,7 @@ canvas{display:block;width:100%;height:105px;margin-top:15px}.legend{font-size:1
 <div class="packnav" aria-label="Demo packs"><a data-pack="microduck" href="https://noteflowai.github.io/robot-reel/">Microduck / official policy</a><a data-pack="braking" href="https://noteflowai.github.io/robot-reel/braking/">Automotive / braking</a><a data-pack="studio" href="https://noteflowai.github.io/robot-reel/studio/">Studio / agent arm</a></div>
 <section class="hero"><div><div class="eyebrow">Recorded simulation. Open evidence.</div><h1>Watch the robot.<br><span>Inspect every move.</span></h1></div><p>Click a shot. Scrub a frame. See what the joints actually did.<br><span class="hint">No install, no login. This is a replay of a recorded run.</span></p></section>
 <section class="studio" aria-label="Interactive simulation replay">
-<div class="player"><div class="screen"><video id="video" controls playsinline preload="metadata" poster="microduck/media/poster.png" aria-label="Recorded robot simulation"><source src="microduck/media/robot-reel.mp4" type="video/mp4"></video></div>
+<div class="player"><div class="screen"><video id="video" controls playsinline preload="metadata" poster="media/poster.png" aria-label="Recorded robot simulation"><source src="media/robot-reel.mp4" type="video/mp4"></video></div>
 <aside class="inspector" aria-label="Recorded frame inspector">
 <div><div class="eyebrow" id="scene">Title sequence</div><h2 id="caption">Choose a shot below.</h2><div class="mode" id="mode">Telemetry appears during robot footage.</div><div class="hint" id="frame-label">No recorded robot frame at this time.</div></div>
 <div class="numbers"><label for="joint" id="joint-label">Inspect a joint</label><select id="joint" disabled><option>Start a robot scene</option></select>
@@ -47,7 +47,7 @@ canvas{display:block;width:100%;height:105px;margin-top:15px}.legend{font-size:1
 <div class="shots" id="shots" aria-label="Recorded shots"></div><div class="status" id="status" role="status">Video and telemetry are synchronized to the recorded frame. Inference pauses are omitted.</div>
 </section>
 <p id="media-notice" class="hint" hidden></p>
-<div class="below"><span id="recording-summary"></span><div class="downloads"><a href="microduck/media/robot-reel.mp4" download>Landscape ↓</a><a href="microduck/media/robot-reel-vertical.mp4" download>Vertical ↓</a><a href="https://github.com/noteflowai/robot-reel/releases/tag/v0.2.0">Evidence bundle ↗</a></div></div>
+<div class="below"><span id="recording-summary"></span><div class="downloads"><a href="media/robot-reel.mp4" download>Landscape ↓</a><a href="media/robot-reel-vertical.mp4" download>Vertical ↓</a><a href="https://github.com/noteflowai/robot-reel/releases/tag/v0.2.0">Evidence bundle ↗</a></div></div>
 <section class="grid" id="remix">
 <article class="card"><div class="eyebrow">Your next robot film</div><h2>Remix the arm plan.</h2><p>Change three moves, then return to the model’s home pose. Download a plan and render it locally. The recorded video above stays unchanged.</p>
 <div class="builder">

@@ -1,20 +1,45 @@
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
 
 def main():
     ap = argparse.ArgumentParser(description="Record a robot simulation and export shareable films.")
+    ap.add_argument("--pack", choices=["studio", "microduck", "braking"], default="studio")
     ap.add_argument("--output", type=Path, default=Path("artifacts/demo"))
-    ap.add_argument("--agent", action="store_true", help="Use a live Bedrock agent (billable); otherwise scripted")
+    director = ap.add_mutually_exclusive_group()
+    director.add_argument("--shots", type=Path, help="Four-shot JSON plan for the scripted arm")
+    director.add_argument("--agent", action="store_true", help="Use a live Bedrock agent (billable); otherwise scripted")
     ap.add_argument("--model", help="Bedrock model or inference profile ID; required with --agent")
     ap.add_argument("--region", default="us-west-2")
     ap.add_argument("--render-only", action="store_true", help="Re-edit an existing capture without a model call")
     args = ap.parse_args()
     if args.agent and not args.model:
         ap.error("--agent requires an explicit --model")
-    os.environ.setdefault("MUJOCO_GL", "egl")
+    if args.render_only and (args.agent or args.shots):
+        ap.error("--render-only cannot change the recording's director or shots")
+    if args.pack != "studio":
+        if args.agent or args.shots or args.render_only:
+            ap.error("Demo packs use their own recorded controller; omit --agent, --shots, and --render-only")
+        os.environ.setdefault("MUJOCO_GL", "glfw" if sys.platform == "darwin" else "egl")
+        from .packs import run_pack
+        run_pack(args.output, args.pack)
+        return
+    shot_plan = None
+    if args.shots:
+        from .plans import load_plan
+        try:
+            shot_plan = load_plan(args.shots)
+        except (ValueError, OSError) as exc:
+            ap.error(str(exc))
+    previous = None
+    if args.render_only:
+        from .verify import verify
+        verify(args.output)
+        previous = json.loads((args.output / "manifest.json").read_text())
+    os.environ.setdefault("MUJOCO_GL", "glfw" if sys.platform == "darwin" else "egl")
     args.output.mkdir(parents=True, exist_ok=True)
     from .capture import Capture, manifest, run_arm
     from .film import render
@@ -22,7 +47,7 @@ def main():
         if (args.output / "so100-trace.json").exists():
             ap.error("Output already contains a capture; choose a fresh directory or use --render-only")
         print("Recording SO-100...", flush=True)
-        run_arm(args.output, args.agent, args.model, args.region)
+        run_arm(args.output, args.agent, args.model, args.region, shot_plan)
         print("Recording G1 (scripted kinematic showcase)...", flush=True)
         g1 = Capture(args.output, "unitree_g1")
         try:
@@ -30,13 +55,18 @@ def main():
         finally:
             g1.close()
     print("Exporting landscape and portrait films...", flush=True)
-    render(args.output)
+    render(args.output, names=previous.get("scenes", ["so100", "unitree_g1"]) if previous else ("so100", "unitree_g1"))
     if args.render_only:
-        previous = json.loads((args.output / "manifest.json").read_text())
-        manifest(args.output, previous["arm_director"], previous["model_id"], previous["region"])
+        manifest(args.output, previous["arm_director"], previous["model_id"], previous["region"], previous.get("scenes"), previous.get("pack"))
     else:
         manifest(args.output, "agent" if args.agent else "scripted", args.model, args.region)
-    print(f"Done: {args.output.resolve()}", flush=True)
+    from .viewer import export_viewer
+    export_viewer(args.output)
+    if previous:
+        manifest(args.output, previous["arm_director"], previous["model_id"], previous["region"], previous.get("scenes"), previous.get("pack"))
+    else:
+        manifest(args.output, "agent" if args.agent else "scripted", args.model, args.region)
+    print(f"Done: {args.output.resolve()} (open index.html for interactive replay)", flush=True)
 
 
 if __name__ == "__main__":

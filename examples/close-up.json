@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "shots": [
+    {"label": "A quieter entrance.", "targets": {"Rotation": -0.4}},
+    {"label": "Open to the light.", "targets": {"Rotation": 0.4, "Jaw": 0.65}},
+    {"label": "Turn the wrist.", "targets": {"Wrist_Roll": 0.25, "Jaw": 0.25}},
+    {"label": "Return to home.", "home": true}
+  ]
+}
