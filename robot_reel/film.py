@@ -62,7 +62,7 @@ def card(title, subtitle, index, total, outro=False):
         text(d, (62, 195+j*84), line, 68, WHITE, True)
     text(d, (68, 485), subtitle, 23, MUTED)
     text(d, (68, 606), "PROMPT  >  MOTION  >  EVIDENCE  >  FILM" if not outro else
-         "SO-100 + G1  /  MuJoCo + Strands Robots", 19, CYAN)
+         "Recorded simulation / Robot Reel", 19, CYAN)
     d.rectangle((0, 714, int(1280*index/max(total, 1)), 720), fill=CYAN)
     return im
 
@@ -77,16 +77,17 @@ def compose(raw, trace, frame, index, total):
     text(d, (38, 30), "ROBOT REEL", 22, WHITE, True)
     text(d, (38, 69), "LANGUAGE BECOMES MOTION", 13, MUTED)
     is_arm = trace["robot"] == "so100"
-    text(d, (38, 125), "01 / THE ARM" if is_arm else "02 / THE HUMANOID", 15, CYAN, True)
-    text(d, (36, 156), "SO-100" if is_arm else "UNITREE G1", 44, WHITE, True)
+    custom = "display_name" in trace
+    driving = trace.get("kind") == "braking"
+    text(d, (38, 125), trace.get("eyebrow", "01 / THE ARM" if is_arm else "02 / THE HUMANOID"), 15, CYAN, True)
+    text(d, (36, 156), trace.get("display_name", "SO-100" if is_arm else "UNITREE G1"), 36 if custom else 44, WHITE, True)
     wrap(d, frame["label"], (38, 225), 28, 405, WHITE, True)
-    source = "AGENT TOOL CALL" if frame["source"] == "agent" else "SCRIPTED DEMO"
+    source = "SCRIPTED CONTROLLER" if driving else ("OFFICIAL ONNX POLICY" if frame["source"] == "policy" else ("AGENT TOOL CALL" if frame["source"] == "agent" else "SCRIPTED DEMO"))
     text(d, (38, 324), source, 14, CYAN, True)
-    text(d, (38, 351), "Position actuators / physics steps" if is_arm else
-         "Kinematic poses / fixed root", 17, MUTED)
-    text(d, (38, 389), "MEASURED JOINT POSITION", 12, MUTED)
-    names = ["Rotation", "Pitch", "Wrist_Roll"] if is_arm else [
-        "right_shoulder_pitch_joint", "right_elbow_joint", "waist_yaw_joint"]
+    text(d, (38, 351), trace.get("description", "Position actuators / physics steps" if is_arm else "Kinematic poses / fixed root"), 17, MUTED)
+    text(d, (38, 389), "MEASURED TELEMETRY" if driving else "MEASURED JOINT POSITION", 12, MUTED)
+    names = trace.get("display_joints") or (["Rotation", "Pitch", "Wrist_Roll"] if is_arm else [
+        "right_shoulder_pitch_joint", "right_elbow_joint", "waist_yaw_joint"])
     for row, name in enumerate(names):
         j = trace["joints"].index(name)
         value = frame["qpos"][j]
@@ -99,7 +100,7 @@ def compose(raw, trace, frame, index, total):
         d.rounded_rectangle((38, y+27, 39+int(388*np.clip((value-lo)/(hi-lo), 0, 1)), y+31),
                             radius=2, fill=CYAN)
     text(d, (38, 612), "SIMULATION / 30 FPS", 14, MUTED)
-    text(d, (38, 641), "Inference pauses omitted" if is_arm else "No walking or balance policy", 13, MUTED)
+    text(d, (38, 641), trace.get("disclaimer", "Inference pauses omitted" if is_arm else "No walking or balance policy"), 13, MUTED)
     d.rounded_rectangle((1010, 26, 1252, 67), radius=20, fill=BG)
     text(d, (1030, 36), "RECORDED SIMULATION", 14, CYAN, True)
     d.rectangle((0, 714, int(1280*index/max(total, 1)), 720), fill=CYAN)
@@ -124,9 +125,9 @@ def portrait(landscape, phase):
     return im
 
 
-def render(output: Path):
+def render(output: Path, names=("so100", "unitree_g1")):
     traces = [json.loads((output / f"{name}-trace.json").read_text())
-              for name in ("so100", "unitree_g1")]
+              for name in names]
     total = 60+sum(len(t["frames"]) for t in traces)+90
     writers = []
     try:
@@ -152,9 +153,9 @@ def render(output: Path):
             for frame in trace["frames"]:
                 raw = np.frombuffer(next(reader), dtype=np.uint8).reshape(height, width, 3)
                 im = compose(raw, trace, frame, index, total)
-                if trace["robot"] == "unitree_g1" and frame["frame"] == 130:
+                if trace is traces[-1] and frame["frame"] == len(trace["frames"])//2:
                     im.save(output / "poster.png")
-                emit(im, "AGENT-DIRECTED ARM" if frame["source"] == "agent" else "SCRIPTED POSE SHOWCASE")
+                emit(im, trace.get("display_name", "AGENT-DIRECTED ARM" if frame["source"] == "agent" else "SCRIPTED POSE SHOWCASE"))
             reader.close()
         for _ in range(90):
             emit(card("Show the run.\nKeep the proof.", "Robot Reel / open-source preview", index, total, True),

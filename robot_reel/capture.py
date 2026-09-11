@@ -154,7 +154,9 @@ class Capture:
         gc.collect()
 
 
-def run_arm(output, agent=False, model_id=None, region="us-west-2"):
+def run_arm(output, agent=False, model_id=None, region="us-west-2", shot_plan=None):
+    from .plans import DEFAULT_PLAN, validate_plan
+    plan = validate_plan(shot_plan if shot_plan is not None else DEFAULT_PLAN)
     capture = Capture(output, "so100")
     try:
         if agent:
@@ -215,22 +217,31 @@ def run_arm(output, agent=False, model_id=None, region="us-west-2"):
             if len(capture.actions) != 4:
                 raise RuntimeError(f"Expected 4 recorded agent motions, got {len(capture.actions)}")
         else:
-            capture.move({"Rotation": -0.8}, "Find your angle.", "scripted")
-            capture.move({"Rotation": 0.8}, "Explore the other side.", "scripted")
-            capture.move({"Wrist_Roll": 0.6, "Jaw": 0.5}, "A new perspective.", "scripted")
-            capture.move(dict(zip(capture.names, capture.home.tolist())), "Back to home.", "scripted")
+            home = dict(zip(capture.names, capture.home.tolist()))
+            # Validate the entire plan against the loaded model before any motion.
+            resolved = [(home if shot.get("home") else shot["targets"], shot["label"])
+                        for shot in plan["shots"]]
+            for targets, _ in resolved:
+                validate_targets(targets, capture.names, capture.limits)
+            (output / "shot-plan.json").write_text(json.dumps(plan, indent=2))
+            for targets, label in resolved:
+                capture.move(targets, label, "scripted")
     finally:
         capture.close()
 
 
-def manifest(output, mode, model_id, region):
+def manifest(output, mode, model_id, region, scene_names=None, pack=None):
     from importlib.metadata import version
     files = sorted(p for p in output.iterdir() if p.is_file() and p.name != "manifest.json")
     document = {
         "schema": 1, "arm_director": mode, "model_id": model_id, "region": region if model_id else None,
         "simulation_only": True, "g1_mode": "scripted kinematic pose showcase; no locomotion or balance",
-        "editing": "Inference pauses omitted. Simulation frames retained in order.",
+        "editing": "Inference pauses omitted. Simulation frames retained in order." if mode == "agent" else "Simulation frames sampled at 30 fps and retained in order.",
         "versions": {n: version(n) for n in ["strands-robots", "mujoco", "strands-agents"]},
         "sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in files},
     }
+    if scene_names:
+        document.update(schema=2, scenes=scene_names, pack=pack)
+        if "unitree_g1" not in scene_names:
+            document.pop("g1_mode", None)
     (output / "manifest.json").write_text(json.dumps(document, indent=2))

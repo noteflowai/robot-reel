@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Watch the robot. Inspect every move. Zero-install replay of recorded robot simulation with frame-synchronized joint telemetry.">
+<meta property="og:title" content="Robot Reel — Watch the robot. Inspect every move.">
+<meta property="og:description" content="A 31-second robot film with an interactive motion trace. Open it, scrub it, remix it.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://noteflowai.github.io/robot-reel/media/poster.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Robot Reel — Inspect every move.</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#eaf2ff;background:#080e1b;--muted:#9bacc5;--green:#57edcf;--line:#25364e}
+*{box-sizing:border-box}body{margin:0}a{color:var(--green);text-underline-offset:4px}button,input,select{font:inherit}button,a{touch-action:manipulation}button,select{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #80aaff;outline-offset:4px}
+main{max-width:1240px;margin:auto;padding:28px 28px 65px}nav{display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{letter-spacing:.13em;font-size:13px;font-weight:800}.navlinks{display:flex;gap:22px;font-size:14px}
+.eyebrow{color:var(--green);font-size:12px;letter-spacing:.13em;text-transform:uppercase}h1{font-size:clamp(40px,6vw,72px);line-height:1.08;letter-spacing:-.055em;margin:22px 0 18px}h1 span{color:var(--green)}.packnav{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.packnav a{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:9px 15px;text-decoration:none}.packnav a[aria-current=page]{background:#12342f;border-color:var(--green)}.hero{padding:36px 0 30px;display:grid;grid-template-columns:1.45fr 1fr;gap:30px;align-items:end}
+p{color:var(--muted);line-height:1.7}.hero p{max-width:410px;font-size:17px;margin:0 0 8px}.hint{font-size:13px;color:var(--muted)}
+.studio{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#0b1423;box-shadow:0 20px 90px #0003}.player{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(300px,1fr)}.screen{background:#02050c;display:flex;align-items:center}video{display:block;width:100%;aspect-ratio:16/9}
+.inspector{padding:24px;border-left:1px solid var(--line);min-width:0}.inspector h2{font-size:23px;margin:9px 0 13px}.mode{font-size:12px;color:var(--green);line-height:1.5;min-height:36px}.readout{display:flex;gap:24px;margin:18px 0}.metric{display:flex;flex-direction:column;gap:6px}.metric strong{font-size:24px;font-variant-numeric:tabular-nums}.metric small{color:var(--muted);font-size:11px}
+select{width:100%;background:#111f33;color:#eaf2ff;border:1px solid #344760;border-radius:7px;padding:9px;font-size:13px;margin-top:7px}label{font-size:13px;color:#c3d2e5}
+canvas{display:block;width:100%;height:105px;margin-top:15px}.legend{font-size:11px;color:var(--muted);display:flex;gap:18px}.legend span:first-child{color:var(--green)}.legend span:last-child{color:#89abff}
+.transport{padding:16px 22px;border-top:1px solid var(--line);display:flex;align-items:center;gap:14px;flex-wrap:wrap}.transport button,.pill{border:1px solid #3a4c62;background:#142239;border-radius:7px;padding:8px 12px;color:#eaf2ff;font-size:13px}.transport output{font-size:12px;font-variant-numeric:tabular-nums;color:var(--muted);min-width:100px}
+#timeline{flex:1;min-width:100px;accent-color:var(--green)}.shots{padding:0 22px 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}.shot{border:1px solid var(--line);background:#0e1b2e;color:#d7e6f8;text-align:left;padding:12px;border-radius:8px;font-size:12px;line-height:1.5;min-width:0}.shot span{display:block;color:var(--muted);font-size:10px;letter-spacing:.04em;margin-bottom:6px}.shot[aria-current=true]{border-color:var(--green);background:#102e32}
+.status{padding:0 22px 18px;font-size:12px;color:var(--muted);min-height:34px}.below{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin:17px 0 50px;font-size:13px}.downloads{display:flex;gap:20px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.card{border:1px solid var(--line);background:#0c1627;border-radius:14px;padding:28px;min-width:0}h2{font-size:27px;letter-spacing:-.03em}.card h2{margin:9px 0 14px}.card p{font-size:14px}.card pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#cde9e6;font-size:12px;line-height:1.7;padding:16px;background:#060e1a;border-radius:8px}
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field label{display:flex;justify-content:space-between;gap:8px;font-size:12px}.field input{width:100%;accent-color:var(--green);margin:12px 0}.field output{color:var(--green);font-variant-numeric:tabular-nums}
+.primary{background:var(--green);border:0;color:#082a27;padding:11px 17px;border-radius:8px;font-weight:750;margin:8px 0}.small{font-size:12px!important}.details{margin-top:24px;color:var(--muted);font-size:13px}.details summary{cursor:pointer;padding:12px 0}code{font-family:ui-monospace,monospace}.footer{border-top:1px solid var(--line);padding-top:25px;margin-top:45px;color:var(--muted);font-size:12px;line-height:1.8}
+@media(max-width:980px){.hero{grid-template-columns:1fr}.hero p{max-width:720px}.player{grid-template-columns:1fr}.inspector{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}.inspector .numbers{grid-row:1/3;grid-column:2}.readout{margin:10px 0}canvas{height:80px}.mode{min-height:0}}
+@media(max-width:620px){main{padding:20px 14px 40px}.navlinks{gap:12px;font-size:12px}.hero{padding-top:30px;gap:5px}h1{font-size:43px}.grid{grid-template-columns:1fr}.shots{grid-template-columns:1fr 1fr;padding:0 14px 16px}.shot:last-child{grid-column:1/3}.transport{padding:14px;gap:10px}.inspector{display:block;padding:18px}.inspector .numbers{margin-top:16px}.readout{gap:30px}.card{padding:22px}.below{margin-bottom:30px}.builder{grid-template-columns:1fr}.hero p{font-size:15px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body><main>
+<nav><span class="brand">ROBOT REEL / 002</span><div class="navlinks"><a href="#remix">Make your own</a><a href="https://github.com/noteflowai/robot-reel">GitHub ↗</a></div></nav>
+<div class="packnav" aria-label="Demo packs"><a data-pack="microduck" href="https://noteflowai.github.io/robot-reel/">Microduck / official policy</a><a data-pack="braking" href="https://noteflowai.github.io/robot-reel/braking/">Automotive / braking</a><a data-pack="studio" href="https://noteflowai.github.io/robot-reel/studio/">Studio / agent arm</a></div>
+<section class="hero"><div><div class="eyebrow">Recorded simulation. Open evidence.</div><h1>Watch the robot.<br><span>Inspect every move.</span></h1></div><p>Click a shot. Scrub a frame. See what the joints actually did.<br><span class="hint">No install, no login. This is a replay of a recorded run.</span></p></section>
+<section class="studio" aria-label="Interactive simulation replay">
+<div class="player"><div class="screen"><video id="video" controls playsinline preload="metadata" poster="__MEDIA_PREFIX__poster.png" aria-label="Recorded robot simulation"><source src="__MEDIA_PREFIX__robot-reel.mp4" type="video/mp4"></video></div>
+<aside class="inspector" aria-label="Recorded frame inspector">
+<div><div class="eyebrow" id="scene">Title sequence</div><h2 id="caption">Choose a shot below.</h2><div class="mode" id="mode">Telemetry appears during robot footage.</div><div class="hint" id="frame-label">No recorded robot frame at this time.</div></div>
+<div class="numbers"><label for="joint" id="joint-label">Inspect a joint</label><select id="joint" disabled><option>Start a robot scene</option></select>
+<div class="readout"><div class="metric"><strong id="measured">—</strong><small id="unit">MEASURED / RAD</small></div><div class="metric"><strong id="error">—</strong><small>|TARGET − MEASURED|</small></div></div>
+<canvas id="plot" width="600" height="210" role="img" aria-label="Selected joint measured and target positions over the last two seconds"></canvas><div class="legend"><span>━ Measured</span><span>┄ Target</span></div></div></aside></div>
+<div class="transport"><button id="play" type="button">Play</button><button id="prev" type="button" aria-label="Previous frame">−1 frame</button><button id="next" type="button" aria-label="Next frame">+1 frame</button><input id="timeline" type="range" min="0" max="31" step="0.0333333333" value="0" aria-label="Film time in seconds"><output id="clock">00.00 / 31.00 s</output><button id="share" type="button">Share this moment</button></div>
+<div class="shots" id="shots" aria-label="Recorded shots"></div><div class="status" id="status" role="status">Video and telemetry are synchronized to the recorded frame. Inference pauses are omitted.</div>
+</section>
+<p id="media-notice" class="hint" hidden></p>
+<div class="below"><span id="recording-summary"></span><div class="downloads"><a href="__MEDIA_PREFIX__robot-reel.mp4" download>Landscape ↓</a><a href="__MEDIA_PREFIX__robot-reel-vertical.mp4" download>Vertical ↓</a><a href="https://github.com/noteflowai/robot-reel/releases/tag/v0.2.0">Evidence bundle ↗</a></div></div>
+<section class="grid" id="remix">
+<article class="card"><div class="eyebrow">Your next robot film</div><h2>Remix the arm plan.</h2><p>Change three moves, then return to the model’s home pose. Download a plan and render it locally. The recorded video above stays unchanged.</p>
+<div class="builder">
+<div class="field"><label for="left">First base angle <output id="left-value">−0.80 rad</output></label><input id="left" type="range" min="-1" max="0" step="0.05" value="-0.8"></div>
+<div class="field"><label for="right">Second base angle <output id="right-value">0.80 rad</output></label><input id="right" type="range" min="0" max="1" step="0.05" value="0.8"></div>
+<div class="field"><label for="wrist">Wrist turn <output id="wrist-value">0.60 rad</output></label><input id="wrist" type="range" min="-1" max="1" step="0.05" value="0.6"></div>
+<div class="field"><label for="jaw">Gripper opening <output id="jaw-value">0.50 rad</output></label><input id="jaw" type="range" min="0" max="0.8" step="0.05" value="0.5"></div>
+</div><button id="download-plan" class="primary" type="button">Download shots.json</button><p class="small">These controls edit a JSON plan, not a live simulator. Local runs label these motions “scripted.”</p><pre>robot-reel --shots shots.json --output artifacts/my-film</pre>
+</article>
+<article class="card"><div class="eyebrow">From clone to film</div><h2>Run it. Keep the trace.</h2><p>Python 3.12+ and OpenGL. First run downloads robot assets. No model credentials for the scripted demo.</p><pre id="quickstart">git clone https://github.com/noteflowai/robot-reel.git
+cd robot-reel
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+robot-reel --output artifacts/demo
+python -m robot_reel.verify artifacts/demo</pre><p class="small">Each new run includes this replay page beside the videos. Open <code><span id="local-path">artifacts/demo/index.html</span></code> directly in your browser.</p><a href="https://github.com/noteflowai/robot-reel#quick-start">Setup &amp; optional agent mode ↗</a></article>
+</section>
+<details class="details"><summary>What does this demo prove?</summary><p id="provenance"></p><p id="method-summary">The SO-100 uses position actuators and MuJoCo physics steps. The G1 segment uses scripted joint-space poses with a fixed root; it is not a walking or balancing policy. Arm targets show the destination for each shot. Microduck targets show the policy actuator command. Driving references show nominal early-braking standstill values.</p><p>The replay displays the supplied recording. The command-line verifier checks file consistency and trace agreement; hashes are not signatures and do not establish independent authenticity or autonomous task success.</p></details>
+<footer class="footer">Independent open-source preview · Strands Robots + MuJoCo · Models from Pollen Robotics / MuJoCo Menagerie / Trossen / Unitree.<br>Original synthesized soundtrack. No external analytics or runtime CDN dependencies. <a href="https://github.com/noteflowai/robot-reel/blob/main/THIRD_PARTY.md">Attribution</a></footer>
+</main>
+<script type="application/json" id="reel-data">__REEL_DATA__</script>
+<script>
+(() => {
+"use strict";
+const data=JSON.parse(document.getElementById("reel-data").textContent);
+const $=id=>document.getElementById(id), video=$("video"), timeline=$("timeline"), joint=$("joint");
+let active=null, current=null, lastFrame="", pendingSeek=null;
+const buttons=[];
+$("status").textContent=`Video and telemetry are synchronized to the recorded frame. ${data.provenance.editing}`;
+if(data.pack!=="studio")$("local-path").textContent=`artifacts/${data.pack}/index.html`;
+for(const a of document.querySelectorAll("[data-pack]"))if(a.dataset.pack===data.pack)a.setAttribute("aria-current","page");
+if(data.pack==="microduck"){
+  $("media-notice").hidden=false;
+  $("media-notice").textContent="Model: Pollen Robotics / Microduck. Microduck media retains the upstream noncommercial/share-alike asset terms; see Attribution below.";
+}
+if(data.pack!=="studio"){
+  $("quickstart").textContent=`git clone https://github.com/noteflowai/robot-reel.git
+cd robot-reel
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip install -e ${data.pack==="microduck"?"'.[microduck]'":"."}
+robot-reel --pack ${data.pack} --output artifacts/${data.pack}
+python -m robot_reel.verify artifacts/${data.pack}`;
+  $("method-summary").textContent=data.pack==="microduck"?"Pollen Robotics' official walking ONNX policy runs at 50 Hz in CPU MuJoCo. The XML position-actuator fallback approximates the motors; the official deployment uses BAM. This is a recorded simulation, not a real-hardware validation. Microduck 3D assets are identified upstream as Creative Commons BY-SA-NC; preserve those terms and attribution with Microduck footage.":"A 1D rigid-body surrogate compares two scripted brake thresholds at the same initial speed. It is not CARLA or AlpaSim, and no Alpamayo model was run. Reference curves show nominal early-braking standstill values. Contact results are specific to this toy scenario, not road-safety certification.";
+}
+$("recording-summary").textContent=`${data.scenes.reduce((sum,s)=>sum+s.frames.length,0)} recorded frames · ${data.duration} seconds · ${data.pack}`;
+if(data.pack!=="studio"){
+  document.querySelector(".hero h1").replaceChildren(document.createTextNode(data.pack==="microduck"?"Meet Microduck.":"A reason to stop."),document.createElement("br"));
+  const span=document.createElement("span");span.textContent="Inspect the run.";document.querySelector(".hero h1").append(span);
+  document.querySelector(".hero p").textContent=data.pack==="microduck"?"Official Microduck policy, recorded in CPU MuJoCo. Explore its joint targets and measured response.":"Same road, speed and obstacle. Compare late braking with an earlier trigger in a 1D MuJoCo surrogate.";
+}
+timeline.max=String(data.duration);
+$("provenance").textContent=`Controller: ${data.pack==="microduck"?"official Microduck ONNX policy":data.provenance.director}. ${data.provenance.editing} Strands Robots ${data.provenance.versions["strands-robots"]}; MuJoCo ${data.provenance.versions.mujoco}.`;
+function findFrame(time) {
+  for(const scene of data.scenes) {
+    const end=scene.start+scene.frames.length/scene.fps;
+    if(time>=scene.start-1e-6 && time<end-1e-6) {
+      const index=Math.min(scene.frames.length-1,Math.max(0,Math.floor((time-scene.start)*scene.fps+1e-6)));
+      return {scene,frame:scene.frames[index],index};
+    }
+  }
+  return null;
+}
+function seek(time) {
+  const t=Math.max(0,Math.min(data.duration,time));
+  if(video.readyState<1){pendingSeek=t;video.load();return;}
+  video.currentTime=t; update(t);
+}
+function draw(found) {
+  const canvas=$("plot"),ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  if(!found)return;
+  const j=Number(joint.value),samples=found.scene.frames.slice(Math.max(0,found.index-59),found.index+1);
+  const values=samples.flatMap(f=>[f.qpos[j],f.target[j]]);
+  let lo=Math.min(...values),hi=Math.max(...values);const pad=Math.max(.03,(hi-lo)*.15);lo-=pad;hi+=pad;
+  ctx.strokeStyle="#26364e";ctx.lineWidth=1;ctx.setLineDash([]);
+  for(let y=20;y<h;y+=55){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+  for(const [field,color,dash] of [["qpos","#57edcf",[]],["target","#89abff",[8,6]]]){
+    ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=3;ctx.setLineDash(dash);
+    samples.forEach((f,i)=>{const x=8+i/Math.max(samples.length-1,1)*(w-16),y=h-14-(f[field][j]-lo)/(hi-lo)*(h-28);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y);});ctx.stroke();
+  }
+  ctx.setLineDash([]);
+}
+function update(time=video.currentTime) {
+  timeline.value=String(time);$("clock").textContent=`${time.toFixed(2).padStart(5,"0")} / ${data.duration.toFixed(2)} s`;
+  current=findFrame(time);
+  $("play").textContent=video.paused?"Play":"Pause";
+  for(const entry of buttons)entry.button.setAttribute("aria-current",String(time>=entry.start && time<entry.end));
+  if(!current){
+    active=null;lastFrame="";joint.disabled=true;
+    $("scene").textContent=time<2?"Title sequence":"Closing sequence";$("caption").textContent="Between robot scenes.";
+    $("mode").textContent="No motion telemetry for this title card.";$("frame-label").textContent="No recorded robot frame at this time.";
+    $("measured").textContent="—";$("error").textContent="—";draw(null);return;
+  }
+  const {scene,frame,index}=current;
+  if(active!==scene.robot){
+    const options=scene.joints.map((name,i)=>{const o=document.createElement("option");o.value=String(i);o.textContent=name;return o;});
+    joint.replaceChildren(...options);joint.disabled=false;active=scene.robot;lastFrame="";
+  }
+  const key=`${scene.robot}:${index}:${joint.value}`;
+  if(key===lastFrame)return;lastFrame=key;
+  const j=Number(joint.value),value=frame.qpos[j],error=Math.abs(frame.target[j]-value);
+  $("scene").textContent=scene.display_name || (scene.robot==="so100"?"01 / SO-100 arm":"02 / Unitree G1");
+  $("caption").textContent=frame.label;
+  $("mode").textContent=scene.kind==="braking"?`Scripted controller · ${scene.outcome.collision?"Contact recorded":"No contact in this trial"} · 1D surrogate`:(frame.source==="policy"?"Official ONNX policy · MuJoCo PD surrogate":(frame.mode==="physics"?`${frame.source==="agent"?"Agent tool call":"Scripted motion"} · Physics simulation`:"Scripted pose · Kinematic / fixed root"));
+  $("unit").textContent=`MEASURED / ${(scene.units?.[j]||"rad").toUpperCase()}`;
+  $("joint-label").textContent=scene.kind==="braking"?"Inspect a channel":"Inspect a joint";
+  $("frame-label").textContent=`Recorded frame ${index} / ${scene.frames.length-1}`;
+  $("measured").textContent=value.toFixed(3);$("error").textContent=error.toFixed(3);
+  draw(current);
+}
+for(const scene of data.scenes){
+  const shots=scene.actions.length?scene.actions:[{label:scene.display_name||"G1 pose showcase",start_frame:0,end_frame:scene.frames.length-1}];
+  shots.forEach((shot,i)=>{
+    const start=scene.start+shot.start_frame/scene.fps,end=scene.start+(shot.end_frame+1)/scene.fps;
+    const button=document.createElement("button");button.className="shot";button.type="button";
+    const small=document.createElement("span");small.textContent=scene.robot==="so100"?`SHOT ${i+1} / ${start.toFixed(0)}–${end.toFixed(0)} s`:`${scene.display_name||"G1"} / ${start.toFixed(0)}–${end.toFixed(0)} s`;
+    button.append(small,document.createTextNode(shot.label));button.addEventListener("click",()=>{video.pause();seek(start+.001);});
+    $("shots").append(button);buttons.push({button,start,end});
+  });
+}
+$("play").addEventListener("click",()=>{if(video.paused)video.play().catch(()=>{$("status").textContent="Playback could not start. Try the native video controls or download the MP4.";});else video.pause();});
+$("prev").addEventListener("click",()=>{video.pause();seek(video.currentTime-1/30);});
+$("next").addEventListener("click",()=>{video.pause();seek(video.currentTime+1/30);});
+timeline.addEventListener("input",()=>{video.pause();seek(Number(timeline.value));});
+joint.addEventListener("change",()=>{lastFrame="";update();});
+for(const event of ["timeupdate","seeking","seeked","play","pause","ended"])video.addEventListener(event,()=>update());
+video.addEventListener("error",()=>{$("status").textContent="Video unavailable. Keep this HTML file beside its MP4 files, or use the download links.";});
+video.addEventListener("loadedmetadata",()=>{if(pendingSeek!==null){const t=pendingSeek;pendingSeek=null;seek(t);}else update();});
+function tick(){if(!video.paused)update();requestAnimationFrame(tick);}requestAnimationFrame(tick);
+function readHash(){
+  const raw=new URLSearchParams(location.hash.slice(1)).get("t");
+  if(raw===null)return;
+  const t=Number(raw);if(Number.isFinite(t)&&t>=0&&t<=data.duration){video.pause();seek(t);}
+}
+window.addEventListener("hashchange",readHash);readHash();update();
+$("share").addEventListener("click",async()=>{
+  const url=new URL(location.href);url.hash=`t=${video.currentTime.toFixed(3)}`;
+  history.replaceState(null,"",url);
+  if(url.protocol==="file:"){$("status").textContent="Local replay: share the HTML and both videos together. This file URL is only usable on your computer.";return;}
+  try{await navigator.clipboard.writeText(url.href);$("status").textContent="Link copied. It opens this recorded moment.";}
+  catch{$("status").textContent="The address bar now points to this moment. Copy its URL to share.";}
+});
+for(const id of ["left","right","wrist","jaw"])$(id).addEventListener("input",()=>{$(`${id}-value`).textContent=`${Number($(id).value).toFixed(2)} rad`;});
+$("download-plan").addEventListener("click",()=>{
+  const val=id=>Number($(id).value);
+  const plan={version:1,shots:[
+    {label:"Find your angle.",targets:{Rotation:val("left")}},
+    {label:"Explore the other side.",targets:{Rotation:val("right")}},
+    {label:"A new perspective.",targets:{Wrist_Roll:val("wrist"),Jaw:val("jaw")}},
+    {label:"Back to home.",home:true}
+  ]};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(plan,null,2)+"\n"],{type:"application/json"}));
+  const a=document.createElement("a");a.href=url;a.download="shots.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+})();
+</script>
+</body></html>

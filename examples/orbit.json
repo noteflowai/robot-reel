@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "shots": [
+    {"label": "Find your angle.", "targets": {"Rotation": -0.8}},
+    {"label": "Explore the other side.", "targets": {"Rotation": 0.8}},
+    {"label": "A new perspective.", "targets": {"Wrist_Roll": 0.6, "Jaw": 0.5}},
+    {"label": "Back to home.", "home": true}
+  ]
+}

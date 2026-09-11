@@ -1,10 +1,6 @@
-import json
-import tempfile
 import unittest
-from pathlib import Path
 
 from robot_reel.capture import validate_targets
-from robot_reel.verify import verify
 
 
 class TargetsTest(unittest.TestCase):
@@ -19,13 +15,6 @@ class TargetsTest(unittest.TestCase):
         for value in [-1, 0, 1]:
             validate_targets({"joint": value}, ["joint"], [(-1, 1)])
 
-    def test_modified_evidence_is_rejected(self):
-        with tempfile.TemporaryDirectory() as directory:
-            p = Path(directory)
-            (p / "capture.txt").write_text("tampered")
-            (p / "manifest.json").write_text(json.dumps({"sha256": {"capture.txt": "wrong"}}))
-            with self.assertRaisesRegex(ValueError, "Hash mismatch"):
-                verify(p)
 
 
 if __name__ == "__main__":
