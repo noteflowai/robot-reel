@@ -1,0 +1,19 @@
+{
+  "schema": "robot-reel-remix-1",
+  "inputs": {
+    "compare/braking/comparison-manifest.json": "c725b52ecc677e599a9d2a2bc392c5a7650d250262bed37c3b83ebff281ecece",
+    "compare/braking/comparison.mp4": "ed4cd564c35a19dc3f172a152474e66fd5d10195ce2cc0b49de04f77ec80718b",
+    "compare/braking/left-trace.json": "9dbcd4d59923ec3e3e7ef8ed7e85429847b638b656bbc041d78aad3f5f537568",
+    "compare/braking/right-trace.json": "29b333064b8e933afe1afaf762b9af9de7922d82c722e7dde3a3636ea0122b77",
+    "blender/media-manifest.json": "9c9f2239a3adbbaa7fc6769d9e759a42c6305227e2e23a6691e65070839bad30",
+    "blender/replay.mp4": "b7dc2f6a9befa124f0ba98d3de328e1351836ce2c837f31833ec8ec4bf298333",
+    "blender/robot-reel-blender.zip": "f8764ac1cda8fc7c91703498cf18be4cdb41aec605a3301719f2ca2668666336",
+    "blender/animation-check.json": "9c674ecdceb07229947309ea9ab16ab301e375146d0c787bc2c2732e4ac09587"
+  },
+  "sha256": {
+    "index.html": "02b0cb407ca6bf79ef34b194492e098fe7d3e9c76e8d038c0fb1f26a5e11289f",
+    "poster.png": "69de5283862caebad9015029a5e89da6152f6040f5cf1e9ae1beac740194558f",
+    "preview.gif": "b175441233bfbb4e9d8806ab1b0c617f4025d2f93cab79060f4a49c955bfcecb"
+  },
+  "preview": "10 Hz samples of both 30 fps videos; animated divider, no new motion."
+}

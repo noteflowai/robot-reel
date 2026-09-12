@@ -41,6 +41,10 @@ No Alpamayo weights, AlpaSim components or CARLA assets are distributed or run.
 The Newton demo uses procedural box geometry authored in `robot_reel/newton.py`.
 Its browser preview draws measured poses without third-party mesh assets.
 The director uses the same procedural geometry and recorded braking samples.
+The README showcase uses excerpts of the published VLA, director and Newton
+replays. Its source frame mapping and media notice are in `docs/showcase/`.
+The Physics → Cinema comparison uses the original procedural braking footage
+and its Blender replay; it does not introduce additional model assets.
 
 The VLA videos and previews depict LIBERO/robosuite assets. Keep
 [`licenses/VLA-MEDIA-NOTICE.txt`](licenses/VLA-MEDIA-NOTICE.txt) with this footage.

@@ -1,0 +1,443 @@
+{
+  "purpose": "README preview montage; independent recordings, completed panels hold their last sample.",
+  "fps": 10,
+  "frames": 70,
+  "samples": [
+    {
+      "preview_frame": 0,
+      "vla_observation": 0,
+      "director_frame": 0,
+      "newton_sample": 0
+    },
+    {
+      "preview_frame": 1,
+      "vla_observation": 2,
+      "director_frame": 3,
+      "newton_sample": 3
+    },
+    {
+      "preview_frame": 2,
+      "vla_observation": 4,
+      "director_frame": 6,
+      "newton_sample": 6
+    },
+    {
+      "preview_frame": 3,
+      "vla_observation": 6,
+      "director_frame": 9,
+      "newton_sample": 9
+    },
+    {
+      "preview_frame": 4,
+      "vla_observation": 8,
+      "director_frame": 12,
+      "newton_sample": 12
+    },
+    {
+      "preview_frame": 5,
+      "vla_observation": 10,
+      "director_frame": 15,
+      "newton_sample": 15
+    },
+    {
+      "preview_frame": 6,
+      "vla_observation": 12,
+      "director_frame": 18,
+      "newton_sample": 18
+    },
+    {
+      "preview_frame": 7,
+      "vla_observation": 14,
+      "director_frame": 21,
+      "newton_sample": 21
+    },
+    {
+      "preview_frame": 8,
+      "vla_observation": 16,
+      "director_frame": 24,
+      "newton_sample": 24
+    },
+    {
+      "preview_frame": 9,
+      "vla_observation": 18,
+      "director_frame": 27,
+      "newton_sample": 27
+    },
+    {
+      "preview_frame": 10,
+      "vla_observation": 20,
+      "director_frame": 30,
+      "newton_sample": 30
+    },
+    {
+      "preview_frame": 11,
+      "vla_observation": 22,
+      "director_frame": 33,
+      "newton_sample": 33
+    },
+    {
+      "preview_frame": 12,
+      "vla_observation": 24,
+      "director_frame": 36,
+      "newton_sample": 36
+    },
+    {
+      "preview_frame": 13,
+      "vla_observation": 26,
+      "director_frame": 39,
+      "newton_sample": 39
+    },
+    {
+      "preview_frame": 14,
+      "vla_observation": 28,
+      "director_frame": 42,
+      "newton_sample": 42
+    },
+    {
+      "preview_frame": 15,
+      "vla_observation": 30,
+      "director_frame": 45,
+      "newton_sample": 45
+    },
+    {
+      "preview_frame": 16,
+      "vla_observation": 32,
+      "director_frame": 48,
+      "newton_sample": 48
+    },
+    {
+      "preview_frame": 17,
+      "vla_observation": 34,
+      "director_frame": 51,
+      "newton_sample": 51
+    },
+    {
+      "preview_frame": 18,
+      "vla_observation": 36,
+      "director_frame": 54,
+      "newton_sample": 54
+    },
+    {
+      "preview_frame": 19,
+      "vla_observation": 38,
+      "director_frame": 57,
+      "newton_sample": 57
+    },
+    {
+      "preview_frame": 20,
+      "vla_observation": 40,
+      "director_frame": 60,
+      "newton_sample": 60
+    },
+    {
+      "preview_frame": 21,
+      "vla_observation": 42,
+      "director_frame": 63,
+      "newton_sample": 63
+    },
+    {
+      "preview_frame": 22,
+      "vla_observation": 44,
+      "director_frame": 66,
+      "newton_sample": 66
+    },
+    {
+      "preview_frame": 23,
+      "vla_observation": 46,
+      "director_frame": 69,
+      "newton_sample": 69
+    },
+    {
+      "preview_frame": 24,
+      "vla_observation": 48,
+      "director_frame": 72,
+      "newton_sample": 72
+    },
+    {
+      "preview_frame": 25,
+      "vla_observation": 50,
+      "director_frame": 75,
+      "newton_sample": 75
+    },
+    {
+      "preview_frame": 26,
+      "vla_observation": 52,
+      "director_frame": 78,
+      "newton_sample": 78
+    },
+    {
+      "preview_frame": 27,
+      "vla_observation": 54,
+      "director_frame": 81,
+      "newton_sample": 81
+    },
+    {
+      "preview_frame": 28,
+      "vla_observation": 56,
+      "director_frame": 84,
+      "newton_sample": 84
+    },
+    {
+      "preview_frame": 29,
+      "vla_observation": 58,
+      "director_frame": 87,
+      "newton_sample": 87
+    },
+    {
+      "preview_frame": 30,
+      "vla_observation": 60,
+      "director_frame": 90,
+      "newton_sample": 90
+    },
+    {
+      "preview_frame": 31,
+      "vla_observation": 62,
+      "director_frame": 93,
+      "newton_sample": 93
+    },
+    {
+      "preview_frame": 32,
+      "vla_observation": 64,
+      "director_frame": 96,
+      "newton_sample": 96
+    },
+    {
+      "preview_frame": 33,
+      "vla_observation": 66,
+      "director_frame": 99,
+      "newton_sample": 99
+    },
+    {
+      "preview_frame": 34,
+      "vla_observation": 68,
+      "director_frame": 102,
+      "newton_sample": 102
+    },
+    {
+      "preview_frame": 35,
+      "vla_observation": 70,
+      "director_frame": 105,
+      "newton_sample": 105
+    },
+    {
+      "preview_frame": 36,
+      "vla_observation": 72,
+      "director_frame": 108,
+      "newton_sample": 108
+    },
+    {
+      "preview_frame": 37,
+      "vla_observation": 74,
+      "director_frame": 111,
+      "newton_sample": 111
+    },
+    {
+      "preview_frame": 38,
+      "vla_observation": 76,
+      "director_frame": 114,
+      "newton_sample": 114
+    },
+    {
+      "preview_frame": 39,
+      "vla_observation": 76,
+      "director_frame": 117,
+      "newton_sample": 117
+    },
+    {
+      "preview_frame": 40,
+      "vla_observation": 76,
+      "director_frame": 120,
+      "newton_sample": 120
+    },
+    {
+      "preview_frame": 41,
+      "vla_observation": 76,
+      "director_frame": 123,
+      "newton_sample": 123
+    },
+    {
+      "preview_frame": 42,
+      "vla_observation": 76,
+      "director_frame": 126,
+      "newton_sample": 126
+    },
+    {
+      "preview_frame": 43,
+      "vla_observation": 76,
+      "director_frame": 129,
+      "newton_sample": 129
+    },
+    {
+      "preview_frame": 44,
+      "vla_observation": 76,
+      "director_frame": 132,
+      "newton_sample": 132
+    },
+    {
+      "preview_frame": 45,
+      "vla_observation": 76,
+      "director_frame": 135,
+      "newton_sample": 135
+    },
+    {
+      "preview_frame": 46,
+      "vla_observation": 76,
+      "director_frame": 138,
+      "newton_sample": 138
+    },
+    {
+      "preview_frame": 47,
+      "vla_observation": 76,
+      "director_frame": 141,
+      "newton_sample": 141
+    },
+    {
+      "preview_frame": 48,
+      "vla_observation": 76,
+      "director_frame": 144,
+      "newton_sample": 144
+    },
+    {
+      "preview_frame": 49,
+      "vla_observation": 76,
+      "director_frame": 147,
+      "newton_sample": 147
+    },
+    {
+      "preview_frame": 50,
+      "vla_observation": 76,
+      "director_frame": 150,
+      "newton_sample": 150
+    },
+    {
+      "preview_frame": 51,
+      "vla_observation": 76,
+      "director_frame": 153,
+      "newton_sample": 153
+    },
+    {
+      "preview_frame": 52,
+      "vla_observation": 76,
+      "director_frame": 156,
+      "newton_sample": 156
+    },
+    {
+      "preview_frame": 53,
+      "vla_observation": 76,
+      "director_frame": 159,
+      "newton_sample": 159
+    },
+    {
+      "preview_frame": 54,
+      "vla_observation": 76,
+      "director_frame": 162,
+      "newton_sample": 162
+    },
+    {
+      "preview_frame": 55,
+      "vla_observation": 76,
+      "director_frame": 165,
+      "newton_sample": 165
+    },
+    {
+      "preview_frame": 56,
+      "vla_observation": 76,
+      "director_frame": 168,
+      "newton_sample": 168
+    },
+    {
+      "preview_frame": 57,
+      "vla_observation": 76,
+      "director_frame": 171,
+      "newton_sample": 171
+    },
+    {
+      "preview_frame": 58,
+      "vla_observation": 76,
+      "director_frame": 174,
+      "newton_sample": 174
+    },
+    {
+      "preview_frame": 59,
+      "vla_observation": 76,
+      "director_frame": 177,
+      "newton_sample": 177
+    },
+    {
+      "preview_frame": 60,
+      "vla_observation": 76,
+      "director_frame": 180,
+      "newton_sample": 180
+    },
+    {
+      "preview_frame": 61,
+      "vla_observation": 76,
+      "director_frame": 183,
+      "newton_sample": 180
+    },
+    {
+      "preview_frame": 62,
+      "vla_observation": 76,
+      "director_frame": 186,
+      "newton_sample": 180
+    },
+    {
+      "preview_frame": 63,
+      "vla_observation": 76,
+      "director_frame": 189,
+      "newton_sample": 180
+    },
+    {
+      "preview_frame": 64,
+      "vla_observation": 76,
+      "director_frame": 192,
+      "newton_sample": 180
+    },
+    {
+      "preview_frame": 65,
+      "vla_observation": 76,
+      "director_frame": 195,
+      "newton_sample": 180
+    },
+    {
+      "preview_frame": 66,
+      "vla_observation": 76,
+      "director_frame": 198,
+      "newton_sample": 180
+    },
+    {
+      "preview_frame": 67,
+      "vla_observation": 76,
+      "director_frame": 201,
+      "newton_sample": 180
+    },
+    {
+      "preview_frame": 68,
+      "vla_observation": 76,
+      "director_frame": 204,
+      "newton_sample": 180
+    },
+    {
+      "preview_frame": 69,
+      "vla_observation": 76,
+      "director_frame": 207,
+      "newton_sample": 180
+    }
+  ],
+  "inputs": {
+    "docs/vla/trace.json": "75d1853283f0aceeceaaa2762d23568b0a09eede7a0b7a256c9ec53c95dd8a8d",
+    "docs/vla/main.mp4": "cc3cf7acd7cb1360e290f9c783f691cc281f1d00826e685ede7b5bea8c53fd8c",
+    "docs/vla/wrist.mp4": "667a6a879ed5bc2f138d0332e62fecae89f7a68fb71dbc3626df5e14d1bb2589",
+    "docs/director/reel.mp4": "4a421b84f102b4f6bb09950d8c7edd289a56cc784685e982b327bc628cf72acf",
+    "docs/director/film.json": "d70247b3ed7b88b156777ecf2360a41d1dda54afe0caac046cf3f83587e5bdd5",
+    "docs/newton/preview.gif": "9768edc8d051efc992b6f0b730662c7ce44e6fc22f01add19349626760e3d9b8",
+    "docs/newton/trace.json": "4231f02946b74c29bfed489a8b841cd94d3cb49901979578285cc258f936e23f"
+  },
+  "sha256": {
+    "hero.gif": "6c42dccad8227611e7c3b56aafaaffb1e5ce4d060bb77bdd2b718ab82170f9b4",
+    "hero.png": "f4db2fd616e629a8f6860375bc7a044377a3d27f65da297c5da4a4e010bb73c1",
+    "vla.png": "25cd35e3c66172f3f5809eb31320079205cb0518e84dc756312e3bf027c90805",
+    "director.png": "cdd986a9696f0c417a114888e939159635d5b0aa3fd9e7788703e39548e04ab6",
+    "newton.png": "3b5f41310b303ae223395a3b00e52973db2b1697aa52d6422488fb907bd73494"
+  }
+}

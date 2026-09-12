@@ -1,0 +1,17 @@
+Robot Reel GitHub showcase
+
+The cover, animated montage and scene thumbnails are derived from Robot Reel's
+published recordings. No new policy behavior or physics is generated.
+The panels show independent runs; each panel holds its last sample after its
+own recording ends. This is a preview, not a synchronized experiment or a
+complete evidence bundle. Source frame mappings and SHA-256 hashes are in
+manifest.json. Open each demo for its complete recording and verification.
+
+The VLA imagery depicts LIBERO/robosuite assets. Preserve the full upstream
+attribution and applicable terms in ../vla/NOTICE.txt (also available in the
+repository at licenses/VLA-MEDIA-NOTICE.txt). Robot Reel's Apache-2.0 code
+license does not relicense those assets.
+
+The director scene and Newton geometry are authored procedurally in Robot Reel.
+The Microduck image linked separately from the README retains its upstream
+noncommercial/share-alike terms and its own media notice; it is not in this montage.

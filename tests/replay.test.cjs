@@ -30,6 +30,63 @@ before(async()=>{
   browser=await chromium.launch();
 });
 after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
+test('physics-to-cinema divider preserves source clocks, contact and scene download',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/remix/#frame=119');
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=2&&!v.seeking));
+    assert.equal(await page.locator('#counter').textContent(),'Sample 119 / 179');
+    await page.locator('#show-raw').click();
+    assert.equal(await page.locator('#reveal').inputValue(),'100');
+    await page.locator('#show-rendered').click();
+    assert.equal(await page.locator('#reveal').inputValue(),'0');
+    assert.equal(await page.locator('#counter').textContent(),'Sample 119 / 179');
+    await page.locator('#show-split').click();
+    assert.equal(await page.locator('#reveal').inputValue(),'50');
+    await page.locator('#contact').click();
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>!v.seeking));
+    assert.equal(await page.locator('#sample').textContent(),'107');
+    assert.match(await page.locator('#left-state').textContent(),/NO CONTACT YET/);
+    assert.match(await page.locator('#right-state').textContent(),/CONTACT RECORDED/);
+    assert.equal(await page.locator('#dcc-frame').textContent(),'108');
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>Number(document.querySelector('#sample').textContent)>115);
+    await page.locator('#play').click();
+    assert.ok(await page.evaluate(()=>Math.abs(document.querySelector('#raw').currentTime-document.querySelector('#rendered').currentTime)<.07));
+    await page.locator('#share').click();
+    assert.ok(page.url().endsWith('#frame='+await page.locator('#sample').textContent()));
+    const pending=page.waitForEvent('download');
+    await page.getByRole('link',{name:'Take the Blender scene ↓'}).click();
+    assert.deepEqual(await readFile(await (await pending).path()),await readFile('docs/blender/replay.blend'));
+  }finally{await page.close();}
+});
+test('physics-to-cinema works offline on mobile with keyboard and pointer controls',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.route(/^https?:/,route=>route.abort());
+    await page.goto(pathToFileURL(resolve('docs/remix/index.html')).href);
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=2&&!v.seeking));
+    const initial=await page.locator('#stage').screenshot();
+    await page.evaluate(()=>{location.hash='frame=0';});
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>!v.seeking));
+    assert.deepEqual(await page.locator('#stage').screenshot(),initial,'Initial view must show frame 0, not an unrelated poster');
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    await page.locator('#reveal').focus();await page.keyboard.press('ArrowRight');
+    assert.equal(await page.locator('#reveal').inputValue(),'51');
+    await page.locator('#next').focus();await page.keyboard.press('Enter');
+    await page.waitForFunction(()=>document.querySelector('#sample').textContent==='1');
+    await page.locator('#handle').scrollIntoViewIfNeeded();
+    const box=await page.locator('#handle').boundingBox();
+    await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();
+    await page.mouse.move(box.x+box.width/2+35,box.y+box.height/2);await page.mouse.up();
+    assert.ok(Number(await page.locator('#reveal').inputValue())>55);
+    assert.equal(await page.locator('#sample').textContent(),'1');
+    await page.locator('#share').click();
+    assert.match(await page.locator('#status').textContent(),/Share the demo folders/);
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
 test('director retains slow-motion sample mapping and exports edits separately',async()=>{
   const page=await browser.newPage();
   try{
