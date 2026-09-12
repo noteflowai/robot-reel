@@ -122,13 +122,17 @@ def verify_site(directory):
                 "first_raw_pixels_sha256": trace["frames"][0]["raw_camera_sha256"][camera],
             }:
                 raise ValueError("Camera check is stale or differs from the trace")
-    with zipfile.ZipFile(directory/"experiment.zip") as archive:
-        names = archive.namelist()
-        if len(names) != len(set(names)) or set(names) != expected|{"manifest.json"}:
-            raise ValueError("Offline archive is incomplete")
-        for name in names:
-            if archive.read(name) != (directory/name).read_bytes():
-                raise ValueError(f"Offline archive differs: {name}")
+    # A build writes experiment.zip beside the site. The published copy under docs/
+    # does not ship it -- the archive is a release asset, so it stays out of the
+    # repository history -- and is verified from the manifest and files instead.
+    if (directory/"experiment.zip").exists():
+        with zipfile.ZipFile(directory/"experiment.zip") as archive:
+            names = archive.namelist()
+            if len(names) != len(set(names)) or set(names) != expected|{"manifest.json"}:
+                raise ValueError("Offline archive is incomplete")
+            for name in names:
+                if archive.read(name) != (directory/name).read_bytes():
+                    raise ValueError(f"Offline archive differs: {name}")
     return summary
 
 

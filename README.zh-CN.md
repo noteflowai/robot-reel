@@ -70,7 +70,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 </a>
 
 **[对照策略运行 ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[完整离线实验包 ↓](https://noteflowai.github.io/robot-reel/stress/experiment.zip) ·
+[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.4.0/robot-reel-stress-experiment.zip) ·
 [MCAP 遥测数据 ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [复现与检查](docs/stress.md)
 

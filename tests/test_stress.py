@@ -192,6 +192,15 @@ class StressTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, message):
                     verify_site(root)
 
+    def test_published_site_verifies_without_the_release_archive(self):
+        # docs/stress/ ships the archive as a release asset, not as a tracked file.
+        self.assertFalse((SITE/"experiment.zip").exists())
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)/"pack"
+            shutil.copytree(SITE, root)
+            summary = verify_site(root)
+            self.assertEqual(summary, json.loads((SITE/"summary.json").read_text()))
+
     def test_offline_archive_omission_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)/"pack"
