@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Ship the Stress Lab's 56 MB offline archive as a release asset instead of a
+  tracked file, verify a published site without it, and fail the tests when any
+  tracked file exceeds 25 MB. The archive was removed from the repository
+  history as well, so existing clones must be re-cloned or hard-reset.
+
 - Check that every relative link and heading anchor in the Markdown docs and the
   landing page resolves, with the standard library.
 - Add launch copy for the landing page, Stress Lab and Butterfly Lab to the
