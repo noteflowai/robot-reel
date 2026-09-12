@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Add a native Rerun inspection workspace: select a paired seed, open six embedded
+  videos alongside measured 3D paths, applied controls and inference timings, or
+  download the portable RRD. Read back native poses, controls, source JSON, video
+  byte streams and clocks; retain terminal semantics and the full experiment's
+  denominator. Feature the verified seed-09 recording on the landing page and in
+  both READMEs. Rerun 0.37.2 remains an isolated optional dependency.
+
 - Synchronize replay scripts, matching offline ZIP members and dependent manifest
   hashes together. Integration tests update real VLA, Chaos and Stress packs,
   verify their evidence and archives, and check that repeated syncs change nothing.

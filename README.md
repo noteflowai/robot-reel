@@ -82,6 +82,24 @@ separate inference/simulation timings and per-condition confidence intervals.
 This is a controlled diagnostic, not an official LIBERO benchmark score.
 Preview plays on simulation time; shorter runs explicitly hold their final sample.</sub>
 
+## Same seed. Different endings.
+
+**Native Rerun inspection.** Open three paired Stress Lab trials with six
+embedded camera videos, measured 3D end-effector paths, applied controls and
+policy-timing curves on one clock. The portable recording keeps the original
+JSON and has been read back against every source sample.
+
+<a href="https://app.rerun.io/version/0.37.2/?url=https%3A%2F%2Fnoteflowai.github.io%2Frobot-reel%2Frerun%2Fseed-09.rrd"><img src="docs/rerun/preview.png" width="100%" alt="Actual Rerun workspace with three policy camera views, measured 3D paths and applied-control curves from paired seed 09."></a>
+
+**[Open the Rerun workspace ↗](https://app.rerun.io/version/0.37.2/?url=https%3A%2F%2Fnoteflowai.github.io%2Frobot-reel%2Frerun%2Fseed-09.rrd)** ·
+[Portable recording ↓](https://noteflowai.github.io/robot-reel/rerun/seed-09.rrd) ·
+[Rebuild & verify](docs/telemetry.md#native-rerun-workspace)
+
+<sub>Selected seed 09: reference succeeds; dim lighting and the shifted camera
+reach the step limit. 405 observations · 41 policy calls · 6 embedded videos.
+The full experiment still contains 30 trials. Desktop browser recommended;
+the downloaded file opens locally in Rerun 0.37.2.</sub>
+
 ## 0.05° apart. Worlds apart.
 
 **The Butterfly Lab.** Twelve isolated Newton worlds begin at nearly identical angles.
@@ -192,7 +210,7 @@ into something people can watch, inspect and reuse.
 | [LeRobot](https://github.com/huggingface/lerobot) | Datasets, policies and training for real and simulated robots | Runs a LeRobot policy (SmolVLA), then keeps every applied action, both cameras and the hardware/timing record as a replay |
 | [MuJoCo Playground](https://github.com/google-deepmind/mujoco_playground), [Isaac Lab](https://github.com/isaac-sim/IsaacLab) | GPU-scale environments and RL training | Takes a single rollout from a simulator and makes it inspectable, comparable and editable |
 | [Genesis](https://github.com/Genesis-Embodied-AI/Genesis), [Newton](https://github.com/newton-physics/newton) | Physics engines | Records Newton on CPU and exports the measured motion as an animated OpenUSD scene with a native Blender check |
-| Rerun, Foxglove | General telemetry viewers | Publishes self-contained HTML replays that open from `file://`, plus MCAP so those viewers can read the same data |
+| Rerun, Foxglove | General telemetry viewers | Publishes self-contained HTML replays, MCAP telemetry and a verified native Rerun workspace with embedded videos |
 
 What is unique here is the chain: hash-verified traces, paired comparisons on
 one clock, an MCP agent that directs a Blender film from the recording, and 3D
@@ -205,6 +223,7 @@ Choose the workflow you want to build:
 | I want to… | Start here |
 | --- | --- |
 | Run paired VLA stress trials on GPU | [CUDA setup, fixed experiment and evidence checks](docs/stress.md) |
+| Inspect paired trials in Rerun | [Portable video, 3D paths and native readback](docs/telemetry.md#native-rerun-workspace) |
 | Run SmolVLA locally | [Isolated CPU environment + pinned models](docs/vla.md) |
 | Let an agent direct a film | [MCP setup + Blender build/render](docs/director.md) |
 | Export real physics to a DCC | [Newton → OpenUSD → Blender](docs/newton.md) |

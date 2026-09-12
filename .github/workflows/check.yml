@@ -44,6 +44,16 @@ jobs:
         run: npm run check:js
       - run: npx playwright install --with-deps chromium
       - run: npm test
+  rerun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e '.[rerun]'
+      - name: Read native videos, clocks, controls and poses back from RRD
+        run: python -m unittest discover -s tests -p test_rerun.py -v
   newton:
     runs-on: ubuntu-latest
     steps:

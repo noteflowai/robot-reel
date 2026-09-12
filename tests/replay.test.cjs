@@ -564,6 +564,26 @@ test('landing page indexes every published demo and copies the quick start',asyn
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);
   }finally{await page.close();}
 });
+test('landing page offers a portable native inspector without loading a viewer in the background',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  const external=[],errors=[];
+  page.on('request',request=>{if(!request.url().startsWith(base))external.push(request.url());});
+  page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.goto(base+'/#inspect');
+    const link=new URL(await page.locator('#open-rerun').getAttribute('href'));
+    assert.equal(link.origin,'https://app.rerun.io');
+    assert.equal(link.pathname,'/version/0.37.2/');
+    assert.equal(link.searchParams.get('url'),'https://noteflowai.github.io/robot-reel/rerun/seed-09.rrd');
+    assert.match(await page.locator('.inspector .counts').textContent(),/6 embedded videos.*405 observations.*41 policy calls/);
+    const download=page.waitForEvent('download');
+    await page.locator('#download-rerun').click();
+    assert.deepEqual(await readFile(await (await download).path()),await readFile('docs/rerun/seed-09.rrd'));
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+    assert.deepEqual(external,[]);
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
 test('Microduck page exposes policy data and a distinct download command',async()=>{
   const page=await browser.newPage();
   try{

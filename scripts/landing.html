@@ -19,6 +19,15 @@ nav{display:flex;gap:10px 18px;flex-wrap:wrap;font:12px/1.4 ui-monospace,SFMono-
 .actions{display:flex;gap:12px;flex-wrap:wrap}.button{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:600;background:var(--panel)}.button.primary{background:var(--mint);border-color:var(--mint);color:#062018}.button.primary:hover{color:#062018;filter:brightness(1.08)}
 .hero picture img,.hero .frame{display:block;width:100%;border-radius:14px;border:1px solid var(--line);background:#000}
 .note{color:var(--muted);font-size:13px;margin-top:10px}
+.inspector{margin-top:30px;border:1px solid #48625e;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#152a2b,#121b2d)}
+.inspector-copy{padding:24px 28px;display:grid;grid-template-columns:1fr 1fr;gap:16px 32px;align-items:center}
+.inspector h2{font-size:clamp(26px,3.6vw,40px);line-height:1.12;letter-spacing:-.02em;margin:8px 0 12px}
+.inspector p{margin:0 0 16px;color:var(--muted);max-width:60ch}.inspector .note{font-size:12px;margin:12px 0 0}
+.inspector .counts{color:var(--mint);font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+.inspector figure{margin:0;background:#09121b;border-top:1px solid var(--line)}
+.inspector figure a{display:block}.inspector img{display:block;width:100%;height:auto}
+.inspector figcaption{padding:12px 24px;color:var(--muted);font-size:12px}
+.inspector a:focus-visible{outline:3px solid var(--orange);outline-offset:-3px}
 .quick{margin:28px 0 8px;border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:18px 22px;display:grid;grid-template-columns:1fr auto;gap:14px 24px;align-items:start}
 .quick>div{min-width:0}.quick h2{margin:2px 0 4px;font-size:18px}.quick p{margin:0 0 10px;color:var(--muted)}
 pre{margin:0;max-width:100%;padding:14px 16px;background:#050c13;border:1px solid var(--line);border-radius:10px;overflow:auto;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#d6e4dc}pre b{color:var(--orange);font-weight:500}
@@ -32,10 +41,10 @@ pre{margin:0;max-width:100%;padding:14px 16px;background:#050c13;border:1px soli
 .card.featured{grid-column:span 1}.card.text{justify-content:center}.card.text .body{padding:22px 18px}
 .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}.pillars article{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--panel)}.pillars h3{margin:4px 0 6px;font-size:16px}.pillars p{margin:0;color:var(--muted);font-size:14px}
 footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:30px;line-height:1.7}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.grid,.pillars{grid-template-columns:1fr 1fr}.quick{grid-template-columns:1fr}.copy{justify-self:start}}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.grid,.pillars{grid-template-columns:1fr 1fr}.quick{grid-template-columns:1fr}.copy{justify-self:start}.inspector-copy{grid-template-columns:1fr;padding:20px}}
 @media(max-width:560px){header,main,footer{padding:16px}.grid,.pillars{grid-template-columns:1fr}}
 </style></head><body>
-<header><a class="brand" href="./">Robot<span>Reel</span></a><nav><a href="#demos">Demos</a><a href="#start">Quick start</a><a href="https://github.com/noteflowai/robot-reel/blob/main/docs/recording.md">Record your own</a><a href="https://github.com/noteflowai/robot-reel/releases/latest">Downloads</a><a href="https://github.com/noteflowai/robot-reel">GitHub</a><a href="https://github.com/noteflowai/robot-reel/blob/main/README.zh-CN.md">中文</a></nav></header>
+<header><a class="brand" href="./">Robot<span>Reel</span></a><nav><a href="#demos">Demos</a><a href="#inspect">Inspect</a><a href="#start">Quick start</a><a href="https://github.com/noteflowai/robot-reel/blob/main/docs/recording.md">Record your own</a><a href="https://github.com/noteflowai/robot-reel/releases/latest">Downloads</a><a href="https://github.com/noteflowai/robot-reel">GitHub</a><a href="https://github.com/noteflowai/robot-reel/blob/main/README.zh-CN.md">中文</a></nav></header>
 <main>
 <section class="hero">
 <div><div class="eyebrow">Physical AI replay lab</div><h1>Give Physical AI<br><span>a replay button.</span></h1>
@@ -43,6 +52,12 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin
 <div class="actions"><a class="button primary" href="stress/">Explore the Stress Lab ↗</a><a class="button" href="chaos/">Enter the Butterfly Lab</a><a class="button" href="remix/">Drag the before / after</a></div>
 <p class="note">No account or install to watch. Every page is a self-contained recording with its source trace and checksums.</p></div>
 <a href="chaos/" aria-label="Open the Butterfly Lab"><picture><source media="(prefers-reduced-motion: reduce)" srcset="chaos/poster.png"><img src="chaos/preview.gif" alt="Twelve measured Newton pendulum trajectories unfold into a colored 3D time sculpture. Adjacent releases differ by 0.05 degrees."></picture></a>
+</section>
+
+<section class="inspector" id="inspect" aria-labelledby="inspect-title">
+<div class="inspector-copy"><div><div class="eyebrow">New · Native Rerun inspection</div><h2 id="inspect-title">Same seed.<br>Different endings.</h2><p>One run succeeds. Two reach the step limit. Put their camera views, measured 3D paths and applied controls on the same timeline, then inspect the policy calls behind the motion.</p><div class="counts">6 embedded videos · 405 observations · 41 policy calls</div></div>
+<div><div class="actions"><a class="button primary" id="open-rerun" href="https://app.rerun.io/version/0.37.2/?url=https%3A%2F%2Fnoteflowai.github.io%2Frobot-reel%2Frerun%2Fseed-09.rrd">Open the Rerun workspace ↗</a><a class="button" id="download-rerun" href="rerun/seed-09.rrd" download>Download recording · 6.3 MiB ↓</a></div><p class="note">A selected group of 3 trials from the 30-trial Stress Lab. The full experiment remains available. Desktop browser recommended; the downloaded file opens locally in Rerun 0.37.2 with all six videos included.</p><p class="note"><a href="stress/#seed=9&amp;condition=dim&amp;frame=61&amp;camera=main">Inspect this pair in the browser replay ↗</a> · <a href="https://github.com/noteflowai/robot-reel/blob/main/docs/telemetry.md#native-rerun-workspace">Rebuild and verify</a></p></div></div>
+<figure><a href="https://app.rerun.io/version/0.37.2/?url=https%3A%2F%2Fnoteflowai.github.io%2Frobot-reel%2Frerun%2Fseed-09.rrd" aria-label="Explore the three recorded trials in Rerun"><img src="rerun/preview.png" width="1440" height="1050" loading="lazy" alt="Native Rerun workspace showing three recorded policy cameras, measured end-effector paths in 3D, and the applied gripper-control curves."></a><figcaption>Actual Rerun workspace · source seed 09. The 3D lines show complete recorded paths; camera titles state each run's outcome and end time. This selected example is a diagnostic, not a benchmark score.</figcaption></figure>
 </section>
 
 <section class="quick" id="start">
@@ -75,7 +90,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 
 <div class="section-title"><h2>Keep the run behind the film</h2><span>Evidence travels with every demo</span></div>
 <section class="pillars">
-<article><span class="eyebrow">Watch</span><h3>Replays, not renders</h3><p>Browser replays with synchronized views, shot navigation and frame links. The browser plays recorded simulations; nothing is re-simulated on your machine.</p></article>
+<article><span class="eyebrow">Watch</span><h3>Watch recorded behavior</h3><p>Browser replays with synchronized views, shot navigation and frame links. The browser plays recorded simulations; nothing is re-simulated on your machine.</p></article>
 <article><span class="eyebrow">Inspect</span><h3>Every applied action</h3><p>Applied controls, measured poses, recorded outcomes, source revisions, hardware and timing. Validators check hashes, timestamps and frame mappings.</p></article>
 <article><span class="eyebrow">Reuse</span><h3>Take the scene with you</h3><p>Offline episodes, MP4s, JSON and MCAP traces, editable Blender projects and animated OpenUSD scenes.</p></article>
 </section>
