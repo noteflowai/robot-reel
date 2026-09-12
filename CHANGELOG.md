@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Synchronize replay scripts, matching offline ZIP members and dependent manifest
+  hashes together. Integration tests update real VLA, Chaos and Stress packs,
+  verify their evidence and archives, and check that repeated syncs change nothing.
+
+- Keep the Stress Lab's offline-archive link in its template. Custom builds
+  default to their own `experiment.zip`; `--archive-href` explicitly selects the
+  published Release asset. Tests cover the complete published page, local build
+  downloads and CLI overrides.
+
 - Encode every recorded video at one quality. Two recorders had drifted to
   imageio-ffmpeg quality 9 (crf 5) and wrote the heaviest media in the
   repository; a test now holds all eight writers to the same value.

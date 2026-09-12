@@ -210,6 +210,20 @@ python -m robot_reel.stress_site artifacts/stress-gpu-30 artifacts/stress-site
 robot-reel stress artifacts/stress-site --check-media --check-mcap
 ```
 
+The download button defaults to the generated `experiment.zip` beside the page,
+so a custom experiment always downloads its own evidence. If that exact archive
+will be hosted elsewhere, pass `--archive-href` with its download location.
+For the published 30-trial experiment, use:
+
+```bash
+python -m robot_reel.stress_site artifacts/stress-gpu-30 artifacts/stress-published \
+  --archive-href https://github.com/noteflowai/robot-reel/releases/download/v0.4.0/robot-reel-stress-experiment.zip
+```
+
+That release link identifies the published experiment; keep the default for a
+different collection. Page synchronization updates local ZIPs only. To distribute
+an updated viewer through Releases, publish a new archive and use its new link.
+
 The published pack can be verified without ML packages:
 `python -S -m robot_reel.stress docs/stress`.
 MCAP reading requires the optional `inspect` extra; media decoding requires

@@ -17,7 +17,10 @@ before `npm test`. Keep the scripts inline: the exported pages must stay
 self-contained enough to open from `file://`. The published pages under `docs/`
 carry a copy of that script, so rebuild them, or run
 `python3 -m robot_reel.pages --write`, and commit the refreshed hashes with the
-template change.
+template change. Synchronization also refreshes matching files in local offline
+ZIPs and the manifests that hash those archives. It preserves the original
+recorded media and source-capture manifests. Release assets are immutable
+snapshots: publish an updated archive separately when releasing a new version.
 
 Blender changes should also pass the saved-project check in [docs/blender.md](docs/blender.md).
 For the Newton adapter, install `.[newton]`, record a fresh CPU run and use

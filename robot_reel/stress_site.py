@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import html
 import io
 import json
 from pathlib import Path
@@ -14,6 +15,20 @@ from .stress import CONDITIONS, MEDIA, SCHEMA, file_hash, summarize, trial_id, v
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKER = '<script id="stress-data" type="application/json">'
+# Only the published experiment uses this release asset. Custom builds link to
+# their own local archive unless the caller explicitly supplies another location.
+PUBLISHED_ARCHIVE_HREF = ("https://github.com/noteflowai/robot-reel/releases/download/"
+                          "v0.4.0/robot-reel-stress-experiment.zip")
+
+
+def page(data, archive_href="experiment.zip"):
+    """Render the replay page for a verified payload."""
+    encoded = json.dumps(data, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
+    template = Path(__file__).with_name("stress.html").read_text()
+    if template.count("__ARCHIVE_HREF__") != 1 or template.count("__STRESS_DATA__") != 1:
+        raise ValueError("The stress template must carry one archive link and one payload")
+    replacements = {"__STRESS_DATA__": encoded, "__ARCHIVE_HREF__": html.escape(archive_href, quote=True)}
+    return re.sub(r"__STRESS_DATA__|__ARCHIVE_HREF__", lambda match: replacements[match[0]], template)
 
 
 def load_collection(directory):
@@ -170,7 +185,7 @@ def check_media(directory):
     return checks
 
 
-def build(recording, output):
+def build(recording, output, archive_href="experiment.zip"):
     from .stress_mcap import export_mcap
     recording, output = Path(recording), Path(output)
     document, attempts, traces = load_collection(recording)
@@ -193,8 +208,7 @@ def build(recording, output):
     write_json(output/"media-checks.json", check_media(output))
     for source, name in (("licenses/VLA-MEDIA-NOTICE.txt", "NOTICE.txt"), ("LICENSE", "LICENSE"), ("docs/stress.md", "METHODS.md")):
         shutil.copyfile(ROOT/source, output/name)
-    encoded = json.dumps(data, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
-    (output/"index.html").write_text(Path(__file__).with_name("stress.html").read_text().replace("__STRESS_DATA__", encoded))
+    (output/"index.html").write_text(page(data, archive_href))
     write_json(output/"manifest.json", {"schema": SCHEMA, "files": {name: file_hash(output/name) for name in sorted(required_files(attempts))}})
     with zipfile.ZipFile(output/"experiment.zip", "w", zipfile.ZIP_DEFLATED) as archive:
         for name in sorted(required_files(attempts)|{"manifest.json"}):
@@ -202,12 +216,14 @@ def build(recording, output):
     return verify_site(output)
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("recording", type=Path)
     parser.add_argument("output", type=Path)
-    args = parser.parse_args()
-    print(json.dumps(build(args.recording, args.output), indent=2))
+    parser.add_argument("--archive-href", default="experiment.zip",
+                        help="Download location for this experiment (default: local experiment.zip)")
+    args = parser.parse_args(argv)
+    print(json.dumps(build(args.recording, args.output, archive_href=args.archive_href), indent=2))
 
 
 if __name__ == "__main__":
