@@ -1,0 +1,36 @@
+{
+  "schema": "robot-reel-director-1",
+  "brief": "Create a short explanation of these two recorded braking trials. Start with both cars, follow their approach, then slow down around the recorded contact. Keep every source sample and finish with both outcomes visible.",
+  "title": "One decision. Two outcomes.",
+  "theme": "midnight",
+  "shots": [
+    {
+      "start": 0,
+      "end": 60,
+      "camera": "overview",
+      "rate": 1,
+      "caption": "Same start. Different braking decisions."
+    },
+    {
+      "start": 60,
+      "end": 96,
+      "camera": "tracking",
+      "rate": 1,
+      "caption": "Follow the measured approach."
+    },
+    {
+      "start": 96,
+      "end": 126,
+      "camera": "impact",
+      "rate": 0.5,
+      "caption": "Recorded contact, slowed to half speed."
+    },
+    {
+      "start": 126,
+      "end": 180,
+      "camera": "top",
+      "rate": 1,
+      "caption": "Two outcomes. Every source sample retained."
+    }
+  ]
+}

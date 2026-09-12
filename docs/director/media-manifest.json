@@ -1,0 +1,18 @@
+{
+  "frames": 210,
+  "source_frames": 180,
+  "fps": 30,
+  "schema": "robot-reel-director-media-1",
+  "width": 960,
+  "height": 540,
+  "sha256": {
+    "animation-check.json": "f964c76c50b92674c5808c07baf292f0d21c612ca2b5e762adfaa47355eb0d11",
+    "film.json": "d70247b3ed7b88b156777ecf2360a41d1dda54afe0caac046cf3f83587e5bdd5",
+    "index.html": "9c1e397359482e2e661bbe74650532e7d98a84066f60a1a2110ea964a0384cbc",
+    "poster.png": "f0e7be311692a246de38b8f6ca7e58008b12f79310aa778d45811b7e0fc4e14a",
+    "preview.gif": "96f3bfed9923d13044703afd49f919f95ff13e8b97a97601a397a3ec5afc9439",
+    "project.zip": "4e668f868dad12a44dd0a4b7388444109caee64cafb9c67f01422e4ee01c379f",
+    "reel.mp4": "4a421b84f102b4f6bb09950d8c7edd289a56cc784685e982b327bc628cf72acf",
+    "storyboard.json": "2183a29708a44d55c4f3eec5dd66dea52cb17580dc24419162a704c0973ddda2"
+  }
+}

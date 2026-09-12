@@ -3,10 +3,13 @@
 **看机器人，也看清每一步。**
 
 把物理 AI 仿真录制成可分享的视频，同时保留可交互的逐帧动作记录。
-可以运行 Microduck 官方策略、对比两种制动控制器，或让 Strands Agent
-控制机械臂。回放直接在浏览器里打开，观看不需要账号，也不需要安装。
-也可以把录制轨迹带进 Blender，或将 Newton 物理仿真导出为带动画的 OpenUSD 场景。
+可以运行 SmolVLA 完成语言指令驱动的操作任务、检查 Microduck 步行策略，
+或让 Agent 为录制实验编排 Blender 成片。回放直接在浏览器里打开，
+观看不需要账号，也不需要安装。原始动作、实测结果和可编辑的
+Blender／OpenUSD 场景都可以一起保留。
 
+[**观看 SmolVLA 执行任务 →**](https://noteflowai.github.io/robot-reel/vla/) ·
+[**试试 Agent 导演 →**](https://noteflowai.github.io/robot-reel/director/) ·
 [**试试 Microduck →**](https://noteflowai.github.io/robot-reel/) ·
 [**对比制动 →**](https://noteflowai.github.io/robot-reel/braking/) ·
 [**检查 Agent 机械臂 →**](https://noteflowai.github.io/robot-reel/studio/) ·
@@ -14,9 +17,44 @@
 [**Newton → USD → Blender →**](https://noteflowai.github.io/robot-reel/newton/) ·
 [English](README.md)
 
-![用 Robot Reel 录制的 Microduck 官方策略仿真](docs/microduck/media/preview.gif)
+![真实 SmolVLA 运行，场景视角与腕部视角同步回放](docs/vla/preview.gif)
 
-[下载视频与证据包](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+[下载 VLA 回放与证据包](https://noteflowai.github.io/robot-reel/vla/episode.zip) ·
+[下载导演版 Blender 工程](https://noteflowai.github.io/robot-reel/director/project.zip) ·
+[原有场景发布包](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+
+## 新增：一句指令，每一步动作都有记录
+
+**在 LIBERO 中实际运行 SmolVLA 策略。** 用语言指令要求机械臂把黑碗放到盘子上，
+本次公开的 CPU 运行在执行 76 次动作后完成任务。两个相机视角、实测机器人状态、
+归一化控制量和推理动作组共用一条时间线；任意观测都可以分享，完整回放可以离线下载。
+
+模型与资产版本均已固定。这是一次固定种子的仿真运行，不是成功率基准；
+视频省略了 CPU 推理等待时间。LeRobot 录制环境与原有场景隔离，保留各自需要的
+MuJoCo 版本。[复现这次真实策略运行](docs/vla.md)。
+分享画面时请保留[上游媒体署名](licenses/VLA-MEDIA-NOTICE.txt)。
+
+```bash
+# 使用 Python 标准库验证仓库中的回放包。
+python3 -m robot_reel.cli vla docs/vla
+```
+
+## 新增：让 Agent 为实验编排成片
+
+**描述展示方式，保留实验结果。** 接入 MCP Agent，先检查已记录的事件，
+再生成通过校验的分镜计划。可编辑的 Blender 成片支持全景、跟拍、接触特写、
+俯视、字幕，以及保留全部原始样本的半速回放。
+
+![四种机位切换，记录到的接触以半速展示](docs/director/preview.gif)
+
+七秒示例把 180 个源样本映射为 210 个成片帧，全部 420 个车辆状态、四次镜头
+绑定和跟拍相机均通过 Blender 5.2.1 检查。网页展示已渲染示例，编辑后导出的
+计划用于下一次渲染。[连接 Agent 并制作自己的成片](docs/director.md)。
+
+```bash
+python3 -m robot_reel.cli direct docs/compare/braking \
+  --plan examples/contact-storyboard.json --output artifacts/director
+```
 
 ## 新增：Newton → OpenUSD → Blender
 
@@ -206,10 +244,11 @@ npx playwright install chromium
 npm test
 ```
 
-Python 测试覆盖计划拒绝、证据一致性与 Blender 导出数据对应关系。导入校验函数
-无需 `imageio_ffmpeg`、MuJoCo 或 NumPy；CI 也会在禁用第三方包的环境中运行测试。
-浏览器测试覆盖跳转、步进、下载、
-移动端布局、本地文件播放和字幕转义。真实录制的冒烟测试需要 OpenGL 和已下载
+Python 测试覆盖计划拒绝、VLA 结果与动作一致性、证据包和 Blender 导出对应关系。
+导入校验函数无需 `imageio_ffmpeg`、MuJoCo、NumPy 或机器学习库；CI 也会在禁用
+第三方包的环境中运行测试。浏览器测试覆盖双相机时钟、跳转、步进、下载、
+移动端布局、本地文件播放和字幕转义；CI 还会检查真实 MCP 协议连接。
+真实录制的冒烟测试需要 OpenGL 和已下载
 的模型资产。Studio 适配器使用了 Strands Robots 的私有字段，并固定在 0.5.1 版本。
 
 参见 [CONTRIBUTING.md](CONTRIBUTING.md)。有价值的贡献包括：公共后端适配器、

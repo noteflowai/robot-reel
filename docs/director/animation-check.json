@@ -1,0 +1,13 @@
+{
+  "blender_version": "5.2.1 LTS",
+  "output_frames": 210,
+  "source_frames": 180,
+  "checked_vehicle_samples": 420,
+  "maximum_position_error_m": 9.425042861721522e-07,
+  "camera_cuts_checked": 4,
+  "constant_hold_checked": true,
+  "tracking_camera_checked": true,
+  "blend_sha256": "505d32031ce2f592f2447921b4f6802ca722c47da375f8e8dfc826b34d300578",
+  "film_sha256": "d70247b3ed7b88b156777ecf2360a41d1dda54afe0caac046cf3f83587e5bdd5",
+  "source_sha256": "d5bfa887a570f3c9c5090909b0405c8deab43d201f2974f10c28a5fa972d9317"
+}
