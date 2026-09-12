@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Redesign the English and Chinese GitHub homepages around a recorded-motion
+  cover, a reduced-motion fallback, scene cards and direct demo/download links.
+- Add Physics → Cinema: an interactive divider between the original MuJoCo
+  comparison and its Blender replay, with shared sample stepping, contact
+  navigation and source consistency checks.
+- Preserve detailed recording and development instructions in dedicated guides.
+
 ## 0.4.0 — Recorded policies and agent-directed films
 
 - Record a real SmolVLA CPU rollout in LIBERO with pinned checkpoint, backbone

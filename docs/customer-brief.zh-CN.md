@@ -1,15 +1,15 @@
 # 面向关注 PAI 创新场景客户的介绍
 
-Robot Reel 是一个面向物理 AI（Physical AI）创新场景的开源演示与验证项目：
-把机器人策略和仿真实验转化为可观看、可逐帧检查、可复现的交互内容。
-目前已展示 SmolVLA 根据语言指令完成机械臂操作、Microduck 学习策略步行、
-制动策略对照，以及 Newton 到 OpenUSD／Blender 的三维展示流程；新增的
-MCP Agent 导演可为已录制实验编排镜头、字幕和慢动作，并保留原始运动数据。
-客户可直接在浏览器体验，也可下载视频、动作证据和可编辑工程，作为具身智能
-概念验证、策略结果交流和三维内容制作的参考起点。
+Robot Reel 把物理 AI（Physical AI）的技术能力变成客户可以直接体验的创新场景：
+观看 SmolVLA 根据语言指令完成机械臂仿真任务，拖动对照原始物理画面与 Blender
+电影场景，或让 MCP Agent 编排镜头、字幕和慢动作。项目还展示 Microduck
+学习策略步行，以及 Newton 到 OpenUSD 的三维流程。每个演示都保留可检查的
+动作或姿态记录，并提供相应的视频、证据和场景文件，让具身智能概念验证、
+策略复盘与三维内容制作既看得到效果，也查得到依据。
 
 项目：https://github.com/noteflowai/robot-reel
 
+- 原始仿真 → 电影场景：https://noteflowai.github.io/robot-reel/remix/
 - VLA 双视角任务回放：https://noteflowai.github.io/robot-reel/vla/
 - Agent 导演：https://noteflowai.github.io/robot-reel/director/
 - Newton／OpenUSD：https://noteflowai.github.io/robot-reel/newton/
