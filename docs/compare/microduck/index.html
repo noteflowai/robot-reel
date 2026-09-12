@@ -13,7 +13,7 @@
 <script>
 const d=JSON.parse(document.querySelector('#comparison-data').textContent), $=id=>document.getElementById(id);
 const videos=[$('left'),$('right')], count=d.traces[0].frames.length, timeline=$('timeline');
-let frame=0,playing=false,origin=0,token=0;
+let frame=0,playing=false,token=0;
 timeline.max=(count-1)/d.fps;timeline.step=1/d.fps;
 $('description').textContent=d.family==='microduck'?'Official Microduck walking policy, two forward-speed commands. Inspect actual joint motion on a shared simulation clock.':'Early and late braking in the same 1D vehicle simulation. Inspect speed, obstacle gap and contact on a shared clock.';
 $('notice').textContent=d.family==='microduck'?'MuJoCo XML PD approximation; no BAM motor model or hardware run. Media follows the upstream Microduck BY-SA-NC terms.':'Scripted controllers in a toy longitudinal rigid-body surrogate. No tires, perception or autonomous-driving model; not a road-safety validation.';

@@ -163,6 +163,20 @@ their original HTML line. It reads the templates without modifying them, and it
 does not add anything to the exported pages. `scripts/viewer-env.d.ts` records
 what the templates assume about the DOM, so the check reports undeclared names,
 typos, wrong arity and dead locals instead of a cast at every element access.
+
+Because every published page carries a verbatim copy of its template's script, a
+template change only reaches the site when the pages are rebuilt. The Python
+suite fails while they disagree. A full rebuild needs the original capture
+bundles and their videos; when only the script changed, copy it across instead:
+
+```bash
+python3 -m robot_reel.pages           # report pages behind their templates
+python3 -m robot_reel.pages --write   # copy the templates into those pages
+```
+
+`--write` also re-records the affected hashes, following the manifest chain
+outward -- a page, the bundle manifest that hashes it, and the remix manifest
+that hashes that bundle manifest.
 The Studio adapter uses private Strands Robots fields and pins version 0.5.1.
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md). Useful contributions include a public
