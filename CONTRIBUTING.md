@@ -12,6 +12,10 @@ are required for recording too.
 For capture changes, run the credential-free demo and verify its output.
 Do not require a paid model or real hardware for ordinary tests.
 
+Changes to a replay template's inline script should pass `npm run check:js`
+before `npm test`. Keep the scripts inline: the exported pages must stay
+self-contained enough to open from `file://`.
+
 Blender changes should also pass the saved-project check in [docs/blender.md](docs/blender.md).
 For the Newton adapter, install `.[newton]`, record a fresh CPU run and use
 `--verify --check-usd`. The native Blender USD import check and page rebuild

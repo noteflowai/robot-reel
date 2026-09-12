@@ -33,6 +33,8 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci
+      - name: Type-check the inline viewer scripts against their templates
+        run: npm run check:js
       - run: npx playwright install --with-deps chromium
       - run: npm test
   newton:
