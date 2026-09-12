@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Every docs/**/index.html must appear here; check() fails on an unlisted page so
 # a new published page cannot quietly escape the comparison.
 PAGES = {
-    "docs/index.html": "robot_reel/replay.html",
+    "docs/index.html": "scripts/landing.html",
     "docs/studio/index.html": "robot_reel/replay.html",
     "docs/microduck/index.html": "robot_reel/replay.html",
     "docs/braking/index.html": "robot_reel/replay.html",

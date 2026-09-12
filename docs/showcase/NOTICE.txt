@@ -15,3 +15,8 @@ license does not relicense those assets.
 The director scene and Newton geometry are authored procedurally in Robot Reel.
 The Microduck image linked separately from the README retains its upstream
 noncommercial/share-alike terms and its own media notice; it is not in this montage.
+
+social.png (the repository's social preview / Open Graph image) is derived solely
+from ../chaos/poster.png, the Butterfly Lab poster: twelve recorded Newton worlds,
+measured poses, depth representing time. No other recording or asset is used and
+no new physics is generated. Rebuild it with scripts/build_social_preview.py.
