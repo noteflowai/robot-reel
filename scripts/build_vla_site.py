@@ -25,9 +25,10 @@ def main():
     if args.output.exists() and any(args.output.iterdir()):
         raise ValueError("Choose an empty site output directory")
     args.output.mkdir(parents=True, exist_ok=True)
-    for name in REQUIRED-{"index.html", "NOTICE.txt"}:
+    for name in REQUIRED-{"index.html", "NOTICE.txt", "LICENSE"}:
         shutil.copyfile(args.recording/name, args.output/name)
     shutil.copyfile(ROOT/"licenses/VLA-MEDIA-NOTICE.txt", args.output/"NOTICE.txt")
+    shutil.copyfile(ROOT/"LICENSE", args.output/"LICENSE")
     seal(args.output)
     result = check_media(args.output)
     readers = [imageio_ffmpeg.read_frames(str(args.output/f"{name}.mp4")) for name in ("main", "wrist")]
