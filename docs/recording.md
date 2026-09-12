@@ -155,7 +155,10 @@ complete offline archive. The optional `inspect` extra enables MCAP readback;
 without it, that one optional test is skipped. CI also exercises the real director MCP transport.
 Real recording smoke runs require OpenGL and downloaded model assets.
 
-`npm run check:js` type-checks the viewer scripts that live inline in the nine
+Installation and container checks also run outside the editable checkout; see
+[distribution checks](distribution.md#distribution-checks).
+
+`npm run check:js` type-checks the viewer scripts that live inline in the ten
 templates under `robot_reel/` and `scripts/`. The exports stay single
 self-contained HTML files, so the scripts
 cannot move into modules or a bundler; the check extracts each template's script,

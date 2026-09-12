@@ -1,8 +1,7 @@
 name: Demo page
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  # Only Check calls this, after every job passes for the same commit.
+  workflow_call:
 permissions:
   contents: read
   pages: write

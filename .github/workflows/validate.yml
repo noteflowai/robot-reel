@@ -1,0 +1,99 @@
+name: Validate
+on:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify traces and plans without rendering dependencies
+        run: python -S -m unittest discover -s tests -v
+      - run: pip install -e '.[director,inspect]'
+      - run: python -m unittest discover -s tests -v
+      - name: Check actual MCP stdio tools and workspace boundaries
+        run: python scripts/check_director_mcp.py
+      - name: Check recorded VLA camera lengths against the action trace
+        run: robot-reel vla docs/vla --check-media
+      - name: Verify all stress trials and round-trip every MCAP message
+        run: |
+          robot-reel stress docs/stress --check-media --check-mcap
+      - run: python -m compileall -q robot_reel
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Type-check the inline viewer scripts against their templates
+        run: npm run check:js
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+  rerun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e '.[rerun]'
+      - name: Read native videos, clocks, controls and poses back from RRD
+        run: python -m unittest discover -s tests -p test_rerun.py -v
+  newton:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e '.[newton]'
+      - name: Record real CPU physics and check every USD transform
+        run: |
+          robot-reel newton --seconds 1 --output artifacts/newton-ci
+          robot-reel newton --output artifacts/newton-ci --verify --check-usd
+      - name: Record twelve isolated worlds and check the complete sweep export
+        run: |
+          python -m robot_reel.chaos --seconds 1 --output artifacts/chaos-ci
+          python -m robot_reel.chaos --output artifacts/chaos-ci --verify --check-usd
+          python -m robot_reel.chaos --output docs/chaos --verify --check-usd
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build twine
+      # Build the wheel from the sdist to exercise both distribution formats.
+      - run: python -m build
+      - run: twine check dist/*
+      - name: Install the wheel into a clean environment
+        run: |
+          python -m venv "$RUNNER_TEMP/installed"
+          "$RUNNER_TEMP/installed/bin/pip" install dist/*.whl 'mcap==1.4.0'
+          "$RUNNER_TEMP/installed/bin/pip" check
+      - name: Export and verify real recordings outside the checkout
+        working-directory: ${{ runner.temp }}
+        env:
+          PYTHONPATH: ""
+        run: |
+          "$RUNNER_TEMP/installed/bin/python" "$GITHUB_WORKSPACE/scripts/check_distribution.py" --source "$GITHUB_WORKSPACE"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/*
+          if-no-files-found: error
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t robot-reel:check .
+      - name: Check the default user and exports with a different mounted UID
+        run: bash scripts/check_container.sh robot-reel:check

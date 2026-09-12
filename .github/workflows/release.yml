@@ -1,5 +1,4 @@
-# Release: build the sdist/wheel on a v* tag, attach them to the GitHub release
-# and publish to PyPI through trusted publishing (no API token stored in GitHub).
+# Release the distributions already installed and tested by Validate.
 #
 # One-time setup:
 #   1. On https://pypi.org, open the robot-reel project (or "Publishing" while
@@ -8,8 +7,9 @@
 #        workflow: release.yml   environment: pypi
 #   2. In the GitHub repository settings, create an environment named "pypi"
 #      (Settings -> Environments). Optionally require reviewers there.
-#   3. Bump [project].version in pyproject.toml, then push a matching tag:
-#        git tag v0.4.0 && git push origin v0.4.0
+#   3. Set repository variable PYPI_PUBLISH_ENABLED=true after that setup.
+#      Without it, verified downloads are still published to GitHub Releases.
+#   4. Bump [project].version and CHANGELOG.md, then push a matching v* tag.
 name: Release
 on:
   push:
@@ -18,7 +18,30 @@ on:
 permissions:
   contents: read
 jobs:
-  build:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Require the tag, package and changelog to agree
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import os, pathlib, tomllib
+          version = tomllib.loads(pathlib.Path("pyproject.toml").read_text())["project"]["version"]
+          if os.environ["RELEASE_TAG"] != f"v{version}":
+              raise SystemExit("Release tag must match pyproject.toml")
+          if not any(line.startswith(f"## {version} — ") for line in pathlib.Path("CHANGELOG.md").read_text().splitlines()):
+              raise SystemExit("Release version needs a CHANGELOG.md entry")
+          PY
+  verify:
+    needs: version
+    uses: ./.github/workflows/validate.yml
+  github:
+    needs: verify
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -27,20 +50,32 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install build twine
-      - run: python -m build
-      - run: twine check dist/*
-      - uses: actions/upload-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: dist
-          path: dist/*
-          if-no-files-found: error
-      - name: Attach the distributions to the GitHub release
+          path: dist
+      - name: Prepare notes and checksums for the tested files
+        run: |
+          python - <<'PY'
+          import hashlib, pathlib, shutil, tomllib
+          version = tomllib.loads(pathlib.Path("pyproject.toml").read_text())["project"]["version"]
+          changelog = pathlib.Path("CHANGELOG.md").read_text()
+          notes = changelog.split(f"## {version} — ", 1)[1].split("\n## ", 1)[0]
+          pathlib.Path("release-notes.md").write_text(notes + "\n\nThe wheel, source distribution and native Rerun recording below passed the same six validation jobs as the site. Open robot-reel-seed-09.rrd in Rerun 0.37.2; its six videos and original evidence are embedded. PyPI publishing is configured separately.\n")
+          dist = pathlib.Path("dist")
+          shutil.copyfile("docs/rerun/seed-09.rrd", dist/"robot-reel-seed-09.rrd")
+          files = sorted(p for p in dist.iterdir() if p.is_file())
+          (dist/"SHA256SUMS").write_text("".join(f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n" for p in files))
+          PY
+      - name: Publish the tested distributions to GitHub
         uses: softprops/action-gh-release@v2
         with:
+          body_path: release-notes.md
           files: dist/*
+          fail_on_unmatched_files: true
   publish:
-    needs: build
+    needs: [verify, github]
+    if: vars.PYPI_PUBLISH_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
