@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Document opening the Stress Lab's MCAP telemetry in Foxglove, with FoxQL
+  expressions for paired conditions, controls and inference timing, and record
+  what Rerun decodes today. A test resolves every documented expression and
+  message count against the real telemetry.
+
 - Ship the Stress Lab's 56 MB offline archive as a release asset instead of a
   tracked file, verify a published site without it, and fail the tests when any
   tracked file exceeds 25 MB. The archive was removed from the repository

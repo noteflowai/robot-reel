@@ -72,6 +72,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 **[对照策略运行 ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
 [完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.4.0/robot-reel-stress-experiment.zip) ·
 [MCAP 遥测数据 ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
+[在 Foxglove 中打开](docs/telemetry.md) ·
 [复现与检查](docs/stress.md)
 
 <sub>一个任务 × 三种原生场景条件 × 十个配对种子；每次固定最多 160 个动作、
