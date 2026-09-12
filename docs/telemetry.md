@@ -83,9 +83,78 @@ mapping the browser replay uses.
 
 The Rerun Viewer opens MCAP files, but its automatic visualization covers ROS 2
 messages and Foxglove's Protobuf schemas, so this custom JSON schema arrives as
-raw messages rather than plotted scalars. Nothing here is Rerun-specific yet: a
-native Rerun view means converting the samples into Rerun archetypes, which is
-still a proposal in the [roadmap](roadmap.zh-CN.md).
+raw messages rather than plotted scalars. Use the native export below for a
+ready-to-use layout with videos, spatial data and plots.
+
+### Native Rerun workspace
+
+[Open the recorded workspace in Rerun 0.37.2](https://app.rerun.io/version/0.37.2/?url=https%3A%2F%2Fnoteflowai.github.io%2Frobot-reel%2Frerun%2Fseed-09.rrd)
+or [download its portable recording](rerun/seed-09.rrd) (6.3 MiB).
+The online viewer loads on demand; a desktop browser with WebGL/WebGPU support
+works best. The downloaded `.rrd` opens in the native Rerun application without
+a video server.
+
+The example contains the **three conditions at seed 09**, selected from the
+original **30-trial** experiment. Reference succeeds in 82 actions; dim lighting
+and the shifted camera each reach the 160-action budget. These selected outcomes
+do not estimate general robustness. The workspace contains:
+
+- Six original MP4s, embedded byte for byte, with a frame reference for every
+  source observation. Switch between scene and wrist cameras.
+- Three measured end-effector paths in simulator world coordinates, metres,
+  Z up. Full paths are visible from the start and show the complete recording;
+  they are not predictions or reconstructed robot geometry.
+- Seven applied-control channels per condition, with step-after interpolation,
+  and separate points for policy and environment-step timing at real calls.
+- Exact observation and inference JSON, complete source traces, provenance and
+  media/license notices. The saved blueprint opens on a shared `episode` clock.
+
+Native readback checks cover **405 observations, 2,814 applied-control values,
+41 inference calls and all six video assets**. Video presentation timestamps must
+equal `sample / 20`; scalar values and JSON stay exact. Spatial visualization
+components use float32 and are compared to source positions within `1e-6` metres.
+
+Reference ends at 4.10 s; the other recordings end at 8.00 s. Camera panels hold
+their final images and state their end times in their titles. Controls stop
+before the terminal observation; the moving 3D marker clears one sample after
+it. The `sample` and `episode` indexes are source clocks. Rerun's optional
+`log_time` index records export time and must not be read as policy latency.
+
+Build any recorded seed in an isolated optional environment:
+
+```bash
+python3 -m venv .venv-rerun
+.venv-rerun/bin/python -m pip install -e '.[rerun]'
+.venv-rerun/bin/python -m robot_reel.stress_rerun \
+  docs/stress artifacts/rerun-seed-09.rrd --seed 9
+.venv-rerun/bin/python -m robot_reel.stress_rerun \
+  docs/stress artifacts/rerun-seed-09.rrd --seed 9 --verify
+.venv-rerun/bin/rerun artifacts/rerun-seed-09.rrd
+```
+
+Choose a new output filename when exporting again. Omitting `--seed` selects
+seed 0, including for custom experiments. The exporter verifies the source site,
+writes a temporary file, reads native components back, and publishes the file
+only after the comparison passes. Rerun is not a dependency of ordinary replay
+or standard-library validation.
+
+The integration targets [Rerun 0.37.2](https://github.com/rerun-io/rerun/releases/tag/0.37.2).
+It uses the version's native `AssetVideo`, `VideoFrameReference`, `Points3D`,
+`LineStrips3D` and `Scalars`, with its experimental RRD reader for independent
+readback. The pin is intentional; SDK/reader upgrades require this check to pass.
+
+To refresh the homepage example, export seed 09, open it in the pinned viewer,
+pause at sample zero and capture the complete workspace as a PNG. After reviewing
+the camera panels, paths and curves, package the checked recording and screenshot:
+
+```bash
+.venv-rerun/bin/python -m scripts.build_rerun_showcase \
+  --recording artifacts/rerun-seed-09.rrd --preview artifacts/rerun-preview.png
+.venv-rerun/bin/python -m unittest discover -s tests -p test_rerun.py -v
+```
+
+The package manifest records the screenshot, recording and original source hashes.
+The preview is a viewer screenshot; it is not an additional policy rollout.
 
 ## Checking and rebuilding it
 

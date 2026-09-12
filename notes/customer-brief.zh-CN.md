@@ -12,6 +12,11 @@ Robot Reel 把物理 AI（Physical AI）的技术能力变成客户可以直接�
 CSV 与 MCAP 遥测数据，让具身智能概念验证、策略复盘与三维内容制作
 既看得到效果，也查得到依据。
 
+新增的 Rerun 原生检查工作区，可把选定的一组配对实验放到同一时间轴，
+同步查看 6 路录制视频、三维末端轨迹、动作曲线和推理耗时；下载的文件
+内嵌视频并保留原始记录，支持本地复盘和逐项核验。首页提供已验证的
+第 9 组实验入口，完整统计仍以原始 30 次实验为准。
+
 项目：https://github.com/noteflowai/robot-reel
 
 - 原始仿真 → 电影场景：https://noteflowai.github.io/robot-reel/remix/
@@ -20,7 +25,8 @@ CSV 与 MCAP 遥测数据，让具身智能概念验证、策略复盘与三维�
 - VLA 双视角任务回放：https://noteflowai.github.io/robot-reel/vla/
 - Agent 导演：https://noteflowai.github.io/robot-reel/director/
 - Newton／OpenUSD：https://noteflowai.github.io/robot-reel/newton/
-- Microduck：https://noteflowai.github.io/robot-reel/
+- 原生检查工作区：https://noteflowai.github.io/robot-reel/#inspect
+- Microduck：https://noteflowai.github.io/robot-reel/microduck/
 
 对外交流口径：原有 VLA 示例是一次成功的仿真运行；新增压力实验是一个任务、
 三种条件、十个配对种子、每次最多 160 步的受控实验。其统计结果只针对这组设置，

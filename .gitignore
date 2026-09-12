@@ -1,6 +1,7 @@
 .venv/
 .venv-vla/
 .venv-vla-gpu/
+.venv-rerun/
 __pycache__/
 *.egg-info/
 artifacts/

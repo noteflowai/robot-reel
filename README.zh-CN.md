@@ -80,6 +80,22 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 分开的推理／仿真耗时及各条件置信区间。这是受控诊断实验，不是 LIBERO 官方榜单成绩。
 预览按仿真时间播放；提前结束的运行明确标注停留在最后一个真实样本。</sub>
 
+## 同一起点，不同结局
+
+**Rerun 原生检查工作区。** 将一组配对压力实验的 6 路录制视频、三维末端轨迹、
+实际动作和推理耗时放到同一时间轴。便携文件内嵌视频及原始 JSON，
+导出后逐项读回，与源记录核对。
+
+<a href="https://app.rerun.io/version/0.37.2/?url=https%3A%2F%2Fnoteflowai.github.io%2Frobot-reel%2Frerun%2Fseed-09.rrd"><img src="docs/rerun/preview.png" width="100%" alt="真实 Rerun 工作区：第 9 组配对实验的三路策略相机、实测三维轨迹及实际控制曲线。"></a>
+
+**[打开 Rerun 工作区 ↗](https://app.rerun.io/version/0.37.2/?url=https%3A%2F%2Fnoteflowai.github.io%2Frobot-reel%2Frerun%2Fseed-09.rrd)** ·
+[下载便携记录 ↓](https://noteflowai.github.io/robot-reel/rerun/seed-09.rrd) ·
+[重建与核验](docs/telemetry.md#native-rerun-workspace)
+
+<sub>精选第 9 组实验：参考条件成功，低光照和相机偏移达到步数上限。
+405 个观测、41 次推理、6 段内嵌视频。完整统计仍以原始 30 次试验为准。
+建议使用桌面浏览器；下载的文件可在本地 Rerun 0.37.2 中打开。</sub>
+
 ## 起点只差 0.05°，轨迹渐行渐远
 
 **蝴蝶效应实验室。** 12 个隔离的 Newton 仿真世界从几乎相同的姿态出发，
@@ -185,7 +201,7 @@ Robot Reel 不是仿真器、训练框架或基准测试。它位于这些工具
 | [LeRobot](https://github.com/huggingface/lerobot) | 真实与仿真机器人的数据集、策略与训练 | 运行 LeRobot 策略（SmolVLA），保留每个执行动作、双相机画面以及硬件与耗时记录，做成回放 |
 | [MuJoCo Playground](https://github.com/google-deepmind/mujoco_playground)、[Isaac Lab](https://github.com/isaac-sim/IsaacLab) | GPU 规模的环境与强化学习训练 | 取仿真器的一次运行，让它可检查、可对照、可编辑 |
 | [Genesis](https://github.com/Genesis-Embodied-AI/Genesis)、[Newton](https://github.com/newton-physics/newton) | 物理引擎 | 在 CPU 上录制 Newton，把实测运动导出为带动画的 OpenUSD 场景，并用 Blender 原生检查 |
-| Rerun、Foxglove | 通用遥测查看器 | 发布可从 `file://` 打开的自包含 HTML 回放，同时提供 MCAP 供这些查看器读取同一份数据 |
+| Rerun、Foxglove | 通用遥测查看器 | 发布自包含 HTML 回放、MCAP 遥测，以及内嵌视频并经过核验的 Rerun 原生工作区 |
 
 独特之处在于这条链：哈希校验的轨迹、同一时钟上的配对对照、
 由 MCP Agent 根据录制指挥 Blender 成片，以及关键帧能映射回原始样本的三维场景。

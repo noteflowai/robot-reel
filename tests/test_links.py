@@ -11,7 +11,7 @@ import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP = {".git", "node_modules", "artifacts", ".venv", ".venv-vla", ".venv-vla-gpu", "build", "dist"}
+SKIP = {".git", "node_modules", "artifacts", ".venv", ".venv-vla", ".venv-vla-gpu", ".venv-rerun", "build", "dist"}
 LINK = re.compile(r"\]\(([^)\s]+)\)|\b(?:href|src|srcset)=\"([^\"]+)\"")
 HEADING = re.compile(r"^#{1,6}\s+(.+?)\s*#*$", re.MULTILINE)
 INLINE_TAG = re.compile(r"<[^>]+>")

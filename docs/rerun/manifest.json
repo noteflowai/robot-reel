@@ -1,0 +1,72 @@
+{
+  "schema": "robot-reel-stress-rerun-1",
+  "rerun_version": "0.37.2",
+  "seed": 9,
+  "selected_trials": 3,
+  "experiment_trials": 30,
+  "plan_sha256": "bac5fc24f6e96f84282fe185246a6f4239e081efc8b183a69be20cf13f6e7efa",
+  "traces_sha256": "0181e9635506653704960e0e34a74deedb4bd9d30dde2fd5eb86f617f35a5de8",
+  "clock": "episode-relative nanoseconds; sample N is observation N at 20 Hz",
+  "position": "measured end-effector xyz in simulator world coordinates, metres, Z up",
+  "controls": "normalized applied controls [-1,1]; terminal observations have no action",
+  "display": "complete recorded paths; camera holds final image; markers clear after termination",
+  "trials": [
+    {
+      "id": "seed-09-reference",
+      "condition": "reference",
+      "outcome": "success",
+      "actions": 82,
+      "observations": 83,
+      "inference_calls": 9,
+      "end_seconds": 4.1
+    },
+    {
+      "id": "seed-09-dim",
+      "condition": "dim",
+      "outcome": "step_limit",
+      "actions": 160,
+      "observations": 161,
+      "inference_calls": 16,
+      "end_seconds": 8.0
+    },
+    {
+      "id": "seed-09-camera",
+      "condition": "camera",
+      "outcome": "step_limit",
+      "actions": 160,
+      "observations": 161,
+      "inference_calls": 16,
+      "end_seconds": 8.0
+    }
+  ],
+  "videos_checked": 6,
+  "observations_checked": 405,
+  "controls_checked": 2814,
+  "inference_calls_checked": 41,
+  "rrd_sha256": "f322c0d612ab3c9a7a6f6c27474edd1600214a0c2874a9db63053bacb10d2bbe",
+  "rrd_bytes": 6605979,
+  "preview": {
+    "kind": "actual Rerun web viewer screenshot",
+    "source_sample": 0,
+    "viewer_version": "0.37.2"
+  },
+  "inputs": {
+    "stress/experiment.json": "d3b2292a818db5298e2b42562170ba8c263bb44c25f6265ad65473cd39b77bf0",
+    "stress/attempts.json": "ae3fc2cc21f3eb0808836eacb39ed26fdeedbb7ae36141927f2efde68676f938",
+    "stress/NOTICE.txt": "ea626872970c7acaf4faafb6fa4a904d2f7b885e376c9cf6ba249b71c3e5ad3e",
+    "stress/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "stress/runs/seed-09-reference/attempt-001/trace.json": "368c1b8389568c4174bc11b2f745e23ddc41932480a5decc782c1d65e5ef9f91",
+    "stress/runs/seed-09-reference/attempt-001/main.mp4": "031e1b92df8d8b6eea46d6491141a232d977ec65c3f61a8400b589adaebb628e",
+    "stress/runs/seed-09-reference/attempt-001/wrist.mp4": "5606b347e6578ab603b25671aafbc7f2d2b8205a618cefc8e20f1c11f478ee2d",
+    "stress/runs/seed-09-dim/attempt-001/trace.json": "0cbf0b757761b6cfaca22465055c834c2e720f972b3f8da8924b7850c341182d",
+    "stress/runs/seed-09-dim/attempt-001/main.mp4": "45b0f5f7db5f034bb76924d948d705ffa7acd7af574df53bda034c367630d1d3",
+    "stress/runs/seed-09-dim/attempt-001/wrist.mp4": "71d8aa30c8e9829a0724906b412744de21e5a97817fad1b0610703844e0c19c0",
+    "stress/runs/seed-09-camera/attempt-001/trace.json": "0136050c891ab7488e13c5bad83994f477643ff55827d31d558ce5b449c257f0",
+    "stress/runs/seed-09-camera/attempt-001/main.mp4": "10e7be5de51f699c17805dc970e6c8bf00da3198c5807a752e859315f2366871",
+    "stress/runs/seed-09-camera/attempt-001/wrist.mp4": "1b5da0bc95c473031c7d4392fcea7a57580f511072324a0ab03e91a68f51e6b0"
+  },
+  "sha256": {
+    "seed-09.rrd": "f322c0d612ab3c9a7a6f6c27474edd1600214a0c2874a9db63053bacb10d2bbe",
+    "preview.png": "56ba45b5ce08d74183cf8711cb04ba9c52e5c05261eaaa254cae5dd8cf890f9c"
+  }
+}
