@@ -2,34 +2,48 @@
 
 **看机器人，也看清每一步。**
 
-把物理 AI 仿真制作成可分享的视频，同时保留能逐帧检查的动作记录。
-现在可以运行 **Microduck 官方步行策略**、对比两种汽车制动策略，或让
-Strands Agent 控制机械臂。
+把物理 AI 仿真录制成可分享的视频，同时保留可交互的逐帧动作记录。
+可以运行 Microduck 官方策略、对比两种制动控制器，或让 Strands Agent
+控制机械臂。回放直接在浏览器里打开，观看不需要账号，也不需要安装。
 
-[**Microduck 交互演示**](https://noteflowai.github.io/robot-reel/) ·
-[**汽车制动对比**](https://noteflowai.github.io/robot-reel/braking/) ·
-[**Agent 机械臂**](https://noteflowai.github.io/robot-reel/studio/) ·
+[**试试 Microduck →**](https://noteflowai.github.io/robot-reel/) ·
+[**对比制动 →**](https://noteflowai.github.io/robot-reel/braking/) ·
+[**检查 Agent 机械臂 →**](https://noteflowai.github.io/robot-reel/studio/) ·
 [English](README.md)
 
-![Microduck 官方策略仿真](docs/microduck/media/preview.gif)
+![用 Robot Reel 录制的 Microduck 官方策略仿真](docs/microduck/media/preview.gif)
 
-[视频与证据包下载](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+[下载视频与证据包](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
 
-## 已实现的三种场景
+## 新增：两次运行，同一时钟
 
-| 场景 | 实际运行内容 | 可查看的数据 |
+[**对比 Microduck 速度 →**](https://noteflowai.github.io/robot-reel/compare/microduck/) ·
+[**对比制动时机 →**](https://noteflowai.github.io/robot-reel/compare/braking/)
+
+同步播放的原始视频、共享的逐帧步进、实测通道曲线，以及可下载的源轨迹。
+CLI 会校验时间戳、模型配置和引擎版本；遇到不匹配的录制会直接拒绝，而不是
+悄悄裁剪。这些是单次试验，不是统计意义上的基准测试。
+[复现这些对比](docs/comparison.md)。
+
+## 三个场景，同一套录制流程
+
+| 场景 | 实际运行的内容 | 可以检查的数据 |
 | --- | --- | --- |
-| Microduck | Pollen Robotics 官方 ONNX 步行策略，50 Hz，CPU MuJoCo | 14 个关节、每次策略输出、机身位移、策略校验值 |
-| 汽车制动 | 相同初始条件下，两种脚本控制器驱动一维刚体车辆模型 | 速度、障碍间距、制动力、接触记录 |
-| Studio | SO-100 位置执行器，可选实时 Agent；G1 为姿态编排 | 四次动作、目标与实测值、home 误差 |
+| **Microduck** | Pollen Robotics 官方 ONNX 步行策略，50 Hz，运行在 CPU MuJoCo 上 | 14 个关节的目标值与响应、每一次策略输出、机身位移、固定的策略校验和 |
+| **制动** | 同一个一维刚体车辆替代模型下的两套脚本控制器 | 速度、障碍间距、制动力、记录到的接触；早制动与晚制动对比 |
+| **Studio** | SO-100 位置执行器；可选的实时 Strands Agent。G1 是脚本编排的运动学片段 | 四次机械臂动作、末端误差、资产定义的 home 姿态、逐帧轨迹 |
 
-网页不需要安装或登录：支持动作跳转、逐帧前进后退、切换关节、查看曲线、
-分享具体时刻。还能调整机械臂的镜头计划，下载 JSON 后在本地生成自己的视频。
-网页上的计划编辑器不会改变正在回放的视频，也不是在线实时仿真。
+所有画面都来自仿真器。标题和遥测数据由代码绘制，配乐为原创程序合成。
+回放支持镜头跳转、单帧步进、关节选择、实测/参考曲线，以及按时间戳分享。
 
-## 运行 Microduck
+**局限是公开的：** Microduck 使用上游 XML 里的 PD 执行器回退方案，而不是
+官方部署所用的 BAM 电机模型。制动场景是一个玩具级纵向场景，既不是 CARLA、
+AlpaSim，也不是 Alpamayo 推理运行或道路安全验证。G1 不展示行走，也没有
+学习得到的平衡策略。
 
-需要 Python 3.12+ 和 OpenGL。当前实测环境是 Linux、NVIDIA L40S、EGL。
+## 快速开始
+
+需要 Python 3.12+ 和 OpenGL。实测环境为 Linux / NVIDIA L40S / EGL。
 
 ```bash
 git clone https://github.com/noteflowai/robot-reel.git
@@ -37,73 +51,113 @@ cd robot-reel
 python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -e '.[microduck]'
+
+# 官方预训练的 Microduck 策略；不需要训练，也不需要模型服务账号。
 robot-reel --pack microduck --output artifacts/duck
 python -m robot_reel.verify artifacts/duck
 ```
 
-直接用浏览器打开 `artifacts/duck/index.html`。第一次运行会下载固定版本的
-官方模型资产和策略；不需要训练，也不需要模型服务账号。推理使用 CPU。
-设置 `ROBOT_REEL_CACHE` 可以修改缓存位置。
+直接打开 `artifacts/duck/index.html`。首次运行会下载固定版本的上游模型资产
+和策略。策略在 CPU 上运行；渲染需要 OpenGL。用 `ROBOT_REEL_CACHE` 指定
+下载缓存目录。
 
-当前适配使用上游提供的 XML PD 执行器回退方式，**不是官方部署使用的 BAM
-电机模型**，因此录制的仿真结果不能等同于真机表现。
-
-Microduck 上游将 3D 模型标为 **Creative Commons BY-SA-NC**，README 未标明
-版本；Microduck 视频保留相关资产署名和非商业/相同方式共享条款。
-Robot Reel 录制代码使用 Apache-2.0，不重新授权上游资产。详见
-[第三方说明](THIRD_PARTY.md)。
-
-## 汽车与机械臂
+Microduck 模型资产在上游被标注为 **Creative Commons BY-SA-NC**（上游 README
+未说明版本号）。相关画面保留这些资产条款与署名要求。我们的录制代码是
+Apache-2.0，不会对 Pollen 的模型重新授权。详见
+[THIRD_PARTY.md](THIRD_PARTY.md)。
 
 其他场景只需要 `pip install -e .`：
 
 ```bash
+# 初始条件完全相同的两次制动运行。
 robot-reel --pack braking --output artifacts/braking
+
+# 无需凭据的机械臂 + 人形演示。
 robot-reel --output artifacts/studio
+
+# 你自己的四镜头机械臂计划；最后一镜回到模型定义的 home 姿态。
 robot-reel --shots examples/close-up.json --output artifacts/my-film
 ```
 
-汽车场景是可重复的一维制动对照，不是 CARLA/AlpaSim 集成，也没有运行
-Alpamayo 驾驶模型。它用于展示如何把控制差异、接触结果和视频联系起来；
-不代表道路安全认证。汽车热点与后续真实接入边界见
-[汽车物理 AI 说明](docs/automotive.md)。
+浏览器里的计划编辑器会导出一个可用于 `--shots` 的 `shots.json`。编辑这个计划
+不会修改或重新仿真当前正在播放的视频。未知关节、非有限的目标值、超出范围的
+目标值以及不支持的计划字段都会被拒绝。前三个镜头会保留未指定的关节；第四个
+镜头必须使用 `"home": true`。
 
-G1 是固定根节点的运动学姿态展示，没有行走或学习得到的平衡策略。
+Linux 默认使用 EGL；安装系统的 OSMesa 库后可以用 `MUJOCO_GL=osmesa` 走软件
+渲染。macOS 默认使用 `glfw`，但还没有纳入实测平台矩阵。
 
-## 输出与复核
+## 输出
 
-每次输出包括横版 1280×720、竖版 720×1280 的 30 fps 视频、交互回放 HTML、
-原始仿真画面、JSON 轨迹、封面和 SHA-256 清单。Microduck 成片 15 秒，
-汽车对比 17 秒，Studio 31 秒。配乐为原创程序合成。
+每次运行会产生两个 H.264/AAC 视频、一个可交互的 HTML 回放、原始仿真录像、
+逐帧 JSON 轨迹、一张封面图和一份 SHA-256 清单。Microduck 还会记录全部 50 Hz
+策略动作及其策略/模型版本号。
+
+| 场景 | 仿真画面 | 成片 |
+| --- | --- | --- |
+| Microduck | 10 秒 / 300 帧 | 15 秒 |
+| 制动 | 2 × 6 秒 / 360 帧 | 17 秒 |
+| Studio | 16 秒机械臂 + 10 秒 G1 / 780 帧 | 31 秒 |
+
+横版为 1280×720，竖版为 720×1280，均为 30 fps。可以直接分享 MP4，或者把
+`index.html` 与视频放在一起，用于本地交互回放。
 
 ```bash
+# 重新剪辑已有的录制，包括 Microduck 或制动场景。
 robot-reel --render-only --output artifacts/duck
+
+# 为已有的兼容证据包加上最新的回放界面。
 python -m robot_reel.viewer artifacts/duck
 ```
 
-校验器检查必需文件哈希、帧序、有限数值、动作与录制帧的一致性、策略输出与
-画面的对应，以及制动接触汇总。哈希不是数字签名，不证明独立真实性、通用
-策略能力或物理安全。
+## 可选：让 Agent 指挥机械臂
 
-## 可选模型导演
-
-配置 AWS SDK 凭据，并选择可用的 Bedrock 模型或推理配置后运行：
+配置 AWS SDK 凭据，并选择一个你可以访问的 Bedrock 模型或推理配置。这会产生
+模型调用费用：
 
 ```bash
 robot-reel --agent --model YOUR_BEDROCK_MODEL_OR_INFERENCE_PROFILE \
   --region us-west-2 --output artifacts/agent-film
 ```
 
-这会产生模型调用费用。Agent 先检查关节，再完成限定的四次动作；提示词和
-最终回复会保存，视频省略模型思考等待。它不是开放式自主任务规划。
+Agent 会先检查关节限位和 home 姿态，然后给出四次受约束的动作。它的提示词和
+回复都会被保存。推理等待时间不进入视频，动作帧保持原有顺序。这是一个有边界的
+演示，不是开放式的自主规划。
 
-欢迎贡献真实策略对比、公共后端适配和 AlpaSim/CARLA 录制导入。
-详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+## 是证据，不是认证
 
-## v0.3：两次运行，同一时钟
+校验器要求每个场景的原始视频与轨迹、以及两个成片都有哈希值。它会检查帧序、
+数值有限性、来源标签、机械臂动作与画面帧的一致性、策略步与画面帧的一致性，
+以及制动接触汇总的一致性。机械臂末端误差和 home 误差必须落在 0.05 弧度的
+演示容差内。
 
-[Microduck 速度对比](https://noteflowai.github.io/robot-reel/compare/microduck/) · [汽车早晚制动对比](https://noteflowai.github.io/robot-reel/compare/braking/)
+哈希只能检测相对于清单的改动。它们不是签名，不能证明独立的真实性，也不能
+认证物理安全或通用的策略能力。驾驶相关的结论只适用于文档中描述的替代模型。
 
-同步查看两段原始仿真视频，逐帧检查同一关节或物理量，并下载并排视频和原始轨迹。工具校验时间戳、模型配置、引擎版本和文件校验和；不兼容的录制会被拒绝。这些是单次仿真记录，不代表硬件测试或自动驾驶能力。
+## 为什么做这个
 
-复现命令见 [comparison.md](docs/comparison.md)。
+[Microduck](https://github.com/pollen-robotics/microduck) 和
+[Microduck RL](https://github.com/pollen-robotics/microduck_rl) 提供了机器人和
+学习得到的行为。[Strands Robots](https://github.com/strands-labs/robots) 提供
+Agent 与机器人的集成。Robot Reel 专注于**把一次运行变成人们可以观看、检查和
+复现的东西**。
+
+汽车场景只是记录可比较结果的一个小起点。关于它与 Alpamayo、AlpaSim、CARLA
+的关系，以及哪些还没有集成，见[汽车集成说明](docs/automotive.md)。
+
+## 开发
+
+```bash
+python -m unittest discover -s tests -v
+npm ci
+npx playwright install chromium
+npm test
+```
+
+Python 测试覆盖计划拒绝逻辑与证据一致性。浏览器测试覆盖跳转、步进、下载、
+移动端布局、本地文件播放和字幕转义。真实录制的冒烟测试需要 OpenGL 和已下载
+的模型资产。Studio 适配器使用了 Strands Robots 的私有字段，并固定在 0.5.1 版本。
+
+参见 [CONTRIBUTING.md](CONTRIBUTING.md)。有价值的贡献包括：公共后端适配器、
+可测量的策略对比，以及真实 AlpaSim/CARLA 运行的导入适配器。不要把计划中的
+集成描述成已经实现的功能。
