@@ -5,15 +5,38 @@
 Record physical-AI simulations as shareable films **and** interactive motion traces.
 Run an official Microduck policy, compare braking controllers, or let a Strands
 agent direct an arm. Open the replay in a browser; no account or install needed to watch.
+Export the braking motion into Blender to create an editable 3D scene.
 
 [**Try Microduck →**](https://noteflowai.github.io/robot-reel/) ·
 [**Compare braking →**](https://noteflowai.github.io/robot-reel/braking/) ·
 [**Inspect the agent arm →**](https://noteflowai.github.io/robot-reel/studio/) ·
+[**Open in Blender →**](https://noteflowai.github.io/robot-reel/blender/) ·
 [中文](README.zh-CN.md)
 
 ![Microduck official-policy simulation recorded with Robot Reel](docs/microduck/media/preview.gif)
 
 [Download videos + evidence](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+
+## New: take a recorded run into Blender
+
+**Keep the motion. Change the scene.** Export the verified braking comparison as
+an editable Blender scene: two cameras, procedural materials, source-driven
+keyframes, and animated speed/gap/contact channels.
+
+[**Watch the Blender replay + download the project →**](https://noteflowai.github.io/robot-reel/blender/)
+
+![Recorded braking motion replayed in an editable Blender scene](docs/blender/preview.gif)
+
+```bash
+# Uses the comparison already included in this checkout. No recording dependencies.
+python3 -m robot_reel.cli blender docs/compare/braking --output artifacts/blender
+blender --background --python artifacts/blender/build_scene.py -- \
+  --bundle artifacts/blender --output artifacts/blender/replay.blend
+```
+
+Tested with Blender 5.2.1 LTS. Every vehicle position comes from a recorded sample;
+this is a stylized replay of the 1D experiment, with no new Blender physics.
+[Reproduce it and check all 360 vehicle samples](docs/blender.md).
 
 ## New: two runs, one clock
 
@@ -153,13 +176,20 @@ to Alpamayo, AlpaSim and CARLA, and what is not integrated yet.
 ## Development
 
 ```bash
-python -m unittest discover -s tests -v
+# Trace, plan and export tests run with the Python standard library.
+python3 -m unittest discover -s tests -v
+# For recording/rendering development, install the runtime in an isolated environment.
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
 npm ci
 npx playwright install chromium
 npm test
 ```
 
-The Python suite covers plan rejection and evidence consistency. Browser checks
+The Python suite covers plan rejection, evidence consistency and Blender export
+agreement. Importing validators does not require `imageio_ffmpeg`, MuJoCo or NumPy;
+CI also runs the suite with third-party packages disabled. Browser checks
 cover seeking, stepping, downloads, mobile layout, local-file playback and caption
 escaping. Real recording smoke runs require OpenGL and downloaded model assets.
 The Studio adapter uses private Strands Robots fields and pins version 0.5.1.

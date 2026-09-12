@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "blender_version": "5.2.1 LTS",
+  "frames": 180,
+  "fps": 30,
+  "sha256": {
+    "index.html": "cfa4d2d020e0b85aa258b9df256bdc369d16f9b7d558e9878b55490c3af0d9e5",
+    "replay.mp4": "b7dc2f6a9befa124f0ba98d3de328e1351836ce2c837f31833ec8ec4bf298333",
+    "poster.png": "bdd1980d50105352188dbf77dd5b2b0031e7ca96b5179f58f90d1d5409961b3b",
+    "preview.gif": "36b0001045d42e9b3c3f25064831c7165771a182ca44344a9be586a6eb6a58ff",
+    "replay.blend": "6825a291b9872065412c17f1af083a71f65b6ddc15eae4e6b7065a651e74c6f2",
+    "animation-check.json": "9c674ecdceb07229947309ea9ab16ab301e375146d0c787bc2c2732e4ac09587",
+    "robot-reel-blender.zip": "f8764ac1cda8fc7c91703498cf18be4cdb41aec605a3301719f2ca2668666336"
+  }
+}

@@ -53,3 +53,19 @@ Demo: https://noteflowai.github.io/robot-reel/compare/microduck/
 
 Suggested feedback prompt: Which two compatible runs would you want to inspect
 on one timeline?
+
+## Blender update draft
+
+Keep the motion. Change the scene.
+
+Robot Reel now takes a verified braking recording into Blender 5.2: two cameras,
+procedural materials, recorded-position keyframes, and animated speed/gap/contact
+channels. Download the editable .blend or reproduce it from the included source
+comparison. The saved-project check covers all 360 vehicle samples and held
+positions between frames.
+
+This is a stylized replay of a toy MuJoCo experiment. It does not rerun physics
+in Blender or claim an autonomous-driving result.
+
+Useful feedback: Which recorded simulation would you want to relight or inspect
+from a different angle? Full robot import and a Blender MCP adapter are not shipped.

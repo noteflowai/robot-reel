@@ -6,6 +6,9 @@ from pathlib import Path
 
 
 def main():
+    if sys.argv[1:2] == ["blender"]:
+        from .blender import main as blender_main
+        return blender_main(sys.argv[2:])
     if sys.argv[1:2] == ["compare"]:
         from .compare import main as compare_main
         return compare_main(sys.argv[2:])

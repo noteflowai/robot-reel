@@ -5,15 +5,37 @@
 把物理 AI 仿真录制成可分享的视频，同时保留可交互的逐帧动作记录。
 可以运行 Microduck 官方策略、对比两种制动控制器，或让 Strands Agent
 控制机械臂。回放直接在浏览器里打开，观看不需要账号，也不需要安装。
+也可以把制动轨迹导入 Blender，制作可编辑的 3D 场景。
 
 [**试试 Microduck →**](https://noteflowai.github.io/robot-reel/) ·
 [**对比制动 →**](https://noteflowai.github.io/robot-reel/braking/) ·
 [**检查 Agent 机械臂 →**](https://noteflowai.github.io/robot-reel/studio/) ·
+[**在 Blender 中打开 →**](https://noteflowai.github.io/robot-reel/blender/) ·
 [English](README.md)
 
 ![用 Robot Reel 录制的 Microduck 官方策略仿真](docs/microduck/media/preview.gif)
 
 [下载视频与证据包](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+
+## 新增：把录制结果带进 Blender
+
+**保留运动，重新设计场景。** 将已验证的制动对照导出为可编辑的 Blender
+场景：两个机位、程序化材质、来自原始样本的关键帧，以及速度／间距／接触数据。
+
+[**观看 Blender 回放并下载工程 →**](https://noteflowai.github.io/robot-reel/blender/)
+
+![在可编辑 Blender 场景中回放录制的制动轨迹](docs/blender/preview.gif)
+
+```bash
+# 使用仓库内已有的制动对照，无需安装录制依赖。
+python3 -m robot_reel.cli blender docs/compare/braking --output artifacts/blender
+blender --background --python artifacts/blender/build_scene.py -- \
+  --bundle artifacts/blender --output artifacts/blender/replay.blend
+```
+
+已在 Blender 5.2.1 LTS 验证。车辆位置逐帧来自原始记录；这是对一维实验的
+风格化回放，没有在 Blender 中重新做物理仿真。
+[复现步骤及全部 360 个车辆状态的验证方法](docs/blender.md)。
 
 ## 新增：两次运行，同一时钟
 
@@ -148,13 +170,20 @@ Agent 与机器人的集成。Robot Reel 专注于**把一次运行变成人们�
 ## 开发
 
 ```bash
-python -m unittest discover -s tests -v
+# 轨迹、计划和导出测试只需要 Python 标准库。
+python3 -m unittest discover -s tests -v
+# 进行录制／渲染开发时，在独立环境中安装运行依赖。
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
 npm ci
 npx playwright install chromium
 npm test
 ```
 
-Python 测试覆盖计划拒绝逻辑与证据一致性。浏览器测试覆盖跳转、步进、下载、
+Python 测试覆盖计划拒绝、证据一致性与 Blender 导出数据对应关系。导入校验函数
+无需 `imageio_ffmpeg`、MuJoCo 或 NumPy；CI 也会在禁用第三方包的环境中运行测试。
+浏览器测试覆盖跳转、步进、下载、
 移动端布局、本地文件播放和字幕转义。真实录制的冒烟测试需要 OpenGL 和已下载
 的模型资产。Studio 适配器使用了 Strands Robots 的私有字段，并固定在 0.5.1 版本。
 
