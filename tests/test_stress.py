@@ -10,7 +10,7 @@ from unittest.mock import patch
 import zipfile
 
 from robot_reel.stress import canonical_hash, divergence, file_hash, summarize, validate_plan, validate_run, wilson
-from robot_reel.stress_site import MARKER, load_collection, verify_site
+from robot_reel.stress_site import ARCHIVE_HREF, MARKER, load_collection, page, payload, verify_site
 from robot_reel.vla import validate_trace
 
 SITE = Path(__file__).resolve().parents[1]/"docs/stress"
@@ -191,6 +191,18 @@ class StressTests(unittest.TestCase):
                 (root/"manifest.json").write_text(json.dumps(manifest))
                 with self.assertRaisesRegex(ValueError, message):
                     verify_site(root)
+
+    def test_published_page_is_reproducible_from_its_template(self):
+        # The whole document, not only its payload: the offline-archive link used
+        # to be patched into the published page by hand, so a rebuild silently
+        # replaced it with a local path.
+        self.assertEqual(page(payload(self.plan, self.attempts, self.traces)),
+                         (SITE/"index.html").read_text())
+        self.assertIn(ARCHIVE_HREF, (SITE/"index.html").read_text())
+        self.assertIn("/releases/download/", ARCHIVE_HREF)
+        with self.assertRaisesRegex(ValueError, "one archive link"):
+            with patch("pathlib.Path.read_text", return_value="<html>__STRESS_DATA__</html>"):
+                page({})
 
     def test_published_site_verifies_without_the_release_archive(self):
         # docs/stress/ ships the archive as a release asset, not as a tracked file.

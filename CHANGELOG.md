@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Keep the Stress Lab's offline-archive link in its template, so rebuilding the
+  page reproduces the published one instead of replacing the release link with a
+  local path. A test rebuilds the whole published document, not just its payload.
+
 - Encode every recorded video at one quality. Two recorders had drifted to
   imageio-ffmpeg quality 9 (crf 5) and wrote the heaviest media in the
   repository; a test now holds all eight writers to the same value.

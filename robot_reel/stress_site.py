@@ -14,6 +14,20 @@ from .stress import CONDITIONS, MEDIA, SCHEMA, file_hash, summarize, trial_id, v
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKER = '<script id="stress-data" type="application/json">'
+# The offline archive is a release asset, not a tracked file, so the published
+# page links it there. Keeping the link in the template means a rebuild
+# reproduces the published page instead of needing the link patched back in.
+ARCHIVE_HREF = ("https://github.com/noteflowai/robot-reel/releases/download/"
+                "v0.4.0/robot-reel-stress-experiment.zip")
+
+
+def page(data, archive_href=ARCHIVE_HREF):
+    """Render the replay page for a verified payload."""
+    encoded = json.dumps(data, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
+    template = Path(__file__).with_name("stress.html").read_text()
+    if template.count("__ARCHIVE_HREF__") != 1 or template.count("__STRESS_DATA__") != 1:
+        raise ValueError("The stress template must carry one archive link and one payload")
+    return template.replace("__ARCHIVE_HREF__", archive_href).replace("__STRESS_DATA__", encoded)
 
 
 def load_collection(directory):
@@ -170,7 +184,7 @@ def check_media(directory):
     return checks
 
 
-def build(recording, output):
+def build(recording, output, archive_href=ARCHIVE_HREF):
     from .stress_mcap import export_mcap
     recording, output = Path(recording), Path(output)
     document, attempts, traces = load_collection(recording)
@@ -193,8 +207,7 @@ def build(recording, output):
     write_json(output/"media-checks.json", check_media(output))
     for source, name in (("licenses/VLA-MEDIA-NOTICE.txt", "NOTICE.txt"), ("LICENSE", "LICENSE"), ("docs/stress.md", "METHODS.md")):
         shutil.copyfile(ROOT/source, output/name)
-    encoded = json.dumps(data, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
-    (output/"index.html").write_text(Path(__file__).with_name("stress.html").read_text().replace("__STRESS_DATA__", encoded))
+    (output/"index.html").write_text(page(data, archive_href))
     write_json(output/"manifest.json", {"schema": SCHEMA, "files": {name: file_hash(output/name) for name in sorted(required_files(attempts))}})
     with zipfile.ZipFile(output/"experiment.zip", "w", zipfile.ZIP_DEFLATED) as archive:
         for name in sorted(required_files(attempts)|{"manifest.json"}):
