@@ -9,11 +9,6 @@ import queue
 from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
 
-import imageio_ffmpeg
-import mujoco
-import numpy as np
-from strands_robots import Robot
-
 FPS = 30
 WIDTH, HEIGHT = 960, 900
 
@@ -33,6 +28,10 @@ def validate_targets(targets, names, limits):
 
 class Capture:
     def __init__(self, output: Path, name: str):
+        import imageio_ffmpeg
+        import mujoco
+        from strands_robots import Robot
+
         self.name, self.output = name, output
         self.robot = Robot(name, mode="sim", backend="mujoco")
         # This adapter intentionally pins strands-robots: the backend access is private.
@@ -70,6 +69,8 @@ class Capture:
         return dict(zip(self.names, self.data.qpos[self.addresses].tolist()))
 
     def frame(self, label, source, mode, target):
+        import numpy as np
+
         i = len(self.frames)
         self.camera.azimuth = (135 if self.name == "so100" else 145) + 12 * math.sin(i / 160)
         self.renderer.update_scene(self.data, camera=self.camera)
@@ -83,6 +84,9 @@ class Capture:
         })
 
     def move(self, targets: dict[str, float], label: str, source: str, seconds=4.0):
+        import mujoco
+        import numpy as np
+
         validate_targets(targets, self.names, self.limits)
         if len(self.actions) >= 6:
             raise ValueError("Maximum six motions per recording")
@@ -113,6 +117,8 @@ class Capture:
 
     def showcase(self):
         """G1 joint-space pose animation, NOT a walking or balancing policy."""
+        import mujoco
+
         baseline = self.data.qpos.copy()
         for i in range(10 * FPS):
             t = i / FPS
