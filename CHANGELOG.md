@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Encode every recorded video at one quality. Two recorders had drifted to
+  imageio-ffmpeg quality 9 (crf 5) and wrote the heaviest media in the
+  repository; a test now holds all eight writers to the same value.
+
 - Hold every published page inside a compressed transfer budget, measured the
   way GitHub Pages serves them. The Stress Lab page is 1.26 MiB of the 1.50 MiB
   limit.

@@ -8,3 +8,5 @@ dist/
 build/
 MUJOCO_LOG.TXT
 node_modules/
+# A stress build writes this archive beside the site; it ships as a release asset.
+/docs/stress/experiment.zip
