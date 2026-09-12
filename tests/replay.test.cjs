@@ -66,7 +66,11 @@ test('physics-to-cinema works offline on mobile with keyboard and pointer contro
   try{
     await page.route(/^https?:/,route=>route.abort());
     await page.goto(pathToFileURL(resolve('docs/remix/index.html')).href);
-    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=1));
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=2&&!v.seeking));
+    const initial=await page.locator('#stage').screenshot();
+    await page.evaluate(()=>{location.hash='frame=0';});
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>!v.seeking));
+    assert.deepEqual(await page.locator('#stage').screenshot(),initial,'Initial view must show frame 0, not an unrelated poster');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     await page.locator('#reveal').focus();await page.keyboard.press('ArrowRight');
     assert.equal(await page.locator('#reveal').inputValue(),'51');
