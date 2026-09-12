@@ -130,10 +130,9 @@ def sandbox_overrides(common, network, extra_roots=()):
     roots = list(dict.fromkeys([*extra_roots, str(common)]))
     overrides = ["-c", "sandbox_workspace_write.writable_roots="
                        + json.dumps(roots, ensure_ascii=False)]
-    if network:
-        # In auto mode nobody is present to approve an escalation, so a blocked
-        # request would only come back to the model as a failure.
-        overrides += ["-c", "sandbox_workspace_write.network_access=true"]
+    # Forward false as well as true: a resumed session must not retain an old
+    # network grant after the user explicitly restricted its configuration.
+    overrides += ["-c", "sandbox_workspace_write.network_access="+str(network).lower()]
     return overrides
 
 

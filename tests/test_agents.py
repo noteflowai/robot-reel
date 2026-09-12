@@ -34,6 +34,7 @@ class AgentLauncherTests(unittest.TestCase):
         roots = next(a.split("=", 1)[1] for a in policy["args"] if "writable_roots=" in a)
         self.assertEqual(json.loads(roots), ["/work/assets", str(common)])
         self.assertNotIn("sandbox_workspace_write.network_access=true", policy["args"])
+        self.assertIn("sandbox_workspace_write.network_access=false", policy["args"])
 
     def test_missing_config_and_named_profiles_do_not_invent_full_access(self):
         common = Path("/work/repo/.git")
