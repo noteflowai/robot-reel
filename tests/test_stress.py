@@ -1,4 +1,5 @@
 import copy
+from html.parser import HTMLParser
 import json
 from pathlib import Path
 import shutil
@@ -10,10 +11,24 @@ from unittest.mock import patch
 import zipfile
 
 from robot_reel.stress import canonical_hash, divergence, file_hash, summarize, validate_plan, validate_run, wilson
-from robot_reel.stress_site import ARCHIVE_HREF, MARKER, load_collection, page, payload, verify_site
+from robot_reel.stress_site import PUBLISHED_ARCHIVE_HREF, MARKER, build, load_collection, main, page, payload, verify_site
 from robot_reel.vla import validate_trace
 
 SITE = Path(__file__).resolve().parents[1]/"docs/stress"
+
+
+def archive_link(document):
+    class Links(HTMLParser):
+        href = None
+
+        def handle_starttag(self, tag, attrs):
+            attributes = dict(attrs)
+            if tag == "a" and attributes.get("id") == "zip":
+                self.href = attributes.get("href")
+
+    parser = Links()
+    parser.feed(document)
+    return parser.href
 
 
 class StressTests(unittest.TestCase):
@@ -196,13 +211,45 @@ class StressTests(unittest.TestCase):
         # The whole document, not only its payload: the offline-archive link used
         # to be patched into the published page by hand, so a rebuild silently
         # replaced it with a local path.
-        self.assertEqual(page(payload(self.plan, self.attempts, self.traces)),
+        self.assertEqual(page(payload(self.plan, self.attempts, self.traces), PUBLISHED_ARCHIVE_HREF),
                          (SITE/"index.html").read_text())
-        self.assertIn(ARCHIVE_HREF, (SITE/"index.html").read_text())
-        self.assertIn("/releases/download/", ARCHIVE_HREF)
+        self.assertEqual(archive_link((SITE/"index.html").read_text()), PUBLISHED_ARCHIVE_HREF)
+        self.assertIn("/releases/download/", PUBLISHED_ARCHIVE_HREF)
         with self.assertRaisesRegex(ValueError, "one archive link"):
             with patch("pathlib.Path.read_text", return_value="<html>__STRESS_DATA__</html>"):
                 page({})
+
+    def test_custom_archive_link_is_escaped_without_changing_the_payload(self):
+        data = {"label": '__ARCHIVE_HREF__ __STRESS_DATA__ </script><img src="x">'}
+        href = 'experiment.zip?label="a&b"&token=__STRESS_DATA__'
+        document = page(data, href)
+        self.assertEqual(archive_link(document), href)
+        self.assertEqual(json.loads(document.split(MARKER)[1].split("</script>", 1)[0]), data)
+
+    def test_build_downloads_its_own_archive_by_default(self):
+        # Reuse checked camera/MCAP evidence so this packaging regression also
+        # runs under python -S; the separate media tests decode those recordings.
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary)/"pack"
+            with (
+                patch("robot_reel.stress_site.check_media",
+                      return_value=json.loads((SITE/"media-checks.json").read_text())),
+                patch("robot_reel.stress_mcap.export_mcap",
+                      side_effect=lambda traces, path: shutil.copyfile(SITE/"telemetry.mcap", path)),
+            ):
+                summary = build(SITE, output)
+            document = (output/"index.html").read_text()
+            self.assertEqual(archive_link(document), "experiment.zip")
+            with zipfile.ZipFile(output/"experiment.zip") as archive:
+                self.assertEqual(archive.read("index.html"), document.encode())
+                self.assertEqual(json.loads(archive.read("summary.json")), summary)
+
+    def test_cli_uses_local_archive_unless_publication_link_is_explicit(self):
+        for options, expected in (([], "experiment.zip"), (["--archive-href", PUBLISHED_ARCHIVE_HREF], PUBLISHED_ARCHIVE_HREF)):
+            with self.subTest(options=options), patch("robot_reel.stress_site.build", return_value={}) as builder:
+                with patch("builtins.print"):
+                    main(["recording", "output", *options])
+                builder.assert_called_once_with(Path("recording"), Path("output"), archive_href=expected)
 
     def test_published_site_verifies_without_the_release_archive(self):
         # docs/stress/ ships the archive as a release asset, not as a tracked file.

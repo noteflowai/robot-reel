@@ -5,7 +5,7 @@ under `docs/` carries a verbatim copy of its template's inline script. A change 
 a template therefore only reaches the published site when the pages are rebuilt,
 and a rebuild needs the original capture bundles with their videos. This module
 compares the two directly, and can copy a template's script into the pages that
-were built from it, refreshing any manifest that records the page's hash.
+were built from it, refreshing local offline archives and dependent manifests.
 
     python -m robot_reel.pages           # report drift
     python -m robot_reel.pages --write   # copy templates into the published pages
@@ -14,9 +14,13 @@ Only the script is synchronized. Anything else -- new markup, new recorded data,
 new media -- still requires the documented rebuild for that page.
 """
 import argparse
+import copy
 import hashlib
 import json
 from pathlib import Path
+import shutil
+import tempfile
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -76,8 +80,50 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def refresh_archives(root, changed):
+    """Replace archived copies of changed files, preserving unrelated sources.
+
+    A member must match both the sibling path and its previous hash. In particular,
+    a source-capture manifest with the same filename is not a copy of the site's
+    manifest. Never add members or extract paths supplied by an archive.
+    """
+    updated = {}
+    for path in sorted((root/"docs").rglob("*.zip")):
+        with zipfile.ZipFile(path) as source:
+            replacements = {}
+            for info in source.infolist():
+                target = (path.parent/info.filename).resolve()
+                if (not info.is_dir() and target.is_relative_to(path.parent.resolve())
+                        and target in changed):
+                    with source.open(info) as stream:
+                        previous = hashlib.file_digest(stream, "sha256").hexdigest()
+                    if previous == changed[target]:
+                        replacements[info.filename] = target
+            if not replacements:
+                continue
+            if len(source.namelist()) != len(set(source.namelist())):
+                raise ValueError(f"{path}: duplicate offline archive members; rebuild the bundle")
+            previous = digest(path)
+            with tempfile.NamedTemporaryFile(dir=path.parent, suffix=".zip", delete=False) as stream:
+                temporary = Path(stream.name)
+            try:
+                with zipfile.ZipFile(temporary, "w") as destination:
+                    destination.comment = source.comment
+                    for info in source.infolist():
+                        target = replacements.get(info.filename)
+                        with (target.open("rb") if target else source.open(info)) as incoming:
+                            with destination.open(copy.copy(info), "w") as outgoing:
+                                shutil.copyfileobj(incoming, outgoing)
+                temporary.chmod(path.stat().st_mode)
+                temporary.replace(path)
+            finally:
+                temporary.unlink(missing_ok=True)
+            updated[path.resolve()] = previous
+    return updated
+
+
 def refresh_hashes(root, changed):
-    """Re-record the hashes of changed files, following the manifest chain.
+    """Refresh manifests and offline copies, following their dependency chain.
 
     Published bundles hash each other: a comparison manifest records its page, and
     the remix manifest records that comparison manifest. Rewriting one file
@@ -86,37 +132,47 @@ def refresh_hashes(root, changed):
     changed file's previous hash, which is what keeps the source-capture manifests
     inside a comparison bundle -- they record a different `index.html` -- untouched.
     """
+    root = root.resolve()
     manifests = sorted((root/"docs").rglob("*manifest*.json"))
     pending, updated = dict(changed), []
     while pending:
-        found = {}
-        for path in manifests:
-            text = path.read_text()
-            document = json.loads(text)
-            touched = False
-            for key in HASH_KEYS:
-                entry = document.get(key)
-                if not isinstance(entry, dict):
-                    continue
-                for name, recorded in entry.items():
-                    # Bundle manifests name siblings; the remix manifest names its
-                    # inputs from the docs root.
-                    for target in ((path.parent/name).resolve(), (root/"docs"/name).resolve()):
-                        if pending.get(target) == recorded:
-                            entry[name] = digest(target)
-                            touched = True
-                            break
-            if touched:
-                found[path.resolve()] = digest(path)
-                # Both writers use indent=2; only their trailing newline differs.
-                path.write_text(json.dumps(document, indent=2) + ("\n" if text.endswith("\n") else ""))
-                updated.append(path)
-        pending = found
-    return updated
+        archive_inputs = dict(pending)
+        # Finish the manifest chain before repacking, so the page and its final
+        # manifest are copied together instead of recompressing the media twice.
+        while pending:
+            found = {}
+            for path in manifests:
+                text = path.read_text()
+                document = json.loads(text)
+                touched = False
+                for key in HASH_KEYS:
+                    entry = document.get(key)
+                    if not isinstance(entry, dict):
+                        continue
+                    for name, recorded in entry.items():
+                        # Bundle manifests name siblings; input manifests may
+                        # name paths from the docs root or the repository root.
+                        for target in ((path.parent/name).resolve(), (root/"docs"/name).resolve(),
+                                       (root/name).resolve()):
+                            if target in pending and pending[target] == recorded:
+                                entry[name] = digest(target)
+                                touched = True
+                                break
+                if touched:
+                    found[path] = digest(path)
+                    archive_inputs.setdefault(path, found[path])
+                    # Both writers use indent=2; only their trailing newline differs.
+                    path.write_text(json.dumps(document, indent=2) + ("\n" if text.endswith("\n") else ""))
+                    updated.append(path)
+            pending = found
+        pending = refresh_archives(root, archive_inputs)
+        updated.extend(pending)
+    return list(dict.fromkeys(updated))
 
 
 def sync(root=ROOT):
-    """Copy each template's inline script into its published pages."""
+    """Copy template scripts, refreshing local archives and dependent hashes."""
+    root = root.resolve()
     written, changed = [], {}
     for page in check(root):
         template = root/PAGES[page.relative_to(root).as_posix()]
@@ -135,6 +191,7 @@ def main(argv=None):
     parser.add_argument("--write", action="store_true",
                         help="Copy the templates into the published pages")
     args = parser.parse_args(argv)
+    args.root = args.root.resolve()
     if args.write:
         written = sync(args.root)
         for path in written:
