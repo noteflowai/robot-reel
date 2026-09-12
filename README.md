@@ -70,7 +70,7 @@ cameras, and jump to the largest measured trajectory difference. Recorded with
 </a>
 
 **[Compare the policy runs ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[Complete offline lab ↓](https://noteflowai.github.io/robot-reel/stress/experiment.zip) ·
+[Complete offline lab ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.4.0/robot-reel-stress-experiment.zip) ·
 [MCAP telemetry ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [Reproduce & inspect](docs/stress.md)
 

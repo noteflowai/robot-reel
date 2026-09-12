@@ -132,6 +132,9 @@ The published folder includes:
   match decoded MP4 pixels bit for bit.
 - A self-contained HTML viewer, notices, file manifest and `experiment.zip`.
   Extract the whole ZIP and open `index.html`; no HTTP server is required.
+  The published site under `docs/stress/` does not carry the 56 MB archive; it
+  is the release asset `robot-reel-stress-experiment.zip` (listed in the
+  release's `SHA256SUMS`), so large bundles stay out of the repository history.
 
 Hashes detect accidental changes; they are not an external attestation of the
 collector. Validators also check trial denominators, paired physical states,
