@@ -2,6 +2,87 @@
 
 Drafts for the repository owner to publish. No external outreach has been sent.
 
+## Landing page, Stress Lab and Butterfly Lab — September 2026
+
+Assets: social preview `docs/showcase/social.png` (upload once under Settings →
+Social preview), landing page https://noteflowai.github.io/robot-reel/, Stress
+Lab GIF `docs/stress/preview.gif`, Butterfly Lab GIF `docs/chaos/preview.gif`.
+Timing hook: Newton 1.6 shipped days ago and the Butterfly Lab records it.
+
+### Show HN title candidates (≤ 80 characters)
+
+- Show HN: Robot Reel – a replay button for physical AI (SmolVLA, Newton, Blender)
+- Show HN: 30 real SmolVLA rollouts you can step through frame by frame, in the browser
+- Show HN: Twelve Newton worlds 0.05° apart, recorded as a 3D time sculpture
+
+### Show HN first comment
+
+> Robot Reel records a run from a robotics stack and turns it into something you
+> can watch, inspect and reuse. Nothing is re-simulated in the browser; every page
+> is a self-contained HTML file with the source trace and checksums next to it.
+>
+> Two new demos. The Stress Lab runs SmolVLA on the same LIBERO task under
+> reference lighting, reduced light and a shifted camera: 30 closed-loop trials
+> across ten paired initial states on an L40S, every trial retained, failures
+> included. Pick any outcome in the matrix, compare both policy cameras, jump to
+> the largest measured end-effector difference. The Butterfly Lab records twelve
+> isolated Newton 1.6 worlds released 0.05° apart and lets you orbit their paths
+> as a 3D time sculpture; the OpenUSD export was checked body-by-body in Blender.
+>
+> What it is not: a simulator, a training framework or a benchmark. It sits after
+> LeRobot / MuJoCo / Newton and keeps the evidence behind the film. The Stress
+> Lab is a controlled diagnostic, not an official LIBERO score.
+>
+> Standard-library quick start: clone, `python3 -m robot_reel.cli vla docs/vla`
+> verifies the included episode against its trace. Recording new runs needs the
+> full runtime (MuJoCo, LeRobot in its own venv; CUDA for the stress lab).
+>
+> Most useful feedback: which policy or simulator log would you want to inspect
+> next, and what telemetry is missing when you step through a failure?
+
+### Reddit (r/robotics, r/MachineLearning, r/blender, r/LocalLLaMA)
+
+- r/robotics: lead with the Stress Lab GIF; ask which failure modes people want
+  paired comparisons for.
+- r/MachineLearning: lead with "every trial retained, failures included, MCAP
+  telemetry"; link docs/stress.md for the fixed protocol.
+- r/blender: lead with the remix divider and the editable .blend / OpenUSD;
+  the MCP director is a secondary point.
+- Disclose it is your project; answer every comment in the first two hours.
+
+### 掘金 / 知乎
+
+标题候选：
+
+- 给物理 AI 加一个「回放键」：30 次真实 SmolVLA 运行、12 个 Newton 世界，浏览器里逐帧看
+- 策略在暗光下为什么失败？把每一次运行都留下来再看
+- 0.05° 的差别，如何在 12.5 秒后变成 6.26 米
+
+正文要点：
+
+> Robot Reel 不是仿真器，也不是训练框架。它做的事情只有一件：把一次运行录下来，
+> 校验轨迹，做成能看、能查、能改的东西。
+>
+> 策略压力实验室：同一个 LIBERO 任务，参考光照 / 暗光 / 移机位三种条件、十组配对
+> 初始状态，SmolVLA 在 L40S 上跑了 30 次真实闭环。全部保留，失败也在；点结果矩阵
+> 任意一格，对照双相机，一键跳到末端轨迹差异最大的时刻。
+>
+> 蝴蝶效应实验室：12 个隔离的 Newton 1.6 世界，释放角只差 0.05°，录下来的路径
+> 拼成一座可以旋转的 3D「时间雕塑」。导出的 OpenUSD 在 Blender 里逐个刚体检查过。
+>
+> 网页全部可离线打开，附源轨迹和哈希。快速开始只需要 Python 标准库。
+> 说明：压力实验是受控诊断，不是 LIBERO 官方成绩；Newton 演示是刚体示例。
+>
+> 仓库：https://github.com/noteflowai/robot-reel （Apache-2.0）
+> 在线演示：https://noteflowai.github.io/robot-reel/
+
+### Where else to link
+
+Upstream discussions where the recording is on-topic, only when answering a real
+question: LeRobot (SmolVLA evaluation under lighting/camera shifts), Newton
+(recording to OpenUSD), Blender community (importing measured motion). Credit the
+upstream project first; link the specific demo, not the repo root.
+
 ## Newton / OpenUSD update — September 2026
 
 Run the physics once. Share every pose.

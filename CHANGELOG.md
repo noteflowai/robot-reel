@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Check that every relative link and heading anchor in the Markdown docs and the
+  landing page resolves, with the standard library.
+- Add launch copy for the landing page, Stress Lab and Butterfly Lab to the
+  maintainer notes.
+
 - Publish a landing page at the site root that indexes all twelve recorded demos,
   with a stdlib quick start and a copy button; the Microduck replay keeps its
   own page. The landing template lives in `scripts/landing.html` and is covered
