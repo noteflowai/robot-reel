@@ -139,6 +139,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[director,inspect]'
 npm ci
+npm run check:js
 npx playwright install chromium
 npm test
 ```
@@ -153,6 +154,15 @@ native scene changes, CPU/GPU separation, source-derived statistics and the
 complete offline archive. The optional `inspect` extra enables MCAP readback;
 without it, that one optional test is skipped. CI also exercises the real director MCP transport.
 Real recording smoke runs require OpenGL and downloaded model assets.
+
+`npm run check:js` type-checks the viewer scripts that live inline in the replay
+templates. The exports stay single self-contained HTML files, so the scripts
+cannot move into modules or a bundler; the check extracts each template's script,
+runs the TypeScript compiler over it in `checkJs` mode, and reports diagnostics at
+their original HTML line. It reads the templates without modifying them, and it
+does not add anything to the exported pages. `scripts/viewer-env.d.ts` records
+what the templates assume about the DOM, so the check reports undeclared names,
+typos, wrong arity and dead locals instead of a cast at every element access.
 The Studio adapter uses private Strands Robots fields and pins version 0.5.1.
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md). Useful contributions include a public

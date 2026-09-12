@@ -50,8 +50,8 @@ def build_scene(document, manifest, output, portrait=False):
     scene["scene_json_sha256"] = manifest["sha256"]["scene.json"]
     scene["animation_samples"] = document["frame_count"]
     for filename in ("scene.json", "blender-manifest.json"):
-        text = bpy.data.texts.new(filename)
-        text.write(json.dumps(document if filename == "scene.json" else manifest, indent=2))
+        datablock = bpy.data.texts.new(filename)
+        datablock.write(json.dumps(document if filename == "scene.json" else manifest, indent=2))
     world = bpy.data.worlds.new("Midnight studio")
     world.use_nodes = True
     world.node_tree.nodes["Background"].inputs["Color"].default_value = (.07, .095, .16, 1)
