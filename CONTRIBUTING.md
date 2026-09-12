@@ -13,6 +13,9 @@ For capture changes, run the credential-free demo and verify its output.
 Do not require a paid model or real hardware for ordinary tests.
 
 Blender changes should also pass the saved-project check in [docs/blender.md](docs/blender.md).
+For the Newton adapter, install `.[newton]`, record a fresh CPU run and use
+`--verify --check-usd`. The native Blender USD import check and page rebuild
+commands are in [docs/newton.md](docs/newton.md).
 
 Please include a short reproducible command and the observed result with fixes.
 Do not commit credentials, account-specific logs, downloaded robot meshes, or

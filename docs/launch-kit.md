@@ -1,6 +1,36 @@
-# Robot Reel v0.2 launch copy
+# Robot Reel launch copy
 
 Drafts for the repository owner to publish. No external outreach has been sent.
+
+## Newton / OpenUSD update — September 2026
+
+Run the physics once. Share every pose.
+
+Robot Reel now records a Newton 1.6 double pendulum on CPU and turns it into an
+offline 3D browser replay plus an animated OpenUSD scene. Step through the real
+poses, share a sample, then import the same motion into Blender. All 362 body
+transforms were checked after actual Blender 5.2.1 import.
+
+No GPU, model-service account or downloaded scene assets needed. This is a small
+rigid-body example; it does not claim a robot policy, particles or a simulation
+benchmark.
+
+Demo: https://noteflowai.github.io/robot-reel/newton/
+Preview: `docs/newton/preview.gif`
+Reproduce: `pip install -e '.[newton]'`, then `robot-reel newton`
+
+### 中文
+
+物理只运行一次，每个姿态都能分享。
+
+Robot Reel 接入了刚发布的 Newton 1.6：CPU 上运行真实双摆，在浏览器里逐帧检查，
+再把同一段运动通过 OpenUSD 带进 Blender。362 个刚体变换均通过实际导入检查；
+网页无需安装，录制无需 GPU，也没有模型 API 调用。
+
+可以下载 USD 和源轨迹，把它改成自己的灯光、机位和场景。当前支持的是可复现
+的刚体演示，尚未接入任意机器人场景或粒子仿真。
+
+## Earlier launch drafts
 
 ## Short post
 

@@ -1,0 +1,10 @@
+{
+  "blender_version": "5.2.1 LTS",
+  "checked_body_samples": 362,
+  "fps": 30,
+  "frame_start": 1,
+  "frame_end": 181,
+  "maximum_transform_error_m": 1.627137754125032e-07,
+  "trace_sha256": "4231f02946b74c29bfed489a8b841cd94d3cb49901979578285cc258f936e23f",
+  "usd_sha256": "76ccd6a3efb5fcb3f84a16937322ec290ebd557f324b019ed2bcb4c4f4fc0bb6"
+}

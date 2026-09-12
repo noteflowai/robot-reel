@@ -5,17 +5,40 @@
 把物理 AI 仿真录制成可分享的视频，同时保留可交互的逐帧动作记录。
 可以运行 Microduck 官方策略、对比两种制动控制器，或让 Strands Agent
 控制机械臂。回放直接在浏览器里打开，观看不需要账号，也不需要安装。
-也可以把制动轨迹导入 Blender，制作可编辑的 3D 场景。
+也可以把录制轨迹带进 Blender，或将 Newton 物理仿真导出为带动画的 OpenUSD 场景。
 
 [**试试 Microduck →**](https://noteflowai.github.io/robot-reel/) ·
 [**对比制动 →**](https://noteflowai.github.io/robot-reel/braking/) ·
 [**检查 Agent 机械臂 →**](https://noteflowai.github.io/robot-reel/studio/) ·
 [**在 Blender 中打开 →**](https://noteflowai.github.io/robot-reel/blender/) ·
+[**Newton → USD → Blender →**](https://noteflowai.github.io/robot-reel/newton/) ·
 [English](README.md)
 
 ![用 Robot Reel 录制的 Microduck 官方策略仿真](docs/microduck/media/preview.gif)
 
 [下载视频与证据包](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+
+## 新增：Newton → OpenUSD → Blender
+
+**运行一次物理仿真，分享每一个姿态。** 在 CPU 上录制真实的 Newton 1.6
+双摆仿真，在浏览器里检查实测的 3D 姿态，再将同一段动画导入 Blender。
+无需 GPU、API 密钥或额外下载的场景资产。
+
+[**检查 Newton 回放并下载 USD 场景 →**](https://noteflowai.github.io/robot-reel/newton/)
+
+![Robot Reel 浏览器中展示的 Newton 实测刚体姿态](docs/newton/preview.gif)
+
+```bash
+pip install -e '.[newton]'
+robot-reel newton --output artifacts/newton
+robot-reel newton --output artifacts/newton --verify --check-usd
+```
+
+打开 `artifacts/newton/index.html`，或将 Blender 设置为 **30 fps** 后导入
+`scene.usda`。六秒演示包含从仿真时刻零开始的 181 个样本，全部 **362 个刚体
+变换**均通过 Blender 5.2.1 实际导入后的检查。这里导出的是刚体展示动画；
+浏览器和 Blender 都在回放已记录的姿态。
+[复现步骤及 Blender 导入检查](docs/newton.md)。
 
 ## 新增：把录制结果带进 Blender
 
@@ -47,7 +70,7 @@ CLI 会校验时间戳、模型配置和引擎版本；遇到不匹配的录制�
 悄悄裁剪。这些是单次试验，不是统计意义上的基准测试。
 [复现这些对比](docs/comparison.md)。
 
-## 三个场景，同一套录制流程
+## MuJoCo 录制场景
 
 | 场景 | 实际运行的内容 | 可以检查的数据 |
 | --- | --- | --- |
@@ -111,9 +134,11 @@ Linux 默认使用 EGL；安装系统的 OSMesa 库后可以用 `MUJOCO_GL=osmes
 
 ## 输出
 
-每次运行会产生两个 H.264/AAC 视频、一个可交互的 HTML 回放、原始仿真录像、
+每个 MuJoCo 场景会产生两个 H.264/AAC 视频、一个可交互的 HTML 回放、原始仿真录像、
 逐帧 JSON 轨迹、一张封面图和一份 SHA-256 清单。Microduck 还会记录全部 50 Hz
 策略动作及其策略/模型版本号。
+独立的 Newton 命令生成 HTML 姿态回放、JSON 轨迹、带动画的 USD 场景和校验
+清单，不渲染 MP4。
 
 | 场景 | 仿真画面 | 成片 |
 | --- | --- | --- |

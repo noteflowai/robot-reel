@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "robot-reel"
 version = "0.3.0"
-description = "Record Microduck policies, braking comparisons and robot agents as inspectable films."
+description = "Record MuJoCo and Newton runs as inspectable replays and editable Blender/OpenUSD scenes."
 readme = "README.md"
 requires-python = ">=3.12"
 license = "Apache-2.0"
@@ -24,10 +24,11 @@ robot-reel = "robot_reel.cli:main"
 include = ["robot_reel*"]
 
 [tool.setuptools.package-data]
-robot_reel = ["replay.html", "comparison.html"]
+robot_reel = ["replay.html", "comparison.html", "newton.html"]
 
 [project.optional-dependencies]
 microduck = ["onnxruntime==1.30.0"]
+newton = ["newton==1.6.0", "warp-lang==1.17.0", "usd-core==26.3"]
 
 [project.urls]
 Homepage = "https://noteflowai.github.io/robot-reel/"

@@ -28,3 +28,15 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm test
+  newton:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e '.[newton]'
+      - name: Record real CPU physics and check every USD transform
+        run: |
+          robot-reel newton --seconds 1 --output artifacts/newton-ci
+          robot-reel newton --output artifacts/newton-ci --verify --check-usd

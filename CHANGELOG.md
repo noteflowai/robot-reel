@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Record Newton 1.6 CPU rigid-body poses and export a self-contained animated
+  OpenUSD scene, with an offline 3D browser replay and per-sample sharing.
+- Check all 362 body samples through OpenUSD and actual Blender 5.2.1 import;
+  explicitly preserve the 30 fps time base when importing into Blender.
 - Export verified braking captures/comparisons into editable Blender 5.2 scenes
   with procedural geometry, two cameras, source-driven keyframes and telemetry.
 - Check the exported JSON against source traces and the saved `.blend` against

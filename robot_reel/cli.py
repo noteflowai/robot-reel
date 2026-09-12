@@ -6,6 +6,9 @@ from pathlib import Path
 
 
 def main():
+    if sys.argv[1:2] == ["newton"]:
+        from .newton import main as newton_main
+        return newton_main(sys.argv[2:])
     if sys.argv[1:2] == ["blender"]:
         from .blender import main as blender_main
         return blender_main(sys.argv[2:])
