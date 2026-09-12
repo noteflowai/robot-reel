@@ -1,0 +1,77 @@
+name: Demo or adapter request
+description: Propose a new recorded scene, simulator adapter, or policy rollout for the replay lab.
+title: "[demo]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Robot Reel publishes recordings that can be replayed and verified from the checkout.
+        The most useful proposals come with a working replay and the source data that produced it.
+        Keep the distinction between physics rollouts, kinematic animation, and agent decisions explicit.
+  - type: input
+    id: simulator
+    attributes:
+      label: Simulator or data source
+      description: MuJoCo, Newton, a real-robot log, an MCAP file, etc. Include the version.
+      placeholder: MuJoCo 3.13.0
+    validations:
+      required: true
+  - type: input
+    id: policy
+    attributes:
+      label: Policy or controller
+      description: What drives the robot in the recording (scripted targets, SmolVLA/LeRobot checkpoint, agent-directed, ...). Name the checkpoint if any.
+      placeholder: SmolVLA via LeRobot, scripted SO-100 plan, ...
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Recording kind
+      options:
+        - Physics rollout
+        - Kinematic animation
+        - Agent-directed film of an existing recording
+        - Mixed (explain below)
+    validations:
+      required: true
+  - type: textarea
+    id: inspectable
+    attributes:
+      label: What should be inspectable
+      description: Which traces, telemetry channels, camera views, per-frame decisions, or checks a viewer should be able to open and verify.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why this scene
+      description: What question does the recording help answer that the existing demos do not?
+    validations:
+      required: true
+  - type: dropdown
+    id: supply
+    attributes:
+      label: Can you supply a working replay and the source data?
+      options:
+        - Yes, replay plus source data (trace, manifest, media) under a compatible license
+        - Replay only
+        - Source data only
+        - No, proposal only
+    validations:
+      required: true
+  - type: textarea
+    id: licensing
+    attributes:
+      label: Licensing and size
+      description: License of the source data, models, and meshes involved; approximate size of media. Large videos belong in release assets, not in the repository.
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Hygiene
+      options:
+        - label: The proposal does not depend on a paid model or real hardware for ordinary tests.
+          required: false
+        - label: No credentials, account-specific logs, downloaded robot meshes, or large videos are attached.
+          required: true
