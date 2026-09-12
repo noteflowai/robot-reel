@@ -2,9 +2,11 @@
   "name": "robot-reel-browser-checks",
   "private": true,
   "scripts": {
+    "check:js": "node scripts/check_viewer_js.cjs",
     "test": "node --test tests/replay.test.cjs"
   },
   "devDependencies": {
-    "playwright": "1.63.0"
+    "playwright": "1.63.0",
+    "typescript": "5.9.3"
   }
 }
