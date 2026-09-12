@@ -115,7 +115,7 @@ def main():
     for name in ("main", "wrist"):
         writer = imageio_ffmpeg.write_frames(
             str(args.output/f"{name}.mp4"), (256, 256), fps=20,
-            codec="libx264", pix_fmt_out="yuv420p", quality=9, ffmpeg_log_level="error",
+            codec="libx264", pix_fmt_out="yuv420p", quality=8, ffmpeg_log_level="error",
         )
         writer.send(None)
         writers[name] = writer
