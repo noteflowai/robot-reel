@@ -2,9 +2,6 @@
 import json
 from pathlib import Path
 
-import imageio_ffmpeg
-import mujoco
-
 from .capture import FPS, HEIGHT, WIDTH
 
 
@@ -42,6 +39,9 @@ def vehicle_xml():
 
 
 def brake_trial(output, early):
+    import imageio_ffmpeg
+    import mujoco
+
     config = VEHICLE_CONFIG
     name = "braking_early" if early else "braking_late"
     model = mujoco.MjModel.from_xml_string(vehicle_xml())

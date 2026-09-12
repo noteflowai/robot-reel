@@ -5,6 +5,7 @@ Observation/action conventions follow microduck_rl/scripts/infer_policy.py
 """
 import hashlib
 import json
+import math
 import os
 import shutil
 import tempfile
@@ -12,17 +13,13 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-import imageio_ffmpeg
-import mujoco
-import numpy as np
-
 from .capture import FPS, HEIGHT, WIDTH
 
 MODEL_COMMIT = "53b8971b61baf5b7f3c16d135dd7cac37623de4b"
 POLICY_REVISION = "088524a64e2557dc453256b6071dbb9d23888802"
 POLICY_SHA256 = "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c"
-DEFAULT_POSE = np.array([0, -.0873, -.4579, -.0049, .453, .3491, .3491, 0, 0,
-                         0, .0873, .4579, .0049, -.453], dtype=np.float32)
+DEFAULT_POSE = (0, -.0873, -.4579, -.0049, .453, .3491, .3491, 0, 0,
+                0, .0873, .4579, .0049, -.453)
 
 
 def ensure_assets():
@@ -71,13 +68,18 @@ def ensure_assets():
 
 
 def validate_speed(speed):
-    if type(speed) not in (int, float) or not np.isfinite(speed) or not 0 <= speed <= .6:
+    if type(speed) not in (int, float) or not math.isfinite(speed) or not 0 <= speed <= .6:
         raise ValueError("Microduck speed must be a finite number between 0 and 0.6 m/s")
     return float(speed)
 
 
 def record_microduck(output, speed=.5):
     speed = validate_speed(speed)
+    import imageio_ffmpeg
+    import mujoco
+    import numpy as np
+
+    default_pose = np.array(DEFAULT_POSE, dtype=np.float32)
     try:
         import onnxruntime as ort
     except ImportError as exc:
@@ -97,7 +99,7 @@ def record_microduck(output, speed=.5):
     ]:
         raise ValueError("Microduck actuator order does not match the official policy")
     data.qpos[:7] = [0, 0, .125, 1, 0, 0, 0]
-    data.qpos[qindices], data.ctrl[:] = DEFAULT_POSE, DEFAULT_POSE
+    data.qpos[qindices], data.ctrl[:] = default_pose, default_pose
     mujoco.mj_forward(model, data)
     options = ort.SessionOptions()
     options.intra_op_num_threads = options.inter_op_num_threads = 1
@@ -126,13 +128,13 @@ def record_microduck(output, speed=.5):
                 gravity = data.xmat[trunk].reshape(3, 3).T @ np.array([0, 0, -1])
                 observation = np.concatenate([
                     data.sensordata[gyro:gyro+3], gravity,
-                    data.qpos[qindices]-DEFAULT_POSE, data.qvel[vindices], previous, command,
+                    data.qpos[qindices]-default_pose, data.qvel[vindices], previous, command,
                 ]).astype(np.float32)[None]
                 action = policy.run(None, {policy.get_inputs()[0].name: observation})[0][0]
                 if action.shape != (14,) or not np.isfinite(action).all():
                     raise RuntimeError("Policy returned an invalid action")
                 previous = action.astype(np.float32)
-                data.ctrl[:] = DEFAULT_POSE+previous
+                data.ctrl[:] = default_pose+previous
                 policy_steps.append({"step": len(policy_steps), "sim_time": float(data.time),
                                      "command": command.tolist(), "action": previous.tolist(),
                                      "target": data.ctrl.tolist()})
@@ -166,7 +168,7 @@ def record_microduck(output, speed=.5):
         "disclaimer": "PD approximation / not real hardware",
         "joints": names, "units": ["rad"]*len(names),
         "display_joints": ["left_hip_pitch", "left_knee", "right_hip_pitch"],
-        "limits": model.jnt_range[ids].tolist(), "home": DEFAULT_POSE.tolist(),
+        "limits": model.jnt_range[ids].tolist(), "home": default_pose.tolist(),
         "frames": frames, "actions": [
             {"label": "Stand", "start_frame": 0, "end_frame": 29, "source": "policy"},
             {"label": "Walk", "start_frame": 30, "end_frame": 239, "source": "policy"},

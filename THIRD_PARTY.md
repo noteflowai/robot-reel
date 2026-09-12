@@ -7,6 +7,9 @@ Strands, Google DeepMind, Hugging Face, or Unitree.
 | --- | --- | --- |
 | Strands Robots | https://github.com/strands-labs/robots | Apache-2.0; robot factory and simulation integration |
 | MuJoCo | https://github.com/google-deepmind/mujoco | Apache-2.0; simulator and renderer |
+| Newton | https://github.com/newton-physics/newton | Apache-2.0; optional CPU rigid-body simulation |
+| NVIDIA Warp | https://github.com/NVIDIA/warp | Apache-2.0; Newton's simulation runtime |
+| OpenUSD | https://github.com/PixarAnimationStudios/OpenUSD | Modified Apache-2.0; optional scene export and transform verification |
 | SO-ARM100 model | https://github.com/google-deepmind/mujoco_menagerie/tree/main/trs_so_arm100 | Apache-2.0 model assets |
 | Unitree G1 model | https://github.com/google-deepmind/mujoco_menagerie/tree/main/unitree_g1 | Unitree BSD-style license; see the model directory's LICENSE |
 | Microduck model | https://github.com/pollen-robotics/microduck_rl | Upstream README identifies 3D models as Creative Commons BY-SA-NC; it does not specify a version |
@@ -28,6 +31,8 @@ terms. Pollen Robotics / Hugging Face has not endorsed Robot Reel.
 
 The automotive geometry is authored procedurally in `robot_reel/packs.py`.
 No Alpamayo weights, AlpaSim components or CARLA assets are distributed or run.
+The Newton demo uses procedural box geometry authored in `robot_reel/newton.py`.
+Its browser preview draws measured poses without third-party mesh assets.
 
 Pillow draws typography and overlays. FFmpeg, supplied through imageio-ffmpeg,
 encodes video; its binary distribution has its own license conditions.

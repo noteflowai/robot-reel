@@ -5,15 +5,61 @@
 Record physical-AI simulations as shareable films **and** interactive motion traces.
 Run an official Microduck policy, compare braking controllers, or let a Strands
 agent direct an arm. Open the replay in a browser; no account or install needed to watch.
+Take recorded motion into Blender, or record Newton physics as an animated OpenUSD scene.
 
 [**Try Microduck →**](https://noteflowai.github.io/robot-reel/) ·
 [**Compare braking →**](https://noteflowai.github.io/robot-reel/braking/) ·
 [**Inspect the agent arm →**](https://noteflowai.github.io/robot-reel/studio/) ·
+[**Open in Blender →**](https://noteflowai.github.io/robot-reel/blender/) ·
+[**Newton → USD → Blender →**](https://noteflowai.github.io/robot-reel/newton/) ·
 [中文](README.zh-CN.md)
 
 ![Microduck official-policy simulation recorded with Robot Reel](docs/microduck/media/preview.gif)
 
 [Download videos + evidence](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+
+## New: Newton → OpenUSD → Blender
+
+**Run the physics once. Share every pose.** Record a real Newton 1.6 double
+pendulum on CPU, inspect its measured 3D poses in a browser, and import the same
+animation into Blender. No GPU, API key, or downloaded scene assets needed.
+
+[**Inspect the Newton replay + download the USD scene →**](https://noteflowai.github.io/robot-reel/newton/)
+
+![Recorded Newton rigid-body poses, displayed in Robot Reel's browser replay](docs/newton/preview.gif)
+
+```bash
+pip install -e '.[newton]'
+robot-reel newton --output artifacts/newton
+robot-reel newton --output artifacts/newton --verify --check-usd
+```
+
+Open `artifacts/newton/index.html`, or set Blender to **30 fps** and import
+`scene.usda`. The six-second demo includes 181 samples, starting at simulation
+time zero. All **362 body transforms** were checked after actual Blender 5.2.1
+import. This is a rigid-body presentation export; the browser and Blender replay
+the recorded poses. [Reproduce it, including the Blender import check](docs/newton.md).
+
+## New: take a recorded run into Blender
+
+**Keep the motion. Change the scene.** Export the verified braking comparison as
+an editable Blender scene: two cameras, procedural materials, source-driven
+keyframes, and animated speed/gap/contact channels.
+
+[**Watch the Blender replay + download the project →**](https://noteflowai.github.io/robot-reel/blender/)
+
+![Recorded braking motion replayed in an editable Blender scene](docs/blender/preview.gif)
+
+```bash
+# Uses the comparison already included in this checkout. No recording dependencies.
+python3 -m robot_reel.cli blender docs/compare/braking --output artifacts/blender
+blender --background --python artifacts/blender/build_scene.py -- \
+  --bundle artifacts/blender --output artifacts/blender/replay.blend
+```
+
+Tested with Blender 5.2.1 LTS. Every vehicle position comes from a recorded sample;
+this is a stylized replay of the 1D experiment, with no new Blender physics.
+[Reproduce it and check all 360 vehicle samples](docs/blender.md).
 
 ## New: two runs, one clock
 
@@ -25,7 +71,7 @@ source traces. The CLI checks timestamps, model configuration and engine version
 it rejects mismatched captures instead of silently trimming them. These are individual
 trials, not a statistical benchmark. [Reproduce the comparisons](docs/comparison.md).
 
-## Three scenes, one recording workflow
+## MuJoCo recording packs
 
 | Pack | What actually runs | What you can inspect |
 | --- | --- | --- |
@@ -92,9 +138,11 @@ part of the tested platform matrix.
 
 ## Outputs
 
-Each run produces two H.264/AAC films, an interactive HTML replay, original
+Each MuJoCo pack produces two H.264/AAC films, an interactive HTML replay, original
 simulator recordings, per-frame JSON traces, a poster, and a SHA-256 manifest.
 Microduck also records all 50 Hz policy actions and its policy/model revisions.
+The separate Newton command produces an HTML pose replay, JSON trace, animated
+USD scene, and checksum manifest; it does not render an MP4.
 
 | Pack | Simulation footage | Edited film |
 | --- | --- | --- |
@@ -153,13 +201,20 @@ to Alpamayo, AlpaSim and CARLA, and what is not integrated yet.
 ## Development
 
 ```bash
-python -m unittest discover -s tests -v
+# Trace, plan and export tests run with the Python standard library.
+python3 -m unittest discover -s tests -v
+# For recording/rendering development, install the runtime in an isolated environment.
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
 npm ci
 npx playwright install chromium
 npm test
 ```
 
-The Python suite covers plan rejection and evidence consistency. Browser checks
+The Python suite covers plan rejection, evidence consistency and Blender export
+agreement. Importing validators does not require `imageio_ffmpeg`, MuJoCo or NumPy;
+CI also runs the suite with third-party packages disabled. Browser checks
 cover seeking, stepping, downloads, mobile layout, local-file playback and caption
 escaping. Real recording smoke runs require OpenGL and downloaded model assets.
 The Studio adapter uses private Strands Robots fields and pins version 0.5.1.

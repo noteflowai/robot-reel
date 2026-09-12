@@ -30,6 +30,91 @@ before(async()=>{
   browser=await chromium.launch();
 });
 after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
+test('Newton replay steps real poses, shares a sample and downloads the exact USD',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/newton/#frame=30');
+    assert.equal(await page.locator('#sample').textContent(),'30');
+    assert.equal(await page.locator('#dcc-frame').textContent(),'31');
+    assert.equal(await page.locator('#time').textContent(),'1.000');
+    await page.locator('#body').selectOption('1');
+    const expected=await page.evaluate(()=>JSON.parse(document.querySelector('#trace-data').textContent).frames[30].poses[1][0].toFixed(4)+' m');
+    assert.equal(await page.locator('#x').textContent(),expected);
+    const before=await page.locator('canvas').screenshot();
+    await page.locator('#front').click();
+    assert.notDeepEqual(await page.locator('canvas').screenshot(),before);
+    assert.equal(await page.locator('#sample').textContent(),'30');
+    await page.locator('#next').click();
+    assert.equal(await page.locator('#sample').textContent(),'31');
+    await page.locator('#share').click();
+    assert.match(page.url(),/#frame=31$/);
+    const pending=page.waitForEvent('download');
+    await page.getByRole('link',{name:'Download USD scene ↓'}).click();
+    const download=await pending;
+    assert.equal(download.suggestedFilename(),'scene.usda');
+    assert.deepEqual(await readFile(await download.path()),await readFile(resolve('docs/newton/scene.usda')));
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>Number(document.querySelector('#sample').textContent)>31);
+    await page.locator('#play').click();
+  }finally{await page.close();}
+});
+test('Newton works offline on mobile and reaches the final source sample',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.route(/^https?:/,route=>route.abort());
+    await page.goto(pathToFileURL(resolve('docs/newton/index.html')).href);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    await page.locator('#next').focus();await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#sample').textContent(),'1');
+    await page.locator('#timeline').evaluate(el=>{el.value=el.max;el.dispatchEvent(new Event('input',{bubbles:true}));});
+    assert.equal(await page.locator('#frame-counter').textContent(),'Sample 180 of 180');
+    assert.equal(await page.locator('#dcc-frame').textContent(),'181');
+    assert.equal(await page.locator('#time').textContent(),'6.000');
+    await page.locator('#next').click();
+    assert.equal(await page.locator('#sample').textContent(),'180');
+    await page.locator('#share').click();
+    assert.match(await page.locator('#share').textContent(),/Share this folder/);
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('Blender replay steps source samples and retains both contact outcomes',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/blender/');
+    await page.waitForFunction(()=>document.querySelector('video').readyState>=1);
+    assert.equal(await page.locator('#frame-counter').textContent(),'Frame 0 of 179');
+    await page.locator('#next').click();
+    await page.waitForFunction(()=>document.querySelector('#frame-counter').textContent==='Frame 1 of 179');
+    const expected=await page.evaluate(()=>JSON.parse(document.querySelector('#scene-data').textContent).runs[0].frames[1].qpos[2]);
+    assert.ok(Number.isFinite(expected));
+    await page.locator('#timeline').evaluate(el=>{el.value='179';el.dispatchEvent(new Event('input',{bubbles:true}));});
+    await page.waitForFunction(()=>document.querySelector('#frame-counter').textContent==='Frame 179 of 179');
+    assert.equal(await page.locator('#left-contact').textContent(),'NO CONTACT RECORDED YET');
+    assert.equal(await page.locator('#right-contact').textContent(),'CONTACT RECORDED');
+    assert.equal(await page.locator('#blender-frame').textContent(),'180');
+    assert.equal(await page.locator('#source-time').textContent(),'6.000');
+    const expectedGap=await page.evaluate(()=>JSON.parse(document.querySelector('#scene-data').textContent).runs[0].frames[179].qpos[1].toFixed(3));
+    assert.equal(await page.locator('#left-gap').textContent(),expectedGap);
+  }finally{await page.close();}
+});
+test('Blender page works locally on mobile and downloads the editable project',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  try{
+    await page.goto(pathToFileURL(resolve('docs/blender/index.html')).href);
+    await page.waitForFunction(()=>document.querySelector('video').readyState>=1);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    await page.locator('#next').focus();await page.keyboard.press('Enter');
+    await page.waitForFunction(()=>document.querySelector('#blender-frame').textContent==='2');
+    await page.goto(base+'/blender/');
+    const pending=page.waitForEvent('download');
+    await page.getByRole('link',{name:'Download .blend ↓'}).click();
+    const download=await pending;
+    assert.equal(download.suggestedFilename(),'replay.blend');
+    const bytes=await readFile(await download.path());
+    assert.deepEqual(bytes,await readFile(resolve('docs/blender/replay.blend')));
+  }finally{await page.close();}
+});
 async function open(suffix=''){
   const page=await browser.newPage();
   await page.goto(base+'/studio/'+suffix);

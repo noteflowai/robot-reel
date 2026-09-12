@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A recorded MuJoCo run, rebuilt as an editable Blender scene. Watch the braking replay, inspect the samples, and download the .blend project.">
+<meta property="og:title" content="Robot Reel — Keep the motion. Change the scene.">
+<meta property="og:description" content="Recorded robot simulation meets an editable Blender scene. Two trials, 360 checked vehicle samples.">
+<meta property="og:image" content="https://noteflowai.github.io/robot-reel/blender/poster.png">
+<title>Robot Reel × Blender — Keep the motion.</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1015;--panel:#121a21;--line:#27333d;--muted:#96a7b3;--mint:#8cf0cb;--orange:#ffb18e;--white:#edf4f6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font:15px/1.6 system-ui,sans-serif}a{color:inherit;text-underline-offset:4px}main{max-width:1240px;margin:auto;padding:28px 28px 70px}nav{display:flex;justify-content:space-between;gap:20px;font-size:13px}.brand{font-weight:800;letter-spacing:.12em}.navlinks{display:flex;gap:22px}.intro{display:grid;grid-template-columns:1.4fr 1fr;gap:44px;align-items:end;padding:65px 0 34px}.eyebrow{font:11px/1.5 ui-monospace,monospace;letter-spacing:.15em;color:var(--mint)}h1{font-size:clamp(42px,5.5vw,72px);line-height:1.04;letter-spacing:-.055em;margin:22px 0}h1 span{color:var(--mint)}.intro p{color:var(--muted);max-width:420px;margin:0 0 20px;font-size:17px}.buttons{display:flex;flex-wrap:wrap;gap:12px}.button,button{display:inline-block;padding:11px 16px;border:1px solid var(--line);border-radius:6px;text-decoration:none;background:var(--panel);color:var(--white);font:inherit;cursor:pointer}.button.primary{background:var(--mint);color:#092019;font-weight:750;border-color:var(--mint)}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--mint);outline-offset:4px}.player{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#111923}.player-top{display:flex;justify-content:space-between;padding:14px 20px;gap:15px;font:11px ui-monospace,monospace;letter-spacing:.07em;color:var(--muted)}video{display:block;width:100%;aspect-ratio:16/9;background:#17222d}.transport{display:flex;align-items:center;gap:12px;padding:16px 20px;flex-wrap:wrap}.transport button{padding:6px 12px;font-size:13px}.transport input{flex:1;min-width:100px;accent-color:var(--mint)}#frame-counter{font:12px ui-monospace,monospace;color:var(--muted);min-width:132px}.trials{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}.trial{padding:24px;border-left:1px solid var(--line)}.trial:first-child{border-left:0}.trial h2{font-size:13px;margin:0 0 16px;text-transform:uppercase;letter-spacing:.07em;color:var(--mint)}.trial:last-child h2{color:var(--orange)}.numbers{display:flex;gap:30px}.numbers span{font-size:11px;color:var(--muted)}.numbers strong{display:block;font:27px/1.5 ui-monospace,monospace}.contact{margin-top:14px;font-size:12px;color:var(--muted)}.contact.impact{color:var(--orange)}.clock{padding:12px 24px;border-top:1px solid var(--line);font:12px/1.7 ui-monospace,monospace;color:var(--muted)}.explainer{display:grid;grid-template-columns:1fr 1fr;gap:52px;padding:44px 0}.explainer h2{font-size:25px;letter-spacing:-.025em;margin:0 0 12px}.explainer p{color:var(--muted)}.checks{display:flex;gap:26px;flex-wrap:wrap;font-size:13px;color:var(--mint)}pre{background:var(--panel);border:1px solid var(--line);padding:18px;border-radius:6px;overflow:auto;font-size:12px;line-height:1.8}.note{border-top:1px solid var(--line);padding-top:24px;color:var(--muted);font-size:12px}.note a{color:var(--white)}#status{color:var(--orange);font-size:13px;margin:12px 0}
+@media(max-width:700px){main{padding:22px 15px 40px}.navlinks{gap:12px;font-size:12px}.intro{grid-template-columns:1fr;padding-top:42px;gap:8px}.intro p{font-size:15px}.intro h1{margin-bottom:10px}.player-top{padding:12px;font-size:10px}.transport{padding:12px;gap:8px}.trials{grid-template-columns:1fr}.trial{border-left:0;border-top:1px solid var(--line);padding:18px}.trial:first-child{border-top:0}.numbers{gap:40px}.explainer{grid-template-columns:1fr;gap:20px;padding-top:32px}.clock{padding:12px 18px}#frame-counter{width:100%}h1{font-size:47px}}
+.intro>div,.explainer>div{min-width:0}
+</style>
+</head>
+<body><main>
+<nav><a class="brand" href="../">ROBOT REEL / 004</a><div class="navlinks"><a href="../compare/braking/">Original simulation</a><a href="https://github.com/noteflowai/robot-reel">GitHub ↗</a></div></nav>
+<section class="intro">
+<div><div class="eyebrow">RECORDED MOTION → BLENDER 5.2 LTS</div><h1>Keep the motion.<br><span>Change the scene.</span></h1></div>
+<div><p>Two braking trials, rebuilt as an editable 3D scene. Change the camera, lights and materials. Keep a checkable record of every move.</p><div class="buttons"><a class="button primary" href="replay.blend" download>Download .blend ↓</a><a class="button" href="robot-reel-blender.zip" download>Project + source data ↓</a></div></div>
+</section>
+<section class="player" aria-label="Recorded braking in Blender">
+<div class="player-top"><span>BLENDER / CYCLES REPLAY</span><span>6 SECONDS · 180 FRAMES · 2 TRIALS</span></div>
+<video id="replay" controls playsinline muted loop preload="metadata" poster="poster.png" aria-label="Blender rendering of early and late braking"><source src="replay.mp4" type="video/mp4"></video>
+<div class="transport"><button id="previous" aria-label="Previous recorded frame">← Frame</button><button id="next" aria-label="Next recorded frame">Frame →</button><label for="timeline" class="eyebrow">SCRUB</label><input id="timeline" type="range" min="0" max="179" value="0" step="1" aria-label="Recorded frame"><span id="frame-counter">Frame 0 of 179</span></div>
+<div class="trials">
+<article class="trial"><h2 id="left-label">Early brake</h2><div class="numbers"><div><span>SPEED / m/s</span><strong id="left-speed">—</strong></div><div><span>GAP / m</span><strong id="left-gap">—</strong></div></div><div class="contact" id="left-contact">Waiting for source data</div></article>
+<article class="trial"><h2 id="right-label">Late brake</h2><div class="numbers"><div><span>SPEED / m/s</span><strong id="right-speed">—</strong></div><div><span>GAP / m</span><strong id="right-gap">—</strong></div></div><div class="contact" id="right-contact">Waiting for source data</div></article>
+</div><div class="clock">Source simulation time: <span id="source-time">—</span> s · Blender frame <span id="blender-frame">1</span> · sampled positions held between frames</div>
+</section>
+<p id="status" role="status" aria-live="polite"></p>
+<section class="explainer">
+<div><h2>A scene you can work with.</h2><p>Open the project in Blender 5.2 LTS. Switch between the overview and impact cameras, restyle the procedural geometry, or inspect animated speed, gap and contact properties. No add-on, downloaded robot mesh or model call required.</p><div class="checks"><span>360 vehicle samples checked</span><a href="animation-check.json" download>Read the animation check ↓</a></div></div>
+<div><h2>Start from the recording.</h2><p>The repository already includes the source comparison. Export it with Python, then build the Blender scene.</p><pre>python3 -m robot_reel.cli blender \
+  docs/compare/braking --output artifacts/blender</pre><a href="https://github.com/noteflowai/robot-reel/blob/main/docs/blender.md">Build, render and verify the scene →</a></div>
+</section>
+<p class="note">This is a stylized replay of two independent 1D MuJoCo trials. Roads are offset for presentation; decorative geometry is illustrative. No Blender physics or autonomous-driving model is run. Motion is sampled at 30 fps; hashes establish consistency, not independent authenticity. <a href="../compare/braking/">Inspect the original recordings</a>. Scene code and procedural assets: Apache-2.0.</p>
+<script type="application/json" id="scene-data">__SCENE_DATA__</script>
+<script>
+"use strict";
+const data=JSON.parse(document.getElementById("scene-data").textContent);
+const video=document.getElementById("replay"),timeline=document.getElementById("timeline");
+const last=data.frame_count-1;
+timeline.max=String(last);
+function index(){return Math.min(last,Math.max(0,Math.floor(video.currentTime*data.fps+0.0001)));}
+function update(){
+ const i=index();timeline.value=String(i);
+ document.getElementById("frame-counter").textContent=`Frame ${i} of ${last}`;
+ document.getElementById("blender-frame").textContent=String(i+1);
+ document.getElementById("source-time").textContent=data.runs[0].frames[i].sim_time.toFixed(3);
+ for(const run of data.runs){
+  const f=run.frames[i],id=run.id;
+  document.getElementById(id+"-label").textContent=run.label;
+  document.getElementById(id+"-speed").textContent=f.qpos[0].toFixed(2);
+  document.getElementById(id+"-gap").textContent=f.qpos[1].toFixed(3);
+  const contact=document.getElementById(id+"-contact");
+  contact.textContent=f.collision?"CONTACT RECORDED":"NO CONTACT RECORDED YET";
+  contact.classList.toggle("impact",f.collision);
+ }
+}
+function seek(i){video.pause();video.currentTime=Math.min(last,Math.max(0,i))/data.fps;update();}
+document.getElementById("previous").addEventListener("click",()=>seek(index()-1));
+document.getElementById("next").addEventListener("click",()=>seek(index()+1));
+timeline.addEventListener("input",()=>seek(Number(timeline.value)));
+video.addEventListener("loadedmetadata",update);video.addEventListener("seeked",update);video.addEventListener("timeupdate",update);
+video.addEventListener("error",()=>{document.getElementById("status").textContent="Video unavailable. Keep this page next to replay.mp4, or download the Blender project.";});
+function tick(){if(!video.paused)update();requestAnimationFrame(tick);}update();tick();
+</script>
+</main></body></html>

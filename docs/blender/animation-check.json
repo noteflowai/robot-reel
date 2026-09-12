@@ -1,0 +1,11 @@
+{
+  "blender_version": "5.2.1 LTS",
+  "checked_vehicle_samples": 360,
+  "frames_per_trial": 180,
+  "fps": 30,
+  "maximum_position_error_m": 9.425042861721522e-07,
+  "between_samples": "constant hold checked",
+  "physics": "no rigid-body simulation or motion blur",
+  "blend_sha256": "6825a291b9872065412c17f1af083a71f65b6ddc15eae4e6b7065a651e74c6f2",
+  "scene_json_sha256": "d5bfa887a570f3c9c5090909b0405c8deab43d201f2974f10c28a5fa972d9317"
+}

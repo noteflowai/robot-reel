@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A real Newton physics run, ready to inspect in your browser and open in Blender. Download the recorded poses and animated OpenUSD scene.">
+<meta property="og:title" content="Newton → OpenUSD → Blender · Robot Reel">
+<meta property="og:description" content="Run the physics once. Share every pose. An interactive Newton 1.6 replay with an editable USD scene.">
+<meta property="og:image" content="https://noteflowai.github.io/robot-reel/newton/preview.png">
+<title>Newton → OpenUSD → Blender · Robot Reel</title>
+<style>
+:root{color-scheme:dark;--bg:#0c1117;--panel:#131c25;--line:#2a3945;--text:#f0f4ef;--muted:#acb9c1;--mint:#65dcc5;--orange:#ffba75}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,sans-serif}
+a{color:inherit;text-decoration:none}a:hover{color:var(--mint)}button,input,select{font:inherit}button,a.button{cursor:pointer;border:1px solid var(--line);background:#1b2934;color:var(--text);border-radius:8px;padding:9px 13px}button:hover,a.button:hover{border-color:var(--mint)}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--mint);outline-offset:4px}
+header,main,footer{max-width:1200px;margin:auto;padding:24px 32px}header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);gap:20px}.brand{font-weight:750;letter-spacing:-.5px;font-size:21px}.brand i{color:var(--mint);font-style:normal}nav{display:flex;gap:20px;font-size:13px;flex-wrap:wrap;color:var(--muted)}
+.intro{display:grid;grid-template-columns:1.2fr 1fr;gap:44px;align-items:end;margin:26px 0 30px}.intro>div{min-width:0}.eyebrow{color:var(--mint);font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:750}h1{font-size:clamp(32px,4.7vw,56px);line-height:1.07;letter-spacing:-2px;margin:13px 0}h1 span{color:var(--mint)}.intro p{margin:12px 0;color:var(--muted);max-width:530px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 4px}a.primary{background:var(--mint);border-color:var(--mint);color:#101a1d;font-weight:700}.quiet{font-size:12px;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--panel)}.viewer{min-width:0;border-right:1px solid var(--line)}.view-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;font-size:12px;color:var(--muted)}.status{color:var(--mint);font-size:10px;text-transform:uppercase;letter-spacing:1.5px}.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mint);margin-right:7px}
+.canvas-wrap{position:relative;background:radial-gradient(ellipse at 55% 40%,#203441 0%,#101b24 70%)}canvas{display:block;width:100%;aspect-ratio:3/2;touch-action:pan-y}.canvas-note{position:absolute;left:20px;bottom:12px;font:10px/1.5 ui-monospace,monospace;color:#9faeb7;pointer-events:none}.camera{display:flex;gap:6px}.camera button{font-size:11px;padding:5px 9px}.controls{padding:16px 20px;border-top:1px solid var(--line)}input[type=range]{width:100%;accent-color:var(--mint);margin:8px 0 14px}.transport{display:flex;align-items:center;justify-content:space-between;gap:12px}.transport-buttons{display:flex;gap:6px}.transport button{font-size:12px;padding:7px 10px}#play{min-width:72px}.clock{font:12px ui-monospace,monospace;color:var(--muted)}
+.inspector{padding:20px}.inspector h2{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin:0 0 14px}.number{font:48px/1.1 ui-monospace,monospace;letter-spacing:-3px;margin:8px 0;color:var(--mint)}.number small{font:13px system-ui;letter-spacing:0;color:var(--muted)}.readouts{display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin:18px 0}.readouts span{display:block;font-size:11px;color:var(--muted)}.readouts strong{font:17px ui-monospace,monospace}.body-select{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted)}select{max-width:135px;background:#18252f;border:1px solid var(--line);padding:5px;color:var(--text);border-radius:5px}.coordinates{display:grid;grid-template-columns:20px 1fr;gap:8px;font:13px ui-monospace,monospace;margin:16px 0}.coordinates dt{color:var(--muted)}.coordinates dd{margin:0;text-align:right}.legend{font-size:11px;color:var(--muted);margin:20px 0}.legend span{color:var(--orange)}.source{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}.source b{color:var(--text)}#share{width:100%;font-size:12px;margin-top:10px}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px;margin:32px 0}.flow article{padding:5px 0;min-width:0}.step{font:11px ui-monospace,monospace;color:var(--mint)}h3{font-size:18px;margin:8px 0}.flow p{font-size:13px;color:var(--muted);margin:8px 0}code{font:12px/1.7 ui-monospace,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:13px;border-radius:8px;background:#151e28;border:1px solid var(--line);color:#cad8df}footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line)}footer a{text-decoration:underline}
+@media(max-width:850px){.intro{grid-template-columns:1fr;gap:4px}.workspace{grid-template-columns:1fr}.viewer{border-right:0}.inspector{border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.inspector h2,.source,#share{grid-column:1/-1}.readouts{margin-top:0}.flow{grid-template-columns:1fr;gap:14px}.number{font-size:40px}}
+@media(max-width:480px){header,main,footer{padding:18px}header{align-items:flex-start;gap:12px}nav{gap:8px 14px;font-size:11px;justify-content:flex-end;max-width:170px}.view-title{padding:12px;font-size:10px}.controls{padding:12px}.transport{flex-wrap:wrap}.clock{font-size:11px}.inspector{padding:16px;gap:0 15px}.intro{margin-top:18px}h1{letter-spacing:-1px}.actions{gap:8px}a.button{font-size:13px;padding:9px 10px}.coordinates{font-size:12px}.canvas-note{left:12px;bottom:6px;font-size:8px}}
+</style>
+</head>
+<body>
+<header><a class="brand" href="https://noteflowai.github.io/robot-reel/">Robot<i>Reel</i></a><nav><a href="https://noteflowai.github.io/robot-reel/blender/">Blender replay</a><a href="https://noteflowai.github.io/robot-reel/compare/microduck/">Compare runs</a><a href="https://github.com/noteflowai/robot-reel">GitHub ↗</a></nav></header>
+<main>
+<section class="intro">
+<div><div class="eyebrow">Newton 1.6 · OpenUSD · Blender</div><h1>Run the physics once.<br><span>Share every pose.</span></h1></div>
+<div><p>A double pendulum, simulated in Newton on CPU. Inspect the recorded motion here, then take the same samples into Blender to light, edit and render.</p><div class="actions"><a class="button primary" href="scene.usda" download>Download USD scene ↓</a><a class="button" href="trace.json" download>Source poses ↓</a></div><p class="quiet">No install to watch. No GPU to record. No external scene assets.</p></div>
+</section>
+<section class="workspace" aria-label="Recorded Newton simulation">
+<div class="viewer">
+<div class="view-title"><span><span class="dot"></span>RECORDED POSES / 3D VIEW</span><div class="camera"><button id="orbit" aria-pressed="true">Orbit</button><button id="front" aria-pressed="false">Front</button></div></div>
+<div class="canvas-wrap"><canvas id="scene" width="900" height="600" aria-label="Two measured pendulum links; teal upper link and orange lower link"></canvas><div class="canvas-note">Z UP · METERS<br>VIEW GENERATED FROM SOURCE POSES</div></div>
+<div class="controls"><label class="quiet" for="timeline" id="frame-counter">Recorded sample</label><input id="timeline" type="range" min="0" value="0" step="1" aria-label="Recorded sample"><div class="transport"><div class="transport-buttons"><button id="prev" aria-label="Previous sample">←</button><button id="play">Play ▶</button><button id="next" aria-label="Next sample">→</button></div><span class="clock"><span id="time">0.000</span> / <span id="duration"></span> s</span></div></div>
+</div>
+<aside class="inspector"><h2>Inside this run</h2><div><div class="quiet">Lower tip height</div><div class="number"><span id="height"></span> <small>m</small></div></div><div class="readouts"><div><span>Source sample</span><strong id="sample"></strong></div><div><span>Blender frame</span><strong id="dcc-frame"></strong></div></div><div><label class="body-select" for="body">Body position<select id="body"><option value="0">Upper link</option><option value="1">Lower link</option></select></label><dl class="coordinates"><dt>X</dt><dd id="x"></dd><dt>Y</dt><dd id="y"></dd><dt>Z</dt><dd id="z"></dd></dl></div><div class="legend">Teal · upper link<br><span>Orange · lower link + tip trail</span><p>The camera changes the view. The timeline selects a recorded state.</p></div><div class="source"><b>Newton <span id="version"></span> · XPBD · CPU</b><br>30 samples/s · 300 physics steps/s<br>Gravity only; no policy or model call.<br>Exported animation has no USD physics.</div><button id="share">Share this sample ↗</button></aside>
+</section>
+<section class="flow">
+<article><span class="step">01 / RECORD</span><h3>Start with real dynamics.</h3><p>Two hinged rigid links, released under gravity. Newton advances the state; Robot Reel saves each body's position and quaternion.</p><pre><code>pip install -e '.[newton]'
+robot-reel newton --output artifacts/newton</code></pre></article>
+<article><span class="step">02 / INSPECT</span><h3>Give the run a shared clock.</h3><p>Step with the arrows, change the view, or download the JSON. Sample 0 is the initial state. The final sample is at <span id="end-time"></span> s.</p><pre><code>robot-reel newton --output artifacts/newton \
+  --verify --check-usd</code></pre></article>
+<article><span class="step">03 / CREATE</span><h3>Open it in Blender.</h3><p>Set <b>Output Properties → Frame Rate → 30 fps</b>, then choose <b>File → Import → Universal Scene Description</b> and open <code>scene.usda</code>. Frame 1 is simulation time 0.</p><p>The USD contains animated link geometry. Add your own lights, camera and set. Recorded integer frames are checked against the source; in-between interpolation belongs to your DCC.</p></article>
+</section>
+</main>
+<footer>One CPU pendulum run, not a robotics benchmark. The browser draws the measured box poses; it does not run Newton. <a href="manifest.json" download>SHA-256 manifest</a> · <a href="https://github.com/noteflowai/robot-reel/blob/main/docs/newton.md">Reproduce & inspect the checks</a></footer>
+<script id="trace-data" type="application/json">__TRACE__</script>
+<script>
+(()=>{
+'use strict';
+const trace=JSON.parse(document.querySelector('#trace-data').textContent),frames=trace.frames;
+const $=id=>document.getElementById(id),canvas=$('scene'),ctx=canvas.getContext('2d'),W=canvas.width,H=canvas.height;
+let sample=0,playing=false,lastTick=0,yaw=.48,pitch=.22;
+const corners=[[-.5,-.5,-.5],[.5,-.5,-.5],[.5,.5,-.5],[-.5,.5,-.5],[-.5,-.5,.5],[.5,-.5,.5],[.5,.5,.5],[-.5,.5,.5]];
+const faces=[[0,1,2,3],[4,7,6,5],[0,4,5,1],[3,2,6,7],[0,3,7,4],[1,5,6,2]];
+function transform(p,v){const[x,y,z,w]=p.slice(3),[a,b,c]=v,tx=2*(y*c-z*b),ty=2*(z*a-x*c),tz=2*(x*b-y*a);return[p[0]+a+w*tx+y*tz-z*ty,p[1]+b+w*ty+z*tx-x*tz,p[2]+c+w*tz+x*ty-y*tx];}
+function project([x,y,z]){const u=Math.cos(yaw)*x-Math.sin(yaw)*y,d=Math.sin(yaw)*x+Math.cos(yaw)*y;return[W*.50+u*105,H*.55+(-Math.cos(pitch)*(z-1.8)+Math.sin(pitch)*d)*105,Math.cos(pitch)*d+Math.sin(pitch)*z];}
+function line(a,b,color,width=1){a=project(a);b=project(b);ctx.beginPath();ctx.moveTo(...a.slice(0,2));ctx.lineTo(...b.slice(0,2));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();}
+function draw(){
+ ctx.clearRect(0,0,W,H);
+ for(let i=-4;i<=4;i++){line([i,-2,0],[i,2,0],'#324956');line([-4,i/2,0],[4,i/2,0],'#324956');}
+ line([0,0,3.8],[0,0,4.35],'#8397a6',3);line([-.4,0,4.35],[.4,0,4.35],'#8397a6',4);
+ const poses=frames[sample].poses,polygons=[];
+ poses.forEach((pose,body)=>{const vertices=corners.map(c=>project(transform(pose,c.map((v,k)=>v*trace.bodies[body].size[k]))));
+  faces.forEach((face,i)=>polygons.push({points:face.map(v=>vertices[v]),body,shade:i,depth:face.reduce((s,v)=>s+vertices[v][2],0)/4}));});
+ let previous=null;for(let i=Math.max(0,sample-90);i<=sample;i++){const p=transform(frames[i].poses[1],[.8,0,0]);if(previous)line(previous,p,`rgba(255,186,117,${.12+.5*(i-Math.max(0,sample-90))/90})`,2);previous=p;}
+ polygons.sort((a,b)=>a.depth-b.depth).forEach(face=>{ctx.beginPath();face.points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fillStyle=trace.bodies[face.body].color;ctx.globalAlpha=.56+face.shade*.065;ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='#b9ded24d';ctx.lineWidth=1;ctx.stroke();});
+ for(const p of [[0,0,3.8],transform(poses[0],[.8,0,0])]){const[x,y]=project(p);ctx.beginPath();ctx.arc(x,y,6,0,2*Math.PI);ctx.fillStyle='#d5e4e7';ctx.fill();ctx.beginPath();ctx.arc(x,y,2.5,0,2*Math.PI);ctx.fillStyle='#14232b';ctx.fill();}
+}
+function seek(i){
+ sample=Math.max(0,Math.min(frames.length-1,Math.round(i)));const f=frames[sample],body=f.poses[Number($('body').value)];
+ $('timeline').value=sample;$('frame-counter').textContent=`Sample ${sample} of ${frames.length-1}`;
+ $('sample').textContent=sample;$('dcc-frame').textContent=sample+1;$('time').textContent=f.sim_time.toFixed(3);
+ $('height').textContent=transform(f.poses[1],[.8,0,0])[2].toFixed(3);
+ ['x','y','z'].forEach((key,k)=>$(key).textContent=body[k].toFixed(4)+' m');draw();
+}
+function pause(){playing=false;$('play').textContent='Play ▶';}
+function tick(now){if(playing){if(!lastTick)lastTick=now;const count=Math.floor((now-lastTick)*trace.fps/1000);if(count){seek(sample+count);lastTick+=count*1000/trace.fps;if(sample===frames.length-1)pause();}}requestAnimationFrame(tick);}
+function fromHash(){const match=/^#frame=(\d+)$/.exec(location.hash);if(match)seek(Number(match[1]));}
+$('timeline').max=frames.length-1;$('duration').textContent=frames.at(-1).sim_time.toFixed(3);$('end-time').textContent=frames.at(-1).sim_time.toFixed(3);$('version').textContent=trace.source.engine_version;
+$('timeline').addEventListener('input',()=>{pause();seek(Number($('timeline').value));});
+$('body').addEventListener('change',()=>seek(sample));
+$('prev').onclick=()=>{pause();seek(sample-1);};$('next').onclick=()=>{pause();seek(sample+1);};
+$('play').onclick=()=>{if(playing){pause();return;}if(sample===frames.length-1)seek(0);playing=true;lastTick=0;$('play').textContent='Pause Ⅱ';};
+function camera(front){yaw=front?0:.48;pitch=front?0:.22;$('front').setAttribute('aria-pressed',String(front));$('orbit').setAttribute('aria-pressed',String(!front));draw();}
+$('front').onclick=()=>camera(true);$('orbit').onclick=()=>camera(false);
+$('share').onclick=async()=>{const url=new URL(location.href);url.hash=`frame=${sample}`;history.replaceState(null,'',url);if(location.protocol!=='file:'&&navigator.clipboard){try{await navigator.clipboard.writeText(url.href);$('share').textContent='Sample link copied ✓';}catch{$('share').textContent='Copy the URL to share ↗';}}else{$('share').textContent=location.protocol==='file:'?'Share this folder + sample '+sample:'Copy the URL to share ↗';}};
+addEventListener('hashchange',()=>{pause();fromHash();});
+document.addEventListener('keydown',event=>{if(['INPUT','SELECT','BUTTON','A'].includes(event.target.tagName))return;if(event.code==='Space'){event.preventDefault();$('play').click();}if(event.code==='ArrowRight'){event.preventDefault();$('next').click();}if(event.code==='ArrowLeft'){event.preventDefault();$('prev').click();}});
+seek(0);fromHash();requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

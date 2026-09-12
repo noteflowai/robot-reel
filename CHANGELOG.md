@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+- Record Newton 1.6 CPU rigid-body poses and export a self-contained animated
+  OpenUSD scene, with an offline 3D browser replay and per-sample sharing.
+- Check all 362 body samples through OpenUSD and actual Blender 5.2.1 import;
+  explicitly preserve the 30 fps time base when importing into Blender.
+- Export verified braking captures/comparisons into editable Blender 5.2 scenes
+  with procedural geometry, two cameras, source-driven keyframes and telemetry.
+- Check the exported JSON against source traces and the saved `.blend` against
+  every vehicle sample, including constant interpolation between frames.
+- Add a downloadable Blender scene and browser replay of its rendered motion.
+- Keep simulation/video dependencies out of validator imports so the complete
+  unit suite runs with only the Python standard library.
+
 ## 0.2.0 — Physical-AI replay packs
 
 - Official Microduck ONNX policy recording in CPU MuJoCo, pinned model/policy

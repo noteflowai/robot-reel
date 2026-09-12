@@ -5,15 +5,60 @@
 把物理 AI 仿真录制成可分享的视频，同时保留可交互的逐帧动作记录。
 可以运行 Microduck 官方策略、对比两种制动控制器，或让 Strands Agent
 控制机械臂。回放直接在浏览器里打开，观看不需要账号，也不需要安装。
+也可以把录制轨迹带进 Blender，或将 Newton 物理仿真导出为带动画的 OpenUSD 场景。
 
 [**试试 Microduck →**](https://noteflowai.github.io/robot-reel/) ·
 [**对比制动 →**](https://noteflowai.github.io/robot-reel/braking/) ·
 [**检查 Agent 机械臂 →**](https://noteflowai.github.io/robot-reel/studio/) ·
+[**在 Blender 中打开 →**](https://noteflowai.github.io/robot-reel/blender/) ·
+[**Newton → USD → Blender →**](https://noteflowai.github.io/robot-reel/newton/) ·
 [English](README.md)
 
 ![用 Robot Reel 录制的 Microduck 官方策略仿真](docs/microduck/media/preview.gif)
 
 [下载视频与证据包](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+
+## 新增：Newton → OpenUSD → Blender
+
+**运行一次物理仿真，分享每一个姿态。** 在 CPU 上录制真实的 Newton 1.6
+双摆仿真，在浏览器里检查实测的 3D 姿态，再将同一段动画导入 Blender。
+无需 GPU、API 密钥或额外下载的场景资产。
+
+[**检查 Newton 回放并下载 USD 场景 →**](https://noteflowai.github.io/robot-reel/newton/)
+
+![Robot Reel 浏览器中展示的 Newton 实测刚体姿态](docs/newton/preview.gif)
+
+```bash
+pip install -e '.[newton]'
+robot-reel newton --output artifacts/newton
+robot-reel newton --output artifacts/newton --verify --check-usd
+```
+
+打开 `artifacts/newton/index.html`，或将 Blender 设置为 **30 fps** 后导入
+`scene.usda`。六秒演示包含从仿真时刻零开始的 181 个样本，全部 **362 个刚体
+变换**均通过 Blender 5.2.1 实际导入后的检查。这里导出的是刚体展示动画；
+浏览器和 Blender 都在回放已记录的姿态。
+[复现步骤及 Blender 导入检查](docs/newton.md)。
+
+## 新增：把录制结果带进 Blender
+
+**保留运动，重新设计场景。** 将已验证的制动对照导出为可编辑的 Blender
+场景：两个机位、程序化材质、来自原始样本的关键帧，以及速度／间距／接触数据。
+
+[**观看 Blender 回放并下载工程 →**](https://noteflowai.github.io/robot-reel/blender/)
+
+![在可编辑 Blender 场景中回放录制的制动轨迹](docs/blender/preview.gif)
+
+```bash
+# 使用仓库内已有的制动对照，无需安装录制依赖。
+python3 -m robot_reel.cli blender docs/compare/braking --output artifacts/blender
+blender --background --python artifacts/blender/build_scene.py -- \
+  --bundle artifacts/blender --output artifacts/blender/replay.blend
+```
+
+已在 Blender 5.2.1 LTS 验证。车辆位置逐帧来自原始记录；这是对一维实验的
+风格化回放，没有在 Blender 中重新做物理仿真。
+[复现步骤及全部 360 个车辆状态的验证方法](docs/blender.md)。
 
 ## 新增：两次运行，同一时钟
 
@@ -25,7 +70,7 @@ CLI 会校验时间戳、模型配置和引擎版本；遇到不匹配的录制�
 悄悄裁剪。这些是单次试验，不是统计意义上的基准测试。
 [复现这些对比](docs/comparison.md)。
 
-## 三个场景，同一套录制流程
+## MuJoCo 录制场景
 
 | 场景 | 实际运行的内容 | 可以检查的数据 |
 | --- | --- | --- |
@@ -89,9 +134,11 @@ Linux 默认使用 EGL；安装系统的 OSMesa 库后可以用 `MUJOCO_GL=osmes
 
 ## 输出
 
-每次运行会产生两个 H.264/AAC 视频、一个可交互的 HTML 回放、原始仿真录像、
+每个 MuJoCo 场景会产生两个 H.264/AAC 视频、一个可交互的 HTML 回放、原始仿真录像、
 逐帧 JSON 轨迹、一张封面图和一份 SHA-256 清单。Microduck 还会记录全部 50 Hz
 策略动作及其策略/模型版本号。
+独立的 Newton 命令生成 HTML 姿态回放、JSON 轨迹、带动画的 USD 场景和校验
+清单，不渲染 MP4。
 
 | 场景 | 仿真画面 | 成片 |
 | --- | --- | --- |
@@ -148,13 +195,20 @@ Agent 与机器人的集成。Robot Reel 专注于**把一次运行变成人们�
 ## 开发
 
 ```bash
-python -m unittest discover -s tests -v
+# 轨迹、计划和导出测试只需要 Python 标准库。
+python3 -m unittest discover -s tests -v
+# 进行录制／渲染开发时，在独立环境中安装运行依赖。
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
 npm ci
 npx playwright install chromium
 npm test
 ```
 
-Python 测试覆盖计划拒绝逻辑与证据一致性。浏览器测试覆盖跳转、步进、下载、
+Python 测试覆盖计划拒绝、证据一致性与 Blender 导出数据对应关系。导入校验函数
+无需 `imageio_ffmpeg`、MuJoCo 或 NumPy；CI 也会在禁用第三方包的环境中运行测试。
+浏览器测试覆盖跳转、步进、下载、
 移动端布局、本地文件播放和字幕转义。真实录制的冒烟测试需要 OpenGL 和已下载
 的模型资产。Studio 适配器使用了 Strands Robots 的私有字段，并固定在 0.5.1 版本。
 
