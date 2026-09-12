@@ -25,5 +25,7 @@ For the Newton adapter, install `.[newton]`, record a fresh CPU run and use
 commands are in [docs/newton.md](docs/newton.md).
 
 Please include a short reproducible command and the observed result with fixes.
+CI runs on pull requests and on pushes to `main`, so open a pull request to have
+a branch checked.
 Do not commit credentials, account-specific logs, downloaded robot meshes, or
 large videos. Release assets are the place for shareable video bundles.

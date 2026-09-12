@@ -1,9 +1,16 @@
 name: Check
 on:
   push:
+    branches: [main]
   pull_request:
 permissions:
   contents: read
+concurrency:
+  # One set of jobs per pull request or per push to main, instead of one for the
+  # branch and an identical one for its pull request. Superseded pull-request
+  # runs are cancelled; runs on main are left to finish.
+  group: check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   check:
     runs-on: ubuntu-latest
