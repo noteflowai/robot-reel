@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use Robot Reel, please cite it using this metadata."
+type: software
+title: "Robot Reel"
+authors:
+  - name: "NoteFlow AI"
+repository-code: "https://github.com/noteflowai/robot-reel"
+url: "https://noteflowai.github.io/robot-reel/"
+license: Apache-2.0
+version: 0.4.0
+date-released: 2026-09-12
+abstract: "Robot Reel is a physical-AI replay lab that records MuJoCo and Newton physics and SmolVLA/LeRobot rollouts, verifies the recorded traces, and directs them into inspectable browser replays and editable Blender/OpenUSD films through a CLI and an MCP agent director."
+keywords:
+  - robotics
+  - simulation
+  - mujoco
+  - vision-language-action
+  - blender
+  - openusd
+  - model-context-protocol

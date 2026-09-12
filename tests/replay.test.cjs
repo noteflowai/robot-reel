@@ -2,6 +2,7 @@ const {test, before, after} = require('node:test');
 const assert = require('node:assert/strict');
 const {createServer} = require('node:http');
 const {readFile, writeFile, mkdtemp, rm} = require('node:fs/promises');
+const {existsSync} = require('node:fs');
 const {tmpdir} = require('node:os');
 const {join, resolve, extname} = require('node:path');
 const {pathToFileURL} = require('node:url');
@@ -547,10 +548,26 @@ test('caption text is displayed literally and cannot execute HTML',async()=>{
     assert.equal(await page.locator('#caption img').count(),0);
   }finally{await page.close();await rm(temp,{recursive:true,force:true});}
 });
-test('Microduck landing page exposes policy data and a distinct download command',async()=>{
+test('landing page indexes every published demo and copies the quick start',async()=>{
   const page=await browser.newPage();
   try{
-    await page.goto(base+'/#t=5');
+    await page.goto(base+'/');
+    const cards=page.locator('.card');
+    assert.equal(await cards.count(),12);
+    const hrefs=await cards.evaluateAll(links=>links.map(link=>link.getAttribute('href')));
+    for(const href of hrefs){
+      assert.ok(existsSync(resolve('docs',href,'index.html')),`${href} has no published page`);
+    }
+    assert.match(await page.locator('#commands').textContent(),/python3 -m robot_reel\.cli vla docs\/vla/);
+    await page.locator('#copy').click();
+    await page.waitForFunction(()=>['Copied','Select and copy'].includes(document.querySelector('#copy').textContent));
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);
+  }finally{await page.close();}
+});
+test('Microduck page exposes policy data and a distinct download command',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/microduck/#t=5');
     await page.waitForFunction(()=>document.querySelector('#frame-label').textContent.startsWith('Recorded frame 90 /'));
     assert.equal(await page.locator('#joint option').count(),14);
     assert.match(await page.locator('#mode').textContent(),/Official ONNX policy/);
