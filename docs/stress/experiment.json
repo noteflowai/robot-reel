@@ -1,0 +1,71 @@
+{
+  "schema": "robot-reel-stress-1",
+  "suite": "libero_spatial",
+  "task_id": 0,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "initial_state_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "conditions": [
+    {
+      "id": "reference",
+      "label": "Reference",
+      "light_scale": 1.0,
+      "camera_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "id": "dim",
+      "label": "25% light",
+      "light_scale": 0.25,
+      "camera_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "id": "camera",
+      "label": "Camera +12 cm",
+      "light_scale": 1.0,
+      "camera_offset_m": [
+        0.12,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "max_steps": 160,
+  "action_steps": 10,
+  "fps": 20,
+  "precision": "float32",
+  "threads": 2,
+  "policy": "HuggingFaceVLA/smolvla_libero",
+  "policy_revision": "6721902bc4d61e50a3bfdb11dfb4cb626f05d102",
+  "noise": "independent torch.Generator per seed; identical noise sequence across paired conditions",
+  "measurement": "new closed-loop policy rollout in every condition",
+  "device": "cuda"
+}

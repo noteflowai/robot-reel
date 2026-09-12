@@ -1,0 +1,272 @@
+[
+  {
+    "trial_id": "seed-00-reference",
+    "attempt": 1,
+    "directory": "runs/seed-00-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:54:59Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T07:55:12Z"
+  },
+  {
+    "trial_id": "seed-00-dim",
+    "attempt": 1,
+    "directory": "runs/seed-00-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:55:12Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T07:55:23Z"
+  },
+  {
+    "trial_id": "seed-00-camera",
+    "attempt": 1,
+    "directory": "runs/seed-00-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:55:23Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T07:55:33Z"
+  },
+  {
+    "trial_id": "seed-01-reference",
+    "attempt": 1,
+    "directory": "runs/seed-01-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:55:33Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:55:50Z"
+  },
+  {
+    "trial_id": "seed-01-dim",
+    "attempt": 1,
+    "directory": "runs/seed-01-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:55:50Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:56:07Z"
+  },
+  {
+    "trial_id": "seed-01-camera",
+    "attempt": 1,
+    "directory": "runs/seed-01-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:56:07Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:56:25Z"
+  },
+  {
+    "trial_id": "seed-02-reference",
+    "attempt": 1,
+    "directory": "runs/seed-02-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:56:25Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:56:42Z"
+  },
+  {
+    "trial_id": "seed-02-dim",
+    "attempt": 1,
+    "directory": "runs/seed-02-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:56:42Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:56:59Z"
+  },
+  {
+    "trial_id": "seed-02-camera",
+    "attempt": 1,
+    "directory": "runs/seed-02-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:56:59Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:57:16Z"
+  },
+  {
+    "trial_id": "seed-03-reference",
+    "attempt": 1,
+    "directory": "runs/seed-03-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:57:50Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:58:10Z"
+  },
+  {
+    "trial_id": "seed-03-dim",
+    "attempt": 1,
+    "directory": "runs/seed-03-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:58:10Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:58:27Z"
+  },
+  {
+    "trial_id": "seed-03-camera",
+    "attempt": 1,
+    "directory": "runs/seed-03-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:58:27Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T07:58:37Z"
+  },
+  {
+    "trial_id": "seed-04-reference",
+    "attempt": 1,
+    "directory": "runs/seed-04-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:58:37Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:58:54Z"
+  },
+  {
+    "trial_id": "seed-04-dim",
+    "attempt": 1,
+    "directory": "runs/seed-04-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:58:54Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:59:11Z"
+  },
+  {
+    "trial_id": "seed-04-camera",
+    "attempt": 1,
+    "directory": "runs/seed-04-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:59:11Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T07:59:20Z"
+  },
+  {
+    "trial_id": "seed-05-reference",
+    "attempt": 1,
+    "directory": "runs/seed-05-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:59:20Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:59:37Z"
+  },
+  {
+    "trial_id": "seed-05-dim",
+    "attempt": 1,
+    "directory": "runs/seed-05-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:59:37Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T07:59:54Z"
+  },
+  {
+    "trial_id": "seed-05-camera",
+    "attempt": 1,
+    "directory": "runs/seed-05-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T07:59:54Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:00:05Z"
+  },
+  {
+    "trial_id": "seed-06-reference",
+    "attempt": 1,
+    "directory": "runs/seed-06-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:00:49Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:01:02Z"
+  },
+  {
+    "trial_id": "seed-06-dim",
+    "attempt": 1,
+    "directory": "runs/seed-06-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:01:02Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:01:12Z"
+  },
+  {
+    "trial_id": "seed-06-camera",
+    "attempt": 1,
+    "directory": "runs/seed-06-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:01:12Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:01:23Z"
+  },
+  {
+    "trial_id": "seed-07-reference",
+    "attempt": 1,
+    "directory": "runs/seed-07-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:01:23Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:01:34Z"
+  },
+  {
+    "trial_id": "seed-07-dim",
+    "attempt": 1,
+    "directory": "runs/seed-07-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:01:34Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:01:45Z"
+  },
+  {
+    "trial_id": "seed-07-camera",
+    "attempt": 1,
+    "directory": "runs/seed-07-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:01:45Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:01:59Z"
+  },
+  {
+    "trial_id": "seed-08-reference",
+    "attempt": 1,
+    "directory": "runs/seed-08-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:01:59Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:02:09Z"
+  },
+  {
+    "trial_id": "seed-08-dim",
+    "attempt": 1,
+    "directory": "runs/seed-08-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:02:09Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:02:20Z"
+  },
+  {
+    "trial_id": "seed-08-camera",
+    "attempt": 1,
+    "directory": "runs/seed-08-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:02:20Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:02:30Z"
+  },
+  {
+    "trial_id": "seed-09-reference",
+    "attempt": 1,
+    "directory": "runs/seed-09-reference/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:03:11Z",
+    "outcome": "success",
+    "finished_utc": "2026-09-12T08:03:24Z"
+  },
+  {
+    "trial_id": "seed-09-dim",
+    "attempt": 1,
+    "directory": "runs/seed-09-dim/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:03:24Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T08:03:41Z"
+  },
+  {
+    "trial_id": "seed-09-camera",
+    "attempt": 1,
+    "directory": "runs/seed-09-camera/attempt-001",
+    "status": "completed",
+    "started_utc": "2026-09-12T08:03:41Z",
+    "outcome": "step_limit",
+    "finished_utc": "2026-09-12T08:03:58Z"
+  }
+]

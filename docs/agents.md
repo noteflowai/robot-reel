@@ -70,6 +70,13 @@ Only a successful device-and-computation check establishes GPU readiness.
 The report distinguishes a host GPU, visible NVIDIA device nodes, a CUDA-enabled
 PyTorch build and a checked matrix operation actually performed on the GPU.
 
+If the launcher matches the new version but a resumed conversation still
+reports `workspace-write`, inspect that conversation with `/status` and
+`/debug-config`. Use `/permissions` to select the intended session policy,
+then repeat the CUDA check. This host required that session-level change;
+installing the launcher and restarting alone had not updated the effective
+permissions. See [the verified GPU setup](gpu-access.md).
+
 Environment equivalents are `AGENTS_CODEX_SANDBOX` and
 `AGENTS_REQUIRE_GPU=1`. An explicit `AGENTS_CMD_CODEX` continues to own its
 complete argument list; the launcher does not rewrite that custom command.

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1016">
+<meta name="description" content="A paired SmolVLA stress experiment. Change native scene lighting or camera position, inspect every real rollout, and download the complete evidence.">
+<title>Stress Lab — Robot Reel</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1016;--panel:#121b25;--line:#2a3644;--text:#edf4f6;--muted:#acbac7;--mint:#83eac5;--purple:#c5afff;--amber:#ffc27d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% 0%,#25203b 0,transparent 43%),var(--bg);color:var(--text);font:16px/1.6 system-ui,sans-serif}main{max-width:1240px;padding:24px 30px 64px;margin:auto}a{color:var(--mint);text-underline-offset:4px}button,select,input{font:inherit}button,select{border:1px solid var(--line);border-radius:10px;color:var(--text);background:#182332;padding:9px 13px;cursor:pointer}button:hover,a:hover{filter:brightness(1.18)}button:disabled{opacity:.38;cursor:default}button[aria-pressed=true]{border-color:var(--mint);background:#173c36;color:var(--mint)}:focus-visible{outline:3px solid var(--purple);outline-offset:4px}nav{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}nav a{text-decoration:none}nav strong{letter-spacing:.04em}nav span{font-size:13px;color:var(--muted)}.eyebrow{text-transform:uppercase;color:var(--mint);font:12px ui-monospace,monospace;letter-spacing:.14em;margin:48px 0 15px}h1{font-size:clamp(42px,6.2vw,76px);letter-spacing:-.06em;line-height:1.05;margin:0 0 24px;max-width:900px}h1 em{font-style:normal;color:var(--purple)}.intro{color:var(--muted);max-width:780px;font-size:18px;margin-bottom:25px}.tags,.toolbar,.downloads{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.tags span{font-size:12px;padding:5px 10px;border:1px solid var(--line);border-radius:20px;color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:30px 0 12px}.stat{border:1px solid var(--line);background:#121b25c7;padding:22px;border-radius:16px}.stat h2{font-size:14px;font-weight:500;margin:0;color:var(--muted)}.score{font-size:43px;letter-spacing:-.05em;line-height:1.3;color:var(--mint);font-weight:650}.stat small{color:var(--muted);display:block;font-size:12px}.note{font-size:13px;color:var(--muted)}h2{font-size:22px;letter-spacing:-.03em}h3{font-size:15px;margin:0}.experiment{display:grid;grid-template-columns:245px 1fr;gap:20px;margin:34px 0}.matrix{border:1px solid var(--line);border-radius:16px;padding:15px;align-self:start;background:#101922}.matrix h2{margin:0 0 4px;font-size:18px}.matrix p{font-size:12px;color:var(--muted);margin:4px 0 15px}.grid{display:grid;grid-template-columns:32px repeat(3,1fr);gap:6px;align-items:center}.grid span{font-size:10px;color:var(--muted);text-align:center}.grid button{padding:6px 0;font-size:12px;border-radius:6px}.grid .success{background:#123b33;color:var(--mint)}.grid .step_limit,.grid .terminated{background:#3b2b24;color:var(--amber)}.grid button[aria-pressed=true]{outline:2px solid var(--text);outline-offset:1px}.legend{font-size:11px;color:var(--muted);margin-top:12px}.legend b{color:var(--mint)}.legend i{font-style:normal;color:var(--amber)}.workbench{min-width:0}.toolbar{justify-content:space-between;margin-bottom:12px}.toolbar label{font-size:13px;color:var(--muted)}.views{display:grid;grid-template-columns:1fr 1fr;gap:12px}.view{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);min-width:0}.view-head{padding:12px 14px;display:flex;gap:8px;justify-content:space-between;align-items:center}.badge{font:10px ui-monospace,monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--amber);text-align:right}.badge.success{color:var(--mint)}video{width:100%;aspect-ratio:1;display:block;background:#080b10;object-fit:contain}.view-clock{font:11px ui-monospace,monospace;color:var(--muted);padding:9px 12px;min-height:39px}.transport{margin:12px 0;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px}.transport .toolbar{margin:0}.transport input{width:100%;accent-color:var(--mint);margin:18px 0 10px;cursor:pointer}.counter{font:12px ui-monospace,monospace;color:var(--mint)}.events{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.events button{font-size:12px;padding:7px 10px}.status{min-height:24px;font-size:12px;color:var(--muted);margin:8px 0 0}.inspect{display:grid;grid-template-columns:1fr 1fr;gap:12px}.telemetry{padding:14px;border:1px solid var(--line);border-radius:14px;min-width:0;background:#101922}.telemetry h3{color:var(--purple);margin-bottom:6px}.telemetry p{font-size:11px;color:var(--muted);margin:4px 0 10px;min-height:35px}.controls{display:grid;gap:4px}.control{display:grid;grid-template-columns:55px 1fr 52px;gap:7px;align-items:center;font:10px ui-monospace,monospace}.track{background:#263343;position:relative;height:5px;border-radius:3px;overflow:hidden}.track:after{content:"";position:absolute;left:50%;height:100%;width:1px;background:#667788}.fill{height:100%;background:var(--mint);position:absolute}.value{text-align:right}.sensors{font:10px/1.8 ui-monospace,monospace;color:var(--muted);overflow-wrap:anywhere;margin-top:12px}.trace-link{font-size:11px}.methods{border-top:1px solid var(--line);padding-top:26px;margin-top:40px;display:grid;grid-template-columns:1.4fr 1fr;gap:34px}.methods h2{margin:0 0 10px}.methods p{color:var(--muted);font-size:14px}.downloads a{border:1px solid var(--line);border-radius:8px;padding:8px 12px;text-decoration:none;font-size:13px}.ledger{margin-top:22px;overflow:auto}.ledger table{border-collapse:collapse;width:100%;font-size:12px}.ledger th,.ledger td{padding:8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}.ledger th{color:var(--muted)}details summary{cursor:pointer;color:var(--mint)}footer{margin-top:30px;font-size:12px;color:var(--muted)}
+@media(max-width:900px){.experiment{grid-template-columns:1fr}.matrix{padding:14px}.grid{grid-template-columns:32px repeat(3,1fr)}.matrix h2,.matrix p{display:inline;margin-right:10px}.grid{margin-top:12px}.grid button{padding:5px}.methods{grid-template-columns:1fr}}
+@media(max-width:540px){main{padding:18px 15px 40px}.eyebrow{margin-top:35px;font-size:10px}h1{font-size:44px}.intro{font-size:15px}.stats{gap:7px}.stat{padding:12px 9px;border-radius:11px}.stat h2{font-size:11px}.score{font-size:34px}.stat small{font-size:10px}.views{gap:7px}.inspect{grid-template-columns:1fr}.view-head{padding:8px;align-items:flex-start;flex-direction:column;gap:2px}.view-head h3{font-size:12px}.view-clock{padding:8px;font-size:10px;min-height:50px}.toolbar{gap:7px}.toolbar button,.toolbar select{font-size:12px;padding:8px}.telemetry{padding:14px}.control{grid-template-columns:66px 1fr 55px;gap:7px;font-size:12px}.counter{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+.divergence{padding:12px 14px;border:1px solid var(--line);border-radius:12px;margin:12px 0;color:var(--muted);font-size:12px}.divergence strong{color:var(--purple)}.divergence svg{display:block;width:100%;height:72px;margin-top:8px}.sensors{white-space:pre-line}
+</style>
+</head>
+<body><main>
+<nav><a href="../"><strong>◉ ROBOT REEL</strong></a><span>Physical AI / Stress Lab</span><a href="METHODS.md">Experiment methods ↗</a></nav>
+<p class="eyebrow" id="eyebrow">SmolVLA / paired closed-loop experiment</p>
+<h1>Change the view.<br><em>Check the policy.</em></h1>
+<p class="intro">Same task. Same starting state. Different light or camera position.
+Watch a fresh policy rollout in every condition, then inspect where its behavior changes.</p>
+<div class="tags"><span id="compute">Real policy inference</span><span>Native scene perturbations</span><span>Every trial retained</span><span>Offline evidence pack</span></div>
+<section class="stats" id="stats" aria-label="Results for every condition"></section>
+<p class="note" id="scope"></p>
+<div class="experiment">
+<aside class="matrix"><h2>All trials. No highlights filter.</h2><p>Select any seed and condition.</p>
+<div class="grid" id="matrix" aria-label="Select a recorded trial"></div>
+<div class="legend"><b>✓ Success</b> &nbsp; <i>— Step limit</i> &nbsp; × Terminated</div>
+<p id="errors"></p></aside>
+<section class="workbench" aria-label="Paired replay">
+<div class="toolbar"><label>Seed <select id="seed" aria-label="Paired seed"></select></label><label>Against <select id="condition" aria-label="Comparison condition"><option value="dim">25% light</option><option value="camera">Camera +12 cm</option><option value="reference">Reference</option></select></label><div><button id="main" aria-pressed="true">Scene</button> <button id="wrist" aria-pressed="false">Wrist</button></div></div>
+<div class="views">
+<article class="view"><div class="view-head"><h3>Reference</h3><span class="badge" id="left-outcome"></span></div><video id="left-video" muted playsinline preload="auto" aria-label="Reference policy camera"></video><div class="view-clock" id="left-clock"></div></article>
+<article class="view"><div class="view-head"><h3 id="right-title"></h3><span class="badge" id="right-outcome"></span></div><video id="right-video" muted playsinline preload="auto" aria-label="Perturbed policy camera"></video><div class="view-clock" id="right-clock"></div></article>
+</div>
+<div class="transport"><div class="toolbar"><div><button id="play">Play ▶</button> <button id="prev" aria-label="Previous sample">←</button> <button id="next" aria-label="Next sample">→</button></div><span class="counter" id="counter"></span><button id="share">Share sample ↗</button></div>
+<input id="timeline" type="range" min="0" value="0" step="1" aria-label="Paired source sample">
+<div class="events"><button id="start">First observation</button><button id="previous-call">← Inference</button><button id="next-call">Inference →</button><button id="peak">Peak separation</button><button id="last-action">Last applied action</button><button id="terminal">Inspect outcome</button></div>
+<p class="status" id="status" role="status" aria-live="polite"></p></div>
+<div class="divergence"><strong id="distance"></strong><span id="distance-scope"></span><svg id="distance-plot" viewBox="0 0 720 72" preserveAspectRatio="none" role="img" aria-label="End-effector separation over the shared recorded samples"><path id="distance-area" fill="#c5afff18"></path><path id="distance-line" fill="none" stroke="#c5afff" stroke-width="2" vector-effect="non-scaling-stroke"></path><line id="distance-cursor" y1="0" y2="72" stroke="#83eac5" stroke-width="1"></line></svg><span id="distance-caption"></span></div>
+<div class="inspect">
+<article class="telemetry"><h3>Reference controls</h3><p id="left-inference"></p><div class="controls" id="left-controls"></div><div class="sensors" id="left-sensors"></div><a class="trace-link" id="left-trace" download>Source trace ↓</a></article>
+<article class="telemetry"><h3>Selected controls</h3><p id="right-inference"></p><div class="controls" id="right-controls"></div><div class="sensors" id="right-sensors"></div><a class="trace-link" id="right-trace" download>Source trace ↓</a></article>
+</div><p class="note">Controls are normalized commands in [−1, 1], not joint angles. Each panel holds its own final observation when its run ends. A held sample is labelled explicitly.</p>
+</section></div>
+<section class="methods"><div><h2>Small experiment. Complete record.</h2>
+<p id="task"></p><p>These are new closed-loop runs with native MuJoCo lighting and camera changes applied before the first policy observation. Initial qpos/qvel, renderer settings and inference noise hashes are checked across every pair.</p>
+<p id="hardware"></p><p>Success is the environment's recorded predicate. “Step limit” means the task was not completed within this experiment's fixed budget. This is a single-task diagnostic, not an official LIBERO or LIBERO-plus benchmark score. Ten paired seeds do not establish general robustness.</p>
+<a href="METHODS.md">Read the exact conditions, clocks and limitations ↗</a></div>
+<div><h2>Take the evidence with you.</h2><p>Every camera, applied action, inference timing, initial state and result. The offline folder embeds its telemetry and needs no service.</p>
+<div class="downloads"><a href="experiment.zip" download id="zip">Complete offline lab ↓</a><a href="telemetry.mcap" download>MCAP telemetry ↓</a><a href="results.csv" download>Results CSV ↓</a><a href="summary.json" download>Summary JSON ↓</a><a href="experiment.json" download>Locked plan ↓</a><a href="attempts.json" download>Attempt ledger ↓</a></div>
+<p>MCAP contains JSON observation and inference channels, with episode-relative nanosecond timestamps. Videos are separate MP4s. No model weights are bundled.</p></div></section>
+<details class="ledger"><summary>Inspect every recorded result and source file</summary><table><thead><tr><th>Trial</th><th>Outcome</th><th>Actions</th><th>Episode</th><th>Policy calls</th><th>Evidence</th></tr></thead><tbody id="runs"></tbody></table></details>
+<details class="ledger"><summary id="attempt-title">Attempt history</summary><table><thead><tr><th>Trial / attempt</th><th>Status</th><th>Started UTC</th><th>Result or error</th></tr></thead><tbody id="attempts"></tbody></table></details>
+<footer>Robot Reel · <a href="LICENSE">Apache-2.0 code</a> · <a href="NOTICE.txt">Media & upstream notices</a> · No live model runs in this page.</footer>
+</main>
+<script id="stress-data" type="application/json">__STRESS_DATA__</script>
+<script>
+'use strict';
+const data=JSON.parse(document.querySelector('#stress-data').textContent), $=id=>document.getElementById(id);
+const traces=new Map(data.traces.map(t=>[t.stress.trial_id,t]));
+const paths=new Map(data.attempts.filter(a=>a.status==='completed').map(a=>[a.trial_id,a.directory]));
+const conditions=data.experiment.conditions, label=id=>conditions.find(c=>c.id===id).label;
+const key=(seed,c)=>`seed-${String(seed).padStart(2,'0')}-${c}`;
+const get=(seed,c)=>traces.get(key(seed,c)), path=t=>paths.get(t.stress.trial_id);
+const outcome=t=>({success:'Success',step_limit:'Step limit',terminated:'Terminated'})[t.result.outcome];
+const firstChange=data.summary.pairs.find(p=>p.reference_success&&!p.condition_success)||data.summary.pairs.find(p=>p.reference_success!==p.condition_success);
+let seed=firstChange?.seed??0,condition=firstChange?.condition??'dim',frame=0,camera='main',playing=false,animation=0,version=0;
+const videos=[$('left-video'),$('right-video')];
+let pair=[],master=null,distances=[],peakFrame=0;
+function element(tag,text,className){const el=document.createElement(tag);el.textContent=text;if(className)el.className=className;return el;}
+function bounded(value,max,fallback){if(value===null||value.trim()==='')return fallback;const n=Number(value);return Number.isFinite(n)?Math.max(0,Math.min(max,Math.trunc(n))):fallback;}
+$('eyebrow').textContent=`SMOLVLA / ${data.summary.completed_trials} REAL ROLLOUTS / ${data.experiment.seeds.length} PAIRED SEEDS`;
+for(const stat of data.summary.conditions){
+  const card=element('article','','stat');card.append(element('h2',label(stat.id)),element('div',`${stat.successes}/${stat.trials}`,'score'));
+  card.append(element('small',`Success · 95% Wilson CI ${(stat.wilson95[0]*100).toFixed(0)}–${(stat.wilson95[1]*100).toFixed(0)}%`),element('small',`${stat.step_limits} step limits · ${stat.mean_policy_seconds.toFixed(2)} s / inference`));$('stats').append(card);
+}
+$('scope').textContent=`One LIBERO Spatial task · ${data.experiment.max_steps} actions / ${(data.experiment.max_steps/20).toFixed(1)} s maximum per trial · 20 Hz simulation control. Inference latency is measured separately. Confidence intervals are per condition, not a paired significance test.`;
+$('errors').textContent=`${data.summary.completed_trials}/${data.summary.planned_trials} planned trials completed · ${data.summary.attempts} attempts · ${data.summary.execution_errors} execution errors.`;
+for(const heading of ['Seed','Ref.','Dim','Camera'])$('matrix').append(element('span',heading));
+for(const n of data.experiment.seeds){
+  const option=element('option',String(n).padStart(2,'0'));option.value=n;$('seed').append(option);
+  $('matrix').append(element('span',String(n).padStart(2,'0')));
+  for(const c of conditions){
+    const t=get(n,c.id),b=element('button',t.result.outcome==='success'?'✓':t.result.outcome==='step_limit'?'—':'×',t.result.outcome);
+    b.dataset.seed=n;b.dataset.condition=c.id;b.setAttribute('aria-label',`Seed ${n}, ${label(c.id)}, ${outcome(t)}`);b.setAttribute('aria-pressed','false');
+    b.onclick=()=>{seed=n;condition=c.id;frame=0;loadPair();};$('matrix').append(b);
+  }
+}
+for(const t of data.traces){
+  const row=element('tr');for(const value of [t.stress.trial_id,outcome(t),t.result.actions,t.result.simulation_seconds.toFixed(2)+' s',t.inference_calls.length])row.append(element('td',String(value)));
+  const cell=element('td');
+  for(const [file,title] of [['trace.json','Trace'],['main.mp4','Scene'],['wrist.mp4','Wrist']]){const a=element('a',title);a.href=path(t)+'/'+file;a.download='';cell.append(a,document.createTextNode(' '));}
+  row.append(cell);$('runs').append(row);
+}
+$('attempt-title').textContent=`Attempt history · ${data.summary.attempts} attempts · ${data.summary.execution_errors} execution errors`;
+for(const attempt of data.attempts){
+  const row=element('tr');
+  for(const value of [`${attempt.trial_id} / ${attempt.attempt}`,attempt.status,attempt.started_utc,attempt.error||attempt.outcome])row.append(element('td',value));
+  $('attempts').append(row);
+}
+$('task').textContent=`Task: “${data.traces[0].task}”. Every seed uses its corresponding LIBERO initial state and an independently seeded noise generator shared across conditions.`;
+const source=data.traces[0].source;
+$('compute').textContent=source.device==='cuda'?source.gpu.replace(/^NVIDIA /,'')+' / CUDA inference':'CPU policy inference';
+$('hardware').textContent=`Recorded on ${source.device==='cuda'?source.gpu+' (CUDA), host '+source.cpu:source.cpu+' (CPU)'}, ${source.threads} CPU threads, ${source.precision}${source.device==='cuda'?', TF32 disabled':''}. ${source.denoising_steps} denoising steps; ${source.n_action_steps} controls applied per inferred chunk. Policy time includes preprocessing and action conversion; simulation step time is recorded separately.`;
+function pause(message='Paused. Inspect the recorded samples.'){
+  playing=false;version++;cancelAnimationFrame(animation);videos.forEach(v=>v.pause());$('play').textContent='Play ▶';$('status').textContent=message;
+}
+function end(t){return t.frames.length-1;}
+function seekVideo(v,t){
+  const sample=Math.min(frame,end(t));v.dataset.frame=sample;
+  if(v.readyState>=1){const time=(sample+.02)/20;if(Math.abs(v.currentTime-time)>.0004)v.currentTime=time;}
+}
+function controls(side,t){
+  const n=Math.min(frame,end(t)),row=t.frames[n],call=t.inference_calls.find(c=>c.frame===row.inference_frame),box=$(side+'-controls');box.replaceChildren();
+  for(let i=0;i<t.channels.length;i++){
+    const line=element('div','','control'),track=element('span','','track'),fill=element('span','','fill'),value=row.action?.[i];
+    fill.style.left=(value<0?50+value*50:50)+'%';fill.style.width=(value===undefined?0:Math.abs(value)*50)+'%';track.append(fill);
+    line.append(element('span',t.channels[i]),track,element('span',value===undefined?'—':value.toFixed(3),'value'));box.append(line);
+  }
+  $(side+'-inference').textContent=row.terminal?'Terminal observation · no action':`Chunk from sample ${row.inference_frame} · policy ${call.policy_seconds.toFixed(2)} s · this simulation step ${(row.env_step_seconds*1000).toFixed(0)} ms`;
+  $(side+'-sensors').textContent=`EEF xyz [m] ${row.state.slice(0,3).map(x=>x.toFixed(3)).join(' / ')}\nJoint position [rad] ${row.joint_position.map(x=>x.toFixed(3)).join(' / ')}`;
+  $(side+'-trace').href=path(t)+'/trace.json';
+}
+function render(seek=true){
+  const max=Math.max(...pair.map(end));frame=Math.max(0,Math.min(max,frame));$('timeline').max=max;$('timeline').value=frame;
+  $('counter').textContent=`Sample ${frame} / ${max} · ${(frame/20).toFixed(2)} s`;
+  $('prev').disabled=frame===0;$('next').disabled=frame===max;
+  pair.forEach((t,i)=>{
+    const side=i?'right':'left',n=Math.min(frame,end(t));
+    $(side+'-clock').textContent=`SOURCE ${String(n).padStart(3,'0')} · ${(n/20).toFixed(2)} s${frame>end(t)?' · HELD FINAL':n===end(t)?' · FINAL OBSERVATION':''}`;
+    if(seek)seekVideo(videos[i],t);else videos[i].dataset.frame=n;
+    controls(side,t);
+  });
+  $('previous-call').disabled=!pair[1].inference_calls.some(c=>c.frame<Math.min(frame,end(pair[1])));
+  $('next-call').disabled=!pair[1].inference_calls.some(c=>c.frame>frame);
+  const shared=frame<distances.length;
+  $('distance').textContent=shared?`${(distances[frame]*100).toFixed(1)} cm EEF separation`:'Outside the shared recording';
+  $('distance-scope').textContent=shared?' · same source sample, measured xyz':' · no divergence metric computed from a held sample';
+  const x=Math.min(frame,distances.length-1)/(distances.length-1)*720;
+  $('distance-cursor').setAttribute('x1',x);$('distance-cursor').setAttribute('x2',x);
+}
+function loadPair(){
+  pause();pair=[get(seed,'reference'),get(seed,condition)];
+  $('seed').value=seed;$('condition').value=condition;$('right-title').textContent=label(condition);
+  $('main').setAttribute('aria-pressed',String(camera==='main'));$('wrist').setAttribute('aria-pressed',String(camera==='wrist'));
+  document.querySelectorAll('#matrix button').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.seed)===seed&&b.dataset.condition===condition)));
+  pair.forEach((t,i)=>{
+    const side=i?'right':'left';$(side+'-outcome').textContent=`${outcome(t)} / ${t.result.actions} actions`;$(side+'-outcome').className='badge '+t.result.outcome;
+    videos[i].poster=path(t)+`/${camera}-poster.png`;videos[i].src=path(t)+`/${camera}.mp4`;videos[i].load();
+  });
+  distances=pair[0].frames.slice(0,pair[1].frames.length).map((a,n)=>Math.hypot(...a.state.slice(0,3).map((v,i)=>v-pair[1].frames[n].state[i])));
+  peakFrame=distances.indexOf(Math.max(...distances));
+  const high=Math.max(.001,distances[peakFrame]);
+  const curve=distances.map((v,n)=>`${n?'L':'M'}${n/(distances.length-1)*720},${70-v/high*66}`).join(' ');
+  $('distance-line').setAttribute('d',curve);$('distance-area').setAttribute('d',curve+' L720,72 L0,72 Z');
+  $('distance-caption').textContent=`Peak ${(distances[peakFrame]*100).toFixed(1)} cm at sample ${peakFrame} · ${distances.length} shared observations. Measured trajectory difference, not a task-error or accuracy score.`;
+  master=videos[end(pair[0])>=end(pair[1])?0:1];render();
+}
+function selectFrame(n,message){pause(message);frame=n;render();}
+function tick(){
+  if(!playing)return;
+  const max=Math.max(...pair.map(end));frame=Math.min(max,Math.floor(master.currentTime*20+1e-6));
+  pair.forEach((t,i)=>{
+    const video=videos[i];
+    if(frame>=end(t)){video.pause();seekVideo(video,t);}
+    else if(video!==master&&!video.seeking&&Math.abs(video.currentTime-master.currentTime)>.035){video.currentTime=master.currentTime;}
+  });
+  render(false);
+  if(frame>=max||master.ended){frame=max;render();pause('End of the recorded pair. Final observations have no action.');return;}
+  animation=requestAnimationFrame(tick);
+}
+$('play').onclick=async()=>{
+  if(playing){pause();render();return;}
+  if(videos.some(v=>v.readyState<2||v.seeking)){$('status').textContent='Loading the paired cameras. Press play when ready.';return;}
+  const current=++version;
+  if(frame===Math.max(...pair.map(end))){frame=0;render();await Promise.all(videos.map(v=>v.seeking?new Promise(resolve=>v.addEventListener('seeked',resolve,{once:true})):Promise.resolve()));if(current!==version)return;}
+  playing=true;$('play').textContent='Pause Ⅱ';$('status').textContent='Playing the recorded simulation clock; this is not live inference.';
+  try{await Promise.all(videos.map((v,i)=>frame<end(pair[i])?v.play():Promise.resolve()));if(current===version)tick();}
+  catch{if(current===version)pause('Playback paused. Use the sample controls to inspect this pair.');}
+};
+videos.forEach((v,i)=>{v.addEventListener('loadedmetadata',()=>seekVideo(v,pair[i]));v.addEventListener('error',()=>pause('Camera file could not load. Keep the complete offline folder together.'));});
+$('seed').onchange=()=>{seed=Number($('seed').value);frame=0;loadPair();};
+$('condition').onchange=()=>{condition=$('condition').value;frame=0;loadPair();};
+for(const name of ['main','wrist'])$(name).onclick=()=>{camera=name;loadPair();};
+$('timeline').oninput=()=>selectFrame(Number($('timeline').value));
+$('prev').onclick=()=>selectFrame(frame-1);$('next').onclick=()=>selectFrame(frame+1);
+$('start').onclick=()=>selectFrame(0);$('last-action').onclick=()=>selectFrame(end(pair[1])-1);
+$('terminal').onclick=()=>selectFrame(end(pair[1]),`Selected run: ${outcome(pair[1])}. This is its final observation, with no invented next action.`);
+$('peak').onclick=()=>selectFrame(peakFrame,'Largest measured end-effector separation within the shared recorded samples.');
+$('previous-call').onclick=()=>selectFrame(pair[1].inference_calls.filter(c=>c.frame<Math.min(frame,end(pair[1]))).at(-1)?.frame??0);
+$('next-call').onclick=()=>selectFrame(pair[1].inference_calls.find(c=>c.frame>frame)?.frame??end(pair[1]));
+function fromHash(){
+  const p=new URLSearchParams(location.hash.slice(1));seed=bounded(p.get('seed'),data.experiment.seeds.length-1,seed);
+  condition=conditions.some(c=>c.id===p.get('condition'))?p.get('condition'):condition;
+  camera=p.get('camera')==='wrist'?'wrist':'main';frame=bounded(p.get('frame'),data.experiment.max_steps,0);loadPair();
+}
+$('share').onclick=()=>{
+  history.replaceState(null,'',`#seed=${seed}&condition=${condition}&frame=${frame}&camera=${camera}`);
+  $('status').textContent=location.protocol==='file:'?'Share this complete folder and the sample fragment in the address bar.':'The address now opens this exact seed, condition, camera and sample.';
+};
+addEventListener('hashchange',fromHash);addEventListener('pagehide',()=>pause());
+if(location.protocol==='file:'){$('zip').hidden=true;$('zip').style.display='none';}
+fromHash();
+</script></body></html>

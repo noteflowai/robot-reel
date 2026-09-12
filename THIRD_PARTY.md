@@ -53,6 +53,11 @@ and its Blender replay; it does not introduce additional model assets.
 
 The VLA videos and previews depict LIBERO/robosuite assets. Keep
 [`licenses/VLA-MEDIA-NOTICE.txt`](licenses/VLA-MEDIA-NOTICE.txt) with this footage.
+The Stress Lab's paired videos and homepage preview use the same upstream
+policy and simulation assets, downloaded separately at pinned revisions.
+Its portable pack retains this notice. MCAP 1.4.0 (MIT,
+https://github.com/foxglove/mcap) is an optional telemetry export dependency;
+the pack contains recorded JSON telemetry, not model weights or asset meshes.
 The downloaded LIBERO asset dataset does not declare a dataset license in its
 card metadata; the recorder's Apache-2.0 license does not override asset terms.
 No policy weights or LIBERO meshes are vendored here. Exact revisions,
