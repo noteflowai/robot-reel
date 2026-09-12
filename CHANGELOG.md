@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Type-check each replay template's inline viewer script, and check the published
+  pages still carry it. Copying a template into its pages re-records the affected
+  bundle hashes along the manifest chain.
+
 - Add the Stress Lab: thirty closed-loop SmolVLA CUDA trials on NVIDIA L40S across ten paired
   initial states and three native lighting/camera conditions. Preserve the
   locked plan, every result and interruption history, input/noise hashes,

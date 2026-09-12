@@ -55,7 +55,9 @@ const $=id=>document.getElementById(id),canvas=$('scene'),ctx=canvas.getContext(
 let sample=0,playing=false,lastTick=0,yaw=.48,pitch=.22;
 const corners=[[-.5,-.5,-.5],[.5,-.5,-.5],[.5,.5,-.5],[-.5,.5,-.5],[-.5,-.5,.5],[.5,-.5,.5],[.5,.5,.5],[-.5,.5,.5]];
 const faces=[[0,1,2,3],[4,7,6,5],[0,4,5,1],[3,2,6,7],[0,3,7,4],[1,5,6,2]];
+/** @param {number[]} p Body pose: position then quaternion. @param {number[]} v Local offset. */
 function transform(p,v){const[x,y,z,w]=p.slice(3),[a,b,c]=v,tx=2*(y*c-z*b),ty=2*(z*a-x*c),tz=2*(x*b-y*a);return[p[0]+a+w*tx+y*tz-z*ty,p[1]+b+w*ty+z*tx-x*tz,p[2]+c+w*tz+x*ty-y*tx];}
+/** @param {number[]} point A 3D point in metres; returns screen x, y and depth. */
 function project([x,y,z]){const u=Math.cos(yaw)*x-Math.sin(yaw)*y,d=Math.sin(yaw)*x+Math.cos(yaw)*y;return[W*.50+u*105,H*.55+(-Math.cos(pitch)*(z-1.8)+Math.sin(pitch)*d)*105,Math.cos(pitch)*d+Math.sin(pitch)*z];}
 function line(a,b,color,width=1){a=project(a);b=project(b);ctx.beginPath();ctx.moveTo(...a.slice(0,2));ctx.lineTo(...b.slice(0,2));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();}
 function draw(){

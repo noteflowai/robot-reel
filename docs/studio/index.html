@@ -125,7 +125,7 @@ function draw(found) {
   let lo=Math.min(...values),hi=Math.max(...values);const pad=Math.max(.03,(hi-lo)*.15);lo-=pad;hi+=pad;
   ctx.strokeStyle="#26364e";ctx.lineWidth=1;ctx.setLineDash([]);
   for(let y=20;y<h;y+=55){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
-  for(const [field,color,dash] of [["qpos","#57edcf",[]],["target","#89abff",[8,6]]]){
+  for(const [field,color,dash] of /** @type {[string,string,number[]][]} */([["qpos","#57edcf",[]],["target","#89abff",[8,6]]])){
     ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=3;ctx.setLineDash(dash);
     samples.forEach((f,i)=>{const x=8+i/Math.max(samples.length-1,1)*(w-16),y=h-14-(f[field][j]-lo)/(hi-lo)*(h-28);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y);});ctx.stroke();
   }
