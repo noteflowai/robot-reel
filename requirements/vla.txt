@@ -3,11 +3,4 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.11.0+cpu
 torchvision==0.26.0+cpu
-lerobot[smolvla,libero,evaluation]==0.6.1
-hf-libero==0.1.4
-robosuite==1.4.0
-mujoco==3.8.1
-numpy==2.2.6
-transformers==5.5.4
-imageio-ffmpeg==0.6.0
-Pillow>=10
+-r vla-common.txt
