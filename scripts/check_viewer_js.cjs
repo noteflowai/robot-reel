@@ -13,7 +13,8 @@ const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
 const root = path.join(__dirname, "..");
-const templates = path.join(root, "robot_reel");
+// Every viewer template: the packaged replays, plus the demo pages built here.
+const directories = [path.join(root, "robot_reel"), __dirname];
 const environment = path.join(__dirname, "viewer-env.d.ts");
 
 // Kept beside the extraction so the checked configuration cannot drift from it.
@@ -49,16 +50,21 @@ function extract(html, name) {
 }
 
 function main() {
-  const files = fs.readdirSync(templates).filter(name => name.endsWith(".html")).sort();
-  assert.ok(files.length > 0, "no replay templates found");
+  const templates = directories.flatMap(directory => fs.readdirSync(directory)
+    .filter(name => name.endsWith(".html"))
+    .map(name => path.join(directory, name)))
+    .sort();
+  assert.ok(templates.length > 0, "no viewer templates found");
   const workspace = fs.mkdtempSync(path.join(os.tmpdir(), "robot-reel-viewer-js-"));
   const offsets = new Map();
   try {
-    for (const file of files) {
-      const { source, offset } = extract(fs.readFileSync(path.join(templates, file), "utf8"), file);
-      const script = file.replace(/\.html$/, ".js");
+    for (const template of templates) {
+      const name = path.relative(root, template);
+      const { source, offset } = extract(fs.readFileSync(template, "utf8"), name);
+      // Directory-qualified so two templates cannot collide on their base name.
+      const script = name.replace(/[/\\]/g, "-").replace(/\.html$/, ".js");
       fs.writeFileSync(path.join(workspace, script), source);
-      offsets.set(script, { offset, file });
+      offsets.set(script, { offset, name });
     }
     fs.copyFileSync(environment, path.join(workspace, "viewer-env.d.ts"));
     fs.writeFileSync(path.join(workspace, "tsconfig.json"), JSON.stringify(CONFIG, null, 2));
@@ -67,18 +73,18 @@ function main() {
     assert.ok(fs.existsSync(tsc), "typescript is not installed; run npm ci");
     const result = spawnSync(process.execPath, [tsc, "-p", workspace], { encoding: "utf8" });
     const output = `${result.stdout || ""}${result.stderr || ""}`;
-    // Rewrite "chaos.js(160,42): error TS…" as "robot_reel/chaos.html:319: error TS…".
+    // Rewrite "robot_reel-chaos.js(160,42): error TS…" as "robot_reel/chaos.html:319: error TS…".
     const report = output.replace(/(?:[^\s(]*[/\\])?([\w.-]+\.js)\((\d+),(\d+)\)/g, (match, script, line, column) => {
       const source = offsets.get(script);
-      return source ? `robot_reel/${source.file}:${Number(line) + source.offset}:${column}` : match;
+      return source ? `${source.name}:${Number(line) + source.offset}:${column}` : match;
     });
     if (result.status !== 0) {
       process.stderr.write(report.trim() + "\n");
-      console.error(`\nViewer script check failed for ${files.length} templates.`);
+      console.error(`\nViewer script check failed for ${templates.length} templates.`);
       process.exit(1);
     }
-    console.log(`Viewer scripts type-check: ${files.length} templates, ` +
-      `${[...offsets.keys()].join(", ")}`);
+    console.log(`Viewer scripts type-check: ${templates.length} templates, ` +
+      `${[...offsets.values()].map(source => source.name).join(", ")}`);
   } finally {
     fs.rmSync(workspace, { recursive: true, force: true });
   }
