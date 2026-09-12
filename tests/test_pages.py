@@ -17,6 +17,8 @@ class PublishedPageTest(unittest.TestCase):
         self.assertEqual(found, set(PAGES))
         for template in set(PAGES.values()):
             self.assertTrue((ROOT/template).exists(), template)
+            # scripts/check_viewer_js.cjs type-checks these two directories.
+            self.assertIn(Path(template).parent.as_posix(), {"robot_reel", "scripts"}, template)
 
     def test_payload_blocks_are_not_mistaken_for_the_script(self):
         for template in sorted(set(PAGES.values())):
