@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Publish a landing page at the site root that indexes all twelve recorded demos,
+  with a stdlib quick start and a copy button; the Microduck replay keeps its
+  own page. The landing template lives in `scripts/landing.html` and is covered
+  by the viewer script check.
+- Move the quick start to the top of both READMEs, add live-demo, Python and
+  stars badges, a Colab notebook and a Dockerfile for the stdlib checks, and a
+  section on how Robot Reel differs from LeRobot, MuJoCo Playground, Isaac Lab,
+  Genesis, Newton, Rerun and Foxglove.
+- Add a 1280×640 social preview built from the Butterfly Lab poster, issue and
+  pull request templates, a code of conduct, a security policy, a citation file,
+  an `examples/` guide and a tag-triggered release workflow that builds the
+  package and publishes it to PyPI through trusted publishing.
+- Move maintainer launch notes out of the published `docs/` tree into `notes/`.
+
 - Type-check each replay template's inline viewer script, and check the published
   pages still carry it. Copying a template into its pages re-records the affected
   bundle hashes along the manifest chain.

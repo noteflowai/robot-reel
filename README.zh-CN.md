@@ -18,6 +18,9 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI 检查状态"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="最新发布版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="代码许可证：Apache-2.0"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-12%20replays-ffca85" alt="在线演示：12 个回放"></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
+  <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
 
 <p align="center">
@@ -29,6 +32,27 @@
 </p>
 
 <p align="center"><sub>观看无需安装，无需账号。封面各面板展示独立录制的运行。</sub></p>
+
+## 快速开始
+
+Python 3.12+，只需标准库就能校验一份真实录制：
+
+```bash
+git clone https://github.com/noteflowai/robot-reel.git
+cd robot-reel
+
+# 检查已录制的策略运行与证据。
+python3 -m robot_reel.cli vla docs/vla
+
+# 把仓库自带的制动对照转成通过校验的分镜计划。
+python3 -m robot_reel.cli direct docs/compare/braking \
+  --plan examples/contact-storyboard.json --output artifacts/director
+```
+
+[![在 Colab 中打开](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/noteflowai/robot-reel/blob/main/examples/quickstart.ipynb)
+也可以构建 [Docker 镜像](Dockerfile)，在容器里运行同样的检查。
+录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)；浏览器演示什么都不用装。
+
 
 ## 新场景 / 换一束光，看策略如何改变
 
@@ -123,10 +147,10 @@
 </td>
 <td width="50%" valign="top">
 <h3>04 / 小机器人，学习得到的步态</h3>
-<a href="https://noteflowai.github.io/robot-reel/"><img src="docs/microduck/media/poster.png" width="100%" alt="在 MuJoCo 中运行 Microduck 官方 ONNX 步行策略，并展示实测关节数据。"></a>
+<a href="https://noteflowai.github.io/robot-reel/microduck/"><img src="docs/microduck/media/poster.png" width="100%" alt="在 MuJoCo 中运行 Microduck 官方 ONNX 步行策略，并展示实测关节数据。"></a>
 <p>观看 Pollen Robotics 的 Microduck 运行官方 ONNX 步行策略。检查关节目标、实际响应与机身运动，也可以比较两种速度指令下的表现。</p>
 <p><strong>50 Hz 策略 · 14 个关节的目标与响应</strong></p>
-<p><a href="https://noteflowai.github.io/robot-reel/">认识 Microduck ↗</a> · <a href="https://noteflowai.github.io/robot-reel/compare/microduck/">比较速度</a> · <a href="docs/recording.zh-CN.md">自己录制</a></p>
+<p><a href="https://noteflowai.github.io/robot-reel/microduck/">认识 Microduck ↗</a> · <a href="https://noteflowai.github.io/robot-reel/compare/microduck/">比较速度</a> · <a href="docs/recording.zh-CN.md">自己录制</a></p>
 </td>
 </tr>
 </table>
@@ -150,21 +174,22 @@ Blender 原生检查覆盖导演影片中的全部 420 个车辆状态，以及 
 新的导演需求由你连接的 Agent 解读，并重新渲染。Microduck 使用 XML PD 执行器回退方案。
 [适用范围、来源与资产条款](THIRD_PARTY.md)。
 
-## 从仓库自带的录制开始
+## 与同类项目的区别
 
-Python 3.12+。以下命令只需要标准库：
+Robot Reel 不是仿真器、训练框架或基准测试。它位于这些工具之后：
+录下一次运行，校验轨迹，再把它变成可观看、可检查、可复用的东西。
 
-```bash
-git clone https://github.com/noteflowai/robot-reel.git
-cd robot-reel
+| | 侧重 | Robot Reel 的位置 |
+| --- | --- | --- |
+| [LeRobot](https://github.com/huggingface/lerobot) | 真实与仿真机器人的数据集、策略与训练 | 运行 LeRobot 策略（SmolVLA），保留每个执行动作、双相机画面以及硬件与耗时记录，做成回放 |
+| [MuJoCo Playground](https://github.com/google-deepmind/mujoco_playground)、[Isaac Lab](https://github.com/isaac-sim/IsaacLab) | GPU 规模的环境与强化学习训练 | 取仿真器的一次运行，让它可检查、可对照、可编辑 |
+| [Genesis](https://github.com/Genesis-Embodied-AI/Genesis)、[Newton](https://github.com/newton-physics/newton) | 物理引擎 | 在 CPU 上录制 Newton，把实测运动导出为带动画的 OpenUSD 场景，并用 Blender 原生检查 |
+| Rerun、Foxglove | 通用遥测查看器 | 发布可从 `file://` 打开的自包含 HTML 回放，同时提供 MCAP 供这些查看器读取同一份数据 |
 
-# 检查已录制的策略运行与证据。
-python3 -m robot_reel.cli vla docs/vla
+独特之处在于这条链：哈希校验的轨迹、同一时钟上的配对对照、
+由 MCP Agent 根据录制指挥 Blender 成片，以及关键帧能映射回原始样本的三维场景。
 
-# 把仓库自带的制动对照转成通过校验的分镜计划。
-python3 -m robot_reel.cli direct docs/compare/braking \
-  --plan examples/contact-storyboard.json --output artifacts/director
-```
+## 构建你自己的场景
 
 选择你想实际构建的流程：
 

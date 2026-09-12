@@ -18,6 +18,9 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI status"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="Latest release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="Code license: Apache-2.0"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-12%20replays-ffca85" alt="Live demos: 12 replays"></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
+  <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
 
 <p align="center">
@@ -29,6 +32,27 @@
 </p>
 
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
+
+## Quick start
+
+Python 3.12+ and the standard library are enough to check a real recording:
+
+```bash
+git clone https://github.com/noteflowai/robot-reel.git
+cd robot-reel
+
+# Check the recorded policy episode and its evidence.
+python3 -m robot_reel.cli vla docs/vla
+
+# Turn the included braking comparison into a checked storyboard.
+python3 -m robot_reel.cli direct docs/compare/braking \
+  --plan examples/contact-storyboard.json --output artifacts/director
+```
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/noteflowai/robot-reel/blob/main/examples/quickstart.ipynb)
+Or build the [Docker image](Dockerfile) and run the same check in a container.
+Recording new runs needs the [full runtime](docs/recording.md); the browser demos need nothing.
+
 
 ## New / Same task. Change the view.
 
@@ -127,10 +151,10 @@ into your own project.
 </td>
 <td width="50%" valign="top">
 <h3>04 / A tiny robot. A learned policy.</h3>
-<a href="https://noteflowai.github.io/robot-reel/"><img src="docs/microduck/media/poster.png" width="100%" alt="Microduck's official ONNX walking policy recorded in MuJoCo, with measured joint telemetry."></a>
+<a href="https://noteflowai.github.io/robot-reel/microduck/"><img src="docs/microduck/media/poster.png" width="100%" alt="Microduck's official ONNX walking policy recorded in MuJoCo, with measured joint telemetry."></a>
 <p>Watch Pollen Robotics' Microduck walk with its official ONNX policy. Follow joint targets, measured responses and base motion, or compare two speed commands.</p>
 <p><strong>50 Hz policy · 14 joint targets and responses</strong></p>
-<p><a href="https://noteflowai.github.io/robot-reel/">Meet Microduck ↗</a> · <a href="https://noteflowai.github.io/robot-reel/compare/microduck/">Compare speeds</a> · <a href="docs/recording.md">Record your own</a></p>
+<p><a href="https://noteflowai.github.io/robot-reel/microduck/">Meet Microduck ↗</a> · <a href="https://noteflowai.github.io/robot-reel/compare/microduck/">Compare speeds</a> · <a href="docs/recording.md">Record your own</a></p>
 </td>
 </tr>
 </table>
@@ -156,21 +180,24 @@ with inference waiting time omitted; new director briefs use your connected
 agent and a new render. Microduck uses the XML PD-actuator fallback.
 [Scope, provenance and asset terms](THIRD_PARTY.md).
 
-## Start from the included recording
+## How it differs
 
-Python 3.12+. These commands need only the standard library:
+Robot Reel is not a simulator, a training framework or a benchmark. It sits
+after them: it records a run from those tools, verifies the trace, and turns it
+into something people can watch, inspect and reuse.
 
-```bash
-git clone https://github.com/noteflowai/robot-reel.git
-cd robot-reel
+| | Focus | Where Robot Reel fits |
+| --- | --- | --- |
+| [LeRobot](https://github.com/huggingface/lerobot) | Datasets, policies and training for real and simulated robots | Runs a LeRobot policy (SmolVLA), then keeps every applied action, both cameras and the hardware/timing record as a replay |
+| [MuJoCo Playground](https://github.com/google-deepmind/mujoco_playground), [Isaac Lab](https://github.com/isaac-sim/IsaacLab) | GPU-scale environments and RL training | Takes a single rollout from a simulator and makes it inspectable, comparable and editable |
+| [Genesis](https://github.com/Genesis-Embodied-AI/Genesis), [Newton](https://github.com/newton-physics/newton) | Physics engines | Records Newton on CPU and exports the measured motion as an animated OpenUSD scene with a native Blender check |
+| Rerun, Foxglove | General telemetry viewers | Publishes self-contained HTML replays that open from `file://`, plus MCAP so those viewers can read the same data |
 
-# Check the recorded policy episode and its evidence.
-python3 -m robot_reel.cli vla docs/vla
+What is unique here is the chain: hash-verified traces, paired comparisons on
+one clock, an MCP agent that directs a Blender film from the recording, and 3D
+scenes whose keyframes map back to the original samples.
 
-# Turn the included braking comparison into a checked storyboard.
-python3 -m robot_reel.cli direct docs/compare/braking \
-  --plan examples/contact-storyboard.json --output artifacts/director
-```
+## Build your own scene
 
 Choose the workflow you want to build:
 

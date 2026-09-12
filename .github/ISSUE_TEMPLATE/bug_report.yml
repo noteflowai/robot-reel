@@ -1,0 +1,82 @@
+name: Bug report
+description: Something in Robot Reel behaves differently from what the docs say.
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please include a short reproducible command and the observed result.
+        Tests and the stdlib-only checks should not require a paid model or real hardware.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: A clear description of the problem and the observed output (paste text, not screenshots, where possible).
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command run
+      description: The exact command line, run from the checkout root.
+      placeholder: python3 -m robot_reel.cli vla docs/vla
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Demo page or CLI subcommand
+      description: Which part of the project is affected.
+      options:
+        - CLI default capture (robot-reel --pack/--shots)
+        - robot-reel compare
+        - robot-reel blender
+        - robot-reel newton
+        - robot-reel direct
+        - robot-reel mcp (MCP director server)
+        - robot-reel vla
+        - robot-reel stress
+        - python -m robot_reel.chaos
+        - python -m robot_reel.pages
+        - Demo page (replay / comparison / newton / director / vla / chaos / stress)
+        - Tests or CI
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, Python version, GPU/driver (or "CPU only"), and MUJOCO_GL if set. For browser page issues, include the browser and version.
+      placeholder: |
+        OS: Ubuntu 24.04
+        Python: 3.12.x (python3 --version)
+        GPU: none / NVIDIA ... driver ...
+        MUJOCO_GL: egl
+        Install: pip install -e '.[director,inspect]'
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Paste the terminal output. Trim account-specific paths and identifiers.
+      render: shell
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Hygiene
+      options:
+        - label: This report contains no credentials, account-specific logs, downloaded robot meshes, or large video files.
+          required: true
+        - label: I ran the command from the checkout root against the current main branch or the latest release.
+          required: false

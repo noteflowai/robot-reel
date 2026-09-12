@@ -22,6 +22,14 @@ Both READMEs use GitHub-compatible HTML and Markdown. `<picture>` selects a
 static image when the viewer requests reduced motion. Scene cards and links
 remain usable without animation. No custom JavaScript or CSS runs in GitHub.
 
+`social.png` is the 1280×640 social preview used by the landing page's Open
+Graph tags and uploaded once in the repository settings. It is built from the
+Butterfly Lab poster alone:
+
+```bash
+python3 scripts/build_social_preview.py
+```
+
 Use `--fonts DIRECTORY` with the cover builder if DejaVu fonts are elsewhere.
 The comparison preview uses the standard Linux DejaVu Sans installation.
 Preserve [the media notice](NOTICE.txt) and the upstream VLA attribution when
