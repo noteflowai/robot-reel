@@ -3,10 +3,13 @@
 **Watch the robot. Inspect every move.**
 
 Record physical-AI simulations as shareable films **and** interactive motion traces.
-Run an official Microduck policy, compare braking controllers, or let a Strands
-agent direct an arm. Open the replay in a browser; no account or install needed to watch.
-Take recorded motion into Blender, or record Newton physics as an animated OpenUSD scene.
+Run SmolVLA on a language-conditioned manipulation task, inspect Microduck's
+walking policy, or turn a recorded experiment into an agent-directed Blender film.
+Open the replay in a browser; no account or install needed to watch.
+Keep the source actions, measured outcomes and editable Blender/OpenUSD scenes.
 
+[**Watch SmolVLA work →**](https://noteflowai.github.io/robot-reel/vla/) ·
+[**Try the agent director →**](https://noteflowai.github.io/robot-reel/director/) ·
 [**Try Microduck →**](https://noteflowai.github.io/robot-reel/) ·
 [**Compare braking →**](https://noteflowai.github.io/robot-reel/braking/) ·
 [**Inspect the agent arm →**](https://noteflowai.github.io/robot-reel/studio/) ·
@@ -14,9 +17,49 @@ Take recorded motion into Blender, or record Newton physics as an animated OpenU
 [**Newton → USD → Blender →**](https://noteflowai.github.io/robot-reel/newton/) ·
 [中文](README.zh-CN.md)
 
-![Microduck official-policy simulation recorded with Robot Reel](docs/microduck/media/preview.gif)
+![A real SmolVLA rollout, with synchronized scene and wrist cameras](docs/vla/preview.gif)
 
-[Download videos + evidence](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+[Download the VLA episode + evidence](https://noteflowai.github.io/robot-reel/vla/episode.zip) ·
+[Download the directed Blender project](https://noteflowai.github.io/robot-reel/director/project.zip) ·
+[Original pack releases](https://github.com/noteflowai/robot-reel/releases/tag/v0.3.0)
+
+## New: words into motion, every action on record
+
+**An actual SmolVLA policy rollout in LIBERO.** A language instruction asks the
+arm to place a black bowl on a plate. The published CPU run completes the task
+after 76 applied actions. Inspect both camera views, measured robot state,
+normalized controls and inference chunks on one timeline. Share any observation
+or download the complete offline episode.
+
+Policy and asset revisions are pinned. This is one seeded simulation, not a
+success-rate benchmark; CPU inference waiting time is omitted from playback.
+LeRobot's recording environment is isolated from the original packs to preserve
+their different MuJoCo versions. [Reproduce the real rollout](docs/vla.md).
+Keep [upstream media attribution](licenses/VLA-MEDIA-NOTICE.txt) with its footage.
+
+```bash
+# Verify the included episode with the Python standard library.
+python3 -m robot_reel.cli vla docs/vla
+```
+
+## New: let an agent direct the story
+
+**Describe the presentation. Preserve the experiment.** Connect an MCP agent
+to inspect the recorded events and create a checked storyboard. Build an
+editable Blender film with overview, tracking, contact and top cameras,
+captions, and half-speed playback that retains every source sample.
+
+![Four camera shots, with measured contact replayed at half speed](docs/director/preview.gif)
+
+The seven-second example retains 180 source samples across 210 film frames.
+All 420 vehicle samples, four cuts and the tracking camera were checked in
+Blender 5.2.1. The browser shows the rendered example and exports edited plans
+for a new render. [Connect an agent and build your own film](docs/director.md).
+
+```bash
+python3 -m robot_reel.cli direct docs/compare/braking \
+  --plan examples/contact-storyboard.json --output artifacts/director
+```
 
 ## New: Newton → OpenUSD → Blender
 
@@ -212,11 +255,13 @@ npx playwright install chromium
 npm test
 ```
 
-The Python suite covers plan rejection, evidence consistency and Blender export
-agreement. Importing validators does not require `imageio_ffmpeg`, MuJoCo or NumPy;
+The Python suite covers plan rejection, VLA outcome/action consistency, evidence
+bundles and Blender export agreement. Importing validators does not require
+`imageio_ffmpeg`, MuJoCo, NumPy or ML libraries;
 CI also runs the suite with third-party packages disabled. Browser checks
-cover seeking, stepping, downloads, mobile layout, local-file playback and caption
-escaping. Real recording smoke runs require OpenGL and downloaded model assets.
+cover both camera clocks, seeking, stepping, downloads, mobile layout, local-file
+playback and caption escaping. CI also exercises the real director MCP transport.
+Real recording smoke runs require OpenGL and downloaded model assets.
 The Studio adapter uses private Strands Robots fields and pins version 0.5.1.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Useful contributions include a public

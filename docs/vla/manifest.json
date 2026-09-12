@@ -1,0 +1,12 @@
+{
+  "schema": "robot-reel-vla-1",
+  "sha256": {
+    "NOTICE.txt": "ea626872970c7acaf4faafb6fa4a904d2f7b885e376c9cf6ba249b71c3e5ad3e",
+    "index.html": "9f4fad1b5f241cf70de142ce74e39d330626063cb3529eddff9406f607e7f91f",
+    "main-poster.png": "bf5b9158578547a7268f74a3de74e3ac0fbde6ebfbf2629341b5edb7ff4e37ba",
+    "main.mp4": "cc3cf7acd7cb1360e290f9c783f691cc281f1d00826e685ede7b5bea8c53fd8c",
+    "trace.json": "75d1853283f0aceeceaaa2762d23568b0a09eede7a0b7a256c9ec53c95dd8a8d",
+    "wrist-poster.png": "3d9a4a7752dff77c9dbd3db91c2a66f2635d20cbbe429beabe101382fea6b925",
+    "wrist.mp4": "667a6a879ed5bc2f138d0332e62fecae89f7a68fb71dbc3626df5e14d1bb2589"
+  }
+}

@@ -11,18 +11,19 @@ def main():
     parser.add_argument("--frames", type=Path, required=True)
     parser.add_argument("--scale", type=int, default=75, help="Percentage of the project's render resolution")
     parser.add_argument("--samples", type=int, default=8)
+    parser.add_argument("--threads", type=int, default=4)
     args_list = sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else sys.argv[1:]
     args = parser.parse_args(args_list)
-    if not 1 <= args.scale <= 100 or args.samples < 1:
-        parser.error("--scale must be 1–100 and --samples must be positive")
+    if not 1 <= args.scale <= 100 or args.samples < 1 or not 1 <= args.threads <= 32:
+        parser.error("--scale must be 1–100, --samples positive, and --threads 1–32")
     if args.frames.exists() and any(args.frames.iterdir()):
         parser.error("Use an empty PNG sequence directory")
-    bpy.ops.wm.open_mainfile(filepath=str(args.blend.resolve()))
+    bpy.ops.wm.open_mainfile(filepath=str(args.blend.resolve()), use_scripts=False)
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.render.resolution_percentage = args.scale
     scene.render.threads_mode = "FIXED"
-    scene.render.threads = 4
+    scene.render.threads = args.threads
     scene.render.use_persistent_data = True
     scene.cycles.samples = args.samples
     scene.cycles.use_denoising = True

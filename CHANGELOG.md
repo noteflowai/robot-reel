@@ -1,6 +1,19 @@
 # Changelog
 
-## Unreleased
+## 0.4.0 — Recorded policies and agent-directed films
+
+- Record a real SmolVLA CPU rollout in LIBERO with pinned checkpoint, backbone
+  and assets; publish the successful seeded bowl-to-plate episode with both
+  policy-input camera views, all 76 applied controls and a terminal observation.
+- Inspect language tasks, normalized actions, inference chunk provenance,
+  measured robot state and task outcomes on a shared browser timeline.
+- Export an agent's typed MCP storyboard into an editable Blender film with
+  four camera choices, captions and sample-preserving half-speed playback.
+- Check all 420 vehicle samples, camera cuts, tracking and constant sample
+  holds in the saved director project; publish its seven-second rendered film.
+- Add portable downloads, frame links, mobile/offline checks, MCP protocol
+  checks and semantic validation beyond file hashes.
+- Isolate the LeRobot/MuJoCo environment from the original recording packs.
 
 - Record Newton 1.6 CPU rigid-body poses and export a self-contained animated
   OpenUSD scene, with an offline 3D browser replay and per-sample sharing.

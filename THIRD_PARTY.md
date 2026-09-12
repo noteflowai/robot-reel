@@ -15,6 +15,13 @@ Strands, Google DeepMind, Hugging Face, or Unitree.
 | Microduck model | https://github.com/pollen-robotics/microduck_rl | Upstream README identifies 3D models as Creative Commons BY-SA-NC; it does not specify a version |
 | Microduck walking policy | https://huggingface.co/pollen-robotics/microduck-policies | Official `alpha_walking.onnx`, pinned revision and SHA-256 in the capture; retain upstream terms |
 | Microduck observation/action convention | https://github.com/pollen-robotics/microduck_rl/blob/main/scripts/infer_policy.py | Apache-2.0; credited in our adapter |
+| SmolVLA LIBERO policy | https://huggingface.co/HuggingFaceVLA/smolvla_libero | Apache-2.0; separately downloaded, pinned checkpoint |
+| SmolVLM2 backbone | https://huggingface.co/HuggingFaceTB/SmolVLM2-500M-Instruct | Apache-2.0; tokenizer/config, with weights inside the full policy checkpoint |
+| LeRobot | https://github.com/huggingface/lerobot | Apache-2.0; VLA inference and observation/action processors |
+| LIBERO | https://github.com/Lifelong-Robot-Learning/LIBERO | MIT; manipulation tasks and task predicates |
+| LIBERO asset snapshot | https://huggingface.co/datasets/lerobot/libero-assets | Pinned, downloaded separately; retain upstream asset terms and attribution |
+| MCP Python SDK | https://github.com/modelcontextprotocol/python-sdk | MIT; optional local director tool server |
+| Blender | https://www.blender.org | GPL; external application used to create and render editable scenes |
 
 Models are fetched separately through `robot_descriptions`; meshes are not
 vendored here. The video depicts these models. Keep this attribution with a
@@ -33,6 +40,14 @@ The automotive geometry is authored procedurally in `robot_reel/packs.py`.
 No Alpamayo weights, AlpaSim components or CARLA assets are distributed or run.
 The Newton demo uses procedural box geometry authored in `robot_reel/newton.py`.
 Its browser preview draws measured poses without third-party mesh assets.
+The director uses the same procedural geometry and recorded braking samples.
+
+The VLA videos and previews depict LIBERO/robosuite assets. Keep
+[`licenses/VLA-MEDIA-NOTICE.txt`](licenses/VLA-MEDIA-NOTICE.txt) with this footage.
+The downloaded LIBERO asset dataset does not declare a dataset license in its
+card metadata; the recorder's Apache-2.0 license does not override asset terms.
+No policy weights or LIBERO meshes are vendored here. Exact revisions,
+checkpoint hash and runtime versions are in the episode's `trace.json`.
 
 Pillow draws typography and overlays. FFmpeg, supplied through imageio-ffmpeg,
 encodes video; its binary distribution has its own license conditions.

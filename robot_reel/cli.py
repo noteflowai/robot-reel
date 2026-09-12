@@ -6,6 +6,15 @@ from pathlib import Path
 
 
 def main():
+    if sys.argv[1:2] == ["vla"]:
+        from .vla import main as vla_main
+        return vla_main(sys.argv[2:])
+    if sys.argv[1:2] == ["direct"]:
+        from .director import main as director_main
+        return director_main(sys.argv[2:])
+    if sys.argv[1:2] == ["mcp"]:
+        from .director_mcp import main as mcp_main
+        return mcp_main(sys.argv[2:])
     if sys.argv[1:2] == ["newton"]:
         from .newton import main as newton_main
         return newton_main(sys.argv[2:])
@@ -15,7 +24,10 @@ def main():
     if sys.argv[1:2] == ["compare"]:
         from .compare import main as compare_main
         return compare_main(sys.argv[2:])
-    ap = argparse.ArgumentParser(description="Record a robot simulation and export shareable films.")
+    ap = argparse.ArgumentParser(
+        description="Record a robot simulation and export shareable films.",
+        epilog="Other commands: compare, blender, newton, direct, mcp, vla. Use COMMAND --help for details.",
+    )
     ap.add_argument("--pack", choices=["studio", "microduck", "braking"], default="studio")
     ap.add_argument("--speed", type=float, help="Microduck forward command in m/s (0–0.6; default 0.5)")
     ap.add_argument("--output", type=Path, default=Path("artifacts/demo"))

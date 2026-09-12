@@ -30,6 +30,87 @@ before(async()=>{
   browser=await chromium.launch();
 });
 after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
+test('director retains slow-motion sample mapping and exports edits separately',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/director/#frame=119');
+    await page.waitForFunction(()=>document.querySelector('video').readyState>=2&&!document.querySelector('video').seeking);
+    assert.equal(await page.locator('#counter').textContent(),'Frame 119 / 209');
+    // Browser media clocks round fractional seconds; retain exact frame selection.
+    for(const frame of [95, 97, 107, 125, 178, 209]){
+      await page.locator('#timeline').evaluate((el,value)=>{el.value=String(value);el.dispatchEvent(new Event('input',{bubbles:true}));},frame);
+      await page.waitForFunction(()=>!document.querySelector('video').seeking);
+      assert.equal(await page.locator('#counter').textContent(),`Frame ${frame} / 209`);
+    }
+    await page.locator('.shot').nth(2).click();
+    await page.waitForFunction(()=>document.querySelector('#source-frame').textContent==='96');
+    assert.equal(await page.locator('#shot-label').textContent(),'SHOT 3 / 0.5×');
+    await page.locator('#next').click();
+    await page.waitForFunction(()=>document.querySelector('#counter').textContent==='Frame 97 / 209');
+    assert.equal(await page.locator('#source-frame').textContent(),'96');
+    await page.locator('#next').click();
+    await page.waitForFunction(()=>document.querySelector('#source-frame').textContent==='97');
+    await page.locator('.shot').last().click();
+    await page.waitForFunction(()=>document.querySelector('#source-frame').textContent==='126');
+    await page.locator('#share').click();
+    assert.match(page.url(),/#frame=156$/);
+    await page.locator('summary').click();
+    await page.getByLabel('Shot 1 caption').fill('Show the measured decision.');
+    await page.getByLabel('Shot 1 camera').selectOption('top');
+    const pending=page.waitForEvent('download');
+    await page.locator('#download-plan').click();
+    const plan=JSON.parse(await readFile(await (await pending).path(),'utf8'));
+    assert.equal(plan.shots[0].caption,'Show the measured decision.');
+    assert.equal(plan.shots[0].camera,'top');
+    assert.equal(await page.evaluate(()=>JSON.parse(document.querySelector('#director-data').textContent).plan.shots[0].camera),'overview');
+    assert.equal(await page.locator('#source-frame').textContent(),'126');
+    const project=page.waitForEvent('download');
+    await page.getByRole('link',{name:'Blender project + sources ↓'}).click();
+    assert.deepEqual(await readFile(await (await project).path()),await readFile('docs/director/project.zip'));
+  }finally{await page.close();}
+});
+test('VLA synchronizes both camera views, applied controls and terminal observation',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/vla/#frame=35');
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=1&&Math.abs(v.currentTime-1.75)<.01));
+    assert.equal(await page.locator('#outcome').textContent(),'TASK SUCCESS');
+    assert.match(await page.locator('#decision').textContent(),/observation 30$/);
+    const expected=await page.evaluate(()=>JSON.parse(document.querySelector('#vla-data').textContent).frames[35].action.map(v=>v.toFixed(2)));
+    assert.deepEqual(await page.locator('.number').allTextContents(),expected);
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>document.querySelector('#main-video').currentTime>2);
+    await page.locator('#play').click();
+    assert.ok(await page.evaluate(()=>Math.abs(document.querySelector('#main-video').currentTime-document.querySelector('#wrist-video').currentTime)<.1));
+    await page.locator('#timeline').evaluate(el=>{el.value=el.max;el.dispatchEvent(new Event('input',{bubbles:true}));});
+    await page.waitForFunction(()=>document.querySelector('#counter').textContent==='Observation 76 / 76');
+    assert.equal(await page.locator('#phase').textContent(),'TERMINAL OBSERVATION');
+    assert.deepEqual(await page.locator('.number').allTextContents(),Array(7).fill('—'));
+    assert.equal(await page.locator('#sim-time').textContent(),'4.300');
+    await page.locator('#share').click();
+    assert.match(page.url(),/#frame=76$/);
+    const pending=page.waitForEvent('download');
+    await page.getByRole('link',{name:'Download episode + evidence ↓'}).click();
+    assert.deepEqual(await readFile(await (await pending).path()),await readFile('docs/vla/episode.zip'));
+  }finally{await page.close();}
+});
+for(const pack of ['director','vla']){
+  test(`${pack} works offline on mobile with keyboard stepping and no overflow`,async()=>{
+    const page=await browser.newPage({viewport:{width:390,height:844}});
+    const errors=[];page.on('pageerror',error=>errors.push(error.message));
+    try{
+      await page.route(/^https?:/,route=>route.abort());
+      await page.goto(pathToFileURL(resolve(`docs/${pack}/index.html`)).href);
+      await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=1));
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+      await page.locator('#next').focus();await page.keyboard.press('Enter');
+      await page.waitForFunction(()=>document.querySelector('#timeline').value==='1');
+      await page.locator('#share').click();
+      assert.match(await page.locator('#status').textContent(),/Share this folder/);
+      assert.deepEqual(errors,[]);
+    }finally{await page.close();}
+  });
+}
 test('Newton replay steps real poses, shares a sample and downloads the exact USD',async()=>{
   const page=await browser.newPage();
   try{
