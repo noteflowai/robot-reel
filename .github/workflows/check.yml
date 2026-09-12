@@ -14,12 +14,15 @@ jobs:
           python-version: "3.12"
       - name: Verify traces and plans without rendering dependencies
         run: python -S -m unittest discover -s tests -v
-      - run: pip install -e '.[director]'
+      - run: pip install -e '.[director,inspect]'
       - run: python -m unittest discover -s tests -v
       - name: Check actual MCP stdio tools and workspace boundaries
         run: python scripts/check_director_mcp.py
       - name: Check recorded VLA camera lengths against the action trace
         run: robot-reel vla docs/vla --check-media
+      - name: Verify all stress trials and round-trip every MCAP message
+        run: |
+          robot-reel stress docs/stress --check-media --check-mcap
       - run: python -m compileall -q robot_reel
   browser:
     runs-on: ubuntu-latest

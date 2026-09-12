@@ -24,12 +24,13 @@ robot-reel = "robot_reel.cli:main"
 include = ["robot_reel*"]
 
 [tool.setuptools.package-data]
-robot_reel = ["replay.html", "comparison.html", "newton.html", "director.html", "vla.html", "chaos.html"]
+robot_reel = ["replay.html", "comparison.html", "newton.html", "director.html", "vla.html", "chaos.html", "stress.html"]
 
 [project.optional-dependencies]
 microduck = ["onnxruntime==1.30.0"]
 newton = ["newton==1.6.0", "warp-lang==1.17.0", "usd-core==26.3"]
 director = ["mcp==2.1.1"]
+inspect = ["mcap==1.4.0"]
 
 [project.urls]
 Homepage = "https://noteflowai.github.io/robot-reel/"

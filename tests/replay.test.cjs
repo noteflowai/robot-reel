@@ -30,6 +30,113 @@ before(async()=>{
   browser=await chromium.launch();
 });
 after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
+async function stressExample(shortReference=false){
+  const html=await readFile('docs/stress/index.html','utf8');
+  const data=JSON.parse(html.split('<script id="stress-data" type="application/json">')[1].split('</script>')[0]);
+  const candidates=data.summary.pairs.map(p=>({
+    ...p,
+    reference:data.traces.find(t=>t.seed===p.seed&&t.stress.condition==='reference'),
+    other:data.traces.find(t=>t.seed===p.seed&&t.stress.condition===p.condition),
+  }));
+  const pair=candidates.find(p=>shortReference
+    ?p.reference.result.actions<p.other.result.actions
+    :p.reference.result.actions>p.other.result.actions)
+    ||candidates.find(p=>p.reference.result.actions!==p.other.result.actions)||candidates[0];
+  return {data,...pair,max:Math.max(pair.reference.result.actions,pair.other.result.actions),
+    shorter:pair.reference.result.actions<pair.other.result.actions?'left':'right'};
+}
+test('Stress Lab pairs real traces and inspects shared samples and terminal controls',async()=>{
+  const page=await browser.newPage();
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    const {data,seed,condition,reference,other,max,shorter}=await stressExample();
+    await page.goto(base+`/stress/#seed=${seed}&condition=${condition}&frame=0`);
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=2&&!v.seeking));
+    assert.deepEqual(await page.locator('#stress-data').textContent().then(JSON.parse),data);
+    assert.equal(await page.locator('#matrix button').count(),30);
+    assert.equal(await page.locator('#runs tr').count(),30);
+    assert.equal(await page.locator('#attempts tr').count(),data.summary.attempts);
+    assert.equal(await page.locator('#left-inference').textContent(),`Chunk from sample 0 · policy ${reference.inference_calls[0].policy_seconds.toFixed(2)} s · this simulation step ${(reference.frames[0].env_step_seconds*1000).toFixed(0)} ms`);
+    await page.locator('#next-call').click();
+    assert.match(await page.locator('#counter').textContent(),/^Sample 10 /);
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>!v.seeking));
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>Number(document.querySelector('#timeline').value)>=20);
+    assert.ok(await page.evaluate(()=>Math.abs(document.querySelector('#left-video').currentTime-document.querySelector('#right-video').currentTime)<.06));
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>!v.seeking));
+    assert.ok(await page.evaluate(()=>Math.abs(document.querySelector('#left-video').currentTime-document.querySelector('#right-video').currentTime)<.005));
+    await page.locator('#peak').click();
+    const peak=data.summary.pairs.find(p=>p.seed===seed&&p.condition===condition);
+    assert.match(await page.locator('#counter').textContent(),new RegExp(`^Sample ${peak.max_eef_frame} /`));
+    assert.equal(await page.locator('#distance').textContent(),`${(peak.max_eef_distance_m*100).toFixed(1)} cm EEF separation`);
+    await page.locator('#terminal').click();
+    assert.match(await page.locator('#counter').textContent(),new RegExp(`^Sample ${other.result.actions} /`));
+    assert.equal(await page.locator('#right-inference').textContent(),'Terminal observation · no action');
+    assert.deepEqual(await page.locator('#right-controls .value').allTextContents(),Array(7).fill('—'));
+    await page.locator('#timeline').evaluate(el=>{el.value=el.max;el.dispatchEvent(new Event('input',{bubbles:true}));});
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>!v.seeking));
+    const shortTrace=shorter==='left'?reference:other,unequal=reference.result.actions!==other.result.actions;
+    assert.match(await page.locator(`#${shorter}-clock`).textContent(),unequal?/HELD FINAL/:/FINAL OBSERVATION/);
+    assert.equal(await page.locator(`#${shorter}-video`).getAttribute('data-frame'),String(shortTrace.result.actions));
+    if(unequal)assert.equal(await page.locator('#distance').textContent(),'Outside the shared recording');
+    assert.ok(Math.abs(await page.locator(`#${shorter}-video`).evaluate(v=>v.currentTime)-shortTrace.result.simulation_seconds)<.01);
+    await page.locator('#wrist').click();
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=2&&!v.seeking));
+    assert.match(await page.locator('#right-video').getAttribute('src'),/wrist.mp4$/);
+    assert.match(await page.locator('#counter').textContent(),new RegExp(`^Sample ${max} /`));
+    await page.locator('#share').click();await page.reload();
+    assert.equal(await page.locator('#wrist').getAttribute('aria-pressed'),'true');
+    assert.match(await page.locator(`#${shorter}-clock`).textContent(),unequal?/HELD FINAL/:/FINAL OBSERVATION/);
+    const pending=page.waitForEvent('download');
+    await page.getByRole('link',{name:'MCAP telemetry ↓',exact:true}).click();
+    assert.deepEqual(await readFile(await (await pending).path()),await readFile('docs/stress/telemetry.mcap'));
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('Stress Lab is offline, accessible on mobile and keeps all seed choices',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  const errors=[],requests=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.route(/^https?:/,route=>{requests.push(route.request().url());route.abort();});
+    await page.goto(pathToFileURL(resolve('docs/stress/index.html')).href+'#seed=0&condition=dim&frame=0');
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=2&&!v.seeking));
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    assert.equal(await page.locator('#play').textContent(),'Play ▶');
+    assert.equal(await page.locator('#zip').isVisible(),false);
+    await page.locator('#seed').selectOption('9');
+    await page.locator('#condition').selectOption('camera');
+    assert.equal(await page.locator('#matrix button[aria-pressed=true]').getAttribute('data-seed'),'9');
+    assert.equal(await page.locator('#matrix button[aria-pressed=true]').getAttribute('data-condition'),'camera');
+    await page.locator('#timeline').focus();await page.keyboard.press('ArrowRight');
+    assert.match(await page.locator('#counter').textContent(),/^Sample 1 /);
+    await page.locator('#share').click();
+    assert.match(await page.locator('#status').textContent(),/^Share this complete folder/);
+    assert.match(page.url(),/#seed=9&condition=camera&frame=1&camera=main$/);
+    await page.locator('#matrix button[data-seed="3"][data-condition="reference"]').click();
+    assert.equal(await page.locator('#condition').inputValue(),'reference');
+    assert.equal(await page.locator('#distance').textContent(),'0.0 cm EEF separation');
+    assert.deepEqual(requests,[]);assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('Stress Lab bounds shared inputs and finishes on real final observations',async()=>{
+  const page=await browser.newPage();
+  try{
+    const {seed,condition,reference,other,max,shorter}=await stressExample(true);
+    await page.goto(base+'/stress/#seed=9999&condition=unknown&frame=99999&camera=bad');
+    assert.equal(await page.locator('#seed').inputValue(),'9');
+    assert.equal(await page.locator('#main').getAttribute('aria-pressed'),'true');
+    assert.equal(await page.locator('#next').isDisabled(),true);
+    await page.evaluate(hash=>{location.hash=hash;},`seed=${seed}&condition=${condition}&frame=${max-1}&camera=main`);
+    await page.waitForFunction(n=>Number(document.querySelector('#timeline').value)===n&&[...document.querySelectorAll('video')].every(v=>v.readyState>=2&&!v.seeking),max-1);
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>document.querySelector('#status').textContent==='End of the recorded pair. Final observations have no action.');
+    assert.equal(await page.locator('#timeline').inputValue(),String(max));
+    assert.equal(await page.locator('#left-inference').textContent(),'Terminal observation · no action');
+    assert.equal(await page.locator('#right-inference').textContent(),'Terminal observation · no action');
+    assert.match(await page.locator(`#${shorter}-clock`).textContent(),reference.result.actions!==other.result.actions?/HELD FINAL/:/FINAL OBSERVATION/);
+  }finally{await page.close();}
+});
 test('Butterfly Lab preserves source metrics across views, playback, sharing and USD download',async()=>{
   const page=await browser.newPage();
   const errors=[];page.on('pageerror',error=>errors.push(error.message));

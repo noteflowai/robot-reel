@@ -21,6 +21,7 @@
 </p>
 
 <p align="center">
+  <a href="https://noteflowai.github.io/robot-reel/stress/"><strong>◉ Explore the Stress Lab</strong></a> &nbsp; · &nbsp;
   <a href="https://noteflowai.github.io/robot-reel/chaos/"><strong>✦ Enter the Butterfly Lab</strong></a> &nbsp; · &nbsp;
   <a href="https://noteflowai.github.io/robot-reel/remix/"><strong>◐ Try the before / after</strong></a> &nbsp; · &nbsp;
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><strong>Download the demos ↓</strong></a> &nbsp; · &nbsp;
@@ -29,7 +30,34 @@
 
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
 
-## New / 0.05° apart. Worlds apart.
+## New / Same task. Change the view.
+
+**The Stress Lab.** SmolVLA runs the same task under reference lighting, reduced
+light and a shifted camera. Explore **30 real closed-loop trials** across ten
+paired initial states. Select any outcome in the matrix, compare both policy
+cameras, and jump to the largest measured trajectory difference. Recorded with
+**NVIDIA L40S / CUDA inference**, with hardware and timing in every trace.
+
+<a href="https://noteflowai.github.io/robot-reel/stress/">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/stress/poster.png">
+    <img src="docs/stress/preview.gif" width="100%" alt="Three real SmolVLA rollouts from the same initial state under reference lighting, reduced light and a shifted camera. Each view retains its source sample and actual outcome.">
+  </picture>
+</a>
+
+**[Compare the policy runs ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
+[Complete offline lab ↓](https://noteflowai.github.io/robot-reel/stress/experiment.zip) ·
+[MCAP telemetry ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
+[Reproduce & inspect](docs/stress.md)
+
+<sub>One task × three native scene conditions × ten paired seeds. Fixed budget:
+160 actions / 8 simulation seconds per trial. Every trial is retained; execution
+errors stay in the attempt ledger. Inspect applied controls, measured state,
+separate inference/simulation timings and per-condition confidence intervals.
+This is a controlled diagnostic, not an official LIBERO benchmark score.
+Preview plays on simulation time; shorter runs explicitly hold their final sample.</sub>
+
+## 0.05° apart. Worlds apart.
 
 **The Butterfly Lab.** Twelve isolated Newton worlds begin at nearly identical angles.
 Their recorded paths become a luminous 3D time sculpture. Drag to orbit, switch
@@ -148,6 +176,7 @@ Choose the workflow you want to build:
 
 | I want to… | Start here |
 | --- | --- |
+| Run paired VLA stress trials on GPU | [CUDA setup, fixed experiment and evidence checks](docs/stress.md) |
 | Run SmolVLA locally | [Isolated CPU environment + pinned models](docs/vla.md) |
 | Let an agent direct a film | [MCP setup + Blender build/render](docs/director.md) |
 | Export real physics to a DCC | [Newton → OpenUSD → Blender](docs/newton.md) |

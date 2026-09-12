@@ -1,0 +1,226 @@
+# Stress Lab: change the view, check the policy
+
+The Stress Lab records **new closed-loop SmolVLA inference** for each condition.
+The public experiment fixes one task, ten paired initial states and three
+conditions before collection: **30 planned trials**, with at most 160 applied
+actions (8 simulation seconds) per trial. All results are retained.
+
+This is a small, controlled diagnostic, **not an official LIBERO or LIBERO-plus
+benchmark score**. The shorter horizon, single task, checkpoint and native
+perturbations define this experiment only. A task that reaches the budget
+without success is labelled `step_limit`, not an execution error. Confidence
+intervals do not establish general robustness.
+
+## Published GPU experiment
+
+Recorded on 2026-09-12 with NVIDIA L40S and PyTorch 2.11.0+cu130:
+
+| Condition | Successes | Step limits | 95% Wilson interval |
+|---|---:|---:|---:|
+| Reference | 5/10 | 5 | 23.7–76.3% |
+| 25% light | 4/10 | 6 | 16.8–68.7% |
+| Camera +12 cm | 7/10 | 3 | 39.7–89.2% |
+
+All 30 planned trials completed in 30 attempts, with zero execution errors.
+The record contains 3,525 applied actions, 3,555 observations, 60 camera videos
+and 360 policy calls. Mean measured policy time was 0.491 seconds per call,
+including the first call of each collector process. The public MCAP contains
+all 3,915 observation/inference messages.
+
+The camera change helped three paired seeds and hurt one; reduced lighting
+changed one paired success to a step limit. These are observations within this
+fixed experiment, not evidence that a camera offset generally improves a
+policy. The intervals overlap and the task, initial states and horizon are
+limited. Earlier CPU trials and short GPU smoke runs are separate collections
+and do not enter these counts.
+
+## What changes
+
+| Condition | Native simulator change before policy inference |
+|---|---|
+| Reference | Unmodified camera and lighting |
+| 25% light | All MuJoCo light ambient, diffuse and specular RGB values multiplied by 0.25 |
+| Camera +12 cm | World-fixed `agentview` camera translated +0.12 m on world X |
+
+The light multiplier describes simulator settings, **not calibrated lux or a
+75% reduction in image luminance**. Ambient materials, shadows, textures and
+the renderer also affect image intensity. The wrist camera position does not
+change. Both camera observations are refreshed after the changes and before
+the first policy call; subsequent observations come from each real environment
+step. The input videos show the actual policy views, with LeRobot's two-axis
+image flip. There are no image filters used to impersonate a new rollout.
+
+Task: `libero_spatial`, task ID 0. Seed N uses LIBERO initial state N through
+the adapter's `episode_index`, not just `reset(seed=N)`. There are ten settling
+steps before sample zero. Every pair must match initial simulator time,
+`qpos`, `qvel`, original camera/light settings and task BDDL hash exactly.
+Changes to native rendering settings must leave physical state unchanged.
+
+An independent CPU `torch.Generator` is seeded with N for policy noise.
+Corresponding inference calls across conditions use the same noise sequence;
+hashes of those tensors are checked, including the shared prefix when run
+lengths differ. This controls the random input, not a guarantee of identical
+trajectories across different software or hardware.
+
+## Policy and clocks
+
+- `HuggingFaceVLA/smolvla_libero`, revision
+  `6721902bc4d61e50a3bfdb11dfb4cb626f05d102`.
+- Tokenizer: `HuggingFaceTB/SmolVLM2-500M-Instruct`, revision
+  `7b375e1b73b11138ff12fe22c8f2822d8fe03467`.
+- Assets: `lerobot/libero-assets`, revision
+  `0b3ea86be5fe169d0fd036ae63d1070ec09e90f6`.
+- LeRobot 0.6.1, hf-libero 0.1.4, robosuite 1.4.0, MuJoCo 3.8.1.
+  The full installed versions, checkpoint SHA-256, CPU, thread count and
+  precision are included in every trace.
+- Float32, two CPU PyTorch threads, ten denoising steps, ten applied controls
+  per policy chunk. The model is loaded with strict checkpoint matching.
+  GPU runs declare `device: cuda` in their own locked plan, record the GPU model,
+  disable TF32 and synchronize CUDA work for inference timing. CPU and GPU
+  trials cannot be mixed in the same experiment.
+- Two 256 × 256 policy cameras; 20 Hz simulator control. An action at sample
+  N is chosen from that observation or its recorded chunk and produces
+  observation N+1. The final observation has **no action**.
+- `policy_seconds` measures preprocessing, policy selection and action
+  conversion on inference steps. `env_step_seconds` separately measures the
+  first simulator step for that chunk; each action frame also records its own
+  simulator step time. These are wall-clock measurements, not 20 Hz inference.
+  Policy latency depends on the recorded hardware and concurrent host load.
+- `wall_seconds` on a run covers the observation/action loop and submission
+  of camera frames to the video encoder. It excludes model loading, environment
+  reset and the encoder's final flush. Inference records also include relative
+  start/end wall times.
+
+Applied commands are clipped to [-1, 1] after the upstream processors. They are
+normalized relative end-effector/gripper controls, not joint angles or meters.
+The trace separately contains measured end-effector state and seven robot
+joint positions.
+
+The success predicate is the environment's `is_success` after a step. Collection
+stops at success, environment termination/truncation, or the predeclared budget.
+The viewer retains separate source clocks and explicitly labels a shorter
+run's held final sample. Replay runs on simulation time; no model executes in
+the browser.
+
+The separation chart uses Euclidean distance between the two measured
+end-effector xyz positions at the same sample. It only uses their shared
+observation prefix, never a held final frame. “Peak separation” jumps to the
+first maximum on that prefix. This is a trajectory difference, not an accuracy,
+task-error or robustness score. The summary also records the L2 difference of
+the first applied control vector.
+
+## Complete evidence
+
+The published folder includes:
+
+- `experiment.json`: immutable settings, seeds and perturbations.
+- `attempts.json`: every attempt, including interrupted/error attempts on
+  resume. Completed trials are never rerun just because their task failed.
+- `runs/seed-NN-CONDITION/attempt-NNN/`: two MP4s, two exact initial RGB posters,
+  source trace and per-run file hashes.
+- `summary.json` and `results.csv`: all planned results; per-condition 95%
+  Wilson intervals and paired success outcomes. These intervals are
+  descriptive binomial intervals, not a paired significance test.
+- `telemetry.mcap`: JSON observation and inference channels per trial. Log and
+  publish timestamps are **episode-relative nanoseconds starting at zero**,
+  not UTC. Every serialized sample, topic, sequence and timestamp is read back
+  and compared to its source. MCAP does not bundle video, model weights or a
+  preconfigured Rerun/Foxglove visualization.
+- `media-checks.json`: all MP4 frames are decoded, dimensions/fps/counts checked
+  against traces, and lossless initial PNG pixels hashed against the raw input.
+  MP4 is lossy: raw frame hashes document observations and are not claimed to
+  match decoded MP4 pixels bit for bit.
+- A self-contained HTML viewer, notices, file manifest and `experiment.zip`.
+  Extract the whole ZIP and open `index.html`; no HTTP server is required.
+
+Hashes detect accidental changes; they are not an external attestation of the
+collector. Validators also check trial denominators, paired physical states,
+model/runtime identity, native perturbations, shared noise, terminal action
+semantics, summary/CSV recomputation and the HTML's embedded telemetry.
+
+Execution errors are counted separately from task outcomes and remain in the
+attempt ledger. A public pack can only be sealed when all planned trials have
+a valid completed record. An error can be resumed without removing its history.
+For an externally interrupted process, the ledger records when the interruption
+was detected on resume; it does not invent an exact process-finish timestamp.
+Partial camera files from interrupted attempts stay in the source collection;
+only sealed runs enter the portable pack.
+
+## Reproduce
+
+Use Python 3.12 and a separate environment: the recorder requires MuJoCo 3.8.1,
+while Robot Reel's rendering environment uses 3.13.0. The first download needs
+network access and several GB of cache/disk. A CPU experiment takes tens of
+minutes, not the eight seconds shown on the simulation clock. Prefer a GPU
+runner when one is available.
+
+For CUDA inference, create the separate environment and run a real device
+check before collecting anything:
+
+```bash
+python3 -m venv .venv-vla-gpu
+.venv-vla-gpu/bin/python -m pip install -r requirements/vla-gpu.txt
+.venv-vla-gpu/bin/python scripts/check_vla_gpu.py
+MUJOCO_GL=egl .venv-vla-gpu/bin/python scripts/record_stress.py \
+  --device cuda --output artifacts/stress-gpu-30 --cache artifacts/vla-cache
+```
+
+The GPU check distinguishes host PCI/driver evidence from device access in the
+actual execution environment. It then runs and checks a matrix multiplication
+on CUDA. Merely having `nvidia-smi` installed, or a CUDA-enabled PyTorch wheel,
+does not pass this check. The collector refuses an unavailable CUDA request;
+it does not silently fall back to CPU.
+
+Once the pinned snapshots are cached, `bash scripts/run_stress_gpu.sh` combines
+that preflight with the same GPU collection command in offline cache mode.
+Run it from a host terminal or runner that exposes the NVIDIA device nodes.
+Pass `--resume` to continue its unchanged GPU experiment.
+
+CPU recording remains available:
+
+```bash
+python3 -m venv .venv-vla
+.venv-vla/bin/python -m pip install -r requirements/vla.txt
+MUJOCO_GL=egl \
+  .venv-vla/bin/python scripts/record_stress.py \
+  --output artifacts/stress-30 --cache artifacts/vla-cache
+```
+
+On CPU hosts with multiple EGL drivers, Mesa can be selected using
+`__EGL_VENDOR_LIBRARY_FILENAMES=/usr/share/glvnd/egl_vendor.d/50_mesa.json`
+when that file exists. The published CUDA experiment uses the GPU host's EGL
+renderer without this Mesa override. The collector does not need root.
+To resume, pass the same arguments plus `--resume`; changing the plan is rejected.
+For runners with a limited job lifetime, add `--stop-after 1` (or another
+positive trial count), then invoke it again with `--resume`. This stops only
+after sealing complete trials and never changes the planned denominator.
+Once all pinned snapshots are cached, `HF_HUB_OFFLINE=1` avoids Hub requests
+during subsequent invocations. It uses those same cached revisions; it does not
+change policy inference or the experiment plan.
+Do not run two collectors against the same output directory.
+
+Package and verify using Robot Reel's regular environment:
+
+```bash
+python -m pip install -e '.[inspect]'
+python -m robot_reel.stress_site artifacts/stress-gpu-30 artifacts/stress-site
+robot-reel stress artifacts/stress-site --check-media --check-mcap
+```
+
+The published pack can be verified without ML packages:
+`python -S -m robot_reel.stress docs/stress`.
+MCAP reading requires the optional `inspect` extra; media decoding requires
+the ordinary imageio-ffmpeg/Pillow dependencies. Neither check reruns a policy.
+
+## Primary sources
+
+- LeRobot LIBERO adapter:
+  https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/envs/libero.py
+- SmolVLA policy:
+  https://github.com/huggingface/lerobot/blob/v0.6.1/src/lerobot/policies/smolvla/modeling_smolvla.py
+- Policy checkpoint: https://huggingface.co/HuggingFaceVLA/smolvla_libero
+- LIBERO: https://github.com/Lifelong-Robot-Learning/LIBERO
+- MCAP Python API: https://mcap.dev/docs/python/mcap-apidoc/mcap.writer
+
+See the included media notice for third-party attribution. Model weights and
+upstream simulation meshes are not redistributed in the public experiment.

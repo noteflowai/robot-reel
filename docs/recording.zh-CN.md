@@ -132,7 +132,7 @@ python3 -m unittest discover -s tests -v
 # 进行录制／渲染开发时，在独立环境中安装运行依赖。
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e .
+python -m pip install -e '.[director,inspect]'
 npm ci
 npx playwright install chromium
 npm test
@@ -141,7 +141,10 @@ npm test
 Python 测试覆盖计划拒绝、VLA 结果与动作一致性、证据包和 Blender 导出对应关系。
 导入校验函数无需 `imageio_ffmpeg`、MuJoCo、NumPy 或机器学习库；CI 也会在禁用
 第三方包的环境中运行测试。浏览器测试覆盖双相机时钟、跳转、步进、下载、
-移动端布局、本地文件播放和字幕转义；CI 还会检查真实 MCP 协议连接。
+移动端布局、本地文件播放和字幕转义。压力实验检查覆盖全部 30 次配对运行、
+原生场景扰动、CPU／GPU 数据分离、源数据统计与完整离线包。
+可选的 `inspect` 依赖启用 MCAP 读回校验；未安装时仅跳过这项可选测试。
+CI 还会检查真实 MCP 协议连接。
 真实录制的冒烟测试需要 OpenGL 和已下载
 的模型资产。Studio 适配器使用了 Strands Robots 的私有字段，并固定在 0.5.1 版本。
 

@@ -137,7 +137,7 @@ python3 -m unittest discover -s tests -v
 # For recording/rendering development, install the runtime in an isolated environment.
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e .
+python -m pip install -e '.[director,inspect]'
 npm ci
 npx playwright install chromium
 npm test
@@ -148,7 +148,10 @@ bundles and Blender export agreement. Importing validators does not require
 `imageio_ffmpeg`, MuJoCo, NumPy or ML libraries;
 CI also runs the suite with third-party packages disabled. Browser checks
 cover both camera clocks, seeking, stepping, downloads, mobile layout, local-file
-playback and caption escaping. CI also exercises the real director MCP transport.
+playback and caption escaping. Stress Lab checks cover all thirty paired trials,
+native scene changes, CPU/GPU separation, source-derived statistics and the
+complete offline archive. The optional `inspect` extra enables MCAP readback;
+without it, that one optional test is skipped. CI also exercises the real director MCP transport.
 Real recording smoke runs require OpenGL and downloaded model assets.
 The Studio adapter uses private Strands Robots fields and pins version 0.5.1.
 

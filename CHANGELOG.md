@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Add the Stress Lab: thirty closed-loop SmolVLA CUDA trials on NVIDIA L40S across ten paired
+  initial states and three native lighting/camera conditions. Preserve the
+  locked plan, every result and interruption history, input/noise hashes,
+  initial physics and separate policy/simulation timings.
+- Add synchronized paired replay, an all-trial outcome matrix, source-aware
+  final-frame holding, inference/outcome navigation and measured end-effector
+  separation on the shared recording prefix.
+- Export the complete offline experiment, CSV and lossless JSON telemetry in
+  MCAP; verify every message on readback, all sixty camera videos and published
+  summary/HTML against the source traces.
+- Add a source-mapped homepage preview and a dated Chinese research roadmap.
+
 - Add the Butterfly Lab: twelve isolated CPU Newton worlds with a 0.05° release
   sweep, interactive motion overlays and time sculptures, source-derived
   separation metrics, a portable offline bundle and a native-checked OpenUSD
