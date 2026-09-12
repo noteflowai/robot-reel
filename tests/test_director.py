@@ -107,6 +107,7 @@ class DirectorTest(unittest.TestCase):
             with zipfile.ZipFile(site/"project.zip") as archive:
                 self.assertTrue(all(not Path(n).is_absolute() and ".." not in Path(n).parts for n in archive.namelist()))
                 archive.extractall(bundle)
+            self.assertEqual((bundle/"LICENSE").read_bytes(), (ROOT/"LICENSE").read_bytes())
             self.assertEqual(verify_director(bundle)["frames"], 210)
             report = json.loads((bundle/"animation-check.json").read_text())
             self.assertEqual(report["checked_vehicle_samples"], 420)

@@ -8,7 +8,7 @@ import re
 from .compare import digest
 
 SCHEMA = "robot-reel-vla-1"
-REQUIRED = {"trace.json", "main.mp4", "wrist.mp4", "main-poster.png", "wrist-poster.png", "index.html", "NOTICE.txt"}
+REQUIRED = {"trace.json", "main.mp4", "wrist.mp4", "main-poster.png", "wrist-poster.png", "index.html", "NOTICE.txt", "LICENSE"}
 CHANNELS = ["delta_x", "delta_y", "delta_z", "delta_rx", "delta_ry", "delta_rz", "gripper"]
 
 

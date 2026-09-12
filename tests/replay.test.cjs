@@ -103,6 +103,7 @@ for(const pack of ['director','vla']){
       await page.goto(pathToFileURL(resolve(`docs/${pack}/index.html`)).href);
       await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=1));
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+      if(pack==='vla')assert.equal(await page.getByRole('link',{name:'Download episode + evidence ↓'}).count(),0);
       await page.locator('#next').focus();await page.keyboard.press('Enter');
       await page.waitForFunction(()=>document.querySelector('#timeline').value==='1');
       await page.locator('#share').click();

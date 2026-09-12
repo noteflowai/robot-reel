@@ -18,6 +18,7 @@
 <script>
 (()=>{
 'use strict';const trace=JSON.parse(document.querySelector('#vla-data').textContent),$=id=>document.getElementById(id),main=$('main-video'),wrist=$('wrist-video'),frames=trace.frames;let current=0;
+if(location.protocol==='file:')document.querySelector('a[href="episode.zip"]').hidden=true;
 $('task').textContent=trace.task;$('outcome').textContent={success:'TASK SUCCESS',step_limit:'STEP LIMIT / RECORDED',terminated:'TERMINATED / RECORDED'}[trace.result.outcome];$('outcome').classList.toggle('limit',trace.result.outcome!=='success');$('timeline').max=frames.length-1;
 const names=['ΔX','ΔY','ΔZ','ΔRX','ΔRY','ΔRZ','GRIP'],bars=[],values=[];
 names.forEach(name=>{const row=document.createElement('div');row.className='action-row';const label=document.createElement('span');label.textContent=name;const bar=document.createElement('div');bar.className='bar';const fill=document.createElement('div');fill.className='fill';bar.append(fill);const number=document.createElement('span');number.className='number';row.append(label,bar,number);$('actions').append(row);bars.push(fill);values.push(number);});

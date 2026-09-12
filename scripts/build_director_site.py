@@ -90,6 +90,7 @@ def main():
     files = [*EXPORT_FILES, "director-manifest.json", "reel.blend", "animation-check.json"]
     files += ["source/"+name for name in [*source_manifest["sha256"], "blender-manifest.json"]]
     with zipfile.ZipFile(output/"project.zip", "w", zipfile.ZIP_DEFLATED) as archive:
+        archive.write(Path(__file__).resolve().parents[1]/"LICENSE", "LICENSE")
         for name in files:
             archive.write(bundle/name, name)
     (output/"media-manifest.json").write_text(json.dumps({
