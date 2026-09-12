@@ -30,6 +30,100 @@ before(async()=>{
   browser=await chromium.launch();
 });
 after(async()=>{await browser?.close();await new Promise(resolve=>server?.close(resolve));});
+test('Butterfly Lab preserves source metrics across views, playback, sharing and USD download',async()=>{
+  const page=await browser.newPage();
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.goto(base+'/chaos/#frame=0&world=11&view=overlay');
+    assert.equal(await page.locator('#counter').textContent(),'Sample 0 / 600');
+    assert.equal(await page.locator('#pair').textContent(),'World 12');
+    assert.equal(await page.locator('#angle').textContent(),'+0.55°');
+    assert.equal(await page.locator('#distance').textContent(),'0.031');
+    assert.equal(await page.locator('#overlay').getAttribute('aria-pressed'),'true');
+    await page.locator('#peak').click();
+    assert.equal(await page.locator('#counter').textContent(),'Sample 375 / 600');
+    assert.equal(await page.locator('#time').textContent(),'12.500');
+    assert.equal(await page.locator('#distance').textContent(),'6.260');
+    assert.equal(await page.locator('#pair').textContent(),'World 04');
+    assert.equal(await page.locator('#angle').textContent(),'+0.15°');
+    assert.equal(await page.locator('#initial-distance').textContent(),'0.0084 m');
+    const before=await page.locator('#scene').evaluate(canvas=>canvas.toDataURL());
+    await page.locator('#sculpture').click();
+    assert.equal(await page.locator('#scene').evaluate(canvas=>canvas.toDataURL())===before,false);
+    assert.equal(await page.locator('#distance').textContent(),'6.260');
+    assert.equal(await page.locator('#counter').textContent(),'Sample 375 / 600');
+    await page.locator('#share').click();
+    assert.match(page.url(),/#frame=375&world=3&view=sculpture$/);
+    await page.reload();
+    assert.equal(await page.locator('#counter').textContent(),'Sample 375 / 600');
+    assert.equal(await page.locator('#pair').textContent(),'World 04');
+    await page.locator('#next').click();
+    assert.equal(await page.locator('#dcc-frame').textContent(),'Blender frame 377');
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>Number(document.querySelector('#timeline').value)>380);
+    await page.locator('#play').click();
+    assert.match(await page.locator('#status').textContent(),/^Paused/);
+    const pending=page.waitForEvent('download');
+    await page.getByRole('link',{name:'Open in Blender ↓'}).click();
+    const download=await pending;
+    assert.equal(download.suggestedFilename(),'scene.usdc');
+    assert.deepEqual(await readFile(await download.path()),await readFile('docs/chaos/scene.usdc'));
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('Butterfly Lab stays offline and paused on mobile, supports camera and keyboard controls',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  const errors=[],requests=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.route(/^https?:/,route=>{requests.push(route.request().url());route.abort();});
+    await page.goto(pathToFileURL(resolve('docs/chaos/index.html')).href);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    assert.equal(await page.locator('#counter').textContent(),'Sample 375 / 600');
+    const before=await page.locator('#scene').evaluate(canvas=>canvas.toDataURL());
+    await page.locator('#rotate-right').click();
+    assert.equal(await page.locator('#scene').evaluate(canvas=>canvas.toDataURL())===before,false);
+    assert.equal(await page.locator('#counter').textContent(),'Sample 375 / 600');
+    await page.locator('#reset-view').click();
+    // Read the canvas pixels: scrolled element screenshots can differ in
+    // compositor antialiasing even after the camera returns to the same pose.
+    assert.equal(await page.locator('#scene').evaluate(canvas=>canvas.toDataURL())===before,true);
+    await page.locator('#scene').scrollIntoViewIfNeeded();
+    const box=await page.locator('#scene').boundingBox();
+    await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();
+    await page.mouse.move(box.x+box.width/2+40,box.y+box.height/2);await page.mouse.up();
+    assert.equal(await page.locator('#scene').evaluate(canvas=>canvas.toDataURL())===before,false);
+    await page.locator('#scene').focus();await page.keyboard.press('ArrowRight');
+    assert.equal(await page.locator('#counter').textContent(),'Sample 376 / 600');
+    await page.getByRole('button',{name:'World 1, +0.00 degrees',exact:true}).click();
+    assert.equal(await page.locator('#distance').textContent(),'0.000');
+    await page.locator('#start').click();
+    assert.equal(await page.locator('#counter').textContent(),'Sample 0 / 600');
+    assert.equal(await page.locator('#prev').isDisabled(),true);
+    await page.locator('#timeline').evaluate(el=>{el.value=el.max;el.dispatchEvent(new Event('input',{bubbles:true}));});
+    assert.equal(await page.locator('#counter').textContent(),'Sample 600 / 600');
+    assert.equal(await page.locator('#time').textContent(),'20.000');
+    assert.equal(await page.locator('#next').isDisabled(),true);
+    await page.locator('#share').click();
+    assert.match(await page.locator('#status').textContent(),/^Share this folder/);
+    assert.deepEqual(requests,[]);assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('Butterfly Lab bounds shared indices and finishes playback on the last real sample',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/chaos/#frame=999999&world=9999&view=unknown');
+    assert.equal(await page.locator('#counter').textContent(),'Sample 600 / 600');
+    assert.equal(await page.locator('#pair').textContent(),'World 12');
+    assert.equal(await page.locator('#sculpture').getAttribute('aria-pressed'),'true');
+    await page.evaluate(()=>{location.hash='frame=599&world=3&view=overlay';});
+    await page.waitForFunction(()=>document.querySelector('#timeline').value==='599');
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>document.querySelector('#play').textContent==='Play ▶');
+    assert.equal(await page.locator('#counter').textContent(),'Sample 600 / 600');
+    assert.equal(await page.locator('#time').textContent(),'20.000');
+    assert.equal(await page.locator('#status').textContent(),'End of the recorded experiment.');
+  }finally{await page.close();}
+});
 test('physics-to-cinema divider preserves source clocks, contact and scene download',async()=>{
   const page=await browser.newPage();
   try{

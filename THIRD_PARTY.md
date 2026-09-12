@@ -40,6 +40,11 @@ The automotive geometry is authored procedurally in `robot_reel/packs.py`.
 No Alpamayo weights, AlpaSim components or CARLA assets are distributed or run.
 The Newton demo uses procedural box geometry authored in `robot_reel/newton.py`.
 Its browser preview draws measured poses without third-party mesh assets.
+The Butterfly Lab records twelve isolated Newton worlds with procedural boxes.
+Its time sculpture draws measured tip paths, and its OpenUSD file preserves
+local body poses under explicitly offset presentation groups. Its source
+mapping and media notice are in `docs/chaos/`; no third-party visual assets or
+image generation models are used.
 The director uses the same procedural geometry and recorded braking samples.
 The README showcase uses excerpts of the published VLA, director and Newton
 replays. Its source frame mapping and media notice are in `docs/showcase/`.

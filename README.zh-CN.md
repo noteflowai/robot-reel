@@ -21,13 +21,36 @@
 </p>
 
 <p align="center">
+  <a href="https://noteflowai.github.io/robot-reel/chaos/"><strong>✦ 进入蝴蝶效应实验室</strong></a> &nbsp; · &nbsp;
   <a href="https://noteflowai.github.io/robot-reel/remix/"><strong>◐ 拖动体验前后对照</strong></a> &nbsp; · &nbsp;
-  <a href="https://noteflowai.github.io/robot-reel/vla/"><strong>观看 SmolVLA ↗</strong></a> &nbsp; · &nbsp;
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><strong>下载演示包 ↓</strong></a> &nbsp; · &nbsp;
   <a href="README.md">English</a>
 </p>
 
 <p align="center"><sub>观看无需安装，无需账号。封面各面板展示独立录制的运行。</sub></p>
+
+## 新场景 / 起点只差 0.05°，轨迹渐行渐远
+
+**蝴蝶效应实验室。** 12 个隔离的 Newton 仿真世界从几乎相同的姿态出发，
+实测轨迹逐渐展开成彩色的三维时间雕塑。拖动旋转，切换运动叠加视图，
+找到微小的初始角度差异演变为 6.26 米摆端距离的那个时刻。
+
+<a href="https://noteflowai.github.io/robot-reel/chaos/">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/chaos/poster.png">
+    <img src="docs/chaos/preview.gif" width="100%" alt="12 组 Newton 双摆的实测轨迹展开为彩色时间雕塑；深度表示仿真时间，相邻释放角度相差 0.05 度。">
+  </picture>
+</a>
+
+**[进入蝴蝶效应实验室 ↗](https://noteflowai.github.io/robot-reel/chaos/)** ·
+[OpenUSD 场景 ↓](https://noteflowai.github.io/robot-reel/chaos/scene.usdc) ·
+[离线实验包 ↓](https://noteflowai.github.io/robot-reel/chaos/experiment.zip) ·
+[复现与检查](docs/chaos.md)
+
+<sub>每个世界 601 个样本，全部 14,424 个刚体姿态通过 Blender 原生检查。
+相邻释放角度相差 0.05°，整个扫描范围为 0.55°；最大记录距离发生在
+12.5 秒的世界 04 与 01 之间，二者初始相差 0.15°。雕塑深度表示时间，
+并非物理位移。首页预览以 3.33 倍速播放，交互回放默认原速。</sub>
 
 ## 同一段记录，两种视觉呈现
 
@@ -124,6 +147,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 | 在本地运行 SmolVLA | [独立 CPU 环境与固定模型版本](docs/vla.md) |
 | 让 Agent 为实验编排成片 | [MCP 配置与 Blender 构建／渲染](docs/director.md) |
 | 把真实物理过程导入三维软件 | [Newton → OpenUSD → Blender](docs/newton.md) |
+| 探索仿真参数扫描 | [蝴蝶效应实验室 → 12 个隔离世界](docs/chaos.md) |
 | 录制 Microduck、制动或机械臂 | [录制场景与运行环境](docs/recording.zh-CN.md) |
 | 对照两次运行的结果 | [比较约定与 CLI](docs/comparison.md) |
 

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add the Butterfly Lab: twelve isolated CPU Newton worlds with a 0.05° release
+  sweep, interactive motion overlays and time sculptures, source-derived
+  separation metrics, a portable offline bundle and a native-checked OpenUSD
+  animation retaining all 14,424 body samples.
+- Feature the new experiment in both GitHub READMEs with a source-mapped GIF
+  and a reduced-motion poster.
 - Redesign the English and Chinese GitHub homepages around a recorded-motion
   cover, a reduced-motion fallback, scene cards and direct demo/download links.
 - Add Physics → Cinema: an interactive divider between the original MuJoCo

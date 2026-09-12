@@ -21,13 +21,37 @@
 </p>
 
 <p align="center">
+  <a href="https://noteflowai.github.io/robot-reel/chaos/"><strong>✦ Enter the Butterfly Lab</strong></a> &nbsp; · &nbsp;
   <a href="https://noteflowai.github.io/robot-reel/remix/"><strong>◐ Try the before / after</strong></a> &nbsp; · &nbsp;
-  <a href="https://noteflowai.github.io/robot-reel/vla/"><strong>Watch SmolVLA ↗</strong></a> &nbsp; · &nbsp;
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><strong>Download the demos ↓</strong></a> &nbsp; · &nbsp;
   <a href="README.zh-CN.md">中文</a>
 </p>
 
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
+
+## New / 0.05° apart. Worlds apart.
+
+**The Butterfly Lab.** Twelve isolated Newton worlds begin at nearly identical angles.
+Their recorded paths become a luminous 3D time sculpture. Drag to orbit, switch
+to a motion overlay, and find the moment a tiny release difference becomes a
+6.26 m gap.
+
+<a href="https://noteflowai.github.io/robot-reel/chaos/">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/chaos/poster.png">
+    <img src="docs/chaos/preview.gif" width="100%" alt="Twelve measured Newton pendulum trajectories unfold into a colored time sculpture. Depth represents simulation time; adjacent releases differ by 0.05 degrees.">
+  </picture>
+</a>
+
+**[Explore the Butterfly Lab ↗](https://noteflowai.github.io/robot-reel/chaos/)** ·
+[OpenUSD scene ↓](https://noteflowai.github.io/robot-reel/chaos/scene.usdc) ·
+[Offline experiment ↓](https://noteflowai.github.io/robot-reel/chaos/experiment.zip) ·
+[Reproduce & inspect](docs/chaos.md)
+
+<sub>601 samples × 12 worlds. All 14,424 body poses checked in native Blender.
+Adjacent release offsets are 0.05°; the sweep spans 0.55°. The largest recorded
+gap is world 04 versus 01 (+0.15°), at 12.5 s. Sculpture depth represents time,
+not physical travel. Preview plays at 3.33×; the interactive replay defaults to 1×.</sub>
 
 ## One recording. Two looks.
 
@@ -127,6 +151,7 @@ Choose the workflow you want to build:
 | Run SmolVLA locally | [Isolated CPU environment + pinned models](docs/vla.md) |
 | Let an agent direct a film | [MCP setup + Blender build/render](docs/director.md) |
 | Export real physics to a DCC | [Newton → OpenUSD → Blender](docs/newton.md) |
+| Explore a physics parameter sweep | [Butterfly Lab → twelve isolated worlds](docs/chaos.md) |
 | Record Microduck, braking or the arm | [Recording packs + runtime setup](docs/recording.md) |
 | Compare two captured runs | [Comparison contract + CLI](docs/comparison.md) |
 

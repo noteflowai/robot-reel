@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Twelve Newton physics worlds, released just 0.05 degrees apart. Explore their recorded motion as luminous trails and a 3D time sculpture.">
+<meta property="og:title" content="The Butterfly Lab · Robot Reel">
+<meta property="og:description" content="0.05° apart. Worlds apart. Twelve recorded physics worlds, one interactive motion sculpture.">
+<meta property="og:image" content="https://noteflowai.github.io/robot-reel/chaos/poster.png">
+<title>The Butterfly Lab · Robot Reel</title>
+<style>
+:root{color-scheme:dark;--bg:#090b14;--panel:#111521;--line:#2b3045;--text:#f0f2fc;--muted:#a5adc8;--mint:#7cf5d3;--pink:#e6a1ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 5%,#23203c80,transparent 45%),var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,sans-serif}
+a{color:inherit;text-decoration:none}a:hover{color:var(--mint)}button,select,input{font:inherit}button,a.button{background:#1b2032;border:1px solid var(--line);border-radius:9px;color:var(--text);padding:9px 13px;cursor:pointer}button:hover,a.button:hover{border-color:var(--mint)}button[aria-pressed=true]{background:#29364b;border-color:var(--mint)}:focus-visible{outline:2px solid var(--mint);outline-offset:4px}button:disabled{opacity:.4;cursor:default}
+header,main,footer{max-width:1280px;margin:auto;padding:22px 34px}header{display:flex;justify-content:space-between;gap:20px;align-items:center;border-bottom:1px solid var(--line)}.brand{font-size:21px;font-weight:800;letter-spacing:-.7px}.brand span{color:var(--mint)}nav{display:flex;gap:22px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.intro{display:grid;grid-template-columns:1.25fr 1fr;align-items:end;gap:42px;margin:22px 0 30px}.kicker{font:11px ui-monospace,monospace;letter-spacing:2px;text-transform:uppercase;color:var(--mint)}h1{font-size:clamp(36px,5vw,64px);letter-spacing:-2.8px;line-height:1.02;margin:16px 0 0}h1 em{font-style:normal;background:linear-gradient(90deg,var(--mint),#a7b9ff,var(--pink));color:transparent;background-clip:text}.intro p{color:var(--muted);max-width:480px;margin:12px 0}.intro b{color:var(--text)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin:17px 0 0}.actions .primary{background:var(--mint);border-color:var(--mint);color:#0c1d1d;font-weight:750;font-size:13px}.actions a{font-size:12px}
+.lab{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden}.lab-header{padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line)}.lab-title{font:11px ui-monospace,monospace;letter-spacing:1.3px;color:var(--muted)}.lab-title span{color:var(--mint)}.modes{display:flex;gap:6px}.modes button{font-size:11px;padding:6px 10px}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 260px}.stage{position:relative;min-width:0;background:radial-gradient(ellipse at 45% 55%,#24264366,transparent 65%),#0b0f1b;overflow:hidden}#scene{display:block;width:100%;height:530px;touch-action:pan-y;cursor:grab}#scene.dragging{cursor:grabbing}.stamp{position:absolute;top:20px;left:22px;pointer-events:none}.stamp strong{display:block;font:29px/1.2 ui-monospace,monospace;letter-spacing:-1px}.stamp small{font:9px ui-monospace,monospace;color:var(--muted);letter-spacing:1.7px}.axis-note{position:absolute;bottom:17px;left:22px;color:var(--muted);font:10px/1.6 ui-monospace,monospace;max-width:65%;pointer-events:none}.camera{position:absolute;bottom:15px;right:16px;display:flex;gap:4px}.camera button{padding:5px 9px;font-size:11px;background:#141d2aee}
+.inspector{padding:21px 18px;border-left:1px solid var(--line);background:linear-gradient(160deg,#171b2d,#101521)}.caption{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted)}.distance{font:46px/1.15 ui-monospace,monospace;letter-spacing:-3px;margin:9px 0;color:var(--mint)}.distance small{font:16px ui-monospace,monospace;letter-spacing:0;color:var(--muted)}.pair{font-size:11px;color:var(--muted)}.pair strong{color:var(--text)}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px 0;margin:17px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.metrics small{font-size:10px;color:var(--muted);display:block}.metrics strong{font:16px ui-monospace,monospace}
+#graph{width:100%;height:80px;display:block;margin:8px 0}.graph-label{display:flex;justify-content:space-between;font:9px ui-monospace,monospace;color:var(--muted)}.worlds{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:9px 0 12px}.worlds button{padding:6px 0;font:10px ui-monospace,monospace;border-radius:5px}.worlds i{width:5px;height:5px;display:inline-block;border-radius:50%;margin-right:4px;background:var(--world)}.worlds button[aria-pressed=true]{border-color:var(--world)}.source-note{font-size:10px;line-height:1.7;color:var(--muted)}
+.controls{border-top:1px solid var(--line);padding:15px 20px}.timeline-label{display:flex;justify-content:space-between;gap:8px;font:10px ui-monospace,monospace;color:var(--muted)}#timeline{width:100%;accent-color:var(--mint);margin:12px 0 15px}.transport{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}.buttons{display:flex;align-items:center;flex-wrap:wrap;gap:6px}.buttons button{padding:7px 11px;font-size:12px}#play{min-width:90px;background:#263e43;border-color:#4b8b87}.rate{font-size:11px;color:var(--muted);display:flex;gap:7px;align-items:center}.rate select{background:#1b2032;color:var(--text);border:1px solid var(--line);border-radius:5px;padding:4px}.status{font-size:11px;min-height:20px;margin:12px 0 0;color:var(--muted)}
+.below{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin:34px 0 20px}.below article{border-top:1px solid var(--line);padding-top:17px}.below h2{font-size:17px;margin:8px 0}.below p{font-size:13px;color:var(--muted)}.below .index{font:11px ui-monospace,monospace;color:var(--pink)}code{font:11px/1.6 ui-monospace,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid var(--line);border-radius:8px;padding:12px;background:#141826}footer{font-size:11px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}footer a{text-decoration:underline}
+@media(max-width:900px){.intro{grid-template-columns:1fr;gap:8px}.intro p{max-width:650px}.workspace{grid-template-columns:1fr}.inspector{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}.metrics{margin:0}.graph-panel{grid-column:1}.world-panel{grid-column:2;grid-row:2/4}.source-note{grid-column:1/-1}.distance{font-size:40px}#scene{height:490px}.below{gap:18px}.below h2{font-size:15px}}
+@media(max-width:540px){header,main,footer{padding:18px}nav{gap:8px 12px;max-width:170px;justify-content:flex-end;font-size:10px}.intro{margin:13px 0 22px}h1{letter-spacing:-1.6px}.intro p{font-size:13px}.lab-header{padding:12px;align-items:flex-start;flex-direction:column;gap:9px}.modes{width:100%}.modes button{flex:1}.stamp{top:15px;left:15px}.stamp strong{font-size:23px}.stamp small{font-size:8px}#scene{height:390px}.axis-note{left:15px;bottom:52px;font-size:8px;max-width:85%}.camera{bottom:12px}.inspector{padding:16px;gap:12px 15px}.distance{font-size:34px}.pair{font-size:10px}.caption{font-size:9px;letter-spacing:.8px}.metrics strong{font-size:14px}.worlds{grid-template-columns:repeat(3,1fr)}.controls{padding:14px}.buttons button{font-size:10px;padding:7px 9px}.timeline-label{font-size:9px}.transport{gap:10px}.below{grid-template-columns:1fr;gap:12px}.below p{margin:7px 0}.lab{border-radius:13px}}
+</style>
+</head>
+<body>
+<header><a class="brand" href="../">Robot<span>Reel</span></a><nav><a href="../remix/">Physics → Cinema</a><a href="../vla/">SmolVLA</a><a href="https://github.com/noteflowai/robot-reel">GitHub ↗</a></nav></header>
+<main>
+<section class="intro">
+<div><div class="kicker">The Butterfly Lab / Newton 1.6</div><h1>0.05° apart.<br><em>Worlds apart.</em></h1></div>
+<div><p>Twelve double pendulums. Almost the same release. <b>Entirely different paths.</b> Turn a recorded physics experiment into a motion sculpture you can explore.</p><div class="actions"><button class="primary" id="replay">Replay the experiment ↻</button><a class="button" href="scene.usdc" download>Open in Blender ↓</a></div></div>
+</section>
+<section class="lab" aria-label="Twelve recorded Newton worlds">
+<div class="lab-header"><div class="lab-title"><span>●</span> 12 WORLDS / ONE SHARED CLOCK</div><div class="modes" aria-label="Presentation"><button id="sculpture" aria-pressed="true">Time sculpture</button><button id="overlay" aria-pressed="false">Motion overlay</button></div></div>
+<div class="workspace">
+<div class="stage">
+<canvas id="scene" tabindex="0" role="img" aria-label="Recorded pendulum tip trajectories. Drag horizontally or use camera buttons to rotate."></canvas>
+<div class="stamp"><small>RECORDED SIMULATION TIME</small><strong><span id="time">0.000</span> s</strong></div>
+<div class="axis-note" id="axis-note"></div>
+<div class="camera" aria-label="Camera"><button id="rotate-left" aria-label="Rotate camera left">↶</button><button id="reset-view">Reset view</button><button id="rotate-right" aria-label="Rotate camera right">↷</button></div>
+</div>
+<aside class="inspector">
+<div><div class="caption">Tip separation / same sample</div><div class="distance"><span id="distance"></span><small> m</small></div><div class="pair"><strong id="pair"></strong> · vs. world 01</div></div>
+<div class="metrics"><div><small>Release difference</small><strong id="angle"></strong></div><div><small>Initial tip distance</small><strong id="initial-distance"></strong></div></div>
+<div class="graph-panel"><div class="caption">Distance from world 01</div><canvas id="graph" role="img" aria-label="Distance from reference versus recorded simulation time"></canvas><div class="graph-label"><span>0 s</span><span id="graph-end"></span></div></div>
+<div class="world-panel"><div class="caption">Choose a world to compare</div><div class="worlds" id="worlds" role="group" aria-label="Recorded world"></div></div>
+<div class="source-note">Adjacent releases differ by 0.05°; the full sweep spans 0.55°. Colors identify isolated worlds. Distances use original 3D poses.</div>
+</aside>
+</div>
+<div class="controls">
+<div class="timeline-label"><label for="timeline" id="counter"></label><span id="dcc-frame"></span></div>
+<input id="timeline" type="range" min="0" step="1" value="0" aria-label="Recorded sample">
+<div class="transport"><div class="buttons"><button id="prev" aria-label="Previous sample">←</button><button id="play">Play ▶</button><button id="next" aria-label="Next sample">→</button><button id="start">Start together</button><button id="peak">Largest separation</button></div><div class="buttons"><label class="rate" for="rate">Speed<select id="rate"><option value=".5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label><button id="share">Share this view ↗</button></div></div>
+<p class="status" id="status" role="status">Paused at the largest recorded separation. Replay to see how it began.</p>
+</div>
+</section>
+<section class="below">
+<article><span class="index">01 / A SMALL PERTURBATION</span><h2>Same setup. Different release.</h2><p>Newton advances 12 isolated worlds on CPU. Two 1.6 m links per world, identical gravity, zero initial velocity. Only the starting angle changes.</p><p><b id="sample-count"></b> samples per world, including the initial state. No policy or model call.</p></article>
+<article><span class="index">02 / A SCULPTURE OF TIME</span><h2>Walk around the experiment.</h2><p>Motion overlay puts the recorded paths on the same axes. Time sculpture spreads samples along a depth axis: <b>depth represents time</b>, not physical travel. Trails end at the selected sample.</p><p>Drag sideways or use the camera buttons. Step, scrub or share the exact sample and world.</p></article>
+<article><span class="index">03 / AN EDITABLE SCENE</span><h2>Take the motion into Blender.</h2><p>Import <code>scene.usdc</code> and set Blender to <b>30 fps</b>. The 24 animated links retain every source pose. World groups are spaced along Y for viewing.</p><div class="actions"><a class="button" href="trace.json" download>Source poses ↓</a><a class="button" href="https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md">Reproduce ↗</a></div></article>
+</section>
+</main>
+<footer>Recorded Newton physics; the browser renders source poses and does not run a simulator. Measured separation describes this experiment. <a href="manifest.json" download>Source hashes</a> · <a href="https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md">Method & native checks</a> · Code and procedural scene: Apache-2.0.</footer>
+<script id="chaos-data" type="application/json">__TRACE__</script>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),trace=JSON.parse($('chaos-data').textContent),frames=trace.frames,worlds=trace.worlds;
+const canvas=$('scene'),ctx=canvas.getContext('2d'),graph=$('graph'),gc=graph.getContext('2d');
+let sample=trace.summary.peak.frame,selected=trace.summary.peak.world,mode='sculpture',yaw=.6,pitch=.27,playing=false,lastTick=0,animation=0,W=900,H=530;
+function point(p,v){const[x,y,z,w]=p.slice(3),[a,b,c]=v,tx=2*(y*c-z*b),ty=2*(z*a-x*c),tz=2*(x*b-y*a);return[p[0]+a+w*tx+y*tz-z*ty,p[1]+b+w*ty+z*tx-x*tz,p[2]+c+w*tz+x*ty-y*tx];}
+const tips=worlds.map((w)=>frames.map(f=>point(f.poses[w.id*2+1],[.8,0,0])));
+const distances=tips.map(path=>path.map((p,i)=>Math.hypot(...p.map((v,k)=>v-tips[0][i][k]))));
+const duration=frames.at(-1).sim_time;
+function viewPoint(p,i){return[p[0],mode==='sculpture'?(frames[i].sim_time-duration/2)*.65:p[1],p[2]];}
+function project(p){const[x,y,z]=p,u=Math.cos(yaw)*x-Math.sin(yaw)*y,d=Math.sin(yaw)*x+Math.cos(yaw)*y;const scale=Math.min(W/(mode==='sculpture'?12:8.6),H/9.2);return[W*.5+u*scale,H*.53+(-Math.cos(pitch)*(z-3.8)+Math.sin(pitch)*d)*scale];}
+function path(points,color,width,alpha=1,glow=0){ctx.beginPath();points.forEach((p,i)=>{const[x,y]=project(p);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.strokeStyle=color;ctx.lineWidth=width;ctx.globalAlpha=alpha;ctx.shadowColor=color;ctx.shadowBlur=glow;ctx.stroke();ctx.shadowBlur=0;ctx.globalAlpha=1;}
+function dot(p,color,r){const[x,y]=project(p);ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=color;ctx.shadowBlur=12;ctx.shadowColor=color;ctx.fill();ctx.shadowBlur=0;}
+function draw(){
+ ctx.clearRect(0,0,W,H);
+ const depth=mode==='sculpture'?duration*.325:3;
+ for(let x=-4;x<=4;x++)path([[x,-depth,0],[x,depth,0]],'#526487',.65,.24);
+ for(let y=-Math.ceil(depth);y<=depth;y++)path([[-4,y,0],[4,y,0]],'#526487',.65,.24);
+ path([[-4,-depth,0],[-4,depth,0]],'#9aa9e0',1,.5);
+ ctx.fillStyle='#7885a5';ctx.font='10px ui-monospace,monospace';
+ for(const[t,label]of [[0,'0 s'],[frames.length-1,`${duration} s`]]){if(mode==='sculpture'){const[x,y]=project([-4,(frames[t].sim_time-duration/2)*.65,0]);ctx.fillText(label,x-16,y+15);}}
+ const order=worlds.filter(w=>w.id!==selected&&w.id!==0).concat(worlds[0],...(selected===0?[]:[worlds[selected]]));
+ for(const w of order){
+  const active=w.id===selected,reference=w.id===0;
+  const trail=tips[w.id].slice(0,sample+1).map((p,i)=>viewPoint(p,i));
+  path(trail,w.color,active?2.2:reference?1.5:1,active?.95:reference?.8:.48,active?5:0);
+  const upper=frames[sample].poses[w.id*2],lower=frames[sample].poses[w.id*2+1];
+  const a=viewPoint(trace.anchor_m,sample),b=viewPoint(point(upper,[.8,0,0]),sample),c=viewPoint(point(lower,[.8,0,0]),sample);
+  path([a,b,c],w.color,active?3.4:1.4,active?1:.45,active?7:0);
+  dot(c,w.color,active?5:2.5);if(active){dot(a,'#edf3ff',3);dot(b,w.color,3);}
+ }
+ if(selected!==0){ctx.setLineDash([4,5]);path([viewPoint(tips[0][sample],sample),viewPoint(tips[selected][sample],sample)],'#ffffff',1,.6);ctx.setLineDash([]);}
+}
+function drawGraph(){
+ const width=graph.clientWidth,height=graph.clientHeight,dpr=Math.min(devicePixelRatio||1,2);
+ graph.width=Math.round(width*dpr);graph.height=Math.round(height*dpr);gc.setTransform(dpr,0,0,dpr,0,0);
+ const values=distances[selected],max=Math.max(.01,...values),px=i=>3+i/(frames.length-1)*(width-6),py=d=>height-6-d/max*(height-16);
+ gc.strokeStyle='#333c55';gc.beginPath();gc.moveTo(0,height-5);gc.lineTo(width,height-5);gc.stroke();
+ gc.beginPath();values.forEach((d,i)=>i?gc.lineTo(px(i),py(d)):gc.moveTo(px(i),py(d)));gc.strokeStyle=worlds[selected].color;gc.lineWidth=1.6;gc.stroke();
+ gc.fillStyle='#eef3ff';gc.beginPath();gc.arc(px(sample),py(values[sample]),3,0,Math.PI*2);gc.fill();
+ gc.fillStyle='#a5adc8';gc.font='9px ui-monospace,monospace';gc.fillText(`${max.toFixed(2)} m`,3,9);
+}
+function seek(value){
+ sample=Math.max(0,Math.min(frames.length-1,Math.round(Number.isFinite(value)?value:0)));
+ $('timeline').value=sample;$('counter').textContent=`Sample ${sample} / ${frames.length-1}`;
+ $('dcc-frame').textContent=`Blender frame ${sample+1}`;$('time').textContent=frames[sample].sim_time.toFixed(3);
+ $('distance').textContent=distances[selected][sample].toFixed(3);$('pair').textContent=`World ${String(selected+1).padStart(2,'0')}`;
+ $('angle').textContent=`+${worlds[selected].angle_offset_deg.toFixed(2)}°`;
+ $('initial-distance').textContent=trace.summary.initial_tip_distances_m[selected].toFixed(4)+' m';
+ $('prev').disabled=sample===0;$('next').disabled=sample===frames.length-1;
+ draw();drawGraph();
+}
+function pause(){playing=false;cancelAnimationFrame(animation);lastTick=0;$('play').textContent='Play ▶';$('status').textContent='Paused. Inspect the selected recorded sample.';}
+function tick(now){
+ if(!playing)return;
+ if(!lastTick)lastTick=now;
+ const rate=Number($('rate').value),count=Math.floor((now-lastTick)*trace.fps*rate/1000);
+ if(count){seek(sample+count);lastTick+=count*1000/(trace.fps*rate);}
+ if(sample===frames.length-1){pause();$('status').textContent='End of the recorded experiment.';}else animation=requestAnimationFrame(tick);
+}
+function play(){if(sample===frames.length-1)seek(0);playing=true;lastTick=0;$('play').textContent='Pause Ⅱ';$('status').textContent='Playing recorded samples. The browser does not resimulate.';animation=requestAnimationFrame(tick);}
+function chooseWorld(value){selected=Math.max(0,Math.min(worlds.length-1,value));document.querySelectorAll('#worlds button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===selected)));seek(sample);}
+function camera(){yaw=mode==='sculpture'?.6:0;pitch=mode==='sculpture'?.27:0;}
+function presentation(value){mode=value==='overlay'?'overlay':'sculpture';$('overlay').setAttribute('aria-pressed',String(mode==='overlay'));$('sculpture').setAttribute('aria-pressed',String(mode==='sculpture'));$('axis-note').textContent=mode==='sculpture'?'X / Z = PHYSICAL POSITION · DEPTH = TIME\nDRAG SIDEWAYS TO ORBIT':'X / Z = PHYSICAL POSITION · WORLDS OVERLAID\nDASHED LINE = CURRENT TIP SEPARATION';camera();draw();}
+function fromHash(){
+ if(!location.hash)return;
+ const params=new URLSearchParams(location.hash.slice(1));
+ const integer=(key,fallback)=>{const text=params.get(key);const n=Number(text);return text!==null&&/^\d+$/.test(text)&&Number.isSafeInteger(n)?n:fallback;};
+ chooseWorld(integer('world',selected));presentation(params.get('view')||mode);seek(integer('frame',sample));
+ $('status').textContent='Paused at the shared sample and world.';
+}
+for(const w of worlds){const b=document.createElement('button');b.textContent=String(w.id+1).padStart(2,'0');b.style.setProperty('--world',w.color);b.setAttribute('aria-label',`World ${w.id+1}, +${w.angle_offset_deg.toFixed(2)} degrees`);b.setAttribute('aria-pressed',String(w.id===selected));const swatch=document.createElement('i');b.prepend(swatch);b.onclick=()=>chooseWorld(w.id);$('worlds').append(b);}
+$('timeline').max=frames.length-1;$('graph-end').textContent=duration+' s';$('sample-count').textContent=frames.length;
+$('timeline').oninput=()=>{pause();seek(Number($('timeline').value));$('status').textContent='Paused at the selected recorded sample.';};
+$('prev').onclick=()=>{pause();seek(sample-1);};$('next').onclick=()=>{pause();seek(sample+1);};
+$('play').onclick=()=>playing?pause():play();
+$('replay').onclick=()=>{pause();seek(0);play();};
+$('start').onclick=()=>{pause();seek(0);$('status').textContent='Initial state, before the first physics step.';};
+$('peak').onclick=()=>{pause();chooseWorld(trace.summary.peak.world);seek(trace.summary.peak.frame);$('status').textContent='Largest recorded tip distance from world 01, across all worlds and samples.';};
+$('rate').onchange=()=>{lastTick=0;};
+$('sculpture').onclick=()=>presentation('sculpture');$('overlay').onclick=()=>presentation('overlay');
+$('rotate-left').onclick=()=>{yaw-=.2;draw();};$('rotate-right').onclick=()=>{yaw+=.2;draw();};$('reset-view').onclick=()=>{camera();draw();};
+$('share').onclick=async()=>{
+ const url=new URL(location.href);url.hash=new URLSearchParams({frame:sample,world:selected,view:mode}).toString();history.replaceState(null,'',url);
+ if(location.protocol==='file:'){$('status').textContent=`Share this folder; use ${url.hash} to restore the sample, world and mode.`;return;}
+ try{await navigator.clipboard.writeText(url.href);$('status').textContent='Sample, world and view link copied.';}catch{$('status').textContent='Copy this page URL to share the sample, world and view.';}
+};
+let drag=null;
+canvas.addEventListener('pointerdown',event=>{if(event.button!==0)return;drag={id:event.pointerId,x:event.clientX,yaw};canvas.setPointerCapture(event.pointerId);canvas.classList.add('dragging');});
+canvas.addEventListener('pointermove',event=>{if(drag?.id===event.pointerId){yaw=drag.yaw+(event.clientX-drag.x)*.007;draw();}});
+function endDrag(){drag=null;canvas.classList.remove('dragging');}
+canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);canvas.addEventListener('lostpointercapture',endDrag);
+document.addEventListener('keydown',event=>{
+ if(['INPUT','SELECT','BUTTON','A'].includes(event.target.tagName))return;
+ if(event.code==='Space'){event.preventDefault();$('play').click();}
+ if(event.code==='ArrowRight'){event.preventDefault();$('next').click();}
+ if(event.code==='ArrowLeft'){event.preventDefault();$('prev').click();}
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
+addEventListener('hashchange',()=>{pause();fromHash();});
+function resize(){const dpr=Math.min(devicePixelRatio||1,2);W=canvas.clientWidth;H=canvas.clientHeight;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();drawGraph();}
+new ResizeObserver(resize).observe(canvas);
+resize();presentation(mode);seek(sample);fromHash();
+})();
+</script>
+</body>
+</html>
