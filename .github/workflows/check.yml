@@ -44,3 +44,8 @@ jobs:
         run: |
           robot-reel newton --seconds 1 --output artifacts/newton-ci
           robot-reel newton --output artifacts/newton-ci --verify --check-usd
+      - name: Record twelve isolated worlds and check the complete sweep export
+        run: |
+          python -m robot_reel.chaos --seconds 1 --output artifacts/chaos-ci
+          python -m robot_reel.chaos --output artifacts/chaos-ci --verify --check-usd
+          python -m robot_reel.chaos --output docs/chaos --verify --check-usd

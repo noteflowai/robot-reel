@@ -1,0 +1,9 @@
+Robot Reel / The Butterfly Lab
+
+Code, generated scene and recorded data: Apache-2.0.
+Procedural geometry; no third-party visual assets or AI-generated frames.
+Simulation: Newton 1.6.0 (Apache-2.0) and Warp 1.17.0 (Apache-2.0).
+12 isolated CPU worlds; the browser renders previously recorded poses.
+Time sculpture maps time to presentation depth. USD parents space worlds along Y.
+Local source poses remain unchanged. Blender import: set the frame rate to 30 fps.
+Offline: open index.html. Links to other Robot Reel scenes need the full site.
