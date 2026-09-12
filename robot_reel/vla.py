@@ -26,7 +26,7 @@ def validate_trace(trace):
     if trace.get("channels") != CHANNELS or trace.get("state_units") != ["m", "m", "m", "rad", "rad", "rad", "m", "m"]:
         raise ValueError("VLA channel convention mismatch")
     source = trace.get("source", {})
-    if not isinstance(source, dict) or source.get("kind") != "policy_rollout" or source.get("device") != "cpu" or source.get("control_mode") != "relative":
+    if not isinstance(source, dict) or source.get("kind") != "policy_rollout" or source.get("device") not in ("cpu", "cuda") or source.get("control_mode") != "relative":
         raise ValueError("Unsupported VLA provenance")
     if source.get("policy") != "HuggingFaceVLA/smolvla_libero" or source.get("versions", {}).get("lerobot") != "0.6.1":
         raise ValueError("Unsupported policy adapter")
@@ -44,7 +44,8 @@ def validate_trace(trace):
         not isinstance(result, dict) or type(result.get("max_steps")) is not int
         or not 1 <= result["max_steps"] <= 280
         or not numbers([result.get("wall_seconds")], 1) or result["wall_seconds"] < 0
-        or type(trace.get("seed")) is not int or trace.get("initial_state_id") != 0
+        or type(trace.get("seed")) is not int
+        or type(trace.get("initial_state_id")) is not int or not 0 <= trace["initial_state_id"] < 50
     ):
         raise ValueError("Invalid VLA run metadata")
     start = result.get("start_sim_time")

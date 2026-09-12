@@ -21,6 +21,7 @@
 </p>
 
 <p align="center">
+  <a href="https://noteflowai.github.io/robot-reel/stress/"><strong>◉ 体验策略压力实验室</strong></a> &nbsp; · &nbsp;
   <a href="https://noteflowai.github.io/robot-reel/chaos/"><strong>✦ 进入蝴蝶效应实验室</strong></a> &nbsp; · &nbsp;
   <a href="https://noteflowai.github.io/robot-reel/remix/"><strong>◐ 拖动体验前后对照</strong></a> &nbsp; · &nbsp;
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><strong>下载演示包 ↓</strong></a> &nbsp; · &nbsp;
@@ -29,7 +30,32 @@
 
 <p align="center"><sub>观看无需安装，无需账号。封面各面板展示独立录制的运行。</sub></p>
 
-## 新场景 / 起点只差 0.05°，轨迹渐行渐远
+## 新场景 / 换一束光，看策略如何改变
+
+**策略压力实验室。** 让 SmolVLA 在参考光照、降低灯光强度和移动相机三种条件下，
+从十组配对初始状态执行同一个任务，保留 **30 次真实闭环运行**。
+点击结果矩阵查看任意成功或失败样本，对照策略的两个相机视角，
+逐帧检查动作和推理记录，一键跳到实测末端轨迹差异最大的位置。
+使用 **NVIDIA L40S / CUDA 推理**，每份记录均包含硬件信息和实测耗时。
+
+<a href="https://noteflowai.github.io/robot-reel/stress/">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/stress/poster.png">
+    <img src="docs/stress/preview.gif" width="100%" alt="同一初始状态下的三次 SmolVLA 真实运行：参考光照、降低灯光强度和移动相机。每个视图保留源样本编号及实际结果。">
+  </picture>
+</a>
+
+**[对照策略运行 ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
+[完整离线实验包 ↓](https://noteflowai.github.io/robot-reel/stress/experiment.zip) ·
+[MCAP 遥测数据 ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
+[复现与检查](docs/stress.md)
+
+<sub>一个任务 × 三种原生场景条件 × 十个配对种子；每次固定最多 160 个动作、
+8 秒仿真时间。保留全部试次，执行错误另记入尝试历史；提供实际控制量、测量状态、
+分开的推理／仿真耗时及各条件置信区间。这是受控诊断实验，不是 LIBERO 官方榜单成绩。
+预览按仿真时间播放；提前结束的运行明确标注停留在最后一个真实样本。</sub>
+
+## 起点只差 0.05°，轨迹渐行渐远
 
 **蝴蝶效应实验室。** 12 个隔离的 Newton 仿真世界从几乎相同的姿态出发，
 实测轨迹逐渐展开成彩色的三维时间雕塑。拖动旋转，切换运动叠加视图，
@@ -144,6 +170,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 
 | 我想…… | 从这里开始 |
 | --- | --- |
+| 用 GPU 运行配对策略压力实验 | [CUDA 环境、固定实验与证据校验](docs/stress.md) |
 | 在本地运行 SmolVLA | [独立 CPU 环境与固定模型版本](docs/vla.md) |
 | 让 Agent 为实验编排成片 | [MCP 配置与 Blender 构建／渲染](docs/director.md) |
 | 把真实物理过程导入三维软件 | [Newton → OpenUSD → Blender](docs/newton.md) |
