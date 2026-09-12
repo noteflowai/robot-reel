@@ -50,7 +50,8 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 ```
 
 [![在 Colab 中打开](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/noteflowai/robot-reel/blob/main/examples/quickstart.ipynb)
-也可以构建 [Docker 镜像](Dockerfile)，在容器里运行同样的检查。
+也可以使用[经过验证的安装包或普通用户 Docker 镜像](docs/distribution.md)；
+安装包发布在 GitHub Releases，容器支持按宿主机 UID/GID 写出文件。
 录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)；浏览器演示什么都不用装。
 
 

@@ -1,5 +1,6 @@
 import copy
 from html.parser import HTMLParser
+from importlib.resources import files
 import json
 from pathlib import Path
 import shutil
@@ -35,6 +36,20 @@ class StressTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.plan, cls.attempts, cls.traces = load_collection(SITE)
+
+    def test_packaged_notices_and_methods_match_the_maintained_sources(self):
+        root = SITE.parents[1]
+        resources = files("robot_reel").joinpath("resources", "stress")
+        for source, bundled in (
+            ("licenses/VLA-MEDIA-NOTICE.txt", "NOTICE.txt"),
+            ("LICENSE", "LICENSE.txt"),
+            ("docs/stress.md", "METHODS.txt"),
+        ):
+            with self.subTest(source=source):
+                self.assertEqual(
+                    (root/source).read_bytes(), resources.joinpath(bundled).read_bytes(),
+                    f"Refresh robot_reel/resources/stress/{bundled} from {source}",
+                )
 
     def test_published_pack_keeps_all_thirty_trials_and_attempt_history(self):
         from scripts.build_stress_showcase import verify_preview

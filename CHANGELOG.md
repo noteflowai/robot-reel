@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 0.5.0 — Paired policy inspection and verified distributions
+
+- Bundle Stress export notices, license and methods as package resources. Build
+  a wheel from the source distribution, install it in a fresh environment, and
+  export all thirty trials outside the checkout, checking videos, MCAP records
+  and the complete offline archive.
+- Gate Pages and tagged releases on the same six validation jobs. Require
+  matching tag, package and changelog versions; publish the tested distributions
+  and native Rerun recording with SHA-256 checksums. PyPI publishing is opt-in
+  after trusted-publisher setup.
+- Run the Docker image as an unprivileged user with a regular package install.
+  Check the default command, writable output, and an actual storyboard export
+  through a bind mount using a different UID/GID.
+
 - Add a native Rerun inspection workspace: select a paired seed, open six embedded
   videos alongside measured 3D paths, applied controls and inference timings, or
   download the portable RRD. Read back native poses, controls, source JSON, video

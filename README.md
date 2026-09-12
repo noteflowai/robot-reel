@@ -50,7 +50,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 ```
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/noteflowai/robot-reel/blob/main/examples/quickstart.ipynb)
-Or build the [Docker image](Dockerfile) and run the same check in a container.
+Or use the [verified installation packages or non-root Docker image](docs/distribution.md).
 Recording new runs needs the [full runtime](docs/recording.md); the browser demos need nothing.
 
 

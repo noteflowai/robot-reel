@@ -5,6 +5,7 @@ import argparse
 import csv
 import html
 import io
+from importlib.resources import files
 import json
 from pathlib import Path
 import re
@@ -13,7 +14,6 @@ import zipfile
 
 from .stress import CONDITIONS, MEDIA, SCHEMA, file_hash, summarize, trial_id, validate_plan, verify_run, write_json
 
-ROOT = Path(__file__).resolve().parents[1]
 MARKER = '<script id="stress-data" type="application/json">'
 # Only the published experiment uses this release asset. Custom builds link to
 # their own local archive unless the caller explicitly supplies another location.
@@ -206,8 +206,9 @@ def build(recording, output, archive_href="experiment.zip"):
     (output/"results.csv").write_text(csv_text(traces))
     export_mcap(traces, output/"telemetry.mcap")
     write_json(output/"media-checks.json", check_media(output))
-    for source, name in (("licenses/VLA-MEDIA-NOTICE.txt", "NOTICE.txt"), ("LICENSE", "LICENSE"), ("docs/stress.md", "METHODS.md")):
-        shutil.copyfile(ROOT/source, output/name)
+    resources = files("robot_reel").joinpath("resources", "stress")
+    for source, name in (("NOTICE.txt", "NOTICE.txt"), ("LICENSE.txt", "LICENSE"), ("METHODS.txt", "METHODS.md")):
+        (output/name).write_bytes(resources.joinpath(source).read_bytes())
     (output/"index.html").write_text(page(data, archive_href))
     write_json(output/"manifest.json", {"schema": SCHEMA, "files": {name: file_hash(output/name) for name in sorted(required_files(attempts))}})
     with zipfile.ZipFile(output/"experiment.zip", "w", zipfile.ZIP_DEFLATED) as archive:
