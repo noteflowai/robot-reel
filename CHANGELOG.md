@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Hold every published page inside a compressed transfer budget, measured the
+  way GitHub Pages serves them. The Stress Lab page is 1.26 MiB of the 1.50 MiB
+  limit.
+
 - Document opening the Stress Lab's MCAP telemetry in Foxglove, with FoxQL
   expressions for paired conditions, controls and inference timing, and record
   what Rerun decodes today. A test resolves every documented expression and
