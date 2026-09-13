@@ -1,5 +1,9 @@
 # 面向关注 PAI 创新场景客户的介绍
 
+可直接发给客户：
+
+> Robot Reel 是一个把物理 AI 变成可交互创新场景的开源实验台：既能对照机器人策略在不同光照和视角下的真实运行，也能旋转查看 GPU 布料形变、探索蝴蝶效应轨迹，并把原始物理记录带入 Blender 制作三维内容。新增 Cloth Lab 在 NVIDIA L40S 上运行三组独立布料实验，保留每个顶点的位置和速度，并通过 OpenUSD、Blender 逐项读回核验。客户无需安装即可在网页体验，也可下载离线实验、场景和原始数据，进一步开展具身智能概念验证、策略复盘与三维创作。
+
 首页提供三步导览：先对照同一初始状态下策略的不同结局，再同步检查双相机、
 三维轨迹和动作，最后复制命令校验完整实验。客户也可按策略运行、实验对照和
 三维创作筛选场景；动态预览按需播放，便于在演示、移动设备和自主探索之间切换。
@@ -36,6 +40,7 @@ Markdown，接收方导入后恢复相同的实验、视角和样本位置，并
 
 - 原始仿真 → 电影场景：https://noteflowai.github.io/robot-reel/remix/
 - 策略压力实验室：https://noteflowai.github.io/robot-reel/stress/
+- GPU 布料实验室：https://noteflowai.github.io/robot-reel/cloth/
 - 蝴蝶效应实验室：https://noteflowai.github.io/robot-reel/chaos/
 - VLA 双视角任务回放：https://noteflowai.github.io/robot-reel/vla/
 - Agent 导演：https://noteflowai.github.io/robot-reel/director/
@@ -52,3 +57,6 @@ Markdown，接收方导入后恢复相同的实验、视角和样本位置，并
 项目未声称已接入某一厂商名为 PAI 的托管平台。各类模型与媒体保留上游许可。
 蝴蝶效应实验室展示固定设置下的仿真敏感性；雕塑深度表示时间，不是物理位移，
 也不代表策略鲁棒性或实机测试结论。
+布料实验只改变 Newton 弯曲系数，未启用碰撞或自碰撞；页面显示的几何差异
+不代表真实织物标定、材料应力或实物测试结果。新场景可直接在网页观看，
+重新录制需使用当前源码；既有 0.6.0 安装包保持原发布内容。

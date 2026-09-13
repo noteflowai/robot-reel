@@ -18,7 +18,7 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI status"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="Latest release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="Code license: Apache-2.0"></a>
-  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-12%20replays-ffca85" alt="Live demos: 12 replays"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-13%20replays-ffca85" alt="Live demos: 13 replays"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -62,7 +62,33 @@ Or use the [verified installation packages or non-root Docker image](docs/distri
 Recording new runs needs the [full runtime](docs/recording.md); the browser demos need nothing.
 
 
-## New / Same task. Change the view.
+## New / Same sheet. Three ways to fall.
+
+**Cloth Lab.** Release three independent Newton cloth simulations on **NVIDIA
+L40S**, changing only the bending coefficient. Orbit the deforming meshes,
+overlay them on the same clock, and compare measured vertex motion.
+Every one of the **42,471 vertex samples** is retained in the source data and
+checked through OpenUSD and Blender.
+
+<a href="https://noteflowai.github.io/robot-reel/cloth/">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/cloth/poster.png">
+    <img src="docs/cloth/preview.gif" width="100%" alt="Three actual Newton CUDA cloth recordings with identical grids and clamps, but different bending coefficients. Each preview frame identifies its source sample and simulation time.">
+  </picture>
+</a>
+
+**[Release the sheets ↗](https://noteflowai.github.io/robot-reel/cloth/)** ·
+[Offline experiment](https://noteflowai.github.io/robot-reel/cloth/experiment.zip) ·
+[Editable OpenUSD](https://noteflowai.github.io/robot-reel/cloth/scene.usdc) ·
+[Method, limits & reproduction](docs/cloth.md)
+
+The coefficients are solver settings, not calibrated fabric properties. Colors
+identify cases; the page reports geometric diagnostics and preserves original
+float32 positions and velocities. No collisions or self-contact are modeled.
+The browser needs no GPU; recording new runs uses the optional Newton runtime
+from the current source checkout.
+
+## Same task. Change the view.
 
 **The Stress Lab.** SmolVLA runs the same task under reference lighting, reduced
 light and a shifted camera. Explore **30 real closed-loop trials** across ten

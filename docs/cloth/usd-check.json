@@ -1,0 +1,8 @@
+{
+  "checked_vertex_samples": 42471,
+  "maximum_position_error_m": 0.0,
+  "maximum_velocity_error_m_s": 0.0,
+  "positions_sha256": "ddd70455f3e7655f1dbf0977f949ac17b0aeea45b754ede6e79718688fd9e094",
+  "velocities_sha256": "41e027b4607a642956e39cdcdd6f086d02bddfa991335f2aea1bf3c846e8d142",
+  "usd_sha256": "8cbc0b87d4ec75764553ba71e7c533060e2598140c0c301ae22ddc806f9ad953"
+}

@@ -18,7 +18,7 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI 检查状态"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="最新发布版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="代码许可证：Apache-2.0"></a>
-  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-12%20replays-ffca85" alt="在线演示：12 个回放"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-13%20replays-ffca85" alt="在线演示：13 个回放"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -63,7 +63,30 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)；浏览器演示什么都不用装。
 
 
-## 新场景 / 换一束光，看策略如何改变
+## 新场景 / 同一张布，三种形变
+
+**布料实验室 Cloth Lab。** 在 **NVIDIA L40S** 上运行三组独立 Newton
+布料仿真，网格、固定边、质量和重力完全相同，只改变弯曲系数。
+旋转观察形变，叠加对照同一时刻的网格，逐帧检查差异，再把场景带进 Blender。
+原始数据保留全部 **42,471 个顶点样本**，并经过 OpenUSD 和 Blender 原生读回校验。
+
+<a href="https://noteflowai.github.io/robot-reel/cloth/">
+  <picture>
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/cloth/poster.png">
+    <img src="docs/cloth/preview.gif" width="100%" alt="三组真实 Newton CUDA 布料录制使用相同网格与固定条件，只改变弯曲系数。每个预览画面标明原始样本和仿真时间。">
+  </picture>
+</a>
+
+**[释放三张布，开始体验 ↗](https://noteflowai.github.io/robot-reel/cloth/)** ·
+[完整离线实验](https://noteflowai.github.io/robot-reel/cloth/experiment.zip) ·
+[可编辑 OpenUSD](https://noteflowai.github.io/robot-reel/cloth/scene.usdc) ·
+[方法、边界与复现](docs/cloth.md)
+
+弯曲系数是求解器设置，不代表经过标定的真实织物属性；颜色用于区分实验。
+页面同时给出几何诊断，保留原始 float32 位置和速度。本场景未启用碰撞或自碰撞。
+网页观看无需 GPU；重新录制可从当前源码安装可选 Newton 环境。
+
+## 换一束光，看策略如何改变
 
 **策略压力实验室。** 让 SmolVLA 在参考光照、降低灯光强度和移动相机三种条件下，
 从十组配对初始状态执行同一个任务，保留 **30 次真实闭环运行**。

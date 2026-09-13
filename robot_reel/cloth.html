@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cloth Lab · Robot Reel</title>
+<meta name="description" content="Three real Newton cloth recordings on one clock. Orbit the deforming meshes, compare measured motion, and take every vertex into Blender.">
+<meta property="og:title" content="Cloth Lab · Same sheet. Three ways to fall.">
+<meta property="og:image" content="https://noteflowai.github.io/robot-reel/cloth/poster.png">
+<style>
+:root{color-scheme:dark;--bg:#09121b;--panel:#101e2a;--line:#30414f;--text:#edf4ef;--muted:#a7bac6;--mint:#79dfc3;--violet:#c1b1ff}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:radial-gradient(ellipse at 80% 0,#202139 0,transparent 48%),var(--bg);color:var(--text);font:15px/1.6 system-ui,sans-serif}
+header,main,footer{max-width:1240px;margin:auto;padding:24px 32px}header{display:flex;justify-content:space-between;align-items:center;gap:20px}.brand{font-weight:750}.brand span{color:var(--mint)}a{color:inherit;text-decoration:none}nav{display:flex;gap:20px;font-size:12px;color:var(--muted)}
+button,a,input,select{touch-action:manipulation}button,.button{font:inherit;color:inherit;border:1px solid var(--line);background:#192937;border-radius:999px;padding:9px 14px;cursor:pointer;display:inline-block}button:hover,.button:hover{border-color:var(--mint)}button:disabled{opacity:.4;cursor:default}button[aria-pressed=true]{border-color:var(--mint);background:#203f40}button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible,select:focus-visible{outline:3px solid #ffca85;outline-offset:3px}
+.intro{display:grid;grid-template-columns:1fr .7fr;gap:50px;align-items:center;margin:14px 0 32px}.kicker,.caption{font:11px/1.5 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.11em;color:var(--mint)}h1{font-size:clamp(39px,5.6vw,68px);letter-spacing:-2px;line-height:1.02;margin:14px 0}h1 em{font-style:normal;color:var(--violet)}.intro p{color:var(--muted);max-width:42ch}.intro b{color:var(--text)}.actions{display:flex;gap:9px;flex-wrap:wrap}.primary{background:var(--mint);color:#09251e;border-color:var(--mint);font-weight:650}
+.lab{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--panel);box-shadow:0 20px 90px #0005}.lab-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:15px 20px;border-bottom:1px solid var(--line)}.lab-head .caption{color:var(--muted);font-size:10px}.modes{display:flex;gap:6px}.modes button{font-size:12px;padding:6px 12px}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 280px}.stage{position:relative;min-width:0;background:radial-gradient(ellipse at 50% 50%,#192c39,transparent 75%),#0b1722}#scene{display:block;width:100%;height:500px;touch-action:pan-y;cursor:grab}#scene.dragging{cursor:grabbing}.stamp{position:absolute;top:20px;left:24px;pointer-events:none}.stamp .caption{font-size:9px;color:var(--muted)}.stamp strong{display:block;font:30px ui-monospace,monospace;letter-spacing:-1px}.camera{position:absolute;bottom:18px;right:18px;display:flex;gap:6px}.camera button{font-size:11px;padding:6px 10px;background:#142431dd}.axis-note{position:absolute;bottom:62px;left:24px;font:9px/1.7 ui-monospace,monospace;color:var(--muted);pointer-events:none;max-width:85%}
+.inspector{padding:24px 20px;border-left:1px solid var(--line)}.inspector .caption{font-size:9px;color:var(--muted)}.distance{font:46px/1.3 ui-monospace,monospace;margin:5px 0;letter-spacing:-2px}.distance small{font-size:18px;color:var(--muted)}.pair{font-size:11px;color:var(--muted)}.cases{display:grid;gap:8px;margin:20px 0}.cases button{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:9px;font:12px ui-monospace,monospace;color:var(--case)}.cases button[aria-pressed=true]{border-color:var(--case);background:#253744}.cases small{font-size:9px;color:var(--muted)}.metrics{border-block:1px solid var(--line);padding:12px 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}.metrics strong{display:block;font:15px ui-monospace,monospace}.metrics small{font-size:10px;color:var(--muted)}#graph{display:block;width:100%;height:76px;margin:12px 0 0}.graph-label{display:flex;justify-content:space-between;font:9px ui-monospace,monospace;color:var(--muted)}.source-note{font-size:10px;color:var(--muted);margin:14px 0 0}
+.controls{padding:16px 20px;border-top:1px solid var(--line)}.time-label{display:flex;justify-content:space-between;gap:10px;font:10px ui-monospace,monospace;color:var(--muted)}#timeline{width:100%;accent-color:var(--mint);margin:13px 0 15px}.transport{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.buttons{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.buttons button{font-size:12px;padding:7px 11px}#play{min-width:85px}.buttons label{font-size:11px;color:var(--muted)}select{background:var(--panel);color:var(--text);border:1px solid var(--line);padding:5px;border-radius:6px}.status{font-size:11px;min-height:18px;color:var(--muted);margin:12px 0 0}
+.below{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;margin:30px 0 0}.below article{border-top:1px solid var(--line);padding-top:16px}.below h2{font-size:18px;margin:6px 0 10px}.below p{font-size:13px;color:var(--muted)}.below .button{font-size:12px;padding:7px 12px}.below .caption{color:var(--violet)}code{font:12px ui-monospace,monospace}footer{font-size:11px;color:var(--muted)}footer a{text-decoration:underline}.skip{position:absolute;top:-100px;left:16px;z-index:4}.skip:focus{top:10px;background:var(--panel);padding:8px}
+@media(max-width:950px){.intro{grid-template-columns:1fr;gap:4px}.intro p{max-width:65ch}.workspace{grid-template-columns:1fr}.inspector{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}.cases{margin:0}.metrics{margin:0}.source-note{grid-column:1/-1;margin:0}#scene{height:480px}.below{gap:18px}}
+@media(max-width:540px){header,main,footer{padding:18px}nav{gap:12px;font-size:10px}h1{letter-spacing:-1.6px}.intro{margin:10px 0 24px}.intro p{font-size:14px}.lab{border-radius:14px}.lab-head{padding:12px}#scene{height:340px}.stamp{left:16px;top:16px}.stamp strong{font-size:24px}.axis-note{left:16px;font-size:8px;bottom:58px}.inspector{padding:16px;gap:14px}.distance{font-size:36px}.cases button{font-size:10px;padding:8px}.cases small{font-size:8px}.metrics strong{font-size:13px}.controls{padding:14px}.time-label{font-size:9px}.buttons button{font-size:10px;padding:7px 9px}.below{grid-template-columns:1fr;gap:16px}.below p{margin:8px 0}}
+</style></head><body>
+<a href="#main" class="skip">Skip to experiment</a>
+<header><a class="brand" href="https://noteflowai.github.io/robot-reel/">Robot<span>Reel</span></a><nav aria-label="Navigation"><a href="https://noteflowai.github.io/robot-reel/chaos/">Butterfly Lab</a><a href="https://github.com/noteflowai/robot-reel">GitHub ↗</a></nav></header>
+<main id="main">
+<section class="intro"><div><div class="kicker">Cloth Lab / recorded deformable physics</div><h1>Same sheet.<br><em>Three ways to fall.</em></h1></div><div><p>One grid, one clamp, one gravity field. Change only the <b>bending coefficient</b>. Orbit three real Newton recordings, then take every vertex into Blender.</p><div class="actions"><button id="replay" class="primary">Release all three ↻</button><a class="button" href="scene.usdc" download>OpenUSD scene ↓</a></div></div></section>
+<section class="lab" aria-label="Three recorded cloth simulations">
+<div class="lab-head"><div class="caption" id="device-label">3 independent simulations / one recorded clock</div><div class="modes" aria-label="Presentation"><button id="separate" aria-pressed="true">Side by side</button><button id="overlay" aria-pressed="false">Overlay</button></div></div>
+<div class="workspace"><div class="stage">
+<canvas id="scene" tabindex="0" role="img" aria-label="Three recorded cloth meshes. Drag sideways or use camera buttons to rotate. White dots mark fixed vertices."></canvas>
+<div class="stamp"><div class="caption">Recorded simulation time</div><strong><span id="time">0.000</span> s</strong></div>
+<div class="axis-note" id="axis-note"></div><div class="camera"><button id="rotate-left" aria-label="Rotate camera left">↶</button><button id="reset-view">Reset view</button><button id="rotate-right" aria-label="Rotate camera right">↷</button></div>
+</div><aside class="inspector">
+<div><div class="caption">Mesh RMS separation / same sample</div><div class="distance"><span id="distance"></span><small> m</small></div><div class="pair">Selected case vs. <code>edge_ke = 0.01</code></div></div>
+<div class="cases" id="cases" role="group" aria-label="Bending coefficient"></div>
+<div class="metrics"><div><small>Mean free-edge drop</small><strong id="drop"></strong></div><div><small>Maximum pin error</small><strong id="pin"></strong></div></div>
+<div><div class="caption">RMS distance from reference</div><canvas id="graph" role="img" aria-label="Selected mesh RMS separation over the full recorded timeline"></canvas><div class="graph-label"><span>0 s</span><span id="graph-end"></span></div></div>
+<p class="source-note">Colors identify cases, not stress. Metrics use original vertex coordinates; display spacing is excluded. Bending coefficients are solver settings, not calibrated fabric properties.</p>
+</aside></div>
+<div class="controls"><div class="time-label"><label for="timeline" id="counter"></label><span id="dcc-frame"></span></div><input type="range" id="timeline" min="0" step="1" value="0" aria-label="Recorded sample">
+<div class="transport"><div class="buttons"><button id="prev" aria-label="Previous sample">←</button><button id="play">Play ▶</button><button id="next" aria-label="Next sample">→</button><button id="start">Initial state</button><button id="peak">Largest difference</button></div><div class="buttons"><label for="rate">Speed <select id="rate"><option value=".25">0.25×</option><option value=".5">0.5×</option><option value="1" selected>1×</option></select></label><button id="share">Share sample ↗</button></div></div>
+<p id="status" class="status" role="status">Paused at the largest recorded RMS difference. Press release to see how it began.</p></div>
+</section>
+<section class="below">
+<article><div class="caption">01 / A controlled release</div><h2>Only bending changes.</h2><p>Each 0.96 × 0.64 m sheet has 117 vertices and 192 triangles. Two columns are fixed. Every free vertex has mass 0.01 kg; gravity is 9.81 m/s². All three start at rest.</p><p id="recording-note"></p><p>No collisions, self-contact or learned policy. The dashed outline shows the initial sheet.</p></article>
+<article><div class="caption">02 / Measured deformation</div><h2>The motion stays inspectable.</h2><p>RMS separation compares all 117 corresponding vertices at the same sample. Free-edge drop is the mean vertical displacement of its nine vertices from their initial height.</p><p id="strain-note"></p><p>These finite-step diagnostics describe this experiment; they are not a validation against real fabric.</p></article>
+<article><div class="caption">03 / From solver to scene</div><h2>Edit it in Blender.</h2><p>The USD stores original mesh points and velocities at every sample. Set Blender to <b>30 fps</b>, then import. Frame 1 is the untouched initial state. Native readback checks the deformation.</p><div class="actions"><a class="button" id="download-archive" __ARCHIVE_ATTR__ href="experiment.zip" download>Offline experiment ↓</a><a class="button" href="https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md">Method & reproduction ↗</a></div></article>
+</section></main>
+<footer>Recorded physics; this page renders saved vertices and does not run Newton. Code and procedural meshes: Apache-2.0. <a href="trace.json" download>Metadata</a> · <a href="positions.f32" download>Positions</a> · <a href="velocities.f32" download>Velocities</a> · <a href="manifest.json" download>Checksums</a><noscript><p>JavaScript is needed for interactive replay. Download the original data or USD scene using the links above.</p></noscript></footer>
+<script id="cloth-data" type="application/json">__CLOTH__</script>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),data=JSON.parse($('cloth-data').textContent),trace=data.trace,cases=trace.cases,n=trace.vertex_count,frames=trace.frame_count;
+const raw=Uint8Array.from(atob(data.positions_base64),c=>c.charCodeAt(0)),view=new DataView(raw.buffer);
+// Decode explicitly as little-endian, independent of the browser's native byte order.
+const values=new Float32Array(raw.length/4);for(let i=0;i<values.length;i++)values[i]=view.getFloat32(i*4,true);
+const canvas=$('scene'),ctx=canvas.getContext('2d'),graph=$('graph'),gc=graph.getContext('2d');
+let sample=trace.summary.peak.frame,selected=trace.summary.peak.case,mode='separate',yaw=-.48,pitch=.65,W=900,H=500,playing=false,tickStart=0,animation=0;
+const point=(f,c,i)=>{const p=((f*cases.length+c)*n+i)*3;return[values[p],values[p+1],values[p+2]];};
+const rms=cases.map((c,k)=>Array.from({length:frames},(_,f)=>Math.sqrt(Array.from({length:n},(_,i)=>{const p=point(f,k,i),r=point(f,0,i);return p.reduce((s,v,j)=>s+(v-r[j])**2,0);}).reduce((a,b)=>a+b,0)/n)));
+const drop=cases.map((c,k)=>Array.from({length:frames},(_,f)=>1.5-trace.free_edge_vertices.reduce((sum,i)=>sum+point(f,k,i)[2],0)/trace.free_edge_vertices.length));
+function world(p,c){return[p[0]+(mode==='separate'?(c-1)*1.35:0),p[1],p[2]];}
+function project(p){const x=p[0]-.08,y=p[1]-.32,z=p[2]-.92,u=Math.cos(yaw)*x-Math.sin(yaw)*y,d=Math.sin(yaw)*x+Math.cos(yaw)*y,scale=Math.min(W/(mode==='separate'?5.4:2.7),H/2.7);return[W*.5+u*scale,H*.52+(-Math.cos(pitch)*z+Math.sin(pitch)*d)*scale,Math.cos(pitch)*d+Math.sin(pitch)*z];}
+function line(points,color,width=1,dash=[]){ctx.beginPath();points.forEach((p,i)=>{const[x,y]=project(p);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([]);}
+function draw(){
+ ctx.clearRect(0,0,W,H);
+ const extent=mode==='separate'?2.4:1.1;
+ for(let x=-extent;x<=extent+.01;x+=.3)line([[x+.48,-.7,.28],[x+.48,1.35,.28]],'#203744',.6);
+ for(let y=-.7;y<=1.36;y+=.3)line([[-extent+.48,y,.28],[extent+.48,y,.28]],'#203744',.6);
+ for(let c=0;c<cases.length;c++){
+  const outline=[0,12,116,104,0].map(i=>world(point(0,c,i),c));
+  line(outline,cases[c].color+'60',1,[4,5]);
+ }
+ const faces=[];
+ for(let c=0;c<cases.length;c++)for(const tri of trace.triangles){
+  const p=tri.map(i=>world(point(sample,c,i),c)),screen=p.map(project),a=p[1].map((v,j)=>v-p[0][j]),b=p[2].map((v,j)=>v-p[0][j]);
+  const normal=[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],length=Math.hypot(...normal)||1;
+  const light=.38+.62*Math.abs((normal[0]*.3-normal[1]*.4+normal[2]*.866)/length);
+  faces.push({c,screen,depth:screen.reduce((s,p)=>s+p[2],0)/3,light});
+ }
+ faces.sort((a,b)=>a.depth-b.depth);
+ for(const face of faces){
+  ctx.beginPath();face.screen.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();
+  const color=cases[face.c].color,rgb=[1,3,5].map(i=>Math.round(parseInt(color.slice(i,i+2),16)*face.light));
+  ctx.fillStyle=`rgba(${rgb.join(',')},${mode==='overlay'?(face.c===selected?.78:.22):.94})`;ctx.fill();
+  ctx.strokeStyle=color+(mode==='overlay'?'65':'50');ctx.lineWidth=.55;ctx.stroke();
+ }
+ for(let c=0;c<cases.length;c++){
+  for(const i of trace.pinned_vertices){const[x,y]=project(world(point(sample,c,i),c));ctx.beginPath();ctx.arc(x,y,1.8,0,Math.PI*2);ctx.fillStyle='#edf4ef';ctx.fill();}
+  const edge=trace.free_edge_vertices.map(i=>world(point(sample,c,i),c));line(edge,cases[c].color,c===selected?2.7:1.4);
+  if(mode==='separate'){const[x,y]=project(world([.45,.32,.17],c));ctx.font='11px ui-monospace,monospace';ctx.textAlign='center';ctx.fillStyle=cases[c].color;ctx.fillText(`k = ${cases[c].edge_ke}`,x,y);ctx.textAlign='left';}
+ }
+}
+function drawGraph(){
+ const w=graph.clientWidth,h=graph.clientHeight,dpr=Math.min(devicePixelRatio||1,2);graph.width=Math.round(w*dpr);graph.height=Math.round(h*dpr);gc.setTransform(dpr,0,0,dpr,0,0);
+ const series=rms[selected],max=Math.max(.01,...series),px=i=>3+i/(frames-1)*(w-6),py=v=>h-5-v/max*(h-18);
+ gc.beginPath();series.forEach((v,i)=>i?gc.lineTo(px(i),py(v)):gc.moveTo(px(i),py(v)));gc.strokeStyle=cases[selected].color;gc.lineWidth=1.7;gc.stroke();
+ gc.beginPath();gc.arc(px(sample),py(series[sample]),3,0,Math.PI*2);gc.fillStyle='#fff';gc.fill();gc.fillStyle='#a7bac6';gc.font='9px ui-monospace,monospace';gc.fillText(max.toFixed(2)+' m',3,10);
+}
+function seek(value){
+ sample=Math.max(0,Math.min(frames-1,Math.round(Number.isFinite(value)?value:0)));
+ $('timeline').value=sample;$('time').textContent=(sample/trace.fps).toFixed(3);$('counter').textContent=`Sample ${sample} / ${frames-1}`;$('dcc-frame').textContent=`Blender frame ${sample+1}`;
+ $('distance').textContent=rms[selected][sample].toFixed(3);$('drop').textContent=drop[selected][sample].toFixed(3)+' m';
+ $('pin').textContent=trace.summary.max_pin_error_m.toExponential(1)+' m';
+ $('prev').disabled=sample===0;$('next').disabled=sample===frames-1;
+ canvas.setAttribute('aria-label',`Recorded cloth sample ${sample}, ${(sample/trace.fps).toFixed(3)} seconds. Selected bending coefficient ${cases[selected].edge_ke}; RMS separation ${rms[selected][sample].toFixed(3)} metres. Drag sideways or use camera buttons to rotate.`);
+ draw();drawGraph();
+}
+function choose(c){selected=Math.max(0,Math.min(cases.length-1,c));document.querySelectorAll('#cases button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===selected)));seek(sample);}
+function presentation(value){mode=value==='overlay'?'overlay':'separate';$('separate').setAttribute('aria-pressed',String(mode==='separate'));$('overlay').setAttribute('aria-pressed',String(mode==='overlay'));$('axis-note').textContent=mode==='separate'?'CASE SPACING IS FOR DISPLAY · WHITE DOTS = FIXED VERTICES':'ORIGINAL COORDINATES OVERLAID · DASHED OUTLINE = INITIAL SHEET';draw();}
+function pause(){playing=false;cancelAnimationFrame(animation);tickStart=0;$('play').textContent='Play ▶';$('status').textContent='Paused. Inspect the selected recorded sample.';}
+function tick(now){if(!playing)return;if(!tickStart)tickStart=now;const step=1000/(trace.fps*Number($('rate').value)),count=Math.floor((now-tickStart)/step);if(count){seek(sample+count);tickStart+=count*step;}if(sample===frames-1){pause();$('status').textContent='End of the recorded experiment.';}else animation=requestAnimationFrame(tick);}
+function play(){if(sample===frames-1)seek(0);playing=true;tickStart=0;$('play').textContent='Pause Ⅱ';$('status').textContent='Playing saved vertices. No simulation runs in the browser.';animation=requestAnimationFrame(tick);}
+function fromHash(){if(!location.hash)return;const p=new URLSearchParams(location.hash.slice(1)),integer=(key,fallback)=>{const text=p.get(key),n=Number(text);return text!==null&&/^\d+$/.test(text)&&Number.isSafeInteger(n)?n:fallback;};pause();choose(integer('case',selected));presentation(p.get('view'));seek(integer('frame',sample));$('status').textContent='Restored the shared case, sample and presentation.';}
+for(const[c,item]of cases.entries()){const b=document.createElement('button');b.style.setProperty('--case',item.color);b.setAttribute('aria-pressed',String(c===selected));b.setAttribute('aria-label',`Bending coefficient ${item.edge_ke}`);const label=document.createElement('span');label.textContent=`k = ${item.edge_ke}`;const note=document.createElement('small');note.textContent=c===0?'REFERENCE':`CASE ${c+1}`;b.append(label,note);b.onclick=()=>choose(c);$('cases').append(b);}
+if(location.protocol==='file:')$('download-archive').hidden=true;
+$('timeline').max=frames-1;$('graph-end').textContent=((frames-1)/trace.fps)+' s';$('device-label').textContent=`${trace.source.device_name} / Newton 1.6 / VBD / 3 runs`;
+$('recording-note').textContent=`${frames} samples per case, including sample 0. Recorded on ${trace.source.device_name} at 30 Hz, with ten 1/300 s substeps and ten solver iterations per step.`;
+const minRatio=Math.min(...trace.summary.cases.map(c=>c.min_edge_length_ratio)),maxRatio=Math.max(...trace.summary.cases.map(c=>c.max_edge_length_ratio));
+$('strain-note').textContent=`Recorded mesh-edge lengths range from ${minRatio.toFixed(3)}× to ${maxRatio.toFixed(3)}× their initial lengths across all cases and samples. This is a geometric diagnostic, not a measured stress.`;
+$('timeline').oninput=()=>{pause();seek(Number($('timeline').value));};$('prev').onclick=()=>{pause();seek(sample-1);};$('next').onclick=()=>{pause();seek(sample+1);};$('start').onclick=()=>{pause();seek(0);};$('play').onclick=()=>playing?pause():play();$('replay').onclick=()=>{pause();seek(0);play();};
+$('peak').onclick=()=>{pause();choose(trace.summary.peak.case);seek(trace.summary.peak.frame);$('status').textContent='Largest RMS separation from the reference across every recorded case and sample.';};
+$('separate').onclick=()=>presentation('separate');$('overlay').onclick=()=>presentation('overlay');$('rate').onchange=()=>{tickStart=0;};
+$('rotate-left').onclick=()=>{yaw-=.2;draw();};$('rotate-right').onclick=()=>{yaw+=.2;draw();};$('reset-view').onclick=()=>{yaw=-.48;pitch=.65;draw();};
+$('share').onclick=async()=>{const url=new URL(location.href);url.hash=new URLSearchParams({frame:String(sample),case:String(selected),view:mode}).toString();history.replaceState(null,'',url);if(location.protocol==='file:'){$('status').textContent=`Share the experiment folder with ${url.hash} to restore this sample.`;return;}try{await navigator.clipboard.writeText(url.href);$('status').textContent='Sample link copied.';}catch{$('status').textContent='Copy this page URL to share the selected sample.';}};
+let drag=null;
+canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;drag={id:e.pointerId,x:e.clientX,yaw};canvas.setPointerCapture(e.pointerId);canvas.classList.add('dragging');});
+canvas.addEventListener('pointermove',e=>{if(drag?.id===e.pointerId){yaw=drag.yaw+(e.clientX-drag.x)*.008;draw();}});
+function endDrag(){drag=null;canvas.classList.remove('dragging');}
+canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);canvas.addEventListener('lostpointercapture',endDrag);
+canvas.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();yaw+=e.key==='ArrowLeft'?-.2:.2;draw();}});
+document.addEventListener('keydown',e=>{if(['INPUT','SELECT','BUTTON','A','CANVAS'].includes(e.target.tagName))return;if(e.code==='Space'){e.preventDefault();playing?pause():play();}if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();pause();seek(sample+(e.key==='ArrowLeft'?-1:1));}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});window.addEventListener('hashchange',fromHash);
+function resize(){const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();drawGraph();}
+new ResizeObserver(resize).observe(canvas);presentation(mode);fromHash();seek(sample);resize();
+})();
+</script></body></html>

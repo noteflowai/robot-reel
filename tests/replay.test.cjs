@@ -47,6 +47,90 @@ async function stressExample(shortReference=false){
   return {data,...pair,max:Math.max(pair.reference.result.actions,pair.other.result.actions),
     shorter:pair.reference.result.actions<pair.other.result.actions?'left':'right'};
 }
+test('Cloth Lab compares original binary vertices and preserves their clock through overlay and sharing',async()=>{
+  const page=await browser.newPage({viewport:{width:1440,height:1100},reducedMotion:'reduce'});
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    const trace=JSON.parse(await readFile('docs/cloth/trace.json','utf8'));
+    const q=await readFile('docs/cloth/positions.f32');
+    const vertex=(f,c,i)=>Array.from({length:3},(_,axis)=>q.readFloatLE(4*(((f*3+c)*117+i)*3+axis)));
+    const rms=(f,c)=>Math.sqrt(Array.from({length:117},(_,i)=>{
+      const p=vertex(f,c,i),reference=vertex(f,0,i);
+      return p.reduce((sum,v,k)=>sum+(v-reference[k])**2,0);
+    }).reduce((a,b)=>a+b,0)/117);
+    await page.goto(base+'/cloth/#frame=61&case=1&view=separate');
+    assert.equal(await page.locator('#counter').textContent(),'Sample 61 / 120');
+    assert.equal(await page.locator('#distance').textContent(),rms(61,1).toFixed(3));
+    assert.equal(await page.locator('#time').textContent(),(61/30).toFixed(3));
+    assert.equal(await page.locator('#dcc-frame').textContent(),'Blender frame 62');
+    const dropped=1.5-trace.free_edge_vertices.reduce((sum,i)=>sum+vertex(61,1,i)[2],0)/9;
+    assert.equal(await page.locator('#drop').textContent(),dropped.toFixed(3)+' m');
+    const image=await page.locator('#scene').evaluate(c=>c.toDataURL());
+    await page.locator('#rotate-left').click();
+    assert.notEqual(await page.locator('#scene').evaluate(c=>c.toDataURL()),image);
+    await page.locator('#overlay').click();
+    assert.equal(await page.locator('#distance').textContent(),rms(61,1).toFixed(3));
+    await page.locator('#share').click();await page.reload();
+    assert.equal(await page.locator('#counter').textContent(),'Sample 61 / 120');
+    assert.equal(await page.locator('#overlay').getAttribute('aria-pressed'),'true');
+    assert.equal(await page.getByRole('button',{name:'Bending coefficient 1',exact:true}).getAttribute('aria-pressed'),'true');
+    await page.locator('#next').click();
+    assert.equal(await page.locator('#counter').textContent(),'Sample 62 / 120');
+    assert.equal(await page.locator('#distance').textContent(),rms(62,1).toFixed(3));
+    await page.locator('#peak').click();
+    assert.equal(await page.locator('#distance').textContent(),trace.summary.peak.rms_m.toFixed(3));
+    assert.equal(await page.locator('#counter').textContent(),`Sample ${trace.summary.peak.frame} / 120`);
+    const downloaded=page.waitForEvent('download');
+    await page.locator('#download-archive').click();
+    assert.deepEqual(await readFile(await (await downloaded).path()),await readFile('docs/cloth/experiment.zip'));
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('Cloth Lab works offline on mobile with explicit playback and bounded shared selections',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+  const errors=[],requests=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
+    const url=pathToFileURL(resolve('docs/cloth/index.html')).href;
+    await page.goto(url+'#case=999&frame=999&view=overlay');
+    assert.equal(await page.locator('#counter').textContent(),'Sample 120 / 120');
+    assert.equal(await page.locator('#next').isDisabled(),true);
+    assert.equal(await page.locator('#cases button[aria-pressed="true"]').textContent(),'k = 100CASE 3');
+    assert.equal(await page.locator('#download-archive').isVisible(),false);
+    assert.equal(await page.locator('#play').textContent(),'Play ▶');
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+    await page.locator('#start').click();
+    assert.equal(await page.locator('#prev').isDisabled(),true);
+    assert.equal(await page.locator('#distance').textContent(),'0.000');
+    assert.equal(await page.locator('#drop').textContent(),'0.000 m');
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>Number(document.querySelector('#timeline').value)>=3);
+    await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
+    assert.equal(await page.locator('#play').textContent(),'Play ▶');
+    const frame=await page.locator('#timeline').inputValue();
+    await page.locator('#share').click();
+    assert.match(await page.locator('#status').textContent(),/Share the experiment folder/);
+    await page.reload();
+    assert.equal(await page.locator('#timeline').inputValue(),frame);
+    await page.goto(url+'#frame=-2&case=NaN&view=invalid');
+    await page.reload();
+    assert.equal(await page.locator('#counter').textContent(),'Sample 29 / 120');
+    assert.equal(await page.locator('#separate').getAttribute('aria-pressed'),'true');
+    assert.deepEqual(requests,[]);
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('Cloth Lab keeps original scene downloads available without JavaScript',async()=>{
+  const page=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
+  try{
+    await page.goto(base+'/cloth/');
+    const pending=page.waitForEvent('download');
+    await page.getByRole('link',{name:'OpenUSD scene ↓',exact:true}).click();
+    assert.deepEqual(await readFile(await (await pending).path()),await readFile('docs/cloth/scene.usdc'));
+    assert.match(await page.locator('noscript').textContent(),/original data or USD/);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  }finally{await page.close();}
+});
 test('Stress Lab pairs real traces and inspects shared samples and terminal controls',async()=>{
   const page=await browser.newPage();
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
@@ -629,7 +713,7 @@ test('landing page indexes every published demo and copies the quick start',asyn
   try{
     await page.goto(base+'/');
     const cards=page.locator('.card');
-    assert.equal(await cards.count(),12);
+    assert.equal(await cards.count(),13);
     const hrefs=await cards.evaluateAll(links=>links.map(link=>link.getAttribute('href')));
     for(const href of hrefs){
       assert.ok(existsSync(resolve('docs',href,'index.html')),`${href} has no published page`);
@@ -695,19 +779,19 @@ test('homepage purpose filters preserve keyboard focus, share links and browser 
     assert.equal(await page.locator('#demo-count').textContent(),'Showing 4 policy demos');
     assert.equal(new URL(page.url()).searchParams.get('category'),'policies');
     await page.locator('[data-filter="create"]').click();
-    assert.deepEqual(await visible(),['blender/','director/','newton/','remix/','studio/']);
+    assert.deepEqual(await visible(),['blender/','cloth/','director/','newton/','remix/','studio/']);
     await page.goBack();
     await page.waitForFunction(()=>document.querySelector('[data-filter="policies"]').getAttribute('aria-pressed')==='true');
     assert.equal((await visible()).length,4);
     await page.goForward();await page.reload();
-    assert.equal((await visible()).length,5);
+    assert.equal((await visible()).length,6);
     await page.locator('[data-filter="experiments"]').click();
-    assert.deepEqual(await visible(),['braking/','chaos/','compare/braking/','compare/microduck/','newton/','stress/']);
+    assert.deepEqual(await visible(),['braking/','chaos/','cloth/','compare/braking/','compare/microduck/','newton/','stress/']);
     await page.locator('[data-filter="all"]').click();
-    assert.equal((await visible()).length,12);
+    assert.equal((await visible()).length,13);
     assert.equal(new URL(page.url()).searchParams.has('category'),false);
     await page.goto(base+'/?category=__proto__#demos');
-    assert.equal((await visible()).length,12);
+    assert.equal((await visible()).length,13);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   }finally{await page.close();}
 });
@@ -747,7 +831,7 @@ test('homepage remains navigable without JavaScript and its filters work from fi
     const page=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
     try{
       await page.goto(target);
-      assert.equal(await page.locator('#demo-grid .card:visible').count(),12);
+      assert.equal(await page.locator('#demo-grid .card:visible').count(),13);
       assert.equal(await page.locator('#filters').isVisible(),false);
       assert.equal(await page.locator('#copy').isVisible(),false);
       await page.locator('#tour-inspect').click();
@@ -761,9 +845,9 @@ test('homepage remains navigable without JavaScript and its filters work from fi
     await page.goto(url+'?category=policies#demos');
     assert.equal(await page.locator('#demo-grid .card:visible').count(),4);
     await page.locator('[data-filter="create"]').click();
-    assert.equal(await page.locator('#demo-grid .card:visible').count(),5);
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),6);
     await page.locator('[data-filter="all"]').click();
-    assert.equal(await page.locator('#demo-grid .card:visible').count(),12);
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),13);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     assert.deepEqual(errors,[]);
   }finally{await page.close();}

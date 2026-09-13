@@ -28,6 +28,7 @@ def check(source, release_assets=None):
     from robot_reel.stress_site import build, verify_site
     from robot_reel.stress_mcap import check_mcap
     from robot_reel.stress_review import record
+    from robot_reel.cloth import export_viewer, load, verify as verify_cloth
 
     module = Path(robot_reel.__file__).resolve()
     if module.is_relative_to(source/"robot_reel") or Path.cwd().is_relative_to(source):
@@ -36,6 +37,11 @@ def check(source, release_assets=None):
     if version("robot-reel") != expected:
         raise ValueError("Installed distribution version differs from pyproject.toml")
     with tempfile.TemporaryDirectory(prefix="robot-reel-installed-") as temporary:
+        cloth = verify_cloth(source/"docs/cloth")
+        cloth_viewer = Path(temporary)/"cloth.html"
+        export_viewer(*load(source/"docs/cloth"), cloth_viewer)
+        if "__CLOTH__" in cloth_viewer.read_text() or cloth["vertex_samples"] != 42471:
+            raise ValueError("Installed cloth template or source validation failed")
         output = Path(temporary)/"stress"
         summary = build(source/"docs/stress", output)
         if verify_site(output) != summary or summary["completed_trials"] != 30:
@@ -70,7 +76,7 @@ def check(source, release_assets=None):
              str(source/"docs/vla"), "--check-media"],
             check=True, capture_output=True, text=True, timeout=120,
         )
-        report = {"version": expected, "module": str(module),
+        report = {"version": expected, "module": str(module), "cloth_vertex_samples": cloth["vertex_samples"],
                   "stress_trials": summary["completed_trials"], "telemetry": telemetry,
                   "review": review_check, "vla": json.loads(result.stdout)}
         # Preserve the tested bytes before the temporary exported site is removed.

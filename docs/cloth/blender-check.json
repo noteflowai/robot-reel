@@ -1,0 +1,11 @@
+{
+  "blender_version": "5.2.1 LTS",
+  "checked_vertex_samples": 42471,
+  "maximum_position_error_m": 1.4305114737211966e-07,
+  "fps": 30,
+  "frame_start": 1,
+  "frame_end": 121,
+  "trace_sha256": "7888fe5f375118252fb3896457d5f8889fcfc8f53f7859e53b838b48e627cfd0",
+  "positions_sha256": "ddd70455f3e7655f1dbf0977f949ac17b0aeea45b754ede6e79718688fd9e094",
+  "usd_sha256": "8cbc0b87d4ec75764553ba71e7c533060e2598140c0c301ae22ddc806f9ad953"
+}
