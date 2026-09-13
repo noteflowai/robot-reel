@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Point the homepage, READMEs and published Stress Lab at the verified 0.6.0
+  offline bundle. Add a homepage download section with the sample review, guide
+  and checksums after the release assets are publicly available.
+
 ## 0.6.0 — Portable reviews and a complete offline lab
 
 - Deliver the complete Stress Lab ZIP, a source-checked sample review and a

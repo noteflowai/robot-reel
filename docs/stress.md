@@ -262,7 +262,7 @@ For the published 30-trial experiment, use:
 
 ```bash
 python -m robot_reel.stress_site artifacts/stress-gpu-30 artifacts/stress-published \
-  --archive-href https://github.com/noteflowai/robot-reel/releases/download/v0.4.0/robot-reel-stress-experiment.zip
+  --archive-href https://github.com/noteflowai/robot-reel/releases/download/v0.6.0/robot-reel-stress-experiment.zip
 ```
 
 That release link identifies the published experiment; keep the default for a

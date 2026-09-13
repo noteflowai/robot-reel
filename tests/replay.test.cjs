@@ -651,7 +651,7 @@ test('landing page offers a portable native inspector without loading a viewer i
     assert.equal(link.origin,'https://app.rerun.io');
     assert.equal(link.pathname,'/version/0.37.2/');
     assert.equal(link.searchParams.get('url'),'https://noteflowai.github.io/robot-reel/rerun/seed-09.rrd');
-    assert.match(await page.locator('.inspector .counts').textContent(),/6 embedded videos.*405 observations.*41 policy calls/);
+    assert.match(await page.locator('#inspect .counts').textContent(),/6 embedded videos.*405 observations.*41 policy calls/);
     const download=page.waitForEvent('download');
     await page.locator('#download-rerun').click();
     assert.deepEqual(await readFile(await (await download).path()),await readFile('docs/rerun/seed-09.rrd'));
