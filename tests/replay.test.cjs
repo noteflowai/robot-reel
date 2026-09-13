@@ -8,6 +8,7 @@ const {join, resolve, extname} = require('node:path');
 const {pathToFileURL} = require('node:url');
 const {chromium} = require('playwright');
 const {spawnSync} = require('node:child_process');
+const {createHash} = require('node:crypto');
 let browser, server, base;
 before(async()=>{
   server = createServer(async(req,res)=>{
@@ -70,7 +71,9 @@ test('Cloth Lab compares original binary vertices and preserves their clock thro
     assert.notEqual(await page.locator('#scene').evaluate(c=>c.toDataURL()),image);
     await page.locator('#overlay').click();
     assert.equal(await page.locator('#distance').textContent(),rms(61,1).toFixed(3));
+    const sharedImage=await page.locator('#scene').evaluate(c=>c.toDataURL());
     await page.locator('#share').click();await page.reload();
+    assert.equal(await page.locator('#scene').evaluate(c=>c.toDataURL()),sharedImage);
     assert.equal(await page.locator('#counter').textContent(),'Sample 61 / 120');
     assert.equal(await page.locator('#overlay').getAttribute('aria-pressed'),'true');
     assert.equal(await page.getByRole('button',{name:'Bending coefficient 1',exact:true}).getAttribute('aria-pressed'),'true');
@@ -83,6 +86,101 @@ test('Cloth Lab compares original binary vertices and preserves their clock thro
     const downloaded=page.waitForEvent('download');
     await page.locator('#download-archive').click();
     assert.deepEqual(await readFile(await (await downloaded).path()),await readFile('docs/cloth/experiment.zip'));
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('Cloth figures and sample records carry binary-derived facts and restore the same camera offline',async()=>{
+  const trace=JSON.parse(await readFile('docs/cloth/trace.json','utf8')),q=await readFile('docs/cloth/positions.f32');
+  const vertex=(f,c,i,axis)=>q.readFloatLE(4*(((f*3+c)*117+i)*3+axis));
+  const rms=Math.sqrt(Array.from({length:117},(_,i)=>[0,1,2].reduce((sum,a)=>sum+(vertex(61,1,i,a)-vertex(61,0,i,a))**2,0)).reduce((a,b)=>a+b,0)/117);
+  const drop=1.5-trace.free_edge_vertices.reduce((sum,i)=>sum+vertex(61,1,i,2),0)/9;
+  const fingerprint=createHash('sha256').update(q).digest('hex');
+  for(const width of [1440,390]){
+    const page=await browser.newPage({viewport:{width,height:1100},reducedMotion:'reduce'}),errors=[],requests=[];
+    page.on('pageerror',e=>errors.push(e.message));
+    await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
+    try{
+      const url=pathToFileURL(resolve('docs/cloth/index.html')).href;
+      await page.goto(url+'#frame=61&case=1&view=overlay');
+      await page.locator('#rotate-left').click();
+      const download=async id=>{const pending=page.waitForEvent('download');await page.locator(id).click();const file=await pending;return {name:file.suggestedFilename(),bytes:await readFile(await file.path())};};
+      const recordFile=await download('#sample-json'),record=JSON.parse(recordFile.bytes);
+      assert.equal(recordFile.name,'robot-reel-cloth-bend_1-sample-061.json');
+      assert.equal(record.schema,'robot-reel-cloth-sample-1');
+      assert.equal(record.sample,61);assert.equal(record.time_s,61/30);assert.equal(record.blender_frame,62);
+      assert.deepEqual(record.case,{index:1,id:'bend_1',edge_ke:1});
+      assert.deepEqual(record.reference,{index:0,id:'bend_001',edge_ke:.01});
+      assert.ok(Math.abs(record.metrics.rms_separation_m-rms)<1e-12);
+      assert.ok(Math.abs(record.metrics.mean_free_edge_drop_m-drop)<1e-12);
+      assert.equal(record.metrics.max_pin_displacement_m,0);
+      assert.equal(record.source.positions_sha256,fingerprint);
+      for(const [key,value] of Object.entries(trace.source))assert.deepEqual(record.source[key],value);
+      assert.deepEqual(record.presentation.display_offsets_x_m,[0,0,0]);
+      assert.equal(record.presentation.mode,'overlay');
+      assert.ok(Math.abs(record.presentation.yaw_rad+.68)<1e-12);
+      assert.equal(record.presentation.pitch_rad,.65);
+      assert.ok(!recordFile.bytes.includes(Buffer.from('file:')));
+      await page.evaluate(()=>{
+        window.figureText=[];
+        const original=CanvasRenderingContext2D.prototype.fillText;
+        CanvasRenderingContext2D.prototype.fillText=function(text,...args){if(this.canvas.width===1920)window.figureText.push(text);return original.call(this,text,...args);};
+      });
+      const png=await download('#figure');
+      assert.equal(png.name,'robot-reel-cloth-bend_1-sample-061.png');
+      assert.deepEqual([...png.bytes.subarray(0,8)],[137,80,78,71,13,10,26,10]);
+      assert.equal(png.bytes.readUInt32BE(16),1920);assert.equal(png.bytes.readUInt32BE(20),1080);
+      const text=await page.evaluate(()=>window.figureText);
+      assert.ok(text.includes(rms.toFixed(6)));assert.ok(text.includes(drop.toFixed(6)+' m'));
+      assert.ok(text.some(t=>t.includes('Sample 61 / 120')&&t.includes('2.033333 s')&&t.includes('Blender frame 62')));
+      assert.ok(text.some(t=>t.includes(fingerprint)));
+      // The record's portable fragment restores the exported view, across a fresh page load.
+      await page.goto(url+record.replay_fragment);await page.reload();
+      assert.deepEqual((await download('#figure')).bytes,png.bytes);
+      await page.locator('#separate').click();
+      const separate=JSON.parse((await download('#sample-json')).bytes);
+      assert.deepEqual(separate.presentation.display_offsets_x_m,[-1.35,0,1.35]);
+      assert.deepEqual(separate.metrics,record.metrics);
+      assert.notDeepEqual((await download('#figure')).bytes,png.bytes);
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+      assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+    }finally{await page.close();}
+  }
+});
+test('Cloth PNG export freezes its sample during encoding and recovers from an encoder failure',async()=>{
+  const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  try{
+    await page.goto(base+'/cloth/#frame=61&case=1&view=separate');
+    await page.evaluate(()=>{
+      window.originalToBlob=HTMLCanvasElement.prototype.toBlob;
+      HTMLCanvasElement.prototype.toBlob=function(cb,type){window.originalToBlob.call(this,blob=>{window.finishFigure=()=>cb(blob);},type);};
+    });
+    const pending=page.waitForEvent('download');await page.locator('#figure').click();
+    await page.waitForFunction(()=>typeof window.finishFigure==='function');
+    await page.locator('#next').click();
+    assert.equal(await page.locator('#timeline').inputValue(),'62');
+    assert.equal(await page.locator('#figure').isDisabled(),true);
+    await page.evaluate(()=>window.finishFigure());
+    const frozen=await pending;
+    assert.equal(frozen.suggestedFilename(),'robot-reel-cloth-bend_1-sample-061.png');
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('sample 61 saved'));
+    assert.equal(await page.locator('#timeline').inputValue(),'62');
+    await page.evaluate(()=>{HTMLCanvasElement.prototype.toBlob=function(cb){cb(null);};});
+    await page.locator('#figure').click();
+    assert.match(await page.locator('#status').textContent(),/Could not save the figure/);
+    assert.equal(await page.locator('#figure').isDisabled(),false);
+    await page.evaluate(()=>{HTMLCanvasElement.prototype.toBlob=window.originalToBlob;});
+    const retry=page.waitForEvent('download');await page.locator('#figure').click();
+    assert.equal((await retry).suggestedFilename(),'robot-reel-cloth-bend_1-sample-062.png');
+    await page.goto(base+'/cloth/#frame=61&case=1&view=separate');
+    await page.reload();
+    const fresh=page.waitForEvent('download');await page.locator('#figure').click();
+    const checksum=bytes=>createHash('sha256').update(bytes).digest('hex');
+    assert.equal(checksum(await readFile(await (await fresh).path())),checksum(await readFile(await frozen.path())));
+    for(const angle of ['NaN','Infinity','1e99','', '-4']){
+      await page.goto(base+'/cloth/#frame=61&case=1&view=separate&yaw='+angle);
+      const record=page.waitForEvent('download');await page.locator('#sample-json').click();
+      assert.equal(JSON.parse(await readFile(await (await record).path())).presentation.yaw_rad,-.48);
+    }
     assert.deepEqual(errors,[]);
   }finally{await page.close();}
 });

@@ -147,7 +147,8 @@ def measurements(trace, q, velocities):
 
 def export_viewer(trace, positions, velocities, destination, *, archive=False):
     validate(trace, positions, velocities)
-    payload = {"trace": trace, "positions_base64": base64.b64encode(positions).decode("ascii")}
+    payload = {"trace": trace, "positions_base64": base64.b64encode(positions).decode("ascii"),
+               "positions_sha256": hashlib.sha256(positions).hexdigest()}
     data = json.dumps(payload, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
     template = Path(__file__).with_name("cloth.html").read_text()
     Path(destination).write_text(template.replace("__CLOTH__", data).replace("__ARCHIVE_ATTR__", "" if archive else "hidden"))
@@ -183,6 +184,8 @@ def verify(output):
     data = json.loads(html.split(marker, 1)[1].split("</script>", 1)[0])
     if data.get("trace") != trace or base64.b64decode(data.get("positions_base64", ""), validate=True) != q:
         raise ValueError("Browser cloth differs from source data")
+    if "positions_sha256" in data and data["positions_sha256"] != hashlib.sha256(q).hexdigest():
+        raise ValueError("Browser cloth source fingerprint differs from source data")
     return result
 
 

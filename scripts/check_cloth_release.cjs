@@ -4,6 +4,7 @@ const {readFile}=require('node:fs/promises');
 const {resolve}=require('node:path');
 const {pathToFileURL}=require('node:url');
 const {chromium}=require('playwright');
+const {createHash}=require('node:crypto');
 
 async function check(lab){
   const trace=JSON.parse(await readFile(resolve(lab,'trace.json'),'utf8'));
@@ -29,9 +30,23 @@ async function check(lab){
         await page.locator('#next').click();
         assert.equal(await page.locator('#counter').textContent(),'Sample 30 / 120');
         assert.equal(await page.locator('#distance').textContent(),measured(30).toFixed(3));
+        await page.locator('#rotate-left').click();
+        const image=await page.locator('#scene').evaluate(c=>c.toDataURL());
         await page.locator('#share').click();await page.reload();
         assert.equal(await page.locator('#counter').textContent(),'Sample 30 / 120');
         assert.equal(await page.locator('#overlay').getAttribute('aria-pressed'),'true');
+        assert.equal(await page.locator('#scene').evaluate(c=>c.toDataURL()),image);
+        const recordDownload=page.waitForEvent('download');await page.locator('#sample-json').click();
+        const record=JSON.parse(await readFile(await (await recordDownload).path()));
+        assert.equal(record.schema,'robot-reel-cloth-sample-1');
+        assert.equal(record.sample,30);assert.equal(record.time_s,1);assert.equal(record.blender_frame,31);
+        assert.ok(Math.abs(record.metrics.rms_separation_m-measured(30))<1e-12);
+        assert.equal(record.source.positions_sha256,createHash('sha256').update(positions).digest('hex'));
+        assert.ok(Math.abs(record.presentation.yaw_rad+.68)<1e-12);
+        const figureDownload=page.waitForEvent('download');await page.locator('#figure').click();
+        const png=await readFile(await (await figureDownload).path());
+        assert.deepEqual([...png.subarray(0,8)],[137,80,78,71,13,10,26,10]);
+        assert.equal(png.readUInt32BE(16),1920);assert.equal(png.readUInt32BE(20),1080);
         await page.locator('#start').click();
         assert.equal(await page.locator('#distance').textContent(),'0.000');
         await page.locator('#play').click();
@@ -43,7 +58,8 @@ async function check(lab){
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
         assert.deepEqual(network,[]);assert.deepEqual(errors,[]);
         results.push({width,height,vertex_samples:trace.summary.vertex_samples,played:true,
-          binary_payload_matches:true,shared_sample_restored:true,usd_download_matches:true,network_requests:0});
+          binary_payload_matches:true,shared_sample_restored:true,shared_camera_restored:true,
+          figure_png:[1920,1080],sample_json_matches:true,usd_download_matches:true,network_requests:0});
       }finally{await page.close();}
     }
   }finally{await browser.close();}

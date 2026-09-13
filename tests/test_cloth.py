@@ -103,6 +103,28 @@ class ClothEvidenceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Browser cloth"):
                 verify(output)
 
+    def test_source_fingerprint_is_verified_without_rejecting_older_viewers(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            for name in FILES:
+                shutil.copyfile(SITE/name, output/name)
+            export_viewer(self.trace, self.q, self.v, output/"index.html")
+            write_manifest(output)
+            verify(output)
+            marker = '<script id="cloth-data" type="application/json">'
+            head, tail = (output/"index.html").read_text().split(marker)
+            raw, end = tail.split("</script>", 1)
+            payload = json.loads(raw)
+            payload["positions_sha256"] = "0"*64
+            (output/"index.html").write_text(head+marker+json.dumps(payload)+"</script>"+end)
+            write_manifest(output)
+            with self.assertRaisesRegex(ValueError, "source fingerprint"):
+                verify(output)
+            del payload["positions_sha256"]  # v0.7.0/0.7.1 viewer payloads
+            (output/"index.html").write_text(head+marker+json.dumps(payload)+"</script>"+end)
+            write_manifest(output)
+            verify(output)
+
     def test_report_and_archive_changes_are_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)/"site"
