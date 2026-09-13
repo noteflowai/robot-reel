@@ -46,3 +46,5 @@ python3 -S -m robot_reel.cli cloth --output docs/cloth --verify
 布料实验：https://noteflowai.github.io/robot-reel/cloth/
 
 复现及 Blender 导入说明：https://github.com/noteflowai/robot-reel/blob/858886243c100f866be773d2c32eb13c2e2da917/docs/cloth.md
+
+交互功能更新：Stress Lab 新增完整配对结果分组。相机条件净增两次成功，实际包含三次改善和一次退步；可点击对应种子查看录像，导出完整报告，并用当前源码独立核验。在线页面已更新，0.7.1 离线包保留此前版本。

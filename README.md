@@ -129,6 +129,15 @@ or verify its recorded facts against the full local collection. Held final
 observations and the complete experiment's counts stay explicit.
 [Review workflow and CLI](docs/stress.md#share-a-moment-for-review).
 
+**See what a net score hides.** The live lab groups every paired seed by outcome.
+The camera condition's net gain of two successes includes three gains and one
+loss. Select either group, jump to its recordings, and export the full paired
+report for independent verification with the current source checkout.
+[Compare paired outcomes](https://noteflowai.github.io/robot-reel/stress/#outcomes)
+· [Report method and CLI](docs/stress.md#compare-paired-outcomes).
+
+<a href="https://noteflowai.github.io/robot-reel/stress/#outcomes"><img src="docs/paired-outcomes.png" width="100%" alt="All ten paired camera-condition outcomes: four both succeed, one loses success, three gain success, and two remain incomplete. Select a group to inspect its recordings."></a>
+
 The **0.7.1 offline lab** includes these review tools. Download the ZIP and the
 [sample review JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-seed-09-review.json),
 then follow the [quick start guide](docs/offline-lab.md). No installation is needed

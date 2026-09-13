@@ -7,7 +7,7 @@ sdk: static
 app_file: index.html
 fullWidth: true
 header: default
-short_description: Replay SmolVLA trials, GPU cloth and Newton time sculptures.
+short_description: Inspect paired VLA outcomes, GPU cloth and Newton motion.
 license: apache-2.0
 models:
   - HuggingFaceVLA/smolvla_libero
@@ -22,6 +22,7 @@ tags:
   - blender
   - openusd
   - simulation
+  - policy-evaluation
 thumbnail: https://huggingface.co/spaces/glayguo/robot-reel/resolve/main/thumbnail.png
 pinned: true
 ---
@@ -35,7 +36,7 @@ is needed to watch.
 
 | Experiment | Try this | Evidence you can take away |
 | --- | --- | --- |
-| **SmolVLA Stress Lab** | Compare seed 09 under reference and reduced lighting, then inspect all 30 trials. | Two camera views, applied controls, source traces, CSV and MCAP. |
+| **SmolVLA Stress Lab** | Group paired successes and failures, open any seed, then inspect all 30 trials. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
 | **GPU Cloth Lab** | Release three identical sheets with different bending coefficients. Orbit, overlay, export a figure, and reopen a checked sample JSON. | 42,471 original vertex samples, positions and velocities, OpenUSD, native Blender checks. |
 | **Butterfly Lab** | Orbit twelve Newton worlds released 0.05° apart. | Original poses, measured separation, source clocks and an editable OpenUSD scene. |
 

@@ -96,3 +96,13 @@ listings only after the curator's decision; a closed issue alone does not
 establish acceptance. Check GitHub traffic/referrers and actual community
 feedback before deciding which tutorial to write next. No traffic or star
 increase has been measured or promised by this publication record.
+
+
+## Paired outcome review update
+
+The live Stress Lab now exposes all four paired outcome groups and a complete JSON
+report checked by the source CLI. [Updated HF introduction](outreach/huggingface-introduction.md)
+and the existing Chinese submission bodies describe this workflow. The 0.7.1
+release remains unchanged; new CLI flags require the current checkout. Existing
+threads are reused. LeRobot currently has no GitHub Discussions, so no showcase
+issue was opened in its bug tracker.

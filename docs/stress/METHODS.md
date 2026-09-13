@@ -34,6 +34,36 @@ policy. The intervals overlap and the task, initial states and horizon are
 limited. Earlier CPU trials and short GPU smoke runs are separate collections
 and do not enter these counts.
 
+## Compare paired outcomes
+
+The current website and Hugging Face Stress Lab include **Same starts. Which
+outcomes changed?** Select either changed condition to split all ten paired
+seeds into four groups: both successful, success lost, success gained, and
+neither completed. Open any seed directly in the paired replay. The camera
+condition's net gain of two successes contains **three gained successes and one
+lost success**; the grouped view keeps both directions visible.
+
+**Export all paired outcomes** downloads both conditions, every seed group,
+the full experiment's trial/attempt counts and the locked plan hash. The active
+UI filter never removes pairs from the report. “Not completed” combines
+`step_limit` and `terminated`; execution errors stay separately counted.
+These are descriptive paired outcomes, not a significance test or a claim of
+general robustness.
+
+With the current source checkout, export or independently verify a report:
+
+```bash
+python3 -m robot_reel.cli stress docs/stress --paired > paired-outcomes.json
+python3 -m robot_reel.cli stress docs/stress --paired-report paired-outcomes.json
+```
+
+Both commands first verify the complete source collection. The second compares
+the plan hash, every group and every count, including numeric types. This
+establishes consistency with the supplied recordings, not external certification.
+This feature is newer than the 0.7.1 package and release ZIP; those immutable
+assets retain their previous viewer. Current-source exports include the new
+controls, and the current verifier can read the older complete collection.
+
 ## What changes
 
 | Condition | Native simulator change before policy inference |
@@ -132,6 +162,9 @@ The published folder includes:
   match decoded MP4 pixels bit for bit.
 - A self-contained HTML viewer, notices, file manifest and `experiment.zip`.
   Extract the whole ZIP and open `index.html`; no HTTP server is required.
+  The published site under `docs/stress/` does not carry the 56 MB archive; it
+  is the release asset `robot-reel-stress-experiment.zip` (listed in the
+  release's `SHA256SUMS`), so large bundles stay out of the repository history.
 
 Hashes detect accidental changes; they are not an external attestation of the
 collector. Validators also check trial denominators, paired physical states,
@@ -145,6 +178,51 @@ For an externally interrupted process, the ledger records when the interruption
 was detected on resume; it does not invent an exact process-finish timestamp.
 Partial camera files from interrupted attempts stay in the source collection;
 only sealed runs enter the portable pack.
+
+## Share a moment for review
+
+In the current Stress Lab, select a seed, condition, camera and sample, then use
+**Turn a moment into a review** below the controls. Add an optional note and
+download the JSON for checking, or Markdown for a readable discussion. The
+Markdown links to `index.html` with the sample fragment; place it beside the lab's
+index to use that relative link. It does not include your machine's file path or
+browser origin. Downloads do include your note.
+
+The JSON carries the locked plan and its settings hash, full-experiment counts
+and condition summaries, both selected source observations and their original
+results, runtime/checkpoint identity, raw camera hashes and active inference
+records. A shorter run keeps its actual source sample and `held_final` flag.
+Terminal observations have neither an action nor an active inference record.
+Controls retain their recorded units. Selecting a pair does not change the
+experiment's denominator.
+
+Open the JSON using the lab's file picker to compare it with the loaded records
+before restoring the selection and note. A mismatch leaves the existing
+selection and note intact. Processing is local and also works from `file://`;
+notes are not uploaded or stored between visits. User notes are limited to 4,000
+characters and imports to 128 KiB. In Markdown, notes appear as literal text.
+
+For an independent comparison, use **Robot Reel 0.6.0 or newer**, or the current
+checkout:
+
+```bash
+python3 -m robot_reel.cli stress docs/stress --review review.json
+```
+
+Replace `docs/stress` with your complete lab folder and `review.json` with the
+downloaded filename. The standard-library command first validates the collection
+and its manifest, then compares every review fact against the selected source
+records. Its output distinguishes `recorded_facts_match: true` from
+`user_note_verified: false`. Editing a note is allowed; changing recorded facts,
+outcomes, clocks or counts fails verification. Notes are human interpretation.
+The plan hash identifies settings, not a unique recording or an external
+attestation. This check establishes consistency with the supplied collection.
+
+The 0.6.0 release includes this viewer in its complete offline ZIP, together with
+a separate sample review and start guide. The existing v0.4.0 release ZIP remains
+an immutable older viewer. Both contain the same underlying 30-trial evidence;
+either extracted collection can be supplied to the current CLI. Custom exports
+also include these review controls automatically.
 
 ## Reproduce
 
@@ -206,6 +284,20 @@ python -m pip install -e '.[inspect]'
 python -m robot_reel.stress_site artifacts/stress-gpu-30 artifacts/stress-site
 robot-reel stress artifacts/stress-site --check-media --check-mcap
 ```
+
+The download button defaults to the generated `experiment.zip` beside the page,
+so a custom experiment always downloads its own evidence. If that exact archive
+will be hosted elsewhere, pass `--archive-href` with its download location.
+For the published 30-trial experiment, use:
+
+```bash
+python -m robot_reel.stress_site artifacts/stress-gpu-30 artifacts/stress-published \
+  --archive-href https://github.com/noteflowai/robot-reel/releases/download/v0.6.0/robot-reel-stress-experiment.zip
+```
+
+That release link identifies the published experiment; keep the default for a
+different collection. Page synchronization updates local ZIPs only. To distribute
+an updated viewer through Releases, publish a new archive and use its new link.
 
 The published pack can be verified without ML packages:
 `python -S -m robot_reel.stress docs/stress`.

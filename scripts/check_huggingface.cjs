@@ -62,6 +62,16 @@ async function check(directory){
      const png=page.waitForEvent('download');await frame.locator('#figure').click();const image=await readFile(await (await png).path());
      assert.equal(image.readUInt32BE(16),1920);assert.equal(image.readUInt32BE(20),1080);
     }
+    if(lab==='stress'){
+     await frame.locator('#outcome-condition').selectOption('camera');
+     assert.deepEqual(await frame.locator('#outcome-cells strong').allTextContents(),['4','1','3','2']);
+     await frame.locator('[data-outcome="lost_success"]').click();
+     assert.equal(await frame.locator('#outcome-seeds button').count(),1);
+     const pending=page.waitForEvent('download');await frame.locator('#outcome-download').click();
+     const report=JSON.parse(await readFile(await (await pending).path(),'utf8'));
+     assert.equal(report.comparisons.length,2);
+     assert.equal(report.scope.completed_trials,30);
+    }
    }
    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(external,[]);
    rows.push({width,labs:3,cross_origin_embed:true,clipboard_denied:true,share_links:true,
