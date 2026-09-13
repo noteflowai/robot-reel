@@ -54,7 +54,7 @@ Watch a fresh policy rollout in every condition, then inspect where its behavior
 <div class="downloads"><button id="review-json">Export review JSON ↓</button><button id="review-md">Export readable Markdown ↓</button><button id="review-clear">Clear note</button></div>
 <label for="review-file">Open a review JSON</label> <input id="review-file" type="file" accept=".json,application/json">
 <p id="review-privacy" class="note">Files are processed in this browser. Notes are included only in your downloads; they are not uploaded or saved between visits. Exports use a relative replay link and retain the complete experiment's counts.</p>
-<p class="note">To check a downloaded review against your local lab: <code>python3 -m robot_reel.cli stress docs/stress --review review.json</code>. Requires the current checkout; replace the paths with your lab folder and downloaded JSON.</p>
+<p class="note">To check a downloaded review against your local lab: <code>python3 -m robot_reel.cli stress docs/stress --review review.json</code>. Requires Robot Reel 0.6.0+ or the current checkout; replace the paths with your lab folder and downloaded JSON.</p>
 <p id="review-status" class="status" role="status" aria-live="polite"></p>
 </section>
 </section></div>
@@ -269,7 +269,7 @@ function reviewMarkdown(r,name){
     '## Check against the original collection','',
     'The companion JSON carries the observations, inference records, source identity and full condition counts. The validator checks the collection and compares these facts; it does not validate the user note or externally attest the collector.','',
     `Plan SHA-256 (settings only): ${r.plan_sha256}`,'',
-    'From the current Robot Reel checkout, replace paths with your lab folder and downloaded JSON:','',
+    'With Robot Reel 0.6.0+ or the current checkout, replace paths with your lab folder and downloaded JSON:','',
     '```bash',`python3 -m robot_reel.cli stress docs/stress --review ${name}.json`,'```','');
   return lines.join('\n');
 }

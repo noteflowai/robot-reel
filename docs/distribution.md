@@ -10,6 +10,11 @@ The release also includes `robot-reel-seed-09.rrd`: the verified native
 [Rerun recording](telemetry.md#native-rerun-workspace), with six embedded videos
 and the original evidence. Open it in Rerun 0.37.2.
 
+Starting with 0.6.0, releases also carry the complete offline Stress Lab,
+`robot-reel-seed-09-review.json` and `START-HERE.md`. Follow the
+[offline lab guide](offline-lab.md) to open the experiment and import a review
+without installing Python or using a GPU.
+
 Download the wheel and `SHA256SUMS` from the same release, then install the
 downloaded file in a virtual environment:
 
@@ -18,7 +23,7 @@ downloaded file in a virtual environment:
 sha256sum --check --ignore-missing SHA256SUMS
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.5.0-py3-none-any.whl
+python -m pip install ./robot_reel-0.6.0-py3-none-any.whl
 robot-reel --help
 ```
 
@@ -70,7 +75,10 @@ CI builds the wheel from the source distribution, checks metadata with Twine,
 and installs it in a clean environment. From outside the checkout it rebuilds
 the complete thirty-trial Stress site, decodes all sixty videos, reads back
 3,915 MCAP records and compares the archived notices with their maintained
-sources. It also runs the installed CLI on the VLA recording.
+sources. It also runs the installed CLI on the VLA recording and a sample review.
+CI retains that exact ZIP as an artifact; the browser job extracts it, blocks
+network access, checks playback and imports/exports the sample review at desktop
+and mobile sizes.
 
 To reproduce that check from a source checkout:
 
@@ -87,8 +95,13 @@ python3 -m venv "$reel_check/installed"
 (
   cd "$reel_check"
   PYTHONPATH= "$reel_check/installed/bin/python" \
-    "$reel_source/scripts/check_distribution.py" --source "$reel_source"
+    "$reel_source/scripts/check_distribution.py" --source "$reel_source" \
+    --release-assets "$reel_check/offline-assets"
 )
+# Use the repository's existing npm/Playwright environment for the browser check.
+python3 -m zipfile -e "$reel_check/offline-assets/robot-reel-stress-experiment.zip" "$reel_check/lab"
+node scripts/check_offline_release.cjs "$reel_check/lab" \
+  "$reel_check/offline-assets/robot-reel-seed-09-review.json"
 ```
 
 When updating `LICENSE`, `licenses/VLA-MEDIA-NOTICE.txt` or `docs/stress.md`,
@@ -104,9 +117,16 @@ six pass does a main-branch run invoke the Pages deployment. Manually rerunning
 
 A `v*` tag must exactly match `pyproject.toml` and have a version section in
 `CHANGELOG.md`. The release workflow runs the same six jobs and publishes their
-tested wheel and source distribution with SHA-256 checksums. It does not rebuild
-different artifacts after validation. The native Rerun recording is copied from
-the same checked commit and included in those checksums.
+tested wheel, source distribution, offline ZIP, sample review and start guide
+with SHA-256 checksums. It does not rebuild different artifacts after validation.
+The native Rerun recording is copied from the same checked commit and included
+in those checksums. The release assembler rejects missing, stale or extra files.
+Offline artifacts remain separate from Python distributions, so optional PyPI
+publishing receives only the wheel and source distribution.
+Files are uploaded to a draft first and made public only after all uploads
+succeed. A tag that already has a release is rejected before any upload; a failed
+draft upload requires inspection before recovery, rather than overwriting an
+existing release on a rerun.
 
 PyPI publishing additionally requires the project's trusted publisher and the
 GitHub `pypi` environment to be configured, then the repository variable

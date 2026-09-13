@@ -24,6 +24,7 @@ jobs:
           robot-reel stress docs/stress --check-media --check-mcap
       - run: python -m compileall -q robot_reel
   browser:
+    needs: package
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,6 +40,14 @@ jobs:
         run: npm run check:js
       - run: npx playwright install --with-deps chromium
       - run: npm test
+      - uses: actions/download-artifact@v4
+        with:
+          name: offline-lab
+          path: ${{ runner.temp }}/offline-assets
+      - name: Open the installed wheel's actual archive offline
+        run: |
+          python -m zipfile -e "$RUNNER_TEMP/offline-assets/robot-reel-stress-experiment.zip" "$RUNNER_TEMP/offline-lab"
+          node scripts/check_offline_release.cjs "$RUNNER_TEMP/offline-lab" "$RUNNER_TEMP/offline-assets/robot-reel-seed-09-review.json"
   rerun:
     runs-on: ubuntu-latest
     steps:
@@ -87,12 +96,20 @@ jobs:
         env:
           PYTHONPATH: ""
         run: |
-          "$RUNNER_TEMP/installed/bin/python" "$GITHUB_WORKSPACE/scripts/check_distribution.py" --source "$GITHUB_WORKSPACE"
+          "$RUNNER_TEMP/installed/bin/python" "$GITHUB_WORKSPACE/scripts/check_distribution.py" \
+            --source "$GITHUB_WORKSPACE" --release-assets "$RUNNER_TEMP/offline-assets"
       - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/*
           if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: offline-lab
+          path: ${{ runner.temp }}/offline-assets/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
   container:
     runs-on: ubuntu-latest
     steps:
