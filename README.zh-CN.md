@@ -130,6 +130,10 @@ Markdown，重新导入可恢复原始样本位置，也可用命令行与完整
 [打开结果分组](https://noteflowai.github.io/robot-reel/stress/#outcomes) ·
 [报告方法与命令](docs/stress.md#compare-paired-outcomes)。
 
+**[在 Hugging Face Datasets 查看结构化结果](https://huggingface.co/datasets/glayguo/robot-reel-paired-outcomes)**：
+包含 30 条试次、20 条配对结果、源文件哈希和测量方法。这是单任务试验的表格证据，
+不是训练数据或官方榜单成绩。
+
 <a href="https://noteflowai.github.io/robot-reel/stress/#outcomes"><img src="docs/paired-outcomes.png" width="100%" alt="全部十个配对起点：四组均成功，一组失去成功，三组获得成功，两组均未完成；点击分组可检查原录像。"></a>
 
 **0.7.1 离线实验包**已包含这些复盘工具。下载 ZIP 和

@@ -1,4 +1,6 @@
 import copy
+import csv
+import io
 import json
 from pathlib import Path
 import tempfile
@@ -71,3 +73,15 @@ class PairedOutcomesTests(unittest.TestCase):
             path.write_bytes(b" " * 131073)
             with self.assertRaisesRegex(ValueError, "128 KiB"):
                 verify_report(path, self.report)
+
+    def test_dataset_rows_preserve_all_source_pairs_and_units(self):
+        from scripts.build_hf_results import pairs_csv
+        rows = list(csv.DictReader(io.StringIO(pairs_csv(self.summary["pairs"]))))
+        self.assertEqual(len(rows), 20)
+        self.assertEqual(len({(r["seed"], r["condition"]) for r in rows}), 20)
+        camera = [r for r in rows if r["condition"] == "camera"]
+        self.assertEqual(sum(r["outcome_group"] == "gained_success" for r in camera), 3)
+        self.assertEqual(sum(r["outcome_group"] == "lost_success" for r in camera), 1)
+        for row, source in zip(rows, self.summary["pairs"]):
+            self.assertEqual(float(row["max_eef_distance_m"]), source["max_eef_distance_m"])
+            self.assertEqual(int(row["max_eef_frame"]), source["max_eef_frame"])

@@ -100,6 +100,12 @@ increase has been measured or promised by this publication record.
 
 ## Paired outcome review update
 
+The [paired-outcome dataset](https://huggingface.co/datasets/glayguo/robot-reel-paired-outcomes)
+publishes 30 trial rows and 20 paired rows as two evaluation-only configurations.
+Rebuild it with `scripts/build_hf_results.py`; the dataset card and source
+manifest identify its exact source commit. No images or model weights are
+redistributed in this tabular export.
+
 The live Stress Lab now exposes all four paired outcome groups and a complete JSON
 report checked by the source CLI. [Updated HF introduction](outreach/huggingface-introduction.md)
 and the existing Chinese submission bodies describe this workflow. The 0.7.1

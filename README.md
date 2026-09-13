@@ -136,6 +136,10 @@ report for independent verification with the current source checkout.
 [Compare paired outcomes](https://noteflowai.github.io/robot-reel/stress/#outcomes)
 · [Report method and CLI](docs/stress.md#compare-paired-outcomes).
 
+**[Browse the results on Hugging Face Datasets](https://huggingface.co/datasets/glayguo/robot-reel-paired-outcomes)**:
+30 trial rows and 20 paired rows, with source hashes, units and the full method.
+This is the recorded pilot's tabular evidence, not a training dataset or official benchmark.
+
 <a href="https://noteflowai.github.io/robot-reel/stress/#outcomes"><img src="docs/paired-outcomes.png" width="100%" alt="All ten paired camera-condition outcomes: four both succeed, one loses success, three gain success, and two remain incomplete. Select a group to inspect its recordings."></a>
 
 The **0.7.1 offline lab** includes these review tools. Download the ZIP and the
