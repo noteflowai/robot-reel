@@ -78,8 +78,8 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 </a>
 
 **[释放三张布，开始体验 ↗](https://noteflowai.github.io/robot-reel/cloth/)** ·
-[完整离线实验](https://github.com/noteflowai/robot-reel/releases/download/v0.7.0/robot-reel-cloth-experiment.zip) ·
-[可编辑 OpenUSD](https://github.com/noteflowai/robot-reel/releases/download/v0.7.0/robot-reel-cloth-scene.usdc) ·
+[完整离线实验](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-cloth-experiment.zip) ·
+[可编辑 OpenUSD](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-cloth-scene.usdc) ·
 [方法、边界与复现](docs/cloth.md)
 
 弯曲系数是求解器设置，不代表经过标定的真实织物属性；颜色用于区分实验。
@@ -103,7 +103,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 </a>
 
 **[对照策略运行 ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.7.0/robot-reel-stress-experiment.zip) ·
+[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-stress-experiment.zip) ·
 [MCAP 遥测数据 ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [在 Foxglove 中打开](docs/telemetry.md) ·
 [复现与检查](docs/stress.md)
@@ -113,8 +113,8 @@ Markdown，重新导入可恢复原始样本位置，也可用命令行与完整
 记录明确标注末帧停留，保留完整实验统计，个人备注与录制事实分开。
 [复盘流程与核验命令](docs/stress.md#share-a-moment-for-review)。
 
-**0.7.0 离线实验包**已包含这些复盘工具。下载 ZIP 和
-[示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.7.0/robot-reel-seed-09-review.json)，
+**0.7.1 离线实验包**已包含这些复盘工具。下载 ZIP 和
+[示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-seed-09-review.json)，
 按[快速上手说明](docs/offline-lab.md)解压打开即可回放，无需安装；使用同版本
 wheel 还可独立执行命令行核验。
 
