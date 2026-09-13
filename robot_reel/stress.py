@@ -281,10 +281,21 @@ def main(argv=None):
     parser.add_argument("--check-media", action="store_true", help="Decode both policy cameras in every completed trial")
     parser.add_argument("--check-mcap", action="store_true", help="Read back and compare every MCAP telemetry message")
     parser.add_argument("--review", type=Path, help="Compare an exported review JSON with this complete collection")
+    paired = parser.add_mutually_exclusive_group()
+    paired.add_argument("--paired", action="store_true", help="Export paired outcome groups for every condition as JSON")
+    paired.add_argument("--paired-report", type=Path, help="Verify a downloaded paired-outcome report against all source trials")
     args = parser.parse_args(argv)
     from .stress_site import check_media, load_collection, verify_site
     try:
         result = verify_site(args.source)
+        if args.paired or args.paired_report:
+            from .stress_pairs import paired_report, verify_report
+            document = json.loads((args.source/"experiment.json").read_text())
+            report = paired_report(result, canonical_hash(document))
+            if args.paired_report:
+                result["paired_report_verified"] = verify_report(args.paired_report, report)
+            if args.paired:
+                result = report
         if args.review:
             from .stress_review import read_review, verify_record
             from .stress_site import payload

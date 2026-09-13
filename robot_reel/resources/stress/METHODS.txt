@@ -34,6 +34,36 @@ policy. The intervals overlap and the task, initial states and horizon are
 limited. Earlier CPU trials and short GPU smoke runs are separate collections
 and do not enter these counts.
 
+## Compare paired outcomes
+
+The current website and Hugging Face Stress Lab include **Same starts. Which
+outcomes changed?** Select either changed condition to split all ten paired
+seeds into four groups: both successful, success lost, success gained, and
+neither completed. Open any seed directly in the paired replay. The camera
+condition's net gain of two successes contains **three gained successes and one
+lost success**; the grouped view keeps both directions visible.
+
+**Export all paired outcomes** downloads both conditions, every seed group,
+the full experiment's trial/attempt counts and the locked plan hash. The active
+UI filter never removes pairs from the report. “Not completed” combines
+`step_limit` and `terminated`; execution errors stay separately counted.
+These are descriptive paired outcomes, not a significance test or a claim of
+general robustness.
+
+With the current source checkout, export or independently verify a report:
+
+```bash
+python3 -m robot_reel.cli stress docs/stress --paired > paired-outcomes.json
+python3 -m robot_reel.cli stress docs/stress --paired-report paired-outcomes.json
+```
+
+Both commands first verify the complete source collection. The second compares
+the plan hash, every group and every count, including numeric types. This
+establishes consistency with the supplied recordings, not external certification.
+This feature is newer than the 0.7.1 package and release ZIP; those immutable
+assets retain their previous viewer. Current-source exports include the new
+controls, and the current verifier can read the older complete collection.
+
 ## What changes
 
 | Condition | Native simulator change before policy inference |

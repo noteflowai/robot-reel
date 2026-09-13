@@ -353,6 +353,51 @@ test('Stress Lab pairs real traces and inspects shared samples and terminal cont
     assert.deepEqual(errors,[]);
   }finally{await page.close();}
 });
+test('Paired outcome groups retain gains and losses and export the complete source-checked report',async()=>{
+  const directory=await mkdtemp(join(tmpdir(),'robot-reel-pairs-'));
+  try{
+    for(const width of [1280,390]){
+      const page=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});
+      const errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));
+      try{
+        await page.route(/^https?:/,route=>{requests.push(route.request().url());route.abort();});
+        await page.goto(pathToFileURL(resolve('docs/stress/index.html')).href+'#seed=9&condition=dim&frame=0');
+        assert.deepEqual(await page.locator('#outcome-cells strong').allTextContents(),['4','1','0','5']);
+        await page.locator('#outcome-condition').selectOption('camera');
+        assert.deepEqual(await page.locator('#outcome-cells strong').allTextContents(),['4','1','3','2']);
+        await page.locator('[data-outcome="lost_success"]').click();
+        assert.deepEqual(await page.locator('#outcome-seeds button').allTextContents(),['Seed 09']);
+        await page.locator('#outcome-seeds button').click();
+        assert.equal(await page.locator('#seed').inputValue(),'9');
+        assert.equal(await page.locator('#condition').inputValue(),'camera');
+        assert.match(await page.locator('#left-outcome').textContent(),/Success/);
+        assert.match(await page.locator('#right-outcome').textContent(),/Step limit/);
+        const pending=page.waitForEvent('download');await page.locator('#outcome-download').click();
+        const raw=await readFile(await (await pending).path(),'utf8');
+        const report=JSON.parse(raw);
+        assert.equal(report.comparisons.length,2);
+        assert.equal(report.scope.planned_trials,30);
+        assert.equal(report.comparisons[1].net_success_difference,2);
+        const output=join(directory,`paired-${width}.json`);await writeFile(output,raw);
+        const checked=spawnSync('python3',['-S','-m','robot_reel.cli','stress','docs/stress','--paired-report',output],{encoding:'utf8'});
+        assert.equal(checked.status,0,checked.stderr);
+        assert.equal(JSON.parse(checked.stdout).paired_report_verified,true);
+        const exported=spawnSync('python3',['-S','-m','robot_reel.cli','stress','docs/stress','--paired'],{encoding:'utf8'});
+        assert.equal(exported.status,0,exported.stderr);
+        assert.deepEqual(JSON.parse(exported.stdout),report);
+        await page.locator('#outcome-condition').selectOption('dim');
+        await page.locator('[data-outcome="gained_success"]').click();
+        assert.equal(await page.locator('#outcome-seeds button').count(),0);
+        assert.match(await page.locator('#outcome-selection').textContent(),/No recorded pair/);
+        await page.locator('#outcome-all').click();
+        assert.equal(await page.locator('#outcome-seeds button').count(),10);
+        assert.equal(await page.locator('#matrix button').count(),30);
+        assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+        assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+      }finally{await page.close();}
+    }
+  }finally{await rm(directory,{recursive:true,force:true});}
+});
 test('Stress Lab is offline, accessible on mobile and keeps all seed choices',async()=>{
   const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
   const errors=[],requests=[];page.on('pageerror',error=>errors.push(error.message));

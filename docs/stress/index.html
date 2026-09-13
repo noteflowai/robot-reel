@@ -15,6 +15,7 @@
 .divergence{padding:12px 14px;border:1px solid var(--line);border-radius:12px;margin:12px 0;color:var(--muted);font-size:12px}.divergence strong{color:var(--purple)}.divergence svg{display:block;width:100%;height:72px;margin-top:8px}.sensors{white-space:pre-line}
 .review{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--panel);margin-top:20px}.review h2{margin:0 0 8px}.review label,.review p{font-size:13px}.review textarea{display:block;width:100%;min-height:100px;resize:vertical;font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;margin:8px 0 12px}.review input[type=file]{max-width:100%;font-size:12px}.review .downloads{margin-bottom:12px}.review code{overflow-wrap:anywhere}
 .share-result{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:11px}.share-result[hidden]{display:none}.share-result input{min-width:0;flex:1 1 200px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:8px}.share-result a{text-decoration:underline}
+.outcome-lens{border:1px solid var(--line);border-radius:16px;padding:22px;margin:28px 0;background:#111b26}.outcome-lens h2{margin:0}.outcome-cells{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}.outcome-cells button{text-align:left;min-width:0;padding:16px 12px;background:#151f2c}.outcome-cells strong{display:block;font-size:36px;line-height:1.2;color:var(--purple)}.outcome-cells span{font-size:12px;display:block;margin-top:8px}.outcome-cells [data-outcome=lost_success] strong{color:var(--amber)}.outcome-cells [data-outcome=gained_success] strong{color:var(--mint)}.outcome-seeds{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.outcome-seeds button{font-size:12px}.outcome-lens code{overflow-wrap:anywhere}.outcome-lens label{font-size:13px;color:var(--muted)}@media(max-width:540px){.outcome-lens{padding:15px}.outcome-cells{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body><main>
@@ -26,6 +27,17 @@ Watch a fresh policy rollout in every condition, then inspect where its behavior
 <div class="tags"><span id="compute">Real policy inference</span><span>Native scene perturbations</span><span>Every trial retained</span><span>Offline evidence pack</span></div>
 <section class="stats" id="stats" aria-label="Results for every condition"></section>
 <p class="note" id="scope"></p>
+<section class="outcome-lens" id="outcomes" aria-labelledby="outcomes-title">
+<div class="toolbar"><h2 id="outcomes-title">Same starts. Which outcomes changed?</h2><label>Compare with reference <select id="outcome-condition" aria-label="Outcome comparison condition"><option value="dim">25% light</option><option value="camera">Camera +12 cm</option></select></label></div>
+<p class="note">A net success rate can hide changes in both directions. Select a group, then open any paired seed in the replay.</p>
+<div id="outcome-cells" class="outcome-cells" aria-label="Paired outcome groups"></div>
+<div class="toolbar"><p id="outcome-summary" class="counter"></p><button id="outcome-all" type="button">Show all paired seeds</button></div>
+<div id="outcome-seeds" class="outcome-seeds" aria-label="Seeds in the selected outcome group"></div>
+<p id="outcome-selection" class="status" role="status"></p>
+<div class="downloads"><button id="outcome-download" type="button">Export all paired outcomes ↓</button></div>
+<p class="note">“Not completed” includes step limits and terminated runs; execution errors remain in the attempt ledger. Groups use the complete set of paired seeds. These are observed outcomes on one task, not a significance test or a general robustness score.</p>
+<details><summary>Check an exported report independently</summary><p class="note">Use the current source checkout: <code>python3 -m robot_reel.cli stress docs/stress --paired-report paired-outcomes.json</code>. The command checks the full experiment before comparing every group and count. This feature is newer than the 0.7.1 installation package and offline release.</p></details>
+</section>
 <div class="experiment">
 <aside class="matrix"><h2>All trials. No highlights filter.</h2><p>Select any seed and condition.</p>
 <div class="grid" id="matrix" aria-label="Select a recorded trial"></div>
@@ -85,7 +97,63 @@ const firstChange=data.summary.pairs.find(p=>p.reference_success&&!p.condition_s
 let seed=firstChange?.seed??0,condition=firstChange?.condition??'dim',frame=0,camera='main',playing=false,animation=0,version=0;
 const videos=[$('left-video'),$('right-video')];
 let pair=[],master=null,distances=[],peakFrame=0;
+let outcomeFilter='all',outcomeCondition=condition==='reference'?'dim':condition;
 function element(tag,text,className){const el=document.createElement(tag);el.textContent=text;if(className)el.className=className;return el;}
+const outcomeLabels={both_success:'Success → success',lost_success:'Success → not completed',gained_success:'Not completed → success',neither_success:'Neither completed'};
+function pairedOutcomes(){
+  return {
+    schema:'robot-reel-paired-outcomes-1',plan_sha256:data.traces[0].stress.plan_sha256,
+    scope:Object.fromEntries(['planned_trials','completed_trials','attempts','execution_errors'].map(k=>[k,data.summary[k]])),
+    comparisons:conditions.filter(c=>c.id!=='reference').map(c=>{
+      const rows=data.summary.pairs.filter(p=>p.condition===c.id);
+      const groups={both_success:[],lost_success:[],gained_success:[],neither_success:[]};
+      for(const p of rows){
+        const group=p.reference_success?(p.condition_success?'both_success':'lost_success'):(p.condition_success?'gained_success':'neither_success');
+        groups[group].push(p.seed);
+      }
+      for(const seeds of Object.values(groups))seeds.sort((a,b)=>a-b);
+      const reference_successes=groups.both_success.length+groups.lost_success.length;
+      const condition_successes=groups.both_success.length+groups.gained_success.length;
+      return {condition:c.id,paired_seeds:rows.length,groups,reference_successes,condition_successes,net_success_difference:condition_successes-reference_successes};
+    }),
+  };
+}
+function renderOutcomeLens(){
+  if(condition!=='reference')outcomeCondition=condition;
+  $('outcome-condition').value=outcomeCondition;
+  const comparison=pairedOutcomes().comparisons.find(c=>c.condition===outcomeCondition);
+  const delta=comparison.net_success_difference,n=comparison.paired_seeds;
+  $('outcome-summary').textContent=`${label(outcomeCondition)}: ${comparison.condition_successes}/${n} vs reference ${comparison.reference_successes}/${n} · net ${delta>0?'+':''}${delta} successful ${Math.abs(delta)===1?'pair':'pairs'}`;
+  for(const button of document.querySelectorAll('#outcome-cells button')){
+    const group=button.dataset.outcome;
+    button.querySelector('strong').textContent=comparison.groups[group].length;
+    button.setAttribute('aria-pressed',String(group===outcomeFilter));
+  }
+  $('outcome-all').setAttribute('aria-pressed',String(outcomeFilter==='all'));
+  const seeds=outcomeFilter==='all'?[...data.experiment.seeds]:comparison.groups[outcomeFilter];
+  const container=$('outcome-seeds');container.replaceChildren();
+  for(const n of seeds){
+    const button=element('button',`Seed ${String(n).padStart(2,'0')}`);
+    button.dataset.seed=n;button.setAttribute('aria-label',`Inspect paired seed ${n}, ${label(outcomeCondition)}`);
+    button.setAttribute('aria-pressed',String(seed===n&&condition===outcomeCondition));
+    button.onclick=()=>{seed=n;condition=outcomeCondition;frame=0;loadPair();document.querySelector('.workbench').scrollIntoView({block:'start'});};
+    container.append(button);
+  }
+  $('outcome-selection').textContent=`${outcomeFilter==='all'?'All pairs':outcomeLabels[outcomeFilter]} · ${seeds.length} of ${n} seeds${seeds.length?'':'. No recorded pair in this group.'}`;
+}
+for(const [group,title] of Object.entries(outcomeLabels)){
+  const button=element('button','');button.dataset.outcome=group;
+  button.append(element('strong','0'),element('span',title));
+  button.onclick=()=>{outcomeFilter=group;renderOutcomeLens();};$('outcome-cells').append(button);
+}
+$('outcome-all').onclick=()=>{outcomeFilter='all';renderOutcomeLens();};
+$('outcome-condition').onchange=()=>{condition=$('outcome-condition').value;outcomeFilter='all';frame=0;loadPair();};
+$('outcome-download').onclick=()=>{
+  const url=URL.createObjectURL(new Blob([JSON.stringify(pairedOutcomes(),null,2)+'\n'],{type:'application/json'}));
+  const link=element('a','');link.href=url;link.download='paired-outcomes.json';link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  $('outcome-selection').textContent='Exported both conditions and all paired seeds. The current filter does not remove any evidence from the report.';
+};
 function bounded(value,max,fallback){if(value===null||value.trim()==='')return fallback;const n=Number(value);return Number.isFinite(n)?Math.max(0,Math.min(max,Math.trunc(n))):fallback;}
 $('eyebrow').textContent=`SMOLVLA / ${data.summary.completed_trials} REAL ROLLOUTS / ${data.experiment.seeds.length} PAIRED SEEDS`;
 for(const stat of data.summary.conditions){
@@ -173,7 +241,7 @@ function loadPair(){
   const curve=distances.map((v,n)=>`${n?'L':'M'}${n/(distances.length-1)*720},${70-v/high*66}`).join(' ');
   $('distance-line').setAttribute('d',curve);$('distance-area').setAttribute('d',curve+' L720,72 L0,72 Z');
   $('distance-caption').textContent=`Peak ${(distances[peakFrame]*100).toFixed(1)} cm at sample ${peakFrame} · ${distances.length} shared observations. Measured trajectory difference, not a task-error or accuracy score.`;
-  master=videos[end(pair[0])>=end(pair[1])?0:1];render();
+  master=videos[end(pair[0])>=end(pair[1])?0:1];render();renderOutcomeLens();
 }
 function selectFrame(n,message){pause(message);frame=n;render();}
 function tick(){

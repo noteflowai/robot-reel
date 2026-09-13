@@ -124,6 +124,18 @@ Markdown，重新导入可恢复原始样本位置，也可用命令行与完整
 记录明确标注末帧停留，保留完整实验统计，个人备注与录制事实分开。
 [复盘流程与核验命令](docs/stress.md#share-a-moment-for-review)。
 
+**看清净成功率背后的变化。** 在线实验现可按配对结果分组：相机条件净增两次成功，
+实际包含三次从未完成变为成功、一次从成功变为未完成。点击任一分组可打开对应录像，
+导出时仍保留两种条件和所有配对种子，并可用当前源码的 CLI 独立核验。
+[打开结果分组](https://noteflowai.github.io/robot-reel/stress/#outcomes) ·
+[报告方法与命令](docs/stress.md#compare-paired-outcomes)。
+
+**[在 Hugging Face Datasets 查看结构化结果](https://huggingface.co/datasets/glayguo/robot-reel-paired-outcomes)**：
+包含 30 条试次、20 条配对结果、源文件哈希和测量方法。这是单任务试验的表格证据，
+不是训练数据或官方榜单成绩。
+
+<a href="https://noteflowai.github.io/robot-reel/stress/#outcomes"><img src="docs/paired-outcomes.png" width="100%" alt="全部十个配对起点：四组均成功，一组失去成功，三组获得成功，两组均未完成；点击分组可检查原录像。"></a>
+
 **0.7.1 离线实验包**已包含这些复盘工具。下载 ZIP 和
 [示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-seed-09-review.json)，
 按[快速上手说明](docs/offline-lab.md)解压打开即可回放，无需安装；使用同版本
