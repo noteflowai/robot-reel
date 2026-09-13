@@ -149,6 +149,50 @@ was detected on resume; it does not invent an exact process-finish timestamp.
 Partial camera files from interrupted attempts stay in the source collection;
 only sealed runs enter the portable pack.
 
+## Share a moment for review
+
+In the current Stress Lab, select a seed, condition, camera and sample, then use
+**Turn a moment into a review** below the controls. Add an optional note and
+download the JSON for checking, or Markdown for a readable discussion. The
+Markdown links to `index.html` with the sample fragment; place it beside the lab's
+index to use that relative link. It does not include your machine's file path or
+browser origin. Downloads do include your note.
+
+The JSON carries the locked plan and its settings hash, full-experiment counts
+and condition summaries, both selected source observations and their original
+results, runtime/checkpoint identity, raw camera hashes and active inference
+records. A shorter run keeps its actual source sample and `held_final` flag.
+Terminal observations have neither an action nor an active inference record.
+Controls retain their recorded units. Selecting a pair does not change the
+experiment's denominator.
+
+Open the JSON using the lab's file picker to compare it with the loaded records
+before restoring the selection and note. A mismatch leaves the existing
+selection and note intact. Processing is local and also works from `file://`;
+notes are not uploaded or stored between visits. User notes are limited to 4,000
+characters and imports to 128 KiB. In Markdown, notes appear as literal text.
+
+For an independent comparison, use the **current checkout** (this command is
+newer than the v0.5.0 package):
+
+```bash
+python3 -m robot_reel.cli stress docs/stress --review review.json
+```
+
+Replace `docs/stress` with your complete lab folder and `review.json` with the
+downloaded filename. The standard-library command first validates the collection
+and its manifest, then compares every review fact against the selected source
+records. Its output distinguishes `recorded_facts_match: true` from
+`user_note_verified: false`. Editing a note is allowed; changing recorded facts,
+outcomes, clocks or counts fails verification. Notes are human interpretation.
+The plan hash identifies settings, not a unique recording or an external
+attestation. This check establishes consistency with the supplied collection.
+
+The existing v0.4.0 release ZIP remains an immutable older viewer. To use these
+controls offline, build a new pack with the current checkout; its exporter
+includes this viewer automatically. Its underlying 30-trial evidence is the
+same. The original ZIP can still be supplied to the current CLI after extraction.
+
 ## Reproduce
 
 Use Python 3.12 and a separate environment: the recorder requires MuJoCo 3.8.1,

@@ -83,6 +83,12 @@ cameras, and jump to the largest measured trajectory difference. Recorded with
 [Open it in Foxglove](docs/telemetry.md) ·
 [Reproduce & inspect](docs/stress.md)
 
+**Share a moment for review.** Export a selected pair as JSON or readable
+Markdown with your own note. Reopen the JSON to restore the exact source samples,
+or verify its recorded facts against the full local collection. Held final
+observations and the complete experiment's counts stay explicit.
+[Review workflow and CLI](docs/stress.md#share-a-moment-for-review).
+
 <sub>One task × three native scene conditions × ten paired seeds. Fixed budget:
 160 actions / 8 simulation seconds per trial. Every trial is retained; execution
 errors stay in the attempt ledger. Inspect applied controls, measured state,

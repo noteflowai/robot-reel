@@ -7,6 +7,7 @@ const {tmpdir} = require('node:os');
 const {join, resolve, extname} = require('node:path');
 const {pathToFileURL} = require('node:url');
 const {chromium} = require('playwright');
+const {spawnSync} = require('node:child_process');
 let browser, server, base;
 before(async()=>{
   server = createServer(async(req,res)=>{
@@ -136,6 +137,81 @@ test('Stress Lab bounds shared inputs and finishes on real final observations',a
     assert.equal(await page.locator('#left-inference').textContent(),'Terminal observation · no action');
     assert.equal(await page.locator('#right-inference').textContent(),'Terminal observation · no action');
     assert.match(await page.locator(`#${shorter}-clock`).textContent(),reference.result.actions!==other.result.actions?/HELD FINAL/:/FINAL OBSERVATION/);
+  }finally{await page.close();}
+});
+test('Stress review downloads survive CLI verification and offline import without changing source facts',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  const folder=await mkdtemp(join(tmpdir(),'robot-reel-review-'));
+  const errors=[],requests=[];
+  const note='检查接触点 🔎\n````\n<img src=x onerror="window.injected=true">\n[link](javascript:alert(1))\n````';
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.route(/^https?:/,route=>{requests.push(route.request().url());route.abort();});
+  try{
+    await page.goto(pathToFileURL(resolve('docs/stress/index.html')).href+'#seed=9&condition=dim&frame=61&camera=wrist');
+    await page.locator('#review-note').fill(note);
+    let saved;
+    for(const frame of [61,82,100,160]){
+      await page.locator('#timeline').evaluate((el,n)=>{el.value=n;el.dispatchEvent(new Event('input'));},frame);
+      const pending=page.waitForEvent('download');await page.locator('#review-json').click();
+      const download=await pending,review=JSON.parse(await readFile(await download.path(),'utf8'));
+      assert.equal(download.suggestedFilename(),`robot-reel-seed-09-dim-sample-${frame}-wrist.json`);
+      assert.equal(review.scope.planned_trials,30);assert.equal(review.user_note,note);
+      assert.equal(review.recorded[0].source_frame,Math.min(82,frame));
+      assert.equal(review.recorded[0].held_final,frame>82);
+      if(frame>=82){assert.equal(review.recorded[0].observation.action,null);assert.equal(review.recorded[0].active_inference,null);}
+      const output=join(folder,download.suggestedFilename());await download.saveAs(output);
+      const check=spawnSync('python3',['-S','-m','robot_reel.cli','stress','docs/stress','--review',output],{encoding:'utf8'});
+      assert.equal(check.status,0,check.stderr);
+      assert.equal(JSON.parse(check.stdout).review.recorded_facts_match,true);
+      if(frame===100)saved={output,review};
+    }
+    await page.locator('#seed').selectOption('0');
+    await page.locator('#review-note').fill('Local draft');
+    await page.locator('#review-file').setInputFiles(saved.output);
+    await page.waitForFunction(()=>document.querySelector('#review-status').textContent.startsWith('Recorded facts match'));
+    assert.equal(await page.locator('#seed').inputValue(),'9');
+    assert.equal(await page.locator('#condition').inputValue(),'dim');
+    assert.equal(await page.locator('#timeline').inputValue(),'100');
+    assert.equal(await page.locator('#wrist').getAttribute('aria-pressed'),'true');
+    assert.match(page.url(),/#seed=9&condition=dim&frame=100&camera=wrist$/);
+    assert.match(await page.locator('#left-clock').textContent(),/SOURCE 082.*HELD FINAL/);
+    assert.equal(await page.locator('#review-note').inputValue(),note);
+    assert.equal(await page.evaluate(()=>window.injected),undefined);
+    const pending=page.waitForEvent('download');await page.locator('#review-md').click();
+    const markdown=await readFile(await (await pending).path(),'utf8');
+    assert.ok(markdown.includes('`````text\n'+note+'\n`````'));
+    assert.match(markdown,/30\/30 trials completed/);
+    assert.match(markdown,/\| seed-09-reference \| success \| 82 \| 4.10 s \| HELD FINAL \|/);
+    assert.match(markdown,/index.html#seed=9&condition=dim&frame=100&camera=wrist/);
+    assert.ok(!markdown.includes('file:///')&&!markdown.includes('127.0.0.1'));
+    const corrupted=structuredClone(saved.review);corrupted.scope.planned_trials=2;
+    await page.locator('#review-file').setInputFiles({name:'changed.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(corrupted))});
+    await page.waitForFunction(()=>document.querySelector('#review-status').textContent.startsWith('Could not open review:'));
+    assert.match(await page.locator('#review-status').textContent(),/facts differ/);
+    assert.equal(await page.locator('#timeline').inputValue(),'100');
+    assert.equal(await page.locator('#review-note').inputValue(),note);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    await page.locator('#review-clear').click();assert.equal(await page.locator('#review-note').inputValue(),'');
+    assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+  }finally{await page.close();await rm(folder,{recursive:true,force:true});}
+});
+test('Stress review rejects malformed and oversized imports and does not store notes between visits',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/stress/#seed=9&condition=reference&frame=61&camera=main');
+    await page.locator('#review-note').fill('Draft');
+    for(const buffer of [Buffer.from('null'),Buffer.from('{'),Buffer.alloc(131073,32)]){
+      await page.locator('#review-file').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer});
+      await page.waitForFunction(()=>document.querySelector('#review-file').value==='');
+      assert.match(await page.locator('#review-status').textContent(),/^Could not open review:/);
+      assert.equal(await page.locator('#review-note').inputValue(),'Draft');
+      assert.equal(await page.locator('#timeline').inputValue(),'61');
+    }
+    const pending=page.waitForEvent('download');await page.locator('#review-json').click();
+    const review=JSON.parse(await readFile(await (await pending).path(),'utf8'));
+    assert.deepEqual(review.recorded[0],review.recorded[1]);
+    await page.reload();assert.equal(await page.locator('#review-note').inputValue(),'');
+    assert.equal(await page.locator('#matrix button').count(),30);
   }finally{await page.close();}
 });
 test('Butterfly Lab preserves source metrics across views, playback, sharing and USD download',async()=>{

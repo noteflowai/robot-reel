@@ -21,6 +21,7 @@ def check(source):
     import robot_reel
     from robot_reel.stress_site import build, verify_site
     from robot_reel.stress_mcap import check_mcap
+    from robot_reel.stress_review import record
 
     module = Path(robot_reel.__file__).resolve()
     if module.is_relative_to(source/"robot_reel") or Path.cwd().is_relative_to(source):
@@ -34,9 +35,21 @@ def check(source):
         if verify_site(output) != summary or summary["completed_trials"] != 30:
             raise ValueError("Installed package did not preserve the complete experiment")
         # Verify actual MCAP records and decode all camera streams in build().
-        from robot_reel.stress_site import load_collection
-        _, _, traces = load_collection(output)
+        from robot_reel.stress_site import load_collection, payload
+        collection = load_collection(output)
+        traces = collection[2]
         telemetry = check_mcap(traces, output/"telemetry.mcap")
+        review_path = Path(temporary)/"review.json"
+        review_path.write_text(json.dumps(record(payload(*collection),
+            {"seed": 9, "condition": "dim", "frame": 100, "camera": "wrist"}, "Installed wheel check")))
+        review = subprocess.run(
+            [str(Path(sys.executable).with_name("robot-reel")), "stress", str(output),
+             "--review", str(review_path)],
+            check=True, capture_output=True, text=True, timeout=120,
+        )
+        review_check = json.loads(review.stdout)["review"]
+        if not review_check["recorded_facts_match"] or review_check["user_note_verified"]:
+            raise ValueError("Installed review validator did not separate source facts from user notes")
         with zipfile.ZipFile(output/"experiment.zip") as archive:
             for original, name in (
                 ("licenses/VLA-MEDIA-NOTICE.txt", "NOTICE.txt"),
@@ -51,6 +64,7 @@ def check(source):
         )
         return {"version": expected, "module": str(module),
                 "stress_trials": summary["completed_trials"], "telemetry": telemetry,
+                "review": review_check,
                 "vla": json.loads(result.stdout)}
 
 

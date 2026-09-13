@@ -280,10 +280,15 @@ def main(argv=None):
     parser.add_argument("source", type=Path)
     parser.add_argument("--check-media", action="store_true", help="Decode both policy cameras in every completed trial")
     parser.add_argument("--check-mcap", action="store_true", help="Read back and compare every MCAP telemetry message")
+    parser.add_argument("--review", type=Path, help="Compare an exported review JSON with this complete collection")
     args = parser.parse_args(argv)
     from .stress_site import check_media, load_collection, verify_site
     try:
         result = verify_site(args.source)
+        if args.review:
+            from .stress_review import read_review, verify_record
+            from .stress_site import payload
+            result["review"] = verify_record(payload(*load_collection(args.source)), read_review(args.review))
         if args.check_media:
             result["media_trials_checked"] = len(check_media(args.source))
         if args.check_mcap:
