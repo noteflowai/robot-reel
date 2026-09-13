@@ -276,16 +276,30 @@ def record(output, seconds=4, device="cuda:0"):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("artifacts/cloth"))
-    parser.add_argument("--seconds", type=float, default=4)
-    parser.add_argument("--device", choices=("cpu", "cuda:0"), default="cuda:0")
-    parser.add_argument("--verify", action="store_true")
-    parser.add_argument("--check-usd", action="store_true")
+    parser.add_argument("--seconds", type=float, help="New recording duration (default: 4 seconds)")
+    parser.add_argument("--device", choices=("cpu", "cuda:0"), help="New recording device (default: cuda:0)")
+    action = parser.add_mutually_exclusive_group()
+    action.add_argument("--verify", action="store_true")
+    action.add_argument("--export-from", type=Path, metavar="BUNDLE",
+                        help="Export a checked recording to a fresh --output, without new simulation")
+    parser.add_argument("--check-usd", action="store_true",
+                        help="Also read back the USD with its optional native dependency")
     args = parser.parse_args(argv)
+    if (args.verify or args.export_from) and (args.seconds is not None or args.device is not None):
+        parser.error("--seconds and --device apply only to new recordings")
     try:
-        result = verify(args.output) if args.verify else record(args.output, args.seconds, args.device)
-        if args.check_usd:
-            from .cloth_usd import check_usd
-            result = {"summary": result, "usd": check_usd(*load(args.output), args.output/"scene.usdc")}
+        if args.export_from:
+            from .cloth_site import build
+            result = {
+                "summary": build(args.export_from, args.output, check_native=args.check_usd),
+                "exported_to": str(args.output.resolve()), "native_usd_checked": args.check_usd,
+            }
+        else:
+            result = verify(args.output) if args.verify else record(
+                args.output, 4 if args.seconds is None else args.seconds, args.device or "cuda:0")
+            if args.check_usd:
+                from .cloth_usd import check_usd
+                result = {"summary": result, "usd": check_usd(*load(args.output), args.output/"scene.usdc")}
     except (ValueError, OSError, ImportError) as exc:
         parser.error(str(exc))
     print(json.dumps(result, indent=2))

@@ -5,14 +5,17 @@ import json
 from pathlib import Path
 import shutil
 import struct
+import subprocess
+import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from robot_reel.cloth import (
     CASES, FILES, VERTICES, export_viewer, floats, load, measurements, record,
     validate, verify, write_manifest,
 )
-from scripts.build_cloth_site import check_reports, verify_site
+from robot_reel.cloth_site import SOURCES, build, check_reports, verify_site
 from scripts.build_cloth_showcase import verify_showcase
 
 SITE = Path(__file__).resolve().parents[1]/"docs/cloth"
@@ -128,8 +131,100 @@ class ClothEvidenceTests(unittest.TestCase):
             self.assertIn('id="download-archive" hidden', path.read_text())
 
 
+class ClothExportTests(unittest.TestCase):
+    def test_stdlib_cli_exports_complete_sources_reports_and_package_resources(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)/"export"
+            output.mkdir()  # An empty, pre-created output is also supported.
+            command = subprocess.run(
+                [sys.executable, "-S", "-m", "robot_reel.cli", "cloth",
+                 "--export-from", str(SITE), "--output", str(output)],
+                cwd=SITE.parents[1], capture_output=True, text=True, check=True,
+            )
+            report = json.loads(command.stdout)
+            self.assertFalse(report["native_usd_checked"])
+            self.assertEqual(report["summary"], verify_site(output))
+            for name in SOURCES:
+                self.assertEqual((SITE/name).read_bytes(), (output/name).read_bytes())
+            for original, target, resource in (
+                (SITE.parent/"cloth.md", "METHODS.md", "METHODS.txt"),
+                (SITE.parents[1]/"LICENSE", "LICENSE", "LICENSE.txt"),
+            ):
+                self.assertEqual(original.read_bytes(), (output/target).read_bytes())
+                self.assertEqual(original.read_bytes(),
+                    (SITE.parents[1]/"robot_reel/resources/cloth"/resource).read_bytes())
+
+    def test_export_protects_input_existing_output_and_symlink_targets(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root/"source"
+            shutil.copytree(SITE, source)
+            protected = root/"occupied"
+            protected.mkdir()
+            (protected/"keep.txt").write_text("keep")
+            link = root/"link"
+            link.symlink_to(source, target_is_directory=True)
+            for output in (source, source/"child", root, protected, link):
+                with self.subTest(output=output), self.assertRaises(ValueError):
+                    build(source, output)
+            self.assertEqual((protected/"keep.txt").read_text(), "keep")
+            self.assertEqual(check_reports(source)["vertex_samples"], 42471)
+
+    def test_failure_never_publishes_a_partial_export(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)/"export"
+            with patch("robot_reel.cloth_site.export_viewer", side_effect=RuntimeError("render failed")):
+                with self.assertRaisesRegex(RuntimeError, "render failed"):
+                    build(SITE, output)
+            self.assertFalse(output.exists())
+            self.assertEqual(list(Path(directory).iterdir()), [])
+
+    def test_saved_native_reports_reject_mistyped_clocks_and_unaccepted_errors(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)/"source"
+            shutil.copytree(SITE, source)
+            for name, field, value in (
+                ("blender", "frame_start", True),
+                ("blender", "checked_vertex_samples", 42471.0),
+                ("usd", "maximum_position_error_m", 1e-6),
+            ):
+                report = json.loads((SITE/f"{name}-check.json").read_text())
+                report[field] = value
+                path = source/f"{name}-check.json"
+                path.write_text(json.dumps(report))
+                with self.subTest(field=field), self.assertRaises(ValueError):
+                    build(source, Path(directory)/"output")
+                self.assertFalse((Path(directory)/"output").exists())
+                shutil.copyfile(SITE/path.name, path)
+
+
 @unittest.skipUnless(importlib.util.find_spec("pxr"), "OpenUSD optional dependency")
 class ClothNativeTests(unittest.TestCase):
+    def test_requested_native_export_rejects_an_edited_scene_even_after_rehash(self):
+        from pxr import Gf, Usd, UsdGeom
+        from robot_reel.cloth import digest
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root/"source"
+            shutil.copytree(SITE, source)
+            stage = Usd.Stage.Open(str(source/"scene.usdc"))
+            attr = UsdGeom.Mesh.Get(stage, "/World/bend_1").GetPointsAttr()
+            points = attr.Get(20)
+            points[2] = Gf.Vec3f(4, 5, 6)
+            attr.Set(points, 20)
+            stage.GetRootLayer().Save()
+            for name in ("usd", "blender"):
+                path = source/f"{name}-check.json"
+                report = json.loads(path.read_text())
+                report["usd_sha256"] = digest(source/"scene.usdc")
+                path.write_text(json.dumps(report))
+            write_manifest(source)
+            # Hash agreement alone is not a new native inspection.
+            self.assertEqual(check_reports(source)["vertex_samples"], 42471)
+            with self.assertRaisesRegex(ValueError, "USD differs"):
+                build(source, root/"export", check_native=True)
+            self.assertFalse((root/"export").exists())
+
     def test_native_points_and_velocities_match_source(self):
         from robot_reel.cloth_usd import check_usd
         result = check_usd(*load(SITE), SITE/"scene.usdc")

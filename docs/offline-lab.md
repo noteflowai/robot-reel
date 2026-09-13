@@ -1,17 +1,35 @@
-# Robot Reel 0.6.0 — start with the offline lab
+# Robot Reel 0.7.0 — choose an offline lab
 
 Download these files from the same Robot Reel GitHub release:
 
 | File | Use |
 | --- | --- |
+| `robot-reel-cloth-experiment.zip` | GPU cloth replay, original positions/velocities, native reports and editable USD |
+| `robot-reel-cloth-scene.usdc` | The same cloth scene as in the ZIP; import into Blender at 30 fps |
 | `robot-reel-stress-experiment.zip` | Complete offline Stress Lab: 30 trials, 60 videos, telemetry and review tools |
 | `robot-reel-seed-09-review.json` | A sample review to import into the lab |
 | `SHA256SUMS` | SHA-256 checksums for the release files |
-| `robot_reel-0.6.0-py3-none-any.whl` | Optional Python installation for independent checks and exports |
+| `robot_reel-0.7.0-py3-none-any.whl` | Optional Python installation for independent checks and exports |
 | `robot-reel-seed-09.rrd` | Optional native Rerun workspace; open in Rerun 0.37.2 |
 
-The ZIP opens in a browser without Python, a GPU or a network connection.
-It contains recorded runs; opening it does not execute policy inference.
+Both ZIPs open in a browser without Python, a GPU or a network connection.
+They contain recorded runs; opening them does not execute policy inference or
+cloth simulation. Keep the two experiments in separate extracted folders.
+
+## Explore GPU cloth
+
+1. Extract `robot-reel-cloth-experiment.zip` into `cloth-lab`, keeping all files
+   together, and open `index.html`.
+2. Press **Release all three**, step or scrub, and switch between side-by-side
+   and overlay. Colors identify three numerical bending coefficients.
+3. Share a sample by keeping the URL fragment with the folder. Positions and
+   velocities retain all 42,471 vertex samples from the original L40S run.
+4. To edit the scene, import `scene.usdc` in Blender and set **30 fps**.
+   Blender frame 1 is source sample 0; no new cloth simulation is needed.
+
+The experiment changes only a Newton solver coefficient. It does not calibrate
+real fabric, model collisions/self-contact or measure material stress.
+The included `METHODS.md` describes its scope and native checks.
 
 ## Open a real review
 
@@ -31,7 +49,7 @@ The sample note is a review prompt, not verified evidence. The experiment remain
 one LIBERO task, ten paired initial states and three conditions: all 30 trials
 remain visible. A selected pair is not a benchmark or a general robustness claim.
 The earlier v0.4.0 archive contains the same recorded experiment with an older
-viewer; use the 0.6.0 archive for these review tools.
+viewer; use an archive from 0.6.0 or newer for these review tools.
 
 ## Check the downloaded files
 
@@ -66,7 +84,7 @@ on Linux/macOS:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.6.0-py3-none-any.whl
+python -m pip install ./robot_reel-0.7.0-py3-none-any.whl
 robot-reel stress stress-lab --review robot-reel-seed-09-review.json
 ```
 
@@ -75,7 +93,7 @@ directly without changing its activation policy:
 
 ```powershell
 py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.6.0-py3-none-any.whl
+.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.7.0-py3-none-any.whl
 .\.venv\Scripts\robot-reel.exe stress stress-lab --review robot-reel-seed-09-review.json
 ```
 
@@ -90,6 +108,20 @@ Optional video and MCAP checks:
 python -m pip install 'mcap==1.4.0'
 robot-reel stress stress-lab --check-media --check-mcap
 ```
+
+Check or re-export the cloth recording from the same installed environment:
+
+```bash
+robot-reel cloth --output cloth-lab --verify
+robot-reel cloth --export-from cloth-lab --output cloth-copy
+```
+
+The second command produces a new viewer and complete `experiment.zip`,
+preserving original geometry, velocities and native reports. It requires an
+empty destination outside the input folder, and no Newton, Blender or GPU.
+`native_usd_checked: false` means the command checked saved report hashes,
+not a new USD import. Install `usd-core==26.3` and add `--check-usd` to perform
+native readback again.
 
 For the equivalent standard-library check from a source checkout, use
 `python3 -m robot_reel.cli stress /path/to/stress-lab --review /path/to/review.json`.

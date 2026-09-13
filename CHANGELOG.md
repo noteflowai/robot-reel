@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## 0.7.0 — GPU cloth and portable deformable experiments
+
+- Ship Cloth Lab in the installed package and release downloads. Export a checked
+  recording and its complete offline ZIP without a source checkout, Newton or a
+  GPU. Preserve the original data and native reports; request native USD readback
+  separately. Package the method and license, protect existing input/output
+  directories, and publish only a fully validated export.
+- Test both installed-wheel archives offline at desktop and mobile sizes, and
+  publish those exact files with checksums. Keep citation, package and release
+  versions aligned. Existing recordings and earlier release assets are preserved.
+
 - Add Cloth Lab: three independent Newton VBD cloth simulations recorded on
   NVIDIA L40S, with original float32 positions and velocities, shared-clock
   mesh comparison, orbit/overlay replay and a portable offline experiment.
