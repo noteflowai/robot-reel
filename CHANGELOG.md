@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Point the homepage, both READMEs and the published Stress viewer at the
+  verified 0.7.1 downloads, installation guide and checksums.
+
 ## 0.7.1 — Reliable offline export recovery
 
 - Stage Stress Lab exports beside their destination and publish only after media,
