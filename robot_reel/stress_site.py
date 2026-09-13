@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import re
 import shutil
+import tempfile
 import zipfile
 
 from .stress import CONDITIONS, MEDIA, SCHEMA, file_hash, summarize, trial_id, validate_plan, verify_run, write_json
@@ -186,12 +187,31 @@ def check_media(directory):
 
 
 def build(recording, output, archive_href="experiment.zip"):
-    from .stress_mcap import export_mcap
-    recording, output = Path(recording), Path(output)
-    document, attempts, traces = load_collection(recording)
-    if output.exists() and any(output.iterdir()):
+    """Publish a complete, verified export without changing the input collection."""
+    recording, output = Path(recording).resolve(), Path(output)
+    target = output.resolve()
+    if output.is_symlink() or target.is_relative_to(recording) or recording.is_relative_to(target):
+        raise ValueError("Stress input and output directories must be separate")
+    if output.exists() and (not output.is_dir() or any(output.iterdir())):
         raise ValueError("Choose an empty output directory")
-    output.mkdir(parents=True, exist_ok=True)
+    document, attempts, traces = load_collection(recording)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=".stress-export-", dir=output.parent) as temporary:
+        staging = Path(temporary)/"site"
+        staging.mkdir()
+        result = _write_site(recording, staging, document, attempts, traces, archive_href)
+        # Keep staging on the destination filesystem for the final rename.
+        # rmdir also refuses an empty placeholder populated by another writer.
+        if output.is_dir():
+            output.rmdir()
+        staging.replace(output)
+    return result
+
+
+def _write_site(recording, output, document, attempts, traces, archive_href):
+    from .stress_mcap import export_mcap
+    # Resolve the optional MCAP dependency before copying the camera recordings.
+    export_mcap(traces, output/"telemetry.mcap")
     for name in ("experiment.json", "attempts.json"):
         shutil.copyfile(recording/name, output/name)
     for attempt in attempts:
@@ -204,7 +224,6 @@ def build(recording, output, archive_href="experiment.zip"):
     data = payload(document, attempts, traces)
     write_json(output/"summary.json", data["summary"])
     (output/"results.csv").write_text(csv_text(traces))
-    export_mcap(traces, output/"telemetry.mcap")
     write_json(output/"media-checks.json", check_media(output))
     resources = files("robot_reel").joinpath("resources", "stress")
     for source, name in (("NOTICE.txt", "NOTICE.txt"), ("LICENSE.txt", "LICENSE"), ("METHODS.txt", "METHODS.md")):

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Stage Stress Lab exports beside their destination and publish only after media,
+  telemetry, manifest and archive verification succeeds. Failed or interrupted
+  exports can be retried without removing a partial output. Reject overlapping
+  input/output paths, symlink destinations and occupied outputs; preserve files
+  another writer creates before publication.
 - Connect the homepage and both READMEs to the verified 0.7.0 release files,
   with direct downloads for both offline labs and the editable cloth scene.
 
