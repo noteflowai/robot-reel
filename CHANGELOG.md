@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Export selected Stress Lab moments as portable JSON and readable Markdown with
+  separate user notes. Import and compare facts before restoring a selection;
+  verify reviews against a complete local collection with the standard-library
+  CLI. Preserve source clocks, held/final observations, active inference records,
+  checkpoint identity and the complete experiment's counts.
+
 - Guide first-time visitors from a selected paired outcome to native inspection
   and full-experiment reproduction. Add purpose filters with shareable URLs,
   keyboard controls, browser history and offline/no-JavaScript fallbacks.

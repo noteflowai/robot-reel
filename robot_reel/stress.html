@@ -13,6 +13,7 @@
 @media(max-width:540px){main{padding:18px 15px 40px}.eyebrow{margin-top:35px;font-size:10px}h1{font-size:44px}.intro{font-size:15px}.stats{gap:7px}.stat{padding:12px 9px;border-radius:11px}.stat h2{font-size:11px}.score{font-size:34px}.stat small{font-size:10px}.views{gap:7px}.inspect{grid-template-columns:1fr}.view-head{padding:8px;align-items:flex-start;flex-direction:column;gap:2px}.view-head h3{font-size:12px}.view-clock{padding:8px;font-size:10px;min-height:50px}.toolbar{gap:7px}.toolbar button,.toolbar select{font-size:12px;padding:8px}.telemetry{padding:14px}.control{grid-template-columns:66px 1fr 55px;gap:7px;font-size:12px}.counter{font-size:11px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 .divergence{padding:12px 14px;border:1px solid var(--line);border-radius:12px;margin:12px 0;color:var(--muted);font-size:12px}.divergence strong{color:var(--purple)}.divergence svg{display:block;width:100%;height:72px;margin-top:8px}.sensors{white-space:pre-line}
+.review{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--panel);margin-top:20px}.review h2{margin:0 0 8px}.review label,.review p{font-size:13px}.review textarea{display:block;width:100%;min-height:100px;resize:vertical;font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;margin:8px 0 12px}.review input[type=file]{max-width:100%;font-size:12px}.review .downloads{margin-bottom:12px}.review code{overflow-wrap:anywhere}
 </style>
 </head>
 <body><main>
@@ -44,6 +45,18 @@ Watch a fresh policy rollout in every condition, then inspect where its behavior
 <article class="telemetry"><h3>Reference controls</h3><p id="left-inference"></p><div class="controls" id="left-controls"></div><div class="sensors" id="left-sensors"></div><a class="trace-link" id="left-trace" download>Source trace ↓</a></article>
 <article class="telemetry"><h3>Selected controls</h3><p id="right-inference"></p><div class="controls" id="right-controls"></div><div class="sensors" id="right-sensors"></div><a class="trace-link" id="right-trace" download>Source trace ↓</a></article>
 </div><p class="note">Controls are normalized commands in [−1, 1], not joint angles. Each panel holds its own final observation when its run ends. A held sample is labelled explicitly.</p>
+<section class="review" id="review" aria-labelledby="review-title">
+<h2 id="review-title">Turn a moment into a review.</h2>
+<p class="note">Export the selected pair with its recorded observations, controls and inference timing. Import the JSON into this lab to compare its facts and restore the selection. Your note stays separate from the recorded evidence.</p>
+<p id="review-selection" class="counter"></p>
+<label for="review-note">Your note · optional, up to 4,000 characters</label>
+<textarea id="review-note" maxlength="4000" placeholder="What should a teammate inspect at this moment?" aria-describedby="review-privacy"></textarea>
+<div class="downloads"><button id="review-json">Export review JSON ↓</button><button id="review-md">Export readable Markdown ↓</button><button id="review-clear">Clear note</button></div>
+<label for="review-file">Open a review JSON</label> <input id="review-file" type="file" accept=".json,application/json">
+<p id="review-privacy" class="note">Files are processed in this browser. Notes are included only in your downloads; they are not uploaded or saved between visits. Exports use a relative replay link and retain the complete experiment's counts.</p>
+<p class="note">To check a downloaded review against your local lab: <code>python3 -m robot_reel.cli stress docs/stress --review review.json</code>. Requires the current checkout; replace the paths with your lab folder and downloaded JSON.</p>
+<p id="review-status" class="status" role="status" aria-live="polite"></p>
+</section>
 </section></div>
 <section class="methods"><div><h2>Small experiment. Complete record.</h2>
 <p id="task"></p><p>These are new closed-loop runs with native MuJoCo lighting and camera changes applied before the first policy observation. Initial qpos/qvel, renderer settings and inference noise hashes are checked across every pair.</p>
@@ -127,6 +140,7 @@ function controls(side,t){
 function render(seek=true){
   const max=Math.max(...pair.map(end));frame=Math.max(0,Math.min(max,frame));$('timeline').max=max;$('timeline').value=frame;
   $('counter').textContent=`Sample ${frame} / ${max} · ${(frame/20).toFixed(2)} s`;
+  $('review-selection').textContent=`Seed ${String(seed).padStart(2,'0')} · Reference / ${label(condition)} · sample ${frame} · ${camera==='main'?'scene':'wrist'} camera`;
   $('prev').disabled=frame===0;$('next').disabled=frame===max;
   pair.forEach((t,i)=>{
     const side=i?'right':'left',n=Math.min(frame,end(t));
@@ -200,6 +214,97 @@ function fromHash(){
 $('share').onclick=()=>{
   history.replaceState(null,'',`#seed=${seed}&condition=${condition}&frame=${frame}&camera=${camera}`);
   $('status').textContent=location.protocol==='file:'?'Share this complete folder and the sample fragment in the address bar.':'The address now opens this exact seed, condition, camera and sample.';
+};
+function validateNote(note){
+  if(typeof note!=='string'||Array.from(note).length>4000||/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(note)||Array.from(note).some(c=>c.length===1&&/[\ud800-\udfff]/.test(c)))throw Error('Use a note of at most 4,000 characters, without control characters.');
+}
+function reviewRecord(selection,note){
+  validateNote(note);
+  if(!selection||Object.keys(selection).sort().join(',')!=='camera,condition,frame,seed')throw Error('Invalid review selection.');
+  const {seed:s,condition:c,frame:n,camera:view}=selection;
+  if(!Number.isInteger(s)||!data.experiment.seeds.includes(s)||!conditions.some(x=>x.id===c)||!['main','wrist'].includes(view)||!Number.isInteger(n))throw Error('Invalid review seed, condition, camera or sample.');
+  const selected=[get(s,'reference'),get(s,c)];
+  if(n<0||n>Math.max(...selected.map(end)))throw Error('Review sample lies outside this recorded pair.');
+  return {
+    schema:'robot-reel-stress-review-1',plan_sha256:selected[0].stress.plan_sha256,experiment:data.experiment,
+    scope:Object.fromEntries(['planned_trials','completed_trials','attempts','execution_errors','conditions'].map(k=>[k,data.summary[k]])),
+    selection:{...selection},replay_fragment:`#seed=${s}&condition=${c}&frame=${n}&camera=${view}`,
+    recorded:selected.map(t=>{
+      const index=Math.min(n,end(t)),observation=t.frames[index];
+      return {trial_id:t.stress.trial_id,attempt:data.attempts.find(a=>a.trial_id===t.stress.trial_id&&a.status==='completed'),
+        source:t.source,initial_physics_sha256:t.stress.initial_physics_sha256,task_bddl_sha256:t.stress.task_bddl_sha256,
+        channels:t.channels,action_units:t.action_units,state_units:t.state_units,result:t.result,
+        source_frame:index,held_final:n>index,observation,
+        active_inference:observation.terminal?null:t.inference_calls.find(call=>call.frame===observation.inference_frame)};
+    }),user_note:note,
+  };
+}
+function sameJSON(a,b){
+  if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return a===b;
+  if(Array.isArray(a)!==Array.isArray(b))return false;
+  const keys=Object.keys(b);return Object.keys(a).length===keys.length&&keys.every(k=>Object.hasOwn(a,k)&&sameJSON(a[k],b[k]));
+}
+function reviewMarkdown(r,name){
+  const lines=['# Robot Reel — paired moment review','',
+    `Seed ${r.selection.seed} · ${label(r.selection.condition)} · sample ${r.selection.frame} · ${r.selection.camera} camera`,'',
+    `[Open this moment](index.html${r.replay_fragment}) — place this Markdown beside the lab index.html.`,'',
+    '## Recorded facts','',
+    `Full experiment: ${r.scope.completed_trials}/${r.scope.planned_trials} trials completed; ${r.scope.attempts} attempts; ${r.scope.execution_errors} execution errors.`,
+    'One LIBERO Spatial task. This selected pair is not a benchmark or a general robustness result.',''];
+  for(const c of r.scope.conditions)lines.push(`- ${label(c.id)}: ${c.successes}/${c.trials} successes.`);
+  lines.push('','| Run | Recorded outcome | Source sample | Clock | Observation |','| --- | --- | ---: | ---: | --- |');
+  for(const t of r.recorded)lines.push(`| ${t.trial_id} | ${t.result.outcome} | ${t.source_frame} | ${t.observation.episode_time.toFixed(2)} s | ${t.held_final?'HELD FINAL':t.observation.terminal?'FINAL OBSERVATION':'Recorded observation'} |`);
+  lines.push('','Controls are normalized commands, not joint angles. Final observations have no action or active inference.','');
+  for(const t of r.recorded){
+    lines.push(`### ${t.trial_id}`,'',`Source: ${t.attempt.directory}/trace.json`,
+      `Device: ${t.source.device}; policy: ${t.source.policy} @ ${t.source.policy_revision}`,
+      `Checkpoint SHA-256: ${t.source.checkpoint_sha256}`,
+      `Raw ${r.selection.camera} observation SHA-256: ${t.observation.raw_camera_sha256[r.selection.camera]}`,
+      `Applied controls: ${t.observation.action===null?'none (final observation)':JSON.stringify(t.observation.action)}`,
+      `Active inference: ${t.active_inference?`chunk from sample ${t.active_inference.frame}; ${t.active_inference.policy_seconds} wall-clock seconds`:'none (final observation)'}`,'');
+  }
+  // A variable-length fence keeps Markdown/HTML in user notes literal.
+  const fence='`'.repeat(Math.max(3,...Array.from(r.user_note.matchAll(/`+/g),m=>m[0].length+1)));
+  lines.push('## User note — not verified evidence','',fence+'text',r.user_note||'(No note)',fence,'',
+    '## Check against the original collection','',
+    'The companion JSON carries the observations, inference records, source identity and full condition counts. The validator checks the collection and compares these facts; it does not validate the user note or externally attest the collector.','',
+    `Plan SHA-256 (settings only): ${r.plan_sha256}`,'',
+    'From the current Robot Reel checkout, replace paths with your lab folder and downloaded JSON:','',
+    '```bash',`python3 -m robot_reel.cli stress docs/stress --review ${name}.json`,'```','');
+  return lines.join('\n');
+}
+function downloadReview(format){
+  pause('Paused at the exported review sample.');render();
+  try{
+    const r=reviewRecord({seed,condition,frame,camera},$('review-note').value);
+    const name=`robot-reel-seed-${String(seed).padStart(2,'0')}-${condition}-sample-${frame}-${camera}`;
+    const text=format==='json'?JSON.stringify(r,null,2)+'\n':reviewMarkdown(r,name);
+    const blob=new Blob([text],{type:format==='json'?'application/json':'text/markdown;charset=utf-8'});
+    if(blob.size>131072)throw Error('Review exceeds 128 KiB. Shorten the note.');
+    const url=URL.createObjectURL(blob),a=element('a','');a.href=url;a.download=`${name}.${format}`;document.body.append(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    $('review-status').textContent=`${format==='json'?'JSON':'Markdown'} exported for sample ${frame}. Your note is user text, separate from the recorded facts.`;
+  }catch(error){$('review-status').textContent=error.message;}
+}
+$('review-note').onfocus=()=>{pause('Paused while you write a review note.');render();};
+$('review-clear').onclick=()=>{$('review-note').value='';$('review-status').textContent='Note cleared.';};
+$('review-json').onclick=()=>downloadReview('json');$('review-md').onclick=()=>downloadReview('md');
+let reviewImport=0;
+$('review-file').onchange=async()=>{
+  const request=++reviewImport,file=$('review-file').files[0];if(!file)return;
+  try{
+    if(file.size>131072)throw Error('Review JSON exceeds 128 KiB.');
+    const r=JSON.parse(await file.text());
+    if(request!==reviewImport)return;
+    if(!r||Array.isArray(r)||typeof r!=='object')throw Error('Expected a review JSON object.');
+    const expected=reviewRecord(r.selection,r.user_note);
+    if(!sameJSON(r,expected))throw Error('Review facts differ from this collection. Selection and note were kept.');
+    ({seed,condition,frame,camera}=expected.selection);$('review-note').value=expected.user_note;loadPair();
+    // Some file browsers restrict History APIs; restoration still works there.
+    try{history.replaceState(null,'',expected.replay_fragment);}catch{}
+    $('review-status').textContent='Recorded facts match this loaded collection. Selection restored; the user note is not verified evidence.';
+  }catch(error){if(request===reviewImport)$('review-status').textContent=`Could not open review: ${error.message}`;}
+  finally{if(request===reviewImport)$('review-file').value='';}
 };
 addEventListener('hashchange',fromHash);addEventListener('pagehide',()=>pause());
 if(location.protocol==='file:'){$('zip').hidden=true;$('zip').style.display='none';}

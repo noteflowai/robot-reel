@@ -84,6 +84,11 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 [在 Foxglove 中打开](docs/telemetry.md) ·
 [复现与检查](docs/stress.md)
 
+**把具体时刻带进团队复盘。** 将选中的配对样本和个人备注导出为 JSON 或可读
+Markdown，重新导入可恢复原始样本位置，也可用命令行与完整本地实验逐项比对。
+记录明确标注末帧停留，保留完整实验统计，个人备注与录制事实分开。
+[复盘流程与核验命令](docs/stress.md#share-a-moment-for-review)。
+
 <sub>一个任务 × 三种原生场景条件 × 十个配对种子；每次固定最多 160 个动作、
 8 秒仿真时间。保留全部试次，执行错误另记入尝试历史；提供实际控制量、测量状态、
 分开的推理／仿真耗时及各条件置信区间。这是受控诊断实验，不是 LIBERO 官方榜单成绩。
