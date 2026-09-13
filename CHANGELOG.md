@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.7.1 — Reliable offline export recovery
+
 - Stage Stress Lab exports beside their destination and publish only after media,
   telemetry, manifest and archive verification succeeds. Failed or interrupted
   exports can be retried without removing a partial output. Reject overlapping

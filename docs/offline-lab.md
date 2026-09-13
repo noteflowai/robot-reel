@@ -1,4 +1,4 @@
-# Robot Reel 0.7.0 — choose an offline lab
+# Robot Reel 0.7.1 — choose an offline lab
 
 Download these files from the same Robot Reel GitHub release:
 
@@ -9,7 +9,7 @@ Download these files from the same Robot Reel GitHub release:
 | `robot-reel-stress-experiment.zip` | Complete offline Stress Lab: 30 trials, 60 videos, telemetry and review tools |
 | `robot-reel-seed-09-review.json` | A sample review to import into the lab |
 | `SHA256SUMS` | SHA-256 checksums for the release files |
-| `robot_reel-0.7.0-py3-none-any.whl` | Optional Python installation for independent checks and exports |
+| `robot_reel-0.7.1-py3-none-any.whl` | Optional Python installation for independent checks and exports |
 | `robot-reel-seed-09.rrd` | Optional native Rerun workspace; open in Rerun 0.37.2 |
 
 Both ZIPs open in a browser without Python, a GPU or a network connection.
@@ -84,7 +84,7 @@ on Linux/macOS:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.7.0-py3-none-any.whl
+python -m pip install ./robot_reel-0.7.1-py3-none-any.whl
 robot-reel stress stress-lab --review robot-reel-seed-09-review.json
 ```
 
@@ -93,7 +93,7 @@ directly without changing its activation policy:
 
 ```powershell
 py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.7.0-py3-none-any.whl
+.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.7.1-py3-none-any.whl
 .\.venv\Scripts\robot-reel.exe stress stress-lab --review robot-reel-seed-09-review.json
 ```
 
@@ -108,6 +108,17 @@ Optional video and MCAP checks:
 python -m pip install 'mcap==1.4.0'
 robot-reel stress stress-lab --check-media --check-mcap
 ```
+
+To regenerate a complete Stress Lab with the installed package:
+
+```bash
+python -m robot_reel.stress_site stress-lab stress-copy
+```
+
+Version 0.7.1 validates this export before publishing the output directory.
+If a dependency is missing or validation fails, fix that cause and retry the
+same command. It protects the source collection and existing output files;
+choose an empty destination outside the input folder.
 
 Check or re-export the cloth recording from the same installed environment:
 

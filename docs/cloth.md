@@ -106,7 +106,7 @@ the downloaded wheel in a virtual environment:
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install ./robot_reel-0.7.0-py3-none-any.whl
+python -m pip install ./robot_reel-0.7.1-py3-none-any.whl
 robot-reel cloth --output cloth-lab --verify
 
 # Produce a fresh viewer, source files and complete experiment.zip.
@@ -135,7 +135,7 @@ The standalone release file `robot-reel-cloth-scene.usdc` is identical to
 
 ## Record and export your own
 
-From a source checkout (or install the downloaded 0.7.0 wheel with its
+From a source checkout (or install the downloaded 0.7.1 wheel with its
 `[newton]` extra instead):
 
 ```bash
