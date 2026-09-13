@@ -6,7 +6,7 @@ colorTo: purple
 sdk: static
 app_file: index.html
 fullWidth: true
-header: mini
+header: default
 short_description: Replay SmolVLA trials, GPU cloth and Newton time sculptures.
 license: apache-2.0
 models:
