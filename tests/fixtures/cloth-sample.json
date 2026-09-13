@@ -1,0 +1,55 @@
+{
+  "schema": "robot-reel-cloth-sample-1",
+  "sample": 29,
+  "time_s": 0.9666666666666667,
+  "blender_frame": 30,
+  "fps": 30,
+  "case": {
+    "index": 2,
+    "id": "bend_100",
+    "edge_ke": 100
+  },
+  "reference": {
+    "index": 0,
+    "id": "bend_001",
+    "edge_ke": 0.01
+  },
+  "presentation": {
+    "mode": "separate",
+    "yaw_rad": -0.48,
+    "pitch_rad": 0.65,
+    "display_offsets_x_m": [
+      -1.35,
+      0,
+      1.35
+    ]
+  },
+  "metrics": {
+    "rms_separation_m": 0.9080000404747989,
+    "mean_free_edge_drop_m": 0.5572196576330397,
+    "max_pin_displacement_m": 0
+  },
+  "source": {
+    "engine": "newton",
+    "engine_version": "1.6.0",
+    "warp_version": "1.17.0",
+    "usd_version": "26.3",
+    "solver": "SolverVBD",
+    "mode": "physics",
+    "device": "cuda:0",
+    "device_name": "NVIDIA L40S",
+    "execution": "direct_launches",
+    "independent_cases": true,
+    "recorded_at": "2026-09-13T03:10:47.831377+00:00",
+    "recorder_sha256": "56fe3130f403e1d3c79c9a2ee2bbb6c892e2f2fe3f8ec1343d83589ff131b6d8",
+    "positions_sha256": "ddd70455f3e7655f1dbf0977f949ac17b0aeea45b754ede6e79718688fd9e094",
+    "vertex_count": 117,
+    "frame_count": 121
+  },
+  "replay_fragment": "#frame=29&case=2&view=separate&yaw=-0.48",
+  "limits": [
+    "Recorded simulation; no collisions or self-contact.",
+    "Bending coefficients are solver settings, not calibrated fabric properties.",
+    "Colors identify cases, not stress. Metrics exclude display spacing."
+  ]
+}

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Open Cloth Lab sample JSON files, verify their source facts and restore their
+  sample and camera offline. Reject changed or ambiguous files without moving
+  the current view. Add `cloth --verify-sample` for independent standard-library
+  checks against a verified source bundle.
 - Export Cloth Lab samples as 1920 × 1080 PNG figures with original mesh geometry,
   measured deformation, source clocks and a positions fingerprint, plus portable
   JSON records with full-precision metrics. Both work offline. Shared links now

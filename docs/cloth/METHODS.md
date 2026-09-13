@@ -35,6 +35,35 @@ Both downloads work offline. The immutable **0.7.1** release archives predate
 these two buttons; use this page's **Offline experiment** or export from the
 current source to include them.
 
+Use **Open sample JSON** to check a received record and restore it directly.
+The browser compares the source fingerprint and recorder metadata, checks all
+selection and clock fields, and recomputes metrics from its loaded vertices.
+Only a matching file changes the sample, selected case and camera. Invalid
+files leave the current view intact, and an older file read cannot overwrite
+a more recent import. Processing stays in the browser, including offline.
+
+From the **current source checkout**, independently check the file against a
+complete local recording with Python 3.12 and its standard library:
+
+```bash
+python3 -m robot_reel.cli cloth --output docs/cloth --verify-sample sample.json
+```
+
+Replace both paths as needed. The command verifies the source bundle before
+checking the sample; it does not modify files or start a simulation. Newton,
+USD libraries and a GPU are unnecessary. This command is also included when
+building an installation package from current source; it is not present in
+the immutable 0.7.1 packages.
+
+Both readers accept UTF-8 JSON up to 64 KiB, including an optional byte-order
+mark. Duplicate keys, non-finite numbers, excessive nesting, unknown fields,
+out-of-range selections and mismatched replay fragments are rejected.
+Only the three measured metrics allow relative or absolute roundoff of
+`1e-12` to accommodate Python/JavaScript arithmetic. Source identity, clocks,
+coefficients and presentation settings must otherwise agree exactly. A match
+establishes consistency with this recording, not authenticity or material
+validation; a hand-constructed file with the correct facts can also match.
+
 Download **Offline experiment**, extract it, and open `index.html`. The HTML
 contains its positions and metadata, so replay also works from `file://`
 without fetching data, fonts, libraries or a GPU service. Keep the entire

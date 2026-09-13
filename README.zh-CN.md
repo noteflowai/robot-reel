@@ -71,6 +71,8 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 原始数据保留全部 **42,471 个顶点样本**，并经过 OpenUSD 和 Blender 原生读回校验。
 当前实验室还支持导出附实测指标和数据指纹的 **1920 × 1080 演示图片**，
 以及保留完整精度的样本 JSON；分享链接会保存旋转视角，方便团队恢复同一画面讨论。
+收到 JSON 后可直接导入，核对原始记录并恢复画面；当前源码的命令行也支持独立校验，
+无需 GPU 或 Newton，浏览器导入可断网使用。
 
 <a href="https://noteflowai.github.io/robot-reel/cloth/">
   <picture>
