@@ -1,5 +1,18 @@
 # Robot Reel 发布定位
 
+## 当前推广入口
+
+Hugging Face Space 原生提供 SmolVLA 压力实验、GPU 布料和 Newton 蝴蝶效应
+三个交互场景，并通过模型、数据集元信息关联实际使用的上游资产。入口：
+https://huggingface.co/spaces/glayguo/robot-reel
+
+以 Space Community 的首发介绍承接反馈，GitHub 首页与中英文 README 提供
+互链；后续按真实问题分享具体实验。发布记录见
+[huggingface-launch.md](huggingface-launch.md)，其他平台文案仍是草稿。
+观察访客实际体验、复现反馈和有效贡献，不将上线或平台关联写成流量增长保证。
+
+## 初始定位记录
+
 核心承诺：一条命令，把机器人仿真做成视频，同时带上可复核的动作记录。
 
 当前差异：Strands Robots 已经提供自然语言机器人接口；直接把它再包装成

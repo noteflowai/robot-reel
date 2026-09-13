@@ -14,6 +14,7 @@
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 .divergence{padding:12px 14px;border:1px solid var(--line);border-radius:12px;margin:12px 0;color:var(--muted);font-size:12px}.divergence strong{color:var(--purple)}.divergence svg{display:block;width:100%;height:72px;margin-top:8px}.sensors{white-space:pre-line}
 .review{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--panel);margin-top:20px}.review h2{margin:0 0 8px}.review label,.review p{font-size:13px}.review textarea{display:block;width:100%;min-height:100px;resize:vertical;font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;margin:8px 0 12px}.review input[type=file]{max-width:100%;font-size:12px}.review .downloads{margin-bottom:12px}.review code{overflow-wrap:anywhere}
+.share-result{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:11px}.share-result[hidden]{display:none}.share-result input{min-width:0;flex:1 1 200px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:8px}.share-result a{text-decoration:underline}
 </style>
 </head>
 <body><main>
@@ -39,6 +40,7 @@ Watch a fresh policy rollout in every condition, then inspect where its behavior
 <div class="transport"><div class="toolbar"><div><button id="play">Play ▶</button> <button id="prev" aria-label="Previous sample">←</button> <button id="next" aria-label="Next sample">→</button></div><span class="counter" id="counter"></span><button id="share">Share sample ↗</button></div>
 <input id="timeline" type="range" min="0" value="0" step="1" aria-label="Paired source sample">
 <div class="events"><button id="start">First observation</button><button id="previous-call">← Inference</button><button id="next-call">Inference →</button><button id="peak">Peak separation</button><button id="last-action">Last applied action</button><button id="terminal">Inspect outcome</button></div>
+<div id="share-result" class="share-result" hidden><label for="share-url">Sample link</label><input id="share-url" type="text" readonly aria-label="Shared sample URL"><a id="share-open" target="_blank" rel="noopener noreferrer">Open sample ↗</a></div>
 <p class="status" id="status" role="status" aria-live="polite"></p></div>
 <div class="divergence"><strong id="distance"></strong><span id="distance-scope"></span><svg id="distance-plot" viewBox="0 0 720 72" preserveAspectRatio="none" role="img" aria-label="End-effector separation over the shared recorded samples"><path id="distance-area" fill="#c5afff18"></path><path id="distance-line" fill="none" stroke="#c5afff" stroke-width="2" vector-effect="non-scaling-stroke"></path><line id="distance-cursor" y1="0" y2="72" stroke="#83eac5" stroke-width="1"></line></svg><span id="distance-caption"></span></div>
 <div class="inspect">
@@ -213,7 +215,9 @@ function fromHash(){
 }
 $('share').onclick=()=>{
   history.replaceState(null,'',`#seed=${seed}&condition=${condition}&frame=${frame}&camera=${camera}`);
-  $('status').textContent=location.protocol==='file:'?'Share this complete folder and the sample fragment in the address bar.':'The address now opens this exact seed, condition, camera and sample.';
+  if(location.protocol==='file:'){$('status').textContent='Share this complete folder and the sample fragment in the address bar.';return;}
+  $('share-result').hidden=false;$('share-url').value=location.href;$('share-open').href=location.href;
+  $('status').textContent='Use the sample link below to open or copy this seed, condition, camera and sample.';
 };
 function validateNote(note){
   if(typeof note!=='string'||Array.from(note).length>4000||/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(note)||Array.from(note).some(c=>c.length===1&&/[\ud800-\udfff]/.test(c)))throw Error('Use a note of at most 4,000 characters, without control characters.');

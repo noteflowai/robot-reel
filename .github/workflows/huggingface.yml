@@ -1,0 +1,92 @@
+name: Hugging Face Space
+on:
+  workflow_run:
+    workflows: [Check]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      check_run:
+        description: Successful Check run ID for the current main commit
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: huggingface-space
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event != 'pull_request' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve a successful Check run for the current main commit
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHECK_RUN: ${{ inputs.check_run || github.event.workflow_run.id }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          run_id = os.environ["CHECK_RUN"]
+          if not run_id.isdigit():
+              raise ValueError("Supply a numeric Check run ID")
+          repo = os.environ["GITHUB_REPOSITORY"]
+          def get(path):
+              return json.loads(subprocess.check_output(["gh", "api", path], text=True))
+          run = get(f"repos/{repo}/actions/runs/{run_id}")
+          if (run["path"] != ".github/workflows/check.yml" or run["head_branch"] != "main"
+                  or run["event"] == "pull_request" or run["conclusion"] != "success"
+                  or run["head_repository"]["full_name"] != repo):
+              raise ValueError("Only successful Check runs from this repository's main can publish")
+          current = get(f"repos/{repo}/git/ref/heads/main")["object"]["sha"]
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write(f"sha={run['head_sha']}\nrun_id={run_id}\n")
+              output.write(f"current={'true' if run['head_sha'] == current else 'false'}\n")
+          if run["head_sha"] != current:
+              print("A newer main commit exists; this obsolete upload is skipped.")
+          PY
+      - uses: actions/checkout@v4
+        if: steps.source.outputs.current == 'true'
+        with:
+          ref: ${{ steps.source.outputs.sha }}
+      - uses: actions/setup-python@v5
+        if: steps.source.outputs.current == 'true'
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        if: steps.source.outputs.current == 'true'
+        with:
+          name: huggingface-space
+          path: ${{ runner.temp }}/huggingface-space
+          run-id: ${{ steps.source.outputs.run_id }}
+          github-token: ${{ github.token }}
+      - name: Verify and publish the exact tested artifact
+        if: steps.source.outputs.current == 'true'
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_HUB_DISABLE_PROGRESS_BARS: "1"
+          HF_SOURCE_COMMIT: ${{ steps.source.outputs.sha }}
+        run: |
+          python -m pip install -r huggingface/requirements-publish.txt
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          from scripts.build_huggingface import verify
+          from scripts.publish_huggingface import publish
+          folder = Path(os.environ["RUNNER_TEMP"])/"huggingface-space"
+          record = verify(folder)
+          if record["source_commit"] != os.environ["HF_SOURCE_COMMIT"] or record["source_dirty"]:
+              raise ValueError("Artifact source does not match the validated commit")
+          if not os.environ.get("HF_TOKEN"):
+              raise ValueError("Configure the repository's HF_TOKEN secret to publish")
+          result = publish(folder, "glayguo/robot-reel")
+          print(json.dumps(result, indent=2))
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
+              summary.write(f"Published {result['space_url']}\n\nSource: `{result['source_commit']}`\n")
+          PY

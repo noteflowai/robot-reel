@@ -22,6 +22,7 @@ header,main,footer{max-width:1280px;margin:auto;padding:22px 34px}header{display
 .below{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin:34px 0 20px}.below article{border-top:1px solid var(--line);padding-top:17px}.below h2{font-size:17px;margin:8px 0}.below p{font-size:13px;color:var(--muted)}.below .index{font:11px ui-monospace,monospace;color:var(--pink)}code{font:11px/1.6 ui-monospace,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid var(--line);border-radius:8px;padding:12px;background:#141826}footer{font-size:11px;color:var(--muted);border-top:1px solid var(--line);margin-top:20px}footer a{text-decoration:underline}
 @media(max-width:900px){.intro{grid-template-columns:1fr;gap:8px}.intro p{max-width:650px}.workspace{grid-template-columns:1fr}.inspector{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}.metrics{margin:0}.graph-panel{grid-column:1}.world-panel{grid-column:2;grid-row:2/4}.source-note{grid-column:1/-1}.distance{font-size:40px}#scene{height:490px}.below{gap:18px}.below h2{font-size:15px}}
 @media(max-width:540px){header,main,footer{padding:18px}nav{gap:8px 12px;max-width:170px;justify-content:flex-end;font-size:10px}.intro{margin:13px 0 22px}h1{letter-spacing:-1.6px}.intro p{font-size:13px}.lab-header{padding:12px;align-items:flex-start;flex-direction:column;gap:9px}.modes{width:100%}.modes button{flex:1}.stamp{top:15px;left:15px}.stamp strong{font-size:23px}.stamp small{font-size:8px}#scene{height:390px}.axis-note{left:15px;bottom:52px;font-size:8px;max-width:85%}.camera{bottom:12px}.inspector{padding:16px;gap:12px 15px}.distance{font-size:34px}.pair{font-size:10px}.caption{font-size:9px;letter-spacing:.8px}.metrics strong{font-size:14px}.worlds{grid-template-columns:repeat(3,1fr)}.controls{padding:14px}.buttons button{font-size:10px;padding:7px 9px}.timeline-label{font-size:9px}.transport{gap:10px}.below{grid-template-columns:1fr;gap:12px}.below p{margin:7px 0}.lab{border-radius:13px}}
+.share-result{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:11px}.share-result[hidden]{display:none}.share-result input{min-width:0;flex:1 1 200px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:8px}.share-result a{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -52,6 +53,7 @@ header,main,footer{max-width:1280px;margin:auto;padding:22px 34px}header{display
 <div class="timeline-label"><label for="timeline" id="counter"></label><span id="dcc-frame"></span></div>
 <input id="timeline" type="range" min="0" step="1" value="0" aria-label="Recorded sample">
 <div class="transport"><div class="buttons"><button id="prev" aria-label="Previous sample">←</button><button id="play">Play ▶</button><button id="next" aria-label="Next sample">→</button><button id="start">Start together</button><button id="peak">Largest separation</button></div><div class="buttons"><label class="rate" for="rate">Speed<select id="rate"><option value=".5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label><button id="share">Share this view ↗</button></div></div>
+<div id="share-result" class="share-result" hidden><label for="share-url">Sample link</label><input id="share-url" type="text" readonly aria-label="Shared sample URL"><a id="share-open" target="_blank" rel="noopener noreferrer">Open sample ↗</a></div>
 <p class="status" id="status" role="status">Paused at the largest recorded separation. Replay to see how it began.</p>
 </div>
 </section>
@@ -149,7 +151,7 @@ $('rotate-left').onclick=()=>{yaw-=.2;draw();};$('rotate-right').onclick=()=>{ya
 $('share').onclick=async()=>{
  const url=new URL(location.href);url.hash=new URLSearchParams({frame:sample,world:selected,view:mode}).toString();history.replaceState(null,'',url);
  if(location.protocol==='file:'){$('status').textContent=`Share this folder; use ${url.hash} to restore the sample, world and mode.`;return;}
- try{await navigator.clipboard.writeText(url.href);$('status').textContent='Sample, world and view link copied.';}catch{$('status').textContent='Copy this page URL to share the sample, world and view.';}
+ $('share-result').hidden=false;$('share-url').value=url.href;$('share-open').href=url.href;try{await navigator.clipboard.writeText(url.href);$('status').textContent='Sample, world and view link copied.';}catch{$('status').textContent='Use the sample link below to copy or open this recorded moment.';}
 };
 let drag=null;
 canvas.addEventListener('pointerdown',event=>{if(event.button!==0)return;drag={id:event.pointerId,x:event.clientX,yaw};canvas.setPointerCapture(event.pointerId);canvas.classList.add('dragging');});

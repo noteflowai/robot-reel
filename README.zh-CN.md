@@ -19,6 +19,7 @@
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="最新发布版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="代码许可证：Apache-2.0"></a>
   <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-13%20replays-ffca85" alt="在线演示：13 个回放"></a>
+  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-3%20interactive%20labs-ffd21e" alt="Hugging Face：三个交互实验室"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -34,6 +35,11 @@
 <p align="center"><sub>观看无需安装，无需账号。封面各面板展示独立录制的运行。</sub></p>
 
 ## 快速开始
+
+**[在 Hugging Face 体验 Robot Reel](https://huggingface.co/spaces/glayguo/robot-reel)**：
+在同一个 Space 对照 30 次 SmolVLA 运行、旋转查看 GPU 布料录制，
+探索 12 个 Newton 世界。无需安装或模型账号；Space 自带原始录制，
+[构建与发布说明](docs/huggingface.md)提供对应源码提交和文件校验信息。
 
 第一次体验可以从[三步导览](https://noteflowai.github.io/robot-reel/#tour)开始：
 对照一组真实实验的不同结局，进入 Rerun 原生检查，再本地校验完整实验。

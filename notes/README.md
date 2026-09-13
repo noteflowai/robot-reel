@@ -5,6 +5,7 @@ positioning and customer-facing briefs. Nothing here is built into the GitHub
 Pages site under `docs/`.
 
 - [launch-kit.md](launch-kit.md): post drafts and assets for launches.
+- [huggingface-launch.md](huggingface-launch.md): Space announcement and publication record.
 - [launch-plan.zh-CN.md](launch-plan.zh-CN.md): positioning notes (Chinese).
 - [customer-brief.zh-CN.md](customer-brief.zh-CN.md): customer introduction (Chinese).
 

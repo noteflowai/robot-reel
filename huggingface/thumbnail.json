@@ -1,0 +1,8 @@
+{
+  "source_posters_sha256": {
+    "docs/stress/poster.png": "f39553eee0cb0b068ccc078820ac65a122d68d399c08ad592c83a29fdfcc1341",
+    "docs/cloth/poster.png": "0c28bb8a8b87387b487c2aab5a958bf70f10d050ec15de812275773fd2406d2a",
+    "docs/chaos/poster.png": "7c10b136721cb97fad9ede1f7aae5a6a7dae8c98b5da2ad591a4fa771563b6ff"
+  },
+  "thumbnail_sha256": "1f0e753dd32afb767a50bc5f10380b46c80462656fe0eb1b9faa1733aa87e176"
+}

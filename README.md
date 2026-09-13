@@ -19,6 +19,7 @@
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="Latest release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="Code license: Apache-2.0"></a>
   <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-13%20replays-ffca85" alt="Live demos: 13 replays"></a>
+  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-3%20interactive%20labs-ffd21e" alt="Hugging Face: three interactive labs"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -34,6 +35,12 @@
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
 
 ## Quick start
+
+**[Try Robot Reel on Hugging Face](https://huggingface.co/spaces/glayguo/robot-reel)**:
+compare 30 SmolVLA trials, orbit recorded GPU cloth, and explore twelve Newton
+worlds in one Space. No installation or model account needed. The Space hosts
+the original recordings; [build and publication details](docs/huggingface.md)
+include their source commit and checksums.
 
 New here? [Take the three-step tour](https://noteflowai.github.io/robot-reel/#tour):
 compare a real paired outcome, inspect its native Rerun workspace, then verify
