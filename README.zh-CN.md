@@ -89,8 +89,8 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 </a>
 
 **[释放三张布，开始体验 ↗](https://noteflowai.github.io/robot-reel/cloth/)** ·
-[完整离线实验](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-cloth-experiment.zip) ·
-[可编辑 OpenUSD](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-cloth-scene.usdc) ·
+[完整离线实验](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-experiment.zip) ·
+[可编辑 OpenUSD](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-scene.usdc) ·
 [方法、边界与复现](docs/cloth.md)
 
 弯曲系数是求解器设置，不代表经过标定的真实织物属性；颜色用于区分实验。
@@ -114,7 +114,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 </a>
 
 **[对照策略运行 ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-stress-experiment.zip) ·
+[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-stress-experiment.zip) ·
 [MCAP 遥测数据 ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [在 Foxglove 中打开](docs/telemetry.md) ·
 [复现与检查](docs/stress.md)
@@ -126,7 +126,7 @@ Markdown，重新导入可恢复原始样本位置，也可用命令行与完整
 
 **看清净成功率背后的变化。** 在线实验现可按配对结果分组：相机条件净增两次成功，
 实际包含三次从未完成变为成功、一次从成功变为未完成。点击任一分组可打开对应录像，
-导出时仍保留两种条件和所有配对种子，并可用当前源码的 CLI 独立核验。
+导出时仍保留两种条件和所有配对种子，并可用 0.8.0+ 安装包中的 CLI 独立核验。
 [打开结果分组](https://noteflowai.github.io/robot-reel/stress/#outcomes) ·
 [报告方法与命令](docs/stress.md#compare-paired-outcomes)。
 
@@ -136,8 +136,8 @@ Markdown，重新导入可恢复原始样本位置，也可用命令行与完整
 
 <a href="https://noteflowai.github.io/robot-reel/stress/#outcomes"><img src="docs/paired-outcomes.png" width="100%" alt="全部十个配对起点：四组均成功，一组失去成功，三组获得成功，两组均未完成；点击分组可检查原录像。"></a>
 
-**0.7.1 离线实验包**已包含这些复盘工具。下载 ZIP 和
-[示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.7.1/robot-reel-seed-09-review.json)，
+**0.8.0 离线实验包**已包含这些复盘工具。下载 ZIP 和
+[示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-seed-09-review.json)，
 按[快速上手说明](docs/offline-lab.md)解压打开即可回放，无需安装；使用同版本
 wheel 还可独立执行命令行核验。
 

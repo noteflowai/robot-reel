@@ -1,4 +1,4 @@
-# Robot Reel 0.7.1 — choose an offline lab
+# Robot Reel 0.8.0 — choose an offline lab
 
 Download these files from the same Robot Reel GitHub release:
 
@@ -8,13 +8,32 @@ Download these files from the same Robot Reel GitHub release:
 | `robot-reel-cloth-scene.usdc` | The same cloth scene as in the ZIP; import into Blender at 30 fps |
 | `robot-reel-stress-experiment.zip` | Complete offline Stress Lab: 30 trials, 60 videos, telemetry and review tools |
 | `robot-reel-seed-09-review.json` | A sample review to import into the lab |
+| `robot-reel-paired-outcomes.json` | Complete outcome report: ten paired seeds for each changed condition |
 | `SHA256SUMS` | SHA-256 checksums for the release files |
-| `robot_reel-0.7.1-py3-none-any.whl` | Optional Python installation for independent checks and exports |
+| `robot_reel-0.8.0-py3-none-any.whl` | Optional Python installation for independent checks and exports |
 | `robot-reel-seed-09.rrd` | Optional native Rerun workspace; open in Rerun 0.37.2 |
 
 Both ZIPs open in a browser without Python, a GPU or a network connection.
 They contain recorded runs; opening them does not execute policy inference or
 cloth simulation. Keep the two experiments in separate extracted folders.
+
+## Compare every paired outcome
+
+In the 0.8.0+ Stress Lab, open **Same starts. Which outcomes changed?** Choose
+the camera condition, then **Success lost** to inspect seed 09. Choose **Success
+gained** to inspect seeds 03, 04 and 05. The net gain of two contains three gains
+and one loss; all thirty recorded trials remain available.
+
+**Export all paired outcomes** always includes both changed conditions and all
+seed groups, even when the view is filtered. It matches the release's
+`robot-reel-paired-outcomes.json`. With the 0.8.0+ wheel installed, verify it:
+
+```bash
+robot-reel stress stress-lab --paired-report robot-reel-paired-outcomes.json
+```
+
+Expect `paired_report_verified: true`. This checks consistency with the complete
+recording, not statistical significance or general policy robustness.
 
 ## Explore GPU cloth
 
@@ -26,6 +45,9 @@ cloth simulation. Keep the two experiments in separate extracted folders.
    velocities retain all 42,471 vertex samples from the original L40S run.
 4. To edit the scene, import `scene.usdc` in Blender and set **30 fps**.
    Blender frame 1 is source sample 0; no new cloth simulation is needed.
+5. In 0.8.0+, export a 1080p figure or sample JSON. **Open sample JSON** checks
+   a received file against the original vertices before restoring the same
+   sample and camera. These controls work offline.
 
 The experiment changes only a Newton solver coefficient. It does not calibrate
 real fabric, model collisions/self-contact or measure material stress.
@@ -84,7 +106,7 @@ on Linux/macOS:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.7.1-py3-none-any.whl
+python -m pip install ./robot_reel-0.8.0-py3-none-any.whl
 robot-reel stress stress-lab --review robot-reel-seed-09-review.json
 ```
 
@@ -93,7 +115,7 @@ directly without changing its activation policy:
 
 ```powershell
 py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.7.1-py3-none-any.whl
+.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.8.0-py3-none-any.whl
 .\.venv\Scripts\robot-reel.exe stress stress-lab --review robot-reel-seed-09-review.json
 ```
 

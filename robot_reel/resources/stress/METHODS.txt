@@ -50,19 +50,22 @@ UI filter never removes pairs from the report. “Not completed” combines
 These are descriptive paired outcomes, not a significance test or a claim of
 general robustness.
 
-With the current source checkout, export or independently verify a report:
+With Robot Reel **0.8.0+** installed and the offline experiment extracted as
+`stress-lab`, export or independently verify a report:
 
 ```bash
-python3 -m robot_reel.cli stress docs/stress --paired > paired-outcomes.json
-python3 -m robot_reel.cli stress docs/stress --paired-report paired-outcomes.json
+robot-reel stress stress-lab --paired > paired-outcomes.json
+robot-reel stress stress-lab --paired-report paired-outcomes.json
 ```
 
 Both commands first verify the complete source collection. The second compares
 the plan hash, every group and every count, including numeric types. This
 establishes consistency with the supplied recordings, not external certification.
-This feature is newer than the 0.7.1 package and release ZIP; those immutable
-assets retain their previous viewer. Current-source exports include the new
-controls, and the current verifier can read the older complete collection.
+The 0.8.0 release includes the matching report, wheel and complete offline viewer.
+See the [download guide](https://github.com/noteflowai/robot-reel/blob/main/docs/offline-lab.md). From a source checkout, the equivalent
+command is `python3 -m robot_reel.cli stress docs/stress --paired`.
+Earlier release assets retain their original viewer; the current verifier can
+also read their complete collection.
 
 ## What changes
 

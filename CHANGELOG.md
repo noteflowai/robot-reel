@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## 0.8.0 — Portable outcome reports and sample exchange
+
+- Ship the paired policy outcome explorer in the installed package and complete
+  offline Stress Lab. Retain gains and losses, all seed groups and the full
+  experiment denominator. Export and independently verify the complete report.
+- Include `robot-reel-paired-outcomes.json` as a checksummed release asset.
+  Generate it with the installed wheel outside the checkout, reject an altered
+  report, and compare the offline browser's filtered-view export with those
+  exact bytes at desktop and mobile sizes.
+- Publish the descriptive 30-trial / 20-pair result tables on Hugging Face with
+  a source manifest and a reproducible export script. The recorded experiment
+  is unchanged; this release adds inspection and distribution tools.
+
 - Preserve Space homepage symbols and the Chinese link with HTML entities after
   public readback caught a UTF-8 character damaged at the hosting boundary.
 - Connect the Space and both READMEs to a curated Hugging Face model/data

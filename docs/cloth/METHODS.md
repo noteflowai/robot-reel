@@ -31,9 +31,8 @@ no local filesystem path. Metrics use original positions; pin displacement
 is the maximum over fixed vertices **in the selected case and sample**.
 Save the PNG and JSON without changing the selection to keep them paired.
 These are derived inspection exports, not a new simulation or signed evidence.
-Both downloads work offline. The immutable **0.7.1** release archives predate
-these two buttons; use this page's **Offline experiment** or export from the
-current source to include them.
+Both downloads work offline. The **0.8.0+** release archives include these buttons
+and sample import. See the [offline guide](https://github.com/noteflowai/robot-reel/blob/main/docs/offline-lab.md) for verified downloads.
 
 Use **Open sample JSON** to check a received record and restore it directly.
 The browser compares the source fingerprint and recorder metadata, checks all
@@ -51,9 +50,9 @@ python3 -m robot_reel.cli cloth --output docs/cloth --verify-sample sample.json
 
 Replace both paths as needed. The command verifies the source bundle before
 checking the sample; it does not modify files or start a simulation. Newton,
-USD libraries and a GPU are unnecessary. This command is also included when
-building an installation package from current source; it is not present in
-the immutable 0.7.1 packages.
+USD libraries and a GPU are unnecessary. In an installed **0.8.0+** package,
+use `robot-reel cloth --output cloth-lab --verify-sample sample.json` against
+the extracted offline experiment. Earlier packages retain their original commands.
 
 Both readers accept UTF-8 JSON up to 64 KiB, including an optional byte-order
 mark. Duplicate keys, non-finite numbers, excessive nesting, unknown fields,
@@ -156,7 +155,7 @@ the downloaded wheel in a virtual environment:
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
-python -m pip install ./robot_reel-0.7.1-py3-none-any.whl
+python -m pip install ./robot_reel-0.8.0-py3-none-any.whl
 robot-reel cloth --output cloth-lab --verify
 
 # Produce a fresh viewer, source files and complete experiment.zip.
@@ -185,7 +184,7 @@ The standalone release file `robot-reel-cloth-scene.usdc` is identical to
 
 ## Record and export your own
 
-From a source checkout (or install the downloaded 0.7.1 wheel with its
+From a source checkout (or install the downloaded 0.8.0 wheel with its
 `[newton]` extra instead):
 
 ```bash

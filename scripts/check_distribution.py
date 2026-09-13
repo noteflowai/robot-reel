@@ -83,6 +83,27 @@ def check(source, release_assets=None):
         review_check = json.loads(review.stdout)["review"]
         if not review_check["recorded_facts_match"] or review_check["user_note_verified"]:
             raise ValueError("Installed review validator did not separate source facts from user notes")
+        paired_path = Path(temporary)/"paired-outcomes.json"
+        paired_command = [str(Path(sys.executable).with_name("robot-reel")), "stress", str(output)]
+        paired = subprocess.run(paired_command+["--paired"], check=True, capture_output=True, text=True, timeout=120)
+        paired_path.write_text(paired.stdout)
+        paired_report = json.loads(paired.stdout)
+        if (paired_report["scope"]["completed_trials"] != 30
+                or paired_report["comparisons"][1]["groups"]["lost_success"] != [9]
+                or paired_report["comparisons"][1]["groups"]["gained_success"] != [3, 4, 5]):
+            raise ValueError("Installed paired report lost complete experiment outcomes")
+        verified = subprocess.run(paired_command+["--paired-report", str(paired_path)],
+                                  check=True, capture_output=True, text=True, timeout=120)
+        if not json.loads(verified.stdout)["paired_report_verified"]:
+            raise ValueError("Installed paired report did not verify")
+        changed = json.loads(paired.stdout)
+        changed["comparisons"][1]["groups"]["lost_success"] = []
+        changed_path = Path(temporary)/"changed-pairs.json"
+        changed_path.write_text(json.dumps(changed))
+        rejected = subprocess.run(paired_command+["--paired-report", str(changed_path)],
+                                  capture_output=True, text=True, timeout=120)
+        if rejected.returncode == 0 or "differs from the complete source experiment" not in rejected.stderr:
+            raise ValueError("Installed paired verifier accepted a changed outcome")
         with zipfile.ZipFile(output/"experiment.zip") as archive:
             for original, name in (
                 ("licenses/VLA-MEDIA-NOTICE.txt", "NOTICE.txt"),
@@ -98,7 +119,8 @@ def check(source, release_assets=None):
         report = {"version": expected, "module": str(module), "cloth_vertex_samples": cloth["vertex_samples"],
                   "cloth_sample": sample_check,
                   "stress_trials": summary["completed_trials"], "telemetry": telemetry,
-                  "review": review_check, "vla": json.loads(result.stdout)}
+                  "review": review_check, "paired_outcomes_verified": True,
+                  "vla": json.loads(result.stdout)}
         # Preserve the tested bytes before the temporary exported site is removed.
         # The release workflow consumes this artifact; it does not rebuild the ZIP.
         if release_assets is not None:
@@ -106,6 +128,7 @@ def check(source, release_assets=None):
             for original, name in (
                 (output/"experiment.zip", "robot-reel-stress-experiment.zip"),
                 (review_path, "robot-reel-seed-09-review.json"),
+                (paired_path, "robot-reel-paired-outcomes.json"),
                 (source/"docs/offline-lab.md", "START-HERE.md"),
                 (cloth_output/"experiment.zip", "robot-reel-cloth-experiment.zip"),
                 (cloth_output/"scene.usdc", "robot-reel-cloth-scene.usdc"),

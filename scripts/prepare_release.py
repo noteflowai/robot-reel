@@ -8,6 +8,7 @@ import tomllib
 OFFLINE_FILES = {
     "robot-reel-stress-experiment.zip", "robot-reel-seed-09-review.json", "START-HERE.md",
     "robot-reel-cloth-experiment.zip", "robot-reel-cloth-scene.usdc",
+    "robot-reel-paired-outcomes.json",
 }
 
 
@@ -42,6 +43,13 @@ For Stress Lab, import `robot-reel-seed-09-review.json` to inspect a selected mo
 in the complete thirty-trial experiment. Both ZIPs are the exact artifacts
 exported by the installed wheel and tested offline in Chromium at desktop and
 mobile sizes. No GPU or Python is needed to use these recorded browser labs.
+
+Stress Lab includes all four paired outcome groups and complete report export.
+`robot-reel-paired-outcomes.json` was exported and verified by the installed CLI;
+the offline browser produces the same report even after selecting a subset.
+Use `robot-reel stress stress-lab --paired-report robot-reel-paired-outcomes.json`
+to check it independently. Cloth Lab includes source-checked sample import,
+portable JSON and 1080p figure export.
 
 The wheel, source distribution and Rerun recording passed the same six validation
 jobs. Open `robot-reel-seed-09.rrd` in Rerun 0.37.2. `SHA256SUMS` covers every asset.

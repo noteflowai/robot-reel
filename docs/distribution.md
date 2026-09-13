@@ -27,7 +27,7 @@ downloaded file in a virtual environment:
 sha256sum --check --ignore-missing SHA256SUMS
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.7.1-py3-none-any.whl
+python -m pip install ./robot_reel-0.8.0-py3-none-any.whl
 robot-reel --help
 ```
 
@@ -59,6 +59,12 @@ The new folder includes an offline `experiment.zip`. Source data and saved
 native reports remain unchanged. Optional `--check-usd` performs native readback
 again after installing `usd-core==26.3`; plain export only verifies saved reports
 and their source hashes. See the [cloth method](cloth.md#use-the-installed-package).
+
+Starting with 0.8.0, both offline labs include the current inspection tools:
+paired outcome groups and report export for Stress, and sample import plus
+1080p figures for Cloth. The installed CLI independently checks both report
+types. The release includes `robot-reel-paired-outcomes.json`, exported by
+the tested wheel and compared with the offline browser at two screen sizes.
 
 The VLA collector keeps its separately pinned GPU environment; installing the
 main runtime there would conflict with its MuJoCo version. See the
@@ -125,7 +131,8 @@ python3 -m venv "$reel_check/installed"
 # Use the repository's existing npm/Playwright environment for the browser check.
 python3 -m zipfile -e "$reel_check/offline-assets/robot-reel-stress-experiment.zip" "$reel_check/lab"
 node scripts/check_offline_release.cjs "$reel_check/lab" \
-  "$reel_check/offline-assets/robot-reel-seed-09-review.json"
+  "$reel_check/offline-assets/robot-reel-seed-09-review.json" \
+  "$reel_check/offline-assets/robot-reel-paired-outcomes.json"
 python3 -m zipfile -e "$reel_check/offline-assets/robot-reel-cloth-experiment.zip" "$reel_check/cloth"
 node scripts/check_cloth_release.cjs "$reel_check/cloth"
 ```

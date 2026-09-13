@@ -36,7 +36,7 @@ Watch a fresh policy rollout in every condition, then inspect where its behavior
 <p id="outcome-selection" class="status" role="status"></p>
 <div class="downloads"><button id="outcome-download" type="button">Export all paired outcomes ↓</button></div>
 <p class="note">“Not completed” includes step limits and terminated runs; execution errors remain in the attempt ledger. Groups use the complete set of paired seeds. These are observed outcomes on one task, not a significance test or a general robustness score.</p>
-<details><summary>Check an exported report independently</summary><p class="note">Use the current source checkout: <code>python3 -m robot_reel.cli stress docs/stress --paired-report paired-outcomes.json</code>. The command checks the full experiment before comparing every group and count. This feature is newer than the 0.7.1 installation package and offline release.</p></details>
+<details><summary>Check an exported report independently</summary><p class="note">With Robot Reel 0.8.0+ installed: <code>robot-reel stress stress-lab --paired-report paired-outcomes.json</code>. Replace <code>stress-lab</code> with your extracted experiment folder. The command checks the full experiment before comparing every group and count. From a source checkout, use <code>python3 -m robot_reel.cli stress docs/stress --paired-report paired-outcomes.json</code>.</p></details>
 </section>
 <div class="experiment">
 <aside class="matrix"><h2>All trials. No highlights filter.</h2><p>Select any seed and condition.</p>
