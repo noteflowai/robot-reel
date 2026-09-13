@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Export Cloth Lab samples as 1920 × 1080 PNG figures with original mesh geometry,
+  measured deformation, source clocks and a positions fingerprint, plus portable
+  JSON records with full-precision metrics. Both work offline. Shared links now
+  preserve camera rotation; failed PNG encoding can be retried.
 - Point the homepage, both READMEs and the published Stress viewer at the
   verified 0.7.1 downloads, installation guide and checksums.
 

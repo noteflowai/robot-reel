@@ -36,12 +36,12 @@ button,a,input,select{touch-action:manipulation}button,.button{font:inherit;colo
 <p class="source-note">Colors identify cases, not stress. Metrics use original vertex coordinates; display spacing is excluded. Bending coefficients are solver settings, not calibrated fabric properties.</p>
 </aside></div>
 <div class="controls"><div class="time-label"><label for="timeline" id="counter"></label><span id="dcc-frame"></span></div><input type="range" id="timeline" min="0" step="1" value="0" aria-label="Recorded sample">
-<div class="transport"><div class="buttons"><button id="prev" aria-label="Previous sample">←</button><button id="play">Play ▶</button><button id="next" aria-label="Next sample">→</button><button id="start">Initial state</button><button id="peak">Largest difference</button></div><div class="buttons"><label for="rate">Speed <select id="rate"><option value=".25">0.25×</option><option value=".5">0.5×</option><option value="1" selected>1×</option></select></label><button id="share">Share sample ↗</button></div></div>
+<div class="transport"><div class="buttons"><button id="prev" aria-label="Previous sample">←</button><button id="play">Play ▶</button><button id="next" aria-label="Next sample">→</button><button id="start">Initial state</button><button id="peak">Largest difference</button></div><div class="buttons"><label for="rate">Speed <select id="rate"><option value=".25">0.25×</option><option value=".5">0.5×</option><option value="1" selected>1×</option></select></label><button id="share">Share sample ↗</button><button id="figure" title="Save a 1920 × 1080 image with this view, measurements and source">Figure PNG ↓</button><button id="sample-json" title="Save this sample’s measurements, camera and data fingerprint">Sample JSON ↓</button></div></div>
 <p id="status" class="status" role="status">Paused at the largest recorded RMS difference. Press release to see how it began.</p></div>
 </section>
 <section class="below">
 <article><div class="caption">01 / A controlled release</div><h2>Only bending changes.</h2><p>Each 0.96 × 0.64 m sheet has 117 vertices and 192 triangles. Two columns are fixed. Every free vertex has mass 0.01 kg; gravity is 9.81 m/s². All three start at rest.</p><p id="recording-note"></p><p>No collisions, self-contact or learned policy. The dashed outline shows the initial sheet.</p></article>
-<article><div class="caption">02 / Measured deformation</div><h2>The motion stays inspectable.</h2><p>RMS separation compares all 117 corresponding vertices at the same sample. Free-edge drop is the mean vertical displacement of its nine vertices from their initial height.</p><p id="strain-note"></p><p>These finite-step diagnostics describe this experiment; they are not a validation against real fabric.</p></article>
+<article><div class="caption">02 / Measured deformation</div><h2>Take the evidence with you.</h2><p>Save a slide-ready <b>1920 × 1080 figure</b> with the selected view, source clock and measured deformation. Download the matching JSON for full-precision metrics, camera settings and the positions fingerprint. Both work offline.</p><p>RMS compares all 117 corresponding vertices; free-edge drop averages the nine edge vertices. <span id="strain-note"></span></p><p>These finite-step diagnostics describe this experiment; they are not a validation against real fabric.</p></article>
 <article><div class="caption">03 / From solver to scene</div><h2>Edit it in Blender.</h2><p>The USD stores original mesh points and velocities at every sample. Set Blender to <b>30 fps</b>, then import. Frame 1 is the untouched initial state. Native readback checks the deformation.</p><div class="actions"><a class="button" id="download-archive" __ARCHIVE_ATTR__ href="experiment.zip" download>Offline experiment ↓</a><a class="button" href="https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md">Method & reproduction ↗</a></div></article>
 </section></main>
 <footer>Recorded physics; this page renders saved vertices and does not run Newton. Code and procedural meshes: Apache-2.0. <a href="trace.json" download>Metadata</a> · <a href="positions.f32" download>Positions</a> · <a href="velocities.f32" download>Velocities</a> · <a href="manifest.json" download>Checksums</a><noscript><p>JavaScript is needed for interactive replay. Download the original data or USD scene using the links above.</p></noscript></footer>
@@ -55,13 +55,17 @@ const raw=Uint8Array.from(atob(data.positions_base64),c=>c.charCodeAt(0)),view=n
 const values=new Float32Array(raw.length/4);for(let i=0;i<values.length;i++)values[i]=view.getFloat32(i*4,true);
 const canvas=$('scene'),ctx=canvas.getContext('2d'),graph=$('graph'),gc=graph.getContext('2d');
 let sample=trace.summary.peak.frame,selected=trace.summary.peak.case,mode='separate',yaw=-.48,pitch=.65,W=900,H=500,playing=false,tickStart=0,animation=0;
+const wrapAngle=value=>Math.atan2(Math.sin(value),Math.cos(value));
+const snapshot=()=>({sample,selected,mode,yaw,pitch});
+const fragment=s=>new URLSearchParams({frame:String(s.sample),case:String(s.selected),view:s.mode,yaw:String(s.yaw)}).toString();
 const point=(f,c,i)=>{const p=((f*cases.length+c)*n+i)*3;return[values[p],values[p+1],values[p+2]];};
 const rms=cases.map((c,k)=>Array.from({length:frames},(_,f)=>Math.sqrt(Array.from({length:n},(_,i)=>{const p=point(f,k,i),r=point(f,0,i);return p.reduce((s,v,j)=>s+(v-r[j])**2,0);}).reduce((a,b)=>a+b,0)/n)));
 const drop=cases.map((c,k)=>Array.from({length:frames},(_,f)=>1.5-trace.free_edge_vertices.reduce((sum,i)=>sum+point(f,k,i)[2],0)/trace.free_edge_vertices.length));
-function world(p,c){return[p[0]+(mode==='separate'?(c-1)*1.35:0),p[1],p[2]];}
-function project(p){const x=p[0]-.08,y=p[1]-.32,z=p[2]-.92,u=Math.cos(yaw)*x-Math.sin(yaw)*y,d=Math.sin(yaw)*x+Math.cos(yaw)*y,scale=Math.min(W/(mode==='separate'?5.4:2.7),H/2.7);return[W*.5+u*scale,H*.52+(-Math.cos(pitch)*z+Math.sin(pitch)*d)*scale,Math.cos(pitch)*d+Math.sin(pitch)*z];}
-function line(points,color,width=1,dash=[]){ctx.beginPath();points.forEach((p,i)=>{const[x,y]=project(p);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([]);}
-function draw(){
+function draw(target=ctx,state=snapshot(),width=W,height=H){
+ const ctx=target,{sample,selected,mode,yaw,pitch}=state,W=width,H=height;
+ function world(p,c){return[p[0]+(mode==='separate'?(c-1)*1.35:0),p[1],p[2]];}
+ function project(p){const x=p[0]-.08,y=p[1]-.32,z=p[2]-.92,u=Math.cos(yaw)*x-Math.sin(yaw)*y,d=Math.sin(yaw)*x+Math.cos(yaw)*y,scale=Math.min(W/(mode==='separate'?5.4:2.7),H/2.7);return[W*.5+u*scale,H*.52+(-Math.cos(pitch)*z+Math.sin(pitch)*d)*scale,Math.cos(pitch)*d+Math.sin(pitch)*z];}
+ function line(points,color,width=1,dash=[]){ctx.beginPath();points.forEach((p,i)=>{const[x,y]=project(p);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([]);}
  ctx.clearRect(0,0,W,H);
  const extent=mode==='separate'?2.4:1.1;
  for(let x=-extent;x<=extent+.01;x+=.3)line([[x+.48,-.7,.28],[x+.48,1.35,.28]],'#203744',.6);
@@ -110,7 +114,46 @@ function presentation(value){mode=value==='overlay'?'overlay':'separate';$('sepa
 function pause(){playing=false;cancelAnimationFrame(animation);tickStart=0;$('play').textContent='Play ▶';$('status').textContent='Paused. Inspect the selected recorded sample.';}
 function tick(now){if(!playing)return;if(!tickStart)tickStart=now;const step=1000/(trace.fps*Number($('rate').value)),count=Math.floor((now-tickStart)/step);if(count){seek(sample+count);tickStart+=count*step;}if(sample===frames-1){pause();$('status').textContent='End of the recorded experiment.';}else animation=requestAnimationFrame(tick);}
 function play(){if(sample===frames-1)seek(0);playing=true;tickStart=0;$('play').textContent='Pause Ⅱ';$('status').textContent='Playing saved vertices. No simulation runs in the browser.';animation=requestAnimationFrame(tick);}
-function fromHash(){if(!location.hash)return;const p=new URLSearchParams(location.hash.slice(1)),integer=(key,fallback)=>{const text=p.get(key),n=Number(text);return text!==null&&/^\d+$/.test(text)&&Number.isSafeInteger(n)?n:fallback;};pause();choose(integer('case',selected));presentation(p.get('view'));seek(integer('frame',sample));$('status').textContent='Restored the shared case, sample and presentation.';}
+function fromHash(){if(!location.hash)return;const p=new URLSearchParams(location.hash.slice(1)),integer=(key,fallback)=>{const text=p.get(key),n=Number(text);return text!==null&&/^\d+$/.test(text)&&Number.isSafeInteger(n)?n:fallback;},angle=Number(p.get('yaw'));pause();yaw=p.has('yaw')&&p.get('yaw').trim()!==''&&Number.isFinite(angle)&&Math.abs(angle)<=Math.PI?angle:-.48;choose(integer('case',selected));presentation(p.get('view'));seek(integer('frame',sample));$('status').textContent='Restored the shared case, sample, presentation and camera.';}
+function sampleRecord(s){
+ const pin=Math.max(...trace.pinned_vertices.map(i=>Math.hypot(...point(s.sample,s.selected,i).map((v,j)=>v-point(0,s.selected,i)[j]))));
+ return {schema:'robot-reel-cloth-sample-1',sample:s.sample,time_s:s.sample/trace.fps,blender_frame:s.sample+1,fps:trace.fps,
+  case:{index:s.selected,id:cases[s.selected].id,edge_ke:cases[s.selected].edge_ke},reference:{index:0,id:cases[0].id,edge_ke:cases[0].edge_ke},
+  presentation:{mode:s.mode,yaw_rad:s.yaw,pitch_rad:s.pitch,display_offsets_x_m:cases.map((_,i)=>s.mode==='separate'?(i-1)*1.35:0)},
+  metrics:{rms_separation_m:rms[s.selected][s.sample],mean_free_edge_drop_m:drop[s.selected][s.sample],max_pin_displacement_m:pin},
+  source:{...trace.source,positions_sha256:data.positions_sha256,vertex_count:n,frame_count:frames},replay_fragment:'#'+fragment(s),
+  limits:['Recorded simulation; no collisions or self-contact.','Bending coefficients are solver settings, not calibrated fabric properties.','Colors identify cases, not stress. Metrics exclude display spacing.']};
+}
+function saveBlob(blob,name){
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);
+ try{a.click();}finally{a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+}
+const filename=(s,extension)=>`robot-reel-cloth-${cases[s.selected].id}-sample-${String(s.sample).padStart(3,'0')}.${extension}`;
+function figure(s){
+ const out=document.createElement('canvas');out.width=1920;out.height=1080;const c=out.getContext('2d'),record=sampleRecord(s),color=cases[s.selected].color;
+ const text=(value,x,y,size=22,fill='#a7bac6',weight='400',family='system-ui, sans-serif')=>{c.font=`${weight} ${size}px ${family}`;c.fillStyle=fill;c.fillText(value,x,y);};
+ const background=c.createLinearGradient(0,0,1920,1080);background.addColorStop(0,'#0b1925');background.addColorStop(1,'#201e34');c.fillStyle=background;c.fillRect(0,0,1920,1080);
+ text('ROBOT REEL   /   CLOTH LAB',64,62,20,'#79dfc3','650');text('RECORDED DEFORMABLE PHYSICS',1370,62,17);
+ text('Same sheet. Three ways to fall.',64,139,60,'#edf4ef','700');
+ text(`Sample ${s.sample} / ${frames-1}   ·   ${(s.sample/trace.fps).toFixed(6)} s   ·   Blender frame ${s.sample+1}   ·   ${s.mode==='overlay'?'Original coordinates overlaid':'Side by side'}`,66,190,23);
+ c.fillStyle='#0b1722';c.fillRect(64,228,1240,632);
+ // Render original vertices into an independent canvas, without resizing or mutating the live view.
+ const scene=document.createElement('canvas');scene.width=1240;scene.height=570;draw(scene.getContext('2d'),s,1240,570);c.drawImage(scene,64,240);
+ text('WHITE DOTS = FIXED VERTICES   /   DASHED OUTLINE = INITIAL SHEET',92,837,15);
+ cases.forEach((item,i)=>text(`${i===s.selected?'●':'○'}  k = ${item.edge_ke}${i===0?'  / reference':''}`,92+i*390,895,21,item.color));
+ text(`SELECTED   /   edge_ke = ${cases[s.selected].edge_ke}`,1370,262,20,color,'600');
+ text('Mesh RMS separation',1370,319,23,'#edf4ef');text(record.metrics.rms_separation_m.toFixed(6),1368,401,70,color,'600');text('metres · vs. k = 0.01 · all vertices',1370,438,20);
+ text('Mean free-edge drop',1370,497,21);text(record.metrics.mean_free_edge_drop_m.toFixed(6)+' m',1370,539,32,'#edf4ef','500');
+ text('Pin displacement / selected sample',1370,594,20);text(record.metrics.max_pin_displacement_m.toExponential(2)+' m',1370,632,30,'#edf4ef','500');
+ const series=rms[s.selected],maximum=Math.max(.01,...series),px=i=>1370+i/(frames-1)*470,py=v=>791-v/maximum*96;
+ c.beginPath();series.forEach((v,i)=>i?c.lineTo(px(i),py(v)):c.moveTo(px(i),py(v)));c.strokeStyle=color;c.lineWidth=3;c.stroke();c.beginPath();c.arc(px(s.sample),py(series[s.sample]),6,0,Math.PI*2);c.fillStyle='#edf4ef';c.fill();
+ text('RMS / full recording',1370,677,18);text('0 s',1370,826,17);text(`${((frames-1)/trace.fps).toFixed(1)} s`,1792,826,17);text('Axis maximum: '+maximum.toFixed(3)+' m',1370,867,17);
+ c.fillStyle='#30414f';c.fillRect(64,925,1792,1);
+ text(`${trace.source.device_name}   ·   Newton ${trace.source.engine_version} / ${trace.source.solver}   ·   ${n} vertices × ${cases.length} cases × ${frames} samples`,64,965,22,'#edf4ef');
+ text('No contact or calibrated fabric. Colors identify cases, not stress. Metrics exclude display spacing.',64,1001,20);
+ text('positions.f32  SHA-256  '+data.positions_sha256,64,1037,16,'#a7bac6','400','ui-monospace, monospace');
+ return out;
+}
 for(const[c,item]of cases.entries()){const b=document.createElement('button');b.style.setProperty('--case',item.color);b.setAttribute('aria-pressed',String(c===selected));b.setAttribute('aria-label',`Bending coefficient ${item.edge_ke}`);const label=document.createElement('span');label.textContent=`k = ${item.edge_ke}`;const note=document.createElement('small');note.textContent=c===0?'REFERENCE':`CASE ${c+1}`;b.append(label,note);b.onclick=()=>choose(c);$('cases').append(b);}
 if(location.protocol==='file:')$('download-archive').hidden=true;
 $('timeline').max=frames-1;$('graph-end').textContent=((frames-1)/trace.fps)+' s';$('device-label').textContent=`${trace.source.device_name} / Newton 1.6 / VBD / 3 runs`;
@@ -120,14 +163,21 @@ $('strain-note').textContent=`Recorded mesh-edge lengths range from ${minRatio.t
 $('timeline').oninput=()=>{pause();seek(Number($('timeline').value));};$('prev').onclick=()=>{pause();seek(sample-1);};$('next').onclick=()=>{pause();seek(sample+1);};$('start').onclick=()=>{pause();seek(0);};$('play').onclick=()=>playing?pause():play();$('replay').onclick=()=>{pause();seek(0);play();};
 $('peak').onclick=()=>{pause();choose(trace.summary.peak.case);seek(trace.summary.peak.frame);$('status').textContent='Largest RMS separation from the reference across every recorded case and sample.';};
 $('separate').onclick=()=>presentation('separate');$('overlay').onclick=()=>presentation('overlay');$('rate').onchange=()=>{tickStart=0;};
-$('rotate-left').onclick=()=>{yaw-=.2;draw();};$('rotate-right').onclick=()=>{yaw+=.2;draw();};$('reset-view').onclick=()=>{yaw=-.48;pitch=.65;draw();};
-$('share').onclick=async()=>{const url=new URL(location.href);url.hash=new URLSearchParams({frame:String(sample),case:String(selected),view:mode}).toString();history.replaceState(null,'',url);if(location.protocol==='file:'){$('status').textContent=`Share the experiment folder with ${url.hash} to restore this sample.`;return;}try{await navigator.clipboard.writeText(url.href);$('status').textContent='Sample link copied.';}catch{$('status').textContent='Copy this page URL to share the selected sample.';}};
+$('rotate-left').onclick=()=>{yaw=wrapAngle(yaw-.2);draw();};$('rotate-right').onclick=()=>{yaw=wrapAngle(yaw+.2);draw();};$('reset-view').onclick=()=>{yaw=-.48;pitch=.65;draw();};
+$('share').onclick=async()=>{const url=new URL(location.href);url.hash=fragment(snapshot());history.replaceState(null,'',url);if(location.protocol==='file:'){$('status').textContent=`Share the experiment folder with ${url.hash} to restore this sample and camera.`;return;}try{await navigator.clipboard.writeText(url.href);$('status').textContent='Sample and camera link copied.';}catch{$('status').textContent='Copy this page URL to share the selected sample and camera.';}};
+$('sample-json').onclick=()=>{pause();const s=snapshot();try{saveBlob(new Blob([JSON.stringify(sampleRecord(s),null,2)+'\n'],{type:'application/json'}),filename(s,'json'));$('status').textContent=`Sample ${s.sample} JSON saved with full-precision measurements and camera.`;}catch{$('status').textContent='Could not save the sample JSON. Please try again.';}};
+$('figure').onclick=async()=>{
+ pause();const s=snapshot();$('figure').disabled=true;$('status').textContent=`Preparing figure for sample ${s.sample}…`;
+ try{const image=figure(s),blob=await new Promise((resolve,reject)=>image.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG encoding failed')),'image/png'));saveBlob(blob,filename(s,'png'));$('status').textContent=`Figure for sample ${s.sample} saved at 1920 × 1080. Sample JSON includes the full-precision measurements.`;}
+ catch{$('status').textContent='Could not save the figure. Please try again; the recorded sample is still available.';}
+ finally{$('figure').disabled=false;}
+};
 let drag=null;
 canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;drag={id:e.pointerId,x:e.clientX,yaw};canvas.setPointerCapture(e.pointerId);canvas.classList.add('dragging');});
-canvas.addEventListener('pointermove',e=>{if(drag?.id===e.pointerId){yaw=drag.yaw+(e.clientX-drag.x)*.008;draw();}});
+canvas.addEventListener('pointermove',e=>{if(drag?.id===e.pointerId){yaw=wrapAngle(drag.yaw+(e.clientX-drag.x)*.008);draw();}});
 function endDrag(){drag=null;canvas.classList.remove('dragging');}
 canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);canvas.addEventListener('lostpointercapture',endDrag);
-canvas.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();yaw+=e.key==='ArrowLeft'?-.2:.2;draw();}});
+canvas.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();yaw=wrapAngle(yaw+(e.key==='ArrowLeft'?-.2:.2));draw();}});
 document.addEventListener('keydown',e=>{if(['INPUT','SELECT','BUTTON','A','CANVAS'].includes(e.target.tagName))return;if(e.code==='Space'){e.preventDefault();playing?pause():play();}if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();pause();seek(sample+(e.key==='ArrowLeft'?-1:1));}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});window.addEventListener('hashchange',fromHash);
 function resize(){const r=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();drawGraph();}

@@ -69,6 +69,9 @@ L40S**, changing only the bending coefficient. Orbit the deforming meshes,
 overlay them on the same clock, and compare measured vertex motion.
 Every one of the **42,471 vertex samples** is retained in the source data and
 checked through OpenUSD and Blender.
+The current lab also exports **1920 × 1080 figures** with measured deformation
+and source fingerprints, plus full-precision sample JSON. Shared links preserve
+the camera angle so teammates can reopen the same view.
 
 <a href="https://noteflowai.github.io/robot-reel/cloth/">
   <picture>

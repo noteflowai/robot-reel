@@ -12,7 +12,28 @@ It starts paused at the largest recorded RMS distance from the 0.01 case.
 Press **Release all three**, scrub, step, orbit with the camera buttons or
 drag sideways. Overlay compares the original coordinates. Side-by-side
 presentation adds X offsets of −1.35, 0 and +1.35 m; metrics exclude them.
-**Share sample** preserves the sample, selected case and presentation mode.
+**Share sample** preserves the sample, selected case, presentation mode and
+camera rotation. Older links without a camera angle open with the default view.
+
+The current website and source export also offer **Figure PNG** and **Sample JSON**.
+Figure PNG pauses at the selected sample and renders a **1920 × 1080** image
+from original vertices with your camera angle, selected case, recorded clock,
+RMS separation, free-edge drop, pin displacement and the positions SHA-256.
+The image includes the full RMS curve and experiment limits, ready for a slide
+or technical discussion. Its fixed layout is independent of the screen size.
+
+Sample JSON uses schema `robot-reel-cloth-sample-1`. It preserves full-precision
+measurements in metres, zero-based sample and case indices, time in seconds,
+the one-based Blender frame, camera angles in radians, presentation offsets,
+source recorder metadata and the positions fingerprint. Append its
+`replay_fragment` to the matching lab's address to restore the view. It contains
+no local filesystem path. Metrics use original positions; pin displacement
+is the maximum over fixed vertices **in the selected case and sample**.
+Save the PNG and JSON without changing the selection to keep them paired.
+These are derived inspection exports, not a new simulation or signed evidence.
+Both downloads work offline. The immutable **0.7.1** release archives predate
+these two buttons; use this page's **Offline experiment** or export from the
+current source to include them.
 
 Download **Offline experiment**, extract it, and open `index.html`. The HTML
 contains its positions and metadata, so replay also works from `file://`

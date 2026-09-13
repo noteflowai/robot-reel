@@ -69,6 +69,8 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 布料仿真，网格、固定边、质量和重力完全相同，只改变弯曲系数。
 旋转观察形变，叠加对照同一时刻的网格，逐帧检查差异，再把场景带进 Blender。
 原始数据保留全部 **42,471 个顶点样本**，并经过 OpenUSD 和 Blender 原生读回校验。
+当前实验室还支持导出附实测指标和数据指纹的 **1920 × 1080 演示图片**，
+以及保留完整精度的样本 JSON；分享链接会保存旋转视角，方便团队恢复同一画面讨论。
 
 <a href="https://noteflowai.github.io/robot-reel/cloth/">
   <picture>
