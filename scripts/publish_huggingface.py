@@ -14,12 +14,13 @@ def publish(directory, repo_id):
     record = verify(directory)
     if record["source_dirty"]:
         raise ValueError("Preview bundle has uncommitted source; build from a clean commit")
-    from huggingface_hub import HfApi, hf_hub_download
+    from huggingface_hub import HfApi, SpaceCard, hf_hub_download
     from huggingface_hub.utils import validate_repo_id
 
     validate_repo_id(repo_id)
     if len(repo_id.split("/")) != 2:
         raise ValueError("Supply an explicit account/space ID")
+    SpaceCard.load(directory/"README.md").validate()
     api = HfApi()
     api.whoami()  # Resolve auth before creating anything. Never print or persist the token here.
     receipt = directory.parent/(".hf-"+repo_id.replace("/", "--")+".json")

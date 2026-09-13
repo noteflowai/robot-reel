@@ -7,7 +7,7 @@ sdk: static
 app_file: index.html
 fullWidth: true
 header: mini
-short_description: Replay SmolVLA trials, GPU cloth and Newton motion sculptures.
+short_description: Replay SmolVLA trials, GPU cloth and Newton time sculptures.
 license: apache-2.0
 models:
   - HuggingFaceVLA/smolvla_libero

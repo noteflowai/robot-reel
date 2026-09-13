@@ -96,10 +96,11 @@ class HuggingFaceSpaceTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256((ROOT/"huggingface/thumbnail.png").read_bytes()).hexdigest(),
                          record["thumbnail_sha256"])
 
-    def sdk(self, api, download):
+    def sdk(self, api, download, card=None):
         hub = types.ModuleType("huggingface_hub")
         hub.HfApi = lambda: api
         hub.hf_hub_download = download
+        hub.SpaceCard = card if card is not None else MagicMock()
         utils = types.ModuleType("huggingface_hub.utils")
         utils.validate_repo_id = lambda value: None
         return patch.dict("sys.modules", {"huggingface_hub": hub, "huggingface_hub.utils": utils})
@@ -115,6 +116,23 @@ class HuggingFaceSpaceTests(unittest.TestCase):
             with self.sdk(api, MagicMock()), self.assertRaisesRegex(ValueError, "uncommitted"):
                 publish(self.site, "example/preview")
             api.whoami.assert_not_called()
+        finally:
+            path.write_bytes(original)
+
+    def test_invalid_hub_card_cannot_create_or_modify_a_space(self):
+        path = self.site/MANIFEST
+        original = path.read_bytes()
+        record = json.loads(original)
+        record["source_dirty"] = False
+        path.write_text(json.dumps(record))
+        api, card = MagicMock(), MagicMock()
+        card.load.return_value.validate.side_effect = ValueError("Invalid Space metadata")
+        try:
+            with self.sdk(api, MagicMock(), card), self.assertRaisesRegex(ValueError, "metadata"):
+                publish(self.site, "example/invalid-card")
+            api.whoami.assert_not_called()
+            api.create_repo.assert_not_called()
+            api.upload_folder.assert_not_called()
         finally:
             path.write_bytes(original)
 

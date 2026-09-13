@@ -48,7 +48,8 @@ python3 scripts/publish_huggingface.py \
 
 Use an account permitted to create and update this Space. Keep access tokens in
 the Hub's credential store or an environment secret, never in source files.
-The publisher verifies the complete bundle, rejects dirty previews and protects
+The publisher verifies the complete bundle and validates the Space card with
+the Hub before creating or modifying a Space. It rejects dirty previews and protects
 an existing unrelated Space. Updates use the Hub's parent-commit guard and
 remove only obsolete files managed by the previous Robot Reel manifest.
 
