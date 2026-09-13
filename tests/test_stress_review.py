@@ -39,6 +39,11 @@ class StressReviewTests(unittest.TestCase):
                         self.assertEqual(entry["active_inference"]["frame"], entry["observation"]["inference_frame"])
         same = self.review(61, "reference")
         self.assertEqual(same["recorded"][0], same["recorded"][1])
+        # Some JSON writers spell integer-valued numbers as 9.0 / 61.0. The
+        # browser accepts these as integers; the CLI must make the same decision.
+        review = self.review()
+        review["selection"].update(seed=9.0, frame=61.0)
+        self.assertTrue(verify_record(self.data, review)["recorded_facts_match"])
 
     def test_mutated_facts_and_unknown_fields_are_rejected(self):
         mutations = [
@@ -68,6 +73,8 @@ class StressReviewTests(unittest.TestCase):
             None, [], {}, {"seed": 9, "condition": "dim", "frame": 161, "camera": "main"},
             {"seed": True, "condition": "dim", "frame": 1, "camera": "main"},
             {"seed": 9, "condition": "dim", "frame": -1, "camera": "main"},
+            {"seed": 9, "condition": "dim", "frame": 1.5, "camera": "main"},
+            {"seed": 9.1, "condition": "dim", "frame": 1, "camera": "main"},
             {"seed": 9, "condition": "other", "frame": 1, "camera": "main"},
             {"seed": 9, "condition": "reference", "frame": 83, "camera": "main"},
             {"seed": 9, "condition": "dim", "frame": 1, "camera": "unknown"},

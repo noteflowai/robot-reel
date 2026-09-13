@@ -26,12 +26,18 @@ def record(data, selection, note=""):
     if not isinstance(selection, dict) or set(selection) != {"seed", "condition", "frame", "camera"}:
         raise ValueError("Invalid review selection")
     seed, condition, frame, camera = (selection[k] for k in ("seed", "condition", "frame", "camera"))
+    # JSON has one numeric type. Match Number.isInteger in the browser without
+    # accepting booleans, fractions or non-finite values.
+    def integer(value):
+        return type(value) is int or type(value) is float and math.isfinite(value) and value.is_integer()
+
     if (
-        type(seed) is not int or seed not in data["experiment"]["seeds"]
+        not integer(seed) or seed not in data["experiment"]["seeds"]
         or condition not in [c["id"] for c in data["experiment"]["conditions"]]
-        or camera not in ("main", "wrist") or type(frame) is not int
+        or camera not in ("main", "wrist") or not integer(frame)
     ):
         raise ValueError("Invalid review seed, condition, camera or sample")
+    seed, frame = int(seed), int(frame)
     traces = {t["stress"]["trial_id"]: t for t in data["traces"]}
     pair = [traces[trial_id(seed, c)] for c in ("reference", condition)]
     if not 0 <= frame <= max(len(t["frames"]) - 1 for t in pair):
@@ -63,7 +69,7 @@ def record(data, selection, note=""):
         "plan_sha256": canonical_hash(data["experiment"]),
         "experiment": data["experiment"],
         "scope": {key: data["summary"][key] for key in SCOPE_KEYS},
-        "selection": dict(selection),
+        "selection": {"seed": seed, "condition": condition, "frame": frame, "camera": camera},
         "replay_fragment": f"#seed={seed}&condition={condition}&frame={frame}&camera={camera}",
         "recorded": selected,
         "user_note": note,
