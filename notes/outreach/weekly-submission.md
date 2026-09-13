@@ -1,0 +1,28 @@
+自荐一个开源项目：Robot Reel，把机器人策略和物理仿真的一次运行，
+做成浏览器里可以逐帧检查、下载源数据的交互回放。
+
+体验：https://huggingface.co/spaces/glayguo/robot-reel
+
+![Robot Reel 的三个交互实验](https://raw.githubusercontent.com/noteflowai/robot-reel/858886243c100f866be773d2c32eb13c2e2da917/huggingface/thumbnail.png)
+
+可以从三个场景开始：
+
+- **策略失败回放**：SmolVLA 在同一个 LIBERO 任务中，按十组配对初始状态、
+  三种光照/机位条件完成 30 次闭环仿真。成功和失败全部保留，支持双相机对照、
+  查看动作与轨迹差异。
+- **GPU 布料实验**：三个 Newton 布料算例，只改变弯曲系数。可以旋转、叠加对比，
+  导出带测量数据的图片与 JSON，再把同一段变形通过 OpenUSD 导入 Blender。
+- **蝴蝶效应**：十二个双摆世界的相邻释放角相差 0.05°，保存下来的轨迹组成
+  可以旋转的三维“时间雕塑”。
+
+这些网页回放不需要安装软件、登录账号或运行 GPU 服务。源轨迹、校验清单、
+离线实验包与复现说明一起提供，适合机器人教学、实验复盘和技术演示。
+
+范围说明：策略实验是单任务受控诊断，不能作为 LIBERO 官方成绩或真实机器人
+能力证明；布料没有碰撞和自接触，也没有真实材料标定；双摆录制使用 CPU。
+原始仿真由 SmolVLA / LeRobot、Newton 等上游软件完成。
+
+仓库：https://github.com/noteflowai/robot-reel
+
+项目由本账号维护，仍处于早期阶段。代码采用 Apache-2.0，第三方模型和素材
+遵循各自上游许可。

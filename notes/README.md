@@ -6,6 +6,7 @@ Pages site under `docs/`.
 
 - [launch-kit.md](launch-kit.md): post drafts and assets for launches.
 - [huggingface-launch.md](huggingface-launch.md): Space announcement and publication record.
+- [promotion-channels.md](promotion-channels.md): external submissions, checked channel rules and next steps.
 - [launch-plan.zh-CN.md](launch-plan.zh-CN.md): positioning notes (Chinese).
 - [customer-brief.zh-CN.md](customer-brief.zh-CN.md): customer introduction (Chinese).
 
