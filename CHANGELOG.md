@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Connect the homepage and both READMEs to the verified 0.7.0 release files,
+  with direct downloads for both offline labs and the editable cloth scene.
+
 ## 0.7.0 — GPU cloth and portable deformable experiments
 
 - Ship Cloth Lab in the installed package and release downloads. Export a checked
