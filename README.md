@@ -78,8 +78,8 @@ checked through OpenUSD and Blender.
 </a>
 
 **[Release the sheets ↗](https://noteflowai.github.io/robot-reel/cloth/)** ·
-[Offline experiment](https://noteflowai.github.io/robot-reel/cloth/experiment.zip) ·
-[Editable OpenUSD](https://noteflowai.github.io/robot-reel/cloth/scene.usdc) ·
+[Offline experiment](https://github.com/noteflowai/robot-reel/releases/download/v0.7.0/robot-reel-cloth-experiment.zip) ·
+[Editable OpenUSD](https://github.com/noteflowai/robot-reel/releases/download/v0.7.0/robot-reel-cloth-scene.usdc) ·
 [Method, limits & reproduction](docs/cloth.md)
 
 The coefficients are solver settings, not calibrated fabric properties. Colors
@@ -105,7 +105,7 @@ cameras, and jump to the largest measured trajectory difference. Recorded with
 </a>
 
 **[Compare the policy runs ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[Complete offline lab ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.6.0/robot-reel-stress-experiment.zip) ·
+[Complete offline lab ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.7.0/robot-reel-stress-experiment.zip) ·
 [MCAP telemetry ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [Open it in Foxglove](docs/telemetry.md) ·
 [Reproduce & inspect](docs/stress.md)
@@ -116,8 +116,8 @@ or verify its recorded facts against the full local collection. Held final
 observations and the complete experiment's counts stay explicit.
 [Review workflow and CLI](docs/stress.md#share-a-moment-for-review).
 
-The **0.6.0 offline lab** includes these review tools. Download the ZIP and the
-[sample review JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.6.0/robot-reel-seed-09-review.json),
+The **0.7.0 offline lab** includes these review tools. Download the ZIP and the
+[sample review JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.7.0/robot-reel-seed-09-review.json),
 then follow the [quick start guide](docs/offline-lab.md). No installation is needed
 to replay; the matching release wheel enables independent CLI checks.
 
