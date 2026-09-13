@@ -41,6 +41,7 @@ compare 30 SmolVLA trials, orbit recorded GPU cloth, and explore twelve Newton
 worlds in one Space. No installation or model account needed. The Space hosts
 the original recordings; [build and publication details](docs/huggingface.md)
 include their source commit and checksums.
+[Model & data collection](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0) · [Feedback & discussion](https://huggingface.co/spaces/glayguo/robot-reel/discussions/1).
 
 New here? [Take the three-step tour](https://noteflowai.github.io/robot-reel/#tour):
 compare a real paired outcome, inspect its native Rerun workspace, then verify

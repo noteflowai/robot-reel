@@ -40,6 +40,7 @@
 在同一个 Space 对照 30 次 SmolVLA 运行、旋转查看 GPU 布料录制，
 探索 12 个 Newton 世界。无需安装或模型账号；Space 自带原始录制，
 [构建与发布说明](docs/huggingface.md)提供对应源码提交和文件校验信息。
+[模型与数据资源合集](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0) · [体验反馈与讨论](https://huggingface.co/spaces/glayguo/robot-reel/discussions/1)。
 
 第一次体验可以从[三步导览](https://noteflowai.github.io/robot-reel/#tour)开始：
 对照一组真实实验的不同结局，进入 Rerun 原生检查，再本地校验完整实验。

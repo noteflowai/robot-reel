@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Connect the Space and both READMEs to a curated Hugging Face model/data
+  collection and the public feedback thread. Credit the exact recording sources.
+- Verify uploads anonymously against the tested CI artifact: every Git/LFS
+  object plus the public manifest, homepage, three viewers and thumbnail.
+  Bound CDN retries, reject stale or changed deployments and preserve unrelated
+  remote files.
 - Host Cloth, Stress and Butterfly labs as a native Hugging Face static Space,
   with original recordings, a dedicated landing page and model/dataset credits.
   Publish the exact browser-tested artifact after the current main commit's

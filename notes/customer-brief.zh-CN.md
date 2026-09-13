@@ -6,6 +6,11 @@
 
 直接体验：https://huggingface.co/spaces/glayguo/robot-reel
 
+资源合集：https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0
+
+合集按“先体验、再看模型、再核对数据来源”组织，并注明实际录制使用的版本，
+便于客户从交互演示进一步进入复现与技术交流。
+
 Hugging Face Space 原生托管三个实验的录制和回放页面；GitHub 首页保留完整
 13 个演示入口。Space 使用通过浏览器检查的同一份构建产物，并记录源码提交
 与文件指纹。观看已有录制无需模型推理；新增策略运行或 GPU 仿真需另行配置环境。

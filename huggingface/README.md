@@ -46,6 +46,9 @@ embedded and clipboard access is unavailable.
 
 ## Inspect and reproduce
 
+[Explore the curated model and data collection](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0): start with this
+Space, then inspect the actual policy and asset snapshots behind its recordings.
+
 - [Source code, all 13 demos and Chinese README](https://github.com/noteflowai/robot-reel)
 - [Complete project website](https://noteflowai.github.io/robot-reel/)
 - [SmolVLA protocol and limits](https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md)

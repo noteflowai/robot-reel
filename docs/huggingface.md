@@ -60,6 +60,28 @@ workflow succeeds, `Hugging Face Space` uploads **those tested bytes**, using th
 repository's `HF_TOKEN` Actions secret. Pull requests can build and test but
 cannot publish. Obsolete main commits are skipped.
 
+After uploading, the workflow reads the Space back **without authentication**.
+It checks every artifact file's Git blob or LFS content ID at the uploaded Hub
+commit, then checks the publicly served manifest, homepage, three viewers and
+thumbnail against the same artifact. The static host inserts a creator-ID
+assignment at the start of `<head>`; the HTML comparison recognizes only that
+exact metadata shape and compares every remaining byte. Arbitrary injected
+scripts or changed page contents cannot pass. A short bounded retry handles CDN
+propagation; missing files, changed bytes, a private page or a superseding commit
+cannot report successful readback. Unmanaged remote files are reported and
+preserved.
+
+To repeat the public check against a downloaded CI artifact:
+
+```bash
+python3 scripts/verify_huggingface.py \
+  --bundle artifacts/huggingface-space --repo-id glayguo/robot-reel
+```
+
+No Hub token is required for this check. `--revision` can pin the expected Hub
+commit from the publisher's output; `--timeout` bounds public propagation waits
+in seconds (default 120, maximum 300).
+
 To retry a deployment, run `Hugging Face Space` manually with the successful
 `Check` run ID for current main. The artifact must still be available; artifacts
 are retained for seven days. Otherwise, rerun `Check` for current main first.
@@ -72,6 +94,12 @@ experiment posters; its source hashes are in `huggingface/thumbnail.json`.
 The Space's model and dataset metadata identify recording sources and help
 people find the demo in the relevant Hub ecosystem.
 
+The Space homepage and both READMEs link to its curated model/data collection
+and pinned Community introduction. The collection leads with the interactive
+Space, then documents the actual SmolVLA checkpoint and LIBERO asset revisions.
+Published entry points are recorded in
+[the launch notes](../notes/huggingface-launch.md#published-entry-points).
+
 Keep the experiment scope visible: 30 policy trials are one controlled task,
 not an official LIBERO result; cloth properties are not calibrated real fabric;
 the Butterfly sculpture's depth is time. A useful launch asks for missing
@@ -82,3 +110,4 @@ Official references checked on 2026-09-13:
 - [Static HTML Spaces](https://huggingface.co/docs/hub/en/spaces-sdks-static)
 - [Space configuration and discovery metadata](https://huggingface.co/docs/hub/en/spaces-config-reference)
 - [Hub Python API](https://huggingface.co/docs/huggingface_hub/en/package_reference/hf_api)
+- [Hub collections](https://huggingface.co/docs/hub/en/collections)

@@ -79,6 +79,7 @@ jobs:
           from pathlib import Path
           from scripts.build_huggingface import verify
           from scripts.publish_huggingface import publish
+          from scripts.verify_huggingface import verify_publication
           folder = Path(os.environ["RUNNER_TEMP"])/"huggingface-space"
           record = verify(folder)
           if record["source_commit"] != os.environ["HF_SOURCE_COMMIT"] or record["source_dirty"]:
@@ -87,6 +88,12 @@ jobs:
               raise ValueError("Configure the repository's HF_TOKEN secret to publish")
           result = publish(folder, "glayguo/robot-reel")
           print(json.dumps(result, indent=2))
+          proof = verify_publication(folder, result["repo_id"], revision=result["hub_commit"])
+          print(json.dumps(proof, indent=2))
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
               summary.write(f"Published {result['space_url']}\n\nSource: `{result['source_commit']}`\n")
+              summary.write(f"\nAnonymous readback verified {proof['verified_files']} uploaded files ")
+              summary.write(f"and {len(proof['live_files'])} publicly served files.\n")
+              if proof["unmanaged_files"]:
+                  summary.write(f"\nUnmanaged files preserved: {proof['unmanaged_files']}\n")
           PY
