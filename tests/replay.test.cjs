@@ -584,6 +584,126 @@ test('landing page offers a portable native inspector without loading a viewer i
     assert.deepEqual(errors,[]);
   }finally{await page.close();}
 });
+test('homepage tour opens the measured pair and links its full reproduction commands',async()=>{
+  const page=await browser.newPage();
+  try{
+    const summary=JSON.parse(await readFile('docs/stress/summary.json','utf8'));
+    const pair=summary.pairs.find(p=>p.seed===9&&p.condition==='dim');
+    assert.equal(pair.reference_success,true);
+    assert.equal(pair.condition_success,false);
+    await page.goto(base+'/#tour');
+    assert.match(await page.locator('#commands').textContent(),/python3 -m robot_reel\.cli stress docs\/stress/);
+    await page.locator('#tour-inspect').click();
+    assert.equal(new URL(page.url()).hash,'#inspect');
+    await page.locator('#tour-reproduce').click();
+    assert.equal(new URL(page.url()).hash,'#start');
+    await page.locator('#tour-watch').click();
+    await page.waitForFunction(()=>document.querySelector('#counter')?.textContent.startsWith('Sample 61 /'));
+    const selected=new URLSearchParams(new URL(page.url()).hash.slice(1));
+    assert.equal(Number(selected.get('frame')),pair.max_eef_frame);
+    assert.equal(selected.get('seed'),'9');
+    assert.equal(selected.get('condition'),'dim');
+    assert.equal(await page.locator('#matrix button').count(),30);
+  }finally{await page.close();}
+});
+test('homepage purpose filters preserve keyboard focus, share links and browser history',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  const visible=()=>page.locator('#demo-grid .card:visible').evaluateAll(cards=>cards.map(card=>card.getAttribute('href')).sort());
+  try{
+    await page.goto(base+'/#demos');
+    const policies=page.locator('[data-filter="policies"]');
+    await policies.focus();await page.keyboard.press('Enter');
+    assert.deepEqual(await visible(),['compare/microduck/','microduck/','stress/','vla/']);
+    assert.equal(await policies.evaluate(el=>el===document.activeElement),true);
+    assert.equal(await policies.getAttribute('aria-pressed'),'true');
+    assert.equal(await page.locator('#demo-count').textContent(),'Showing 4 policy demos');
+    assert.equal(new URL(page.url()).searchParams.get('category'),'policies');
+    await page.locator('[data-filter="create"]').click();
+    assert.deepEqual(await visible(),['blender/','director/','newton/','remix/','studio/']);
+    await page.goBack();
+    await page.waitForFunction(()=>document.querySelector('[data-filter="policies"]').getAttribute('aria-pressed')==='true');
+    assert.equal((await visible()).length,4);
+    await page.goForward();await page.reload();
+    assert.equal((await visible()).length,5);
+    await page.locator('[data-filter="experiments"]').click();
+    assert.deepEqual(await visible(),['braking/','chaos/','compare/braking/','compare/microduck/','newton/','stress/']);
+    await page.locator('[data-filter="all"]').click();
+    assert.equal((await visible()).length,12);
+    assert.equal(new URL(page.url()).searchParams.has('category'),false);
+    await page.goto(base+'/?category=__proto__#demos');
+    assert.equal((await visible()).length,12);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  }finally{await page.close();}
+});
+test('homepage preview loads only on play and pauses when hidden or reduced motion is requested',async()=>{
+  for(const reducedMotion of ['no-preference','reduce']){
+    const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion});
+    const requests=[],errors=[];
+    page.on('request',request=>requests.push(request.url()));
+    page.on('pageerror',error=>errors.push(error.message));
+    try{
+      await page.goto(base+'/',{waitUntil:'networkidle'});
+      assert.equal(requests.some(url=>/\.(mp4|gif)(?:[?#]|$)/.test(url)),false);
+      assert.equal(requests.some(url=>url.includes('app.rerun.io')),false);
+      assert.equal(await page.locator('#hero-video').evaluate(v=>v.paused&&v.readyState===0),true);
+      await page.locator('#preview-play').focus();await page.keyboard.press('Space');
+      await page.waitForFunction(()=>document.querySelector('#hero-video').currentTime>.2);
+      assert.equal(requests.some(url=>url.endsWith('/showcase/butterfly-preview.mp4')),true);
+      assert.equal(await page.locator('#preview-play').getAttribute('aria-pressed'),'true');
+      if(reducedMotion==='no-preference'){
+        await page.emulateMedia({reducedMotion:'reduce'});
+        await page.waitForFunction(()=>document.querySelector('#hero-video').paused);
+        await page.locator('#preview-play').click();
+        await page.waitForFunction(()=>!document.querySelector('#hero-video').paused);
+      }
+      await page.locator('#demos').scrollIntoViewIfNeeded();
+      await page.waitForFunction(()=>document.querySelector('#hero-video').paused);
+      assert.equal(await page.locator('#preview-play').getAttribute('aria-pressed'),'false');
+      await page.locator('#hero-video').scrollIntoViewIfNeeded();
+      assert.equal(await page.locator('#hero-video').evaluate(v=>v.paused),true);
+      assert.deepEqual(errors,[]);
+    }finally{await page.close();}
+  }
+});
+test('homepage remains navigable without JavaScript and its filters work from file URLs',async()=>{
+  const url=pathToFileURL(resolve('docs/index.html')).href;
+  for(const target of [base+'/',url]){
+    const page=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
+    try{
+      await page.goto(target);
+      assert.equal(await page.locator('#demo-grid .card:visible').count(),12);
+      assert.equal(await page.locator('#filters').isVisible(),false);
+      assert.equal(await page.locator('#copy').isVisible(),false);
+      await page.locator('#tour-inspect').click();
+      assert.equal(new URL(page.url()).hash,'#inspect');
+      assert.match(await page.locator('#commands').textContent(),/stress docs\/stress/);
+    }finally{await page.close();}
+  }
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.goto(url+'?category=policies#demos');
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),4);
+    await page.locator('[data-filter="create"]').click();
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),5);
+    await page.locator('[data-filter="all"]').click();
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),12);
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('homepage keeps an experiment entry when the optional preview cannot load',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.route('**/butterfly-preview.mp4',route=>route.abort());
+    await page.goto(base+'/');
+    await page.locator('#preview-play').click();
+    await page.waitForFunction(()=>document.querySelector('#preview-note').textContent.startsWith('Preview unavailable.'));
+    await page.locator('.preview-actions a').click();
+    assert.equal(new URL(page.url()).pathname,'/chaos/');
+    await page.waitForFunction(()=>document.querySelector('#chaos-data')!==null);
+  }finally{await page.close();}
+});
 test('Microduck page exposes policy data and a distinct download command',async()=>{
   const page=await browser.newPage();
   try{

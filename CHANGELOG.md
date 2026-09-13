@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Guide first-time visitors from a selected paired outcome to native inspection
+  and full-experiment reproduction. Add purpose filters with shareable URLs,
+  keyboard controls, browser history and offline/no-JavaScript fallbacks.
+- Load homepage motion only after an explicit play action. Preserve the original
+  Butterfly preview's 61 source samples and clock in a checked H.264 derivative;
+  pause when the preview leaves view, the tab is hidden or reduced motion changes.
+- Synchronize the complete static landing template, including its markup and
+  styles, while retaining script-only synchronization for recorded replay pages.
+
 ## 0.5.0 — Paired policy inspection and verified distributions
 
 - Bundle Stress export notices, license and methods as package resources. Build

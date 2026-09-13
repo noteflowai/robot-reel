@@ -35,11 +35,19 @@
 
 ## 快速开始
 
+第一次体验可以从[三步导览](https://noteflowai.github.io/robot-reel/#tour)开始：
+对照一组真实实验的不同结局，进入 Rerun 原生检查，再本地校验完整实验。
+[场景库](https://noteflowai.github.io/robot-reel/#demos)支持按策略运行、实验对照和
+三维创作筛选；预览点击后播放。
+
 Python 3.12+，只需标准库就能校验一份真实录制：
 
 ```bash
 git clone https://github.com/noteflowai/robot-reel.git
 cd robot-reel
+
+# 校验配对策略实验中的全部试次。
+python3 -m robot_reel.cli stress docs/stress
 
 # 检查已录制的策略运行与证据。
 python3 -m robot_reel.cli vla docs/vla
