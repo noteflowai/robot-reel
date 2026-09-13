@@ -24,7 +24,7 @@ robot-reel = "robot_reel.cli:main"
 include = ["robot_reel*"]
 
 [tool.setuptools.package-data]
-robot_reel = ["replay.html", "comparison.html", "newton.html", "director.html", "vla.html", "chaos.html", "stress.html", "resources/stress/*.txt"]
+robot_reel = ["replay.html", "comparison.html", "newton.html", "cloth.html", "director.html", "vla.html", "chaos.html", "stress.html", "resources/stress/*.txt"]
 
 [project.optional-dependencies]
 microduck = ["onnxruntime==1.30.0"]

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Add Cloth Lab: three independent Newton VBD cloth simulations recorded on
+  NVIDIA L40S, with original float32 positions and velocities, shared-clock
+  mesh comparison, orbit/overlay replay and a portable offline experiment.
+  Check every deforming vertex and velocity through OpenUSD, and every imported
+  mesh vertex through Blender. Publish a source-mapped preview and document
+  the numerical settings, diagnostics and material-validation limits.
+
 - Point the homepage, READMEs and published Stress Lab at the verified 0.6.0
   offline bundle. Add a homepage download section with the sample review, guide
   and checksums after the release assets are publicly available.

@@ -37,6 +37,7 @@ PAGES = {
     "docs/director/index.html": "robot_reel/director.html",
     "docs/newton/index.html": "robot_reel/newton.html",
     "docs/chaos/index.html": "robot_reel/chaos.html",
+    "docs/cloth/index.html": "robot_reel/cloth.html",
     "docs/stress/index.html": "robot_reel/stress.html",
     "docs/blender/index.html": "scripts/blender_demo.html",
     "docs/remix/index.html": "scripts/remix_demo.html",
