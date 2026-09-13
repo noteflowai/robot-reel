@@ -4,6 +4,17 @@ Target Space: `glayguo/robot-reel`.
 Launch copy for the Space Community. Published announcements are visible under
 the Space’s Community tab; other channel posts remain drafts.
 
+## Published entry points
+
+- [Interactive Space](https://huggingface.co/spaces/glayguo/robot-reel)
+- [Pinned Community introduction](https://huggingface.co/spaces/glayguo/robot-reel/discussions/1)
+- [Model and data collection](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0): the Space, the actual SmolVLA
+  checkpoint and the LIBERO asset repository, with the recorded revisions in
+  each source note. Published publicly on 2026-09-13.
+
+The collection groups an independent project with its credited upstream sources;
+it does not imply an upstream endorsement or change any asset license.
+
 ## Space Community announcement
 
 Title: **Three Physical AI experiments you can replay and inspect**
