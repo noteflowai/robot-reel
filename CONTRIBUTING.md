@@ -22,6 +22,15 @@ ZIPs and the manifests that hash those archives. It preserves the original
 recorded media and source-capture manifests. Release assets are immutable
 snapshots: publish an updated archive separately when releasing a new version.
 
+The static landing page is synchronized in full, so its markup, styles and
+script travel together. Its on-demand Butterfly video is derived from the
+verified GIF, retaining the source samples and clock. Rebuild with
+`python scripts/build_landing_preview.py`; `--verify` checks provenance, the
+1 MiB video budget, and every decoded frame against its mapped source with a
+bounded allowance for lossy color compression. The original GIF and trace remain
+the source of truth. Browser checks require no GIF/video request before play,
+and cover filtering, history, keyboard, reduced motion, offline and no-JS use.
+
 Blender changes should also pass the saved-project check in [docs/blender.md](docs/blender.md).
 For the Newton adapter, install `.[newton]`, record a fresh CPU run and use
 `--verify --check-usd`. The native Blender USD import check and page rebuild

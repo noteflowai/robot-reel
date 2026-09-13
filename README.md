@@ -35,11 +35,19 @@
 
 ## Quick start
 
+New here? [Take the three-step tour](https://noteflowai.github.io/robot-reel/#tour):
+compare a real paired outcome, inspect its native Rerun workspace, then verify
+the full experiment locally. The [demo gallery](https://noteflowai.github.io/robot-reel/#demos)
+filters policy runs, comparison experiments and 3D creation; previews play on request.
+
 Python 3.12+ and the standard library are enough to check a real recording:
 
 ```bash
 git clone https://github.com/noteflowai/robot-reel.git
 cd robot-reel
+
+# Check every trial in the paired policy experiment.
+python3 -m robot_reel.cli stress docs/stress
 
 # Check the recorded policy episode and its evidence.
 python3 -m robot_reel.cli vla docs/vla

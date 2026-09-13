@@ -16,6 +16,21 @@ class PublishedPageTest(unittest.TestCase):
     def test_published_pages_carry_their_template_script(self):
         self.assertEqual([page.relative_to(ROOT).as_posix() for page in check(ROOT)], [])
 
+    def test_landing_markup_changes_sync_even_when_the_script_does_not_change(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            page, template = root/"docs/index.html", root/"scripts/landing.html"
+            page.parent.mkdir()
+            template.parent.mkdir()
+            script = '<script>\nconsole.log("same script");\n</script>'
+            page.write_text("<h1>Before</h1>"+script)
+            template.write_text("<h1>After</h1>"+script)
+            self.assertEqual(check(root), [page])
+            self.assertEqual(sync(root), [page])
+            self.assertEqual(page.read_bytes(), template.read_bytes())
+            self.assertEqual(check(root), [])
+            self.assertEqual(sync(root), [])
+
     def test_every_published_page_is_listed(self):
         found = {p.relative_to(ROOT).as_posix() for p in (ROOT/"docs").rglob("index.html")}
         self.assertEqual(found, set(PAGES))

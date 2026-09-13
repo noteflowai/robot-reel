@@ -10,8 +10,8 @@ were built from it, refreshing local offline archives and dependent manifests.
     python -m robot_reel.pages           # report drift
     python -m robot_reel.pages --write   # copy templates into the published pages
 
-Only the script is synchronized. Anything else -- new markup, new recorded data,
-new media -- still requires the documented rebuild for that page.
+The static landing page is copied in full. For recorded replays, only the script
+is synchronized; new markup, recorded data or media still require their rebuild.
 """
 import argparse
 import copy
@@ -68,9 +68,16 @@ def published(root=ROOT):
 
 
 def check(root=ROOT):
-    """Return the published pages whose inline script differs from its template."""
-    return [page for page, template in published(root)
-            if inline_script(page)[0] != inline_script(template)[0]]
+    """Check the complete landing page and each recorded replay's inline script."""
+    drifted = []
+    for page, template in published(root):
+        if page == root/"docs/index.html":
+            same = page.read_bytes() == template.read_bytes()
+        else:
+            same = inline_script(page)[0] == inline_script(template)[0]
+        if not same:
+            drifted.append(page)
+    return drifted
 
 
 HASH_KEYS = ("sha256", "files", "inputs")
@@ -171,16 +178,19 @@ def refresh_hashes(root, changed):
 
 
 def sync(root=ROOT):
-    """Copy template scripts, refreshing local archives and dependent hashes."""
+    """Copy the landing page or replay scripts, then refresh archives and hashes."""
     root = root.resolve()
     written, changed = [], {}
     for page in check(root):
         template = root/PAGES[page.relative_to(root).as_posix()]
-        script = inline_script(template)[0]
-        text = page.read_text()
-        _, start, end = inline_script(page)
         changed[page.resolve()] = digest(page)
-        page.write_text(text[:start] + script + text[end:])
+        if page == root/"docs/index.html":
+            page.write_bytes(template.read_bytes())
+        else:
+            script = inline_script(template)[0]
+            text = page.read_text()
+            _, start, end = inline_script(page)
+            page.write_text(text[:start] + script + text[end:])
         written.append(page)
     return written + refresh_hashes(root, changed)
 

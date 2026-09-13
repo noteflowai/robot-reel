@@ -8,7 +8,9 @@
 <meta name="twitter:card" content="summary_large_image">
 <style>
 :root{color-scheme:dark;--bg:#09121b;--panel:#131f2a;--line:#30414f;--text:#edf4ef;--muted:#a7bac6;--mint:#79dfc3;--orange:#ffca85;--lavender:#c1b1ff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,sans-serif}a{color:inherit;text-decoration:none}a:hover{color:var(--mint)}
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,sans-serif}a{color:inherit;text-decoration:none}a:hover{color:var(--mint)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--orange);outline-offset:4px}
+.skip{position:absolute;left:16px;top:-80px;padding:10px 16px;background:var(--mint);color:var(--bg);z-index:2}.skip:focus{top:12px}
 header,main,footer{max-width:1180px;margin:0 auto;padding:22px 32px}
 header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.brand{font-weight:700;letter-spacing:.02em}.brand span{color:var(--mint)}
 nav{display:flex;gap:10px 18px;flex-wrap:wrap;font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
@@ -17,7 +19,14 @@ nav{display:flex;gap:10px 18px;flex-wrap:wrap;font:12px/1.4 ui-monospace,SFMono-
 .hero h1{font-size:clamp(34px,5vw,58px);line-height:1.05;margin:10px 0 16px;letter-spacing:-.01em}.hero h1 span{color:var(--lavender)}
 .hero p{color:var(--muted);font-size:17px;max-width:46ch;margin:0 0 22px}
 .actions{display:flex;gap:12px;flex-wrap:wrap}.button{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:600;background:var(--panel)}.button.primary{background:var(--mint);border-color:var(--mint);color:#062018}.button.primary:hover{color:#062018;filter:brightness(1.08)}
-.hero picture img,.hero .frame{display:block;width:100%;border-radius:14px;border:1px solid var(--line);background:#000}
+.hero-preview{margin:0;min-width:0}.hero-preview video{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line);background:#000}
+.preview-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}.hero-preview figcaption{color:var(--muted);font-size:12px;margin-top:8px}
+.tour{margin-top:30px;padding:22px;border:1px solid #48625e;border-radius:18px;background:linear-gradient(120deg,#152a2b,#121b2d)}
+.tour h2{font-size:26px;line-height:1.2;margin:8px 0}.tour>p{margin:0 0 18px;color:var(--muted)}
+.tour ol{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;list-style:none;padding:0;margin:0}
+.tour li{min-width:0}.tour a{display:block;height:100%;padding:18px;border:1px solid var(--line);border-radius:12px;background:#09121b80}
+.tour a:hover{border-color:var(--mint)}.tour strong{display:block;font-size:18px;margin:8px 0}.tour .detail{display:block;color:var(--muted);font-size:14px}
+.tour .step{color:var(--mint);font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;letter-spacing:.08em}
 .note{color:var(--muted);font-size:13px;margin-top:10px}
 .inspector{margin-top:30px;border:1px solid #48625e;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#152a2b,#121b2d)}
 .inspector-copy{padding:24px 28px;display:grid;grid-template-columns:1fr 1fr;gap:16px 32px;align-items:center}
@@ -33,6 +42,8 @@ nav{display:flex;gap:10px 18px;flex-wrap:wrap;font:12px/1.4 ui-monospace,SFMono-
 pre{margin:0;max-width:100%;padding:14px 16px;background:#050c13;border:1px solid var(--line);border-radius:10px;overflow:auto;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#d6e4dc}pre b{color:var(--orange);font-weight:500}
 .copy{align-self:center;justify-self:end}button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);padding:8px 14px}button:hover{border-color:var(--mint)}
 .section-title{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:34px 0 14px}.section-title h2{margin:0;font-size:22px}.section-title span{color:var(--muted);font-size:13px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}.filters button[aria-pressed="true"]{background:var(--mint);border-color:var(--mint);color:#062018}
+.section-title{flex-wrap:wrap}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .card{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;background:var(--panel);overflow:hidden;transition:border-color .15s,transform .15s}.card:hover{border-color:var(--mint);transform:translateY(-2px);color:inherit}
 .card img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#000;border-bottom:1px solid var(--line)}
@@ -41,17 +52,33 @@ pre{margin:0;max-width:100%;padding:14px 16px;background:#050c13;border:1px soli
 .card.featured{grid-column:span 1}.card.text{justify-content:center}.card.text .body{padding:22px 18px}
 .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}.pillars article{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:var(--panel)}.pillars h3{margin:4px 0 6px;font-size:16px}.pillars p{margin:0;color:var(--muted);font-size:14px}
 footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:30px;line-height:1.7}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.grid,.pillars{grid-template-columns:1fr 1fr}.quick{grid-template-columns:1fr}.copy{justify-self:start}.inspector-copy{grid-template-columns:1fr;padding:20px}}
-@media(max-width:560px){header,main,footer{padding:16px}.grid,.pillars{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.grid,.pillars{grid-template-columns:1fr 1fr}.tour ol{grid-template-columns:1fr}.quick{grid-template-columns:1fr}.copy{justify-self:start}.inspector-copy{grid-template-columns:1fr;padding:20px}}
+@media(max-width:560px){header,main,footer{padding:16px}.grid,.pillars{grid-template-columns:1fr}.tour{padding:18px}}
 </style></head><body>
-<header><a class="brand" href="./">Robot<span>Reel</span></a><nav><a href="#demos">Demos</a><a href="#inspect">Inspect</a><a href="#start">Quick start</a><a href="https://github.com/noteflowai/robot-reel/blob/main/docs/recording.md">Record your own</a><a href="https://github.com/noteflowai/robot-reel/releases/latest">Downloads</a><a href="https://github.com/noteflowai/robot-reel">GitHub</a><a href="https://github.com/noteflowai/robot-reel/blob/main/README.zh-CN.md">中文</a></nav></header>
-<main>
+<a class="skip" href="#main">Skip to content</a>
+<header><a class="brand" href="./">Robot<span>Reel</span></a><nav aria-label="Main navigation"><a href="#tour">Start here</a><a href="#demos">Demos</a><a href="#inspect">Inspect</a><a href="#start">Quick start</a><a href="https://github.com/noteflowai/robot-reel/blob/main/docs/recording.md">Record your own</a><a href="https://github.com/noteflowai/robot-reel/releases/latest">Downloads</a><a href="https://github.com/noteflowai/robot-reel">GitHub</a><a href="https://github.com/noteflowai/robot-reel/blob/main/README.zh-CN.md">中文</a></nav></header>
+<main id="main">
 <section class="hero">
 <div><div class="eyebrow">Physical AI replay lab</div><h1>Give Physical AI<br><span>a replay button.</span></h1>
 <p>Real policy rollouts. Films you can inspect. 3D scenes you can edit. Watch the behavior, step through the evidence, and take the scene with you.</p>
-<div class="actions"><a class="button primary" href="stress/">Explore the Stress Lab ↗</a><a class="button" href="chaos/">Enter the Butterfly Lab</a><a class="button" href="remix/">Drag the before / after</a></div>
+<div class="actions"><a class="button primary" href="#tour">Take the 30-second tour ↓</a><a class="button" href="#demos">Choose a demo</a></div>
 <p class="note">No account or install to watch. Every page is a self-contained recording with its source trace and checksums.</p></div>
-<a href="chaos/" aria-label="Open the Butterfly Lab"><picture><source media="(prefers-reduced-motion: reduce)" srcset="chaos/poster.png"><img src="chaos/preview.gif" alt="Twelve measured Newton pendulum trajectories unfold into a colored 3D time sculpture. Adjacent releases differ by 0.05 degrees."></picture></a>
+<figure class="hero-preview">
+<video id="hero-video" controls muted loop playsinline preload="none" width="900" height="640" poster="chaos/poster.png" src="showcase/butterfly-preview.mp4" aria-label="Butterfly Lab: twelve recorded Newton trajectories forming a time sculpture"></video>
+<div class="preview-actions"><button id="preview-play" type="button" aria-controls="hero-video" aria-pressed="false" hidden>Play preview</button><a href="chaos/">Explore all 12 worlds ↗</a></div>
+<figcaption id="preview-note">Recorded Newton poses · preview at 3.33× speed · sculpture depth represents time. Motion starts when you press play.</figcaption>
+</figure>
+</section>
+
+<section class="tour" id="tour" aria-labelledby="tour-title">
+<div class="eyebrow">Start here · a 30-second tour</div><h2 id="tour-title">From a surprising run to the evidence.</h2>
+<p>Follow one selected example, then check the full experiment yourself. No setup to explore.</p>
+<ol>
+<li><a id="tour-watch" href="stress/#seed=9&amp;condition=dim&amp;frame=61&amp;camera=main"><span class="step">01 / Compare</span><strong>Same seed. Different endings.</strong><span class="detail">Open seed 09 at its largest shared trajectory difference. Reference succeeds; reduced light reaches the step limit.</span></a></li>
+<li><a id="tour-inspect" href="#inspect"><span class="step">02 / Inspect</span><strong>Read the run behind the result.</strong><span class="detail">Put the cameras, measured 3D paths and applied controls on one timeline in the Rerun workspace.</span></a></li>
+<li><a id="tour-reproduce" href="#start"><span class="step">03 / Reproduce</span><strong>Check all 30 trials locally.</strong><span class="detail">Copy the commands to verify the original experiment and its full denominator. Keep the recordings and checksums.</span></a></li>
+</ol>
 </section>
 
 <section class="inspector" id="inspect" aria-labelledby="inspect-title">
@@ -61,31 +88,40 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin
 </section>
 
 <section class="quick" id="start">
-<div><div class="eyebrow">Quick start · Python 3.12+, standard library only</div><h2>Check a real recording in under a minute.</h2><p>Verify the included SmolVLA episode against its evidence, then turn a recorded braking comparison into a checked storyboard.</p>
+<div><div class="eyebrow">Quick start · Python 3.12+, standard library only</div><h2>Check the experiment yourself.</h2><p>Verify all 30 Stress Lab trials and the original SmolVLA episode, then turn the recorded braking comparison into a checked storyboard.</p>
 <pre id="commands">git clone https://github.com/noteflowai/robot-reel.git
 cd robot-reel
+<b># Check all 30 paired trials and the complete evidence.</b>
+python3 -m robot_reel.cli stress docs/stress
 <b># Check the recorded policy episode and its evidence.</b>
 python3 -m robot_reel.cli vla docs/vla
 <b># Turn the included braking comparison into a checked storyboard.</b>
 python3 -m robot_reel.cli direct docs/compare/braking \
   --plan examples/contact-storyboard.json --output artifacts/director</pre></div>
-<button class="copy" id="copy" type="button">Copy commands</button>
+<button class="copy" id="copy" type="button" hidden>Copy commands</button>
+<p class="note">Ready to collect new GPU trials? Follow the <a href="https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md#reproduce">recording recipe</a>. Prefer an installation package? See <a href="https://github.com/noteflowai/robot-reel/blob/main/docs/distribution.md">verified downloads and Docker</a>.</p>
 </section>
 
-<div class="section-title" id="demos"><h2>Twelve recorded demos</h2><span>Each opens in the browser and works from file://</span></div>
-<section class="grid" aria-label="Demo pages">
-<a class="card" href="stress/"><img src="stress/poster.png" alt="Three SmolVLA rollouts from one initial state under reference lighting, reduced light and a shifted camera." loading="lazy"><div class="body"><span class="meta">Stress Lab · SmolVLA · CUDA</span><h3>Same task. Change the view.</h3><p>30 real closed-loop trials across ten paired initial states and three scene conditions. Compare both policy cameras and jump to the largest measured trajectory difference.</p></div></a>
-<a class="card" href="chaos/"><img src="chaos/poster.png" alt="Neon 3D time sculpture of twelve Newton pendulum trajectories." loading="lazy"><div class="body"><span class="meta lavender">Butterfly Lab · Newton · OpenUSD</span><h3>0.05° apart. Worlds apart.</h3><p>Twelve isolated worlds begin at nearly identical angles. Drag to orbit their recorded paths and find where a tiny release difference becomes a 6.26 m gap.</p></div></a>
-<a class="card" href="remix/"><img src="remix/poster.png" alt="Split view between the original MuJoCo footage and its Blender replay." loading="lazy"><div class="body"><span class="meta orange">Physics → Cinema · MuJoCo · Blender</span><h3>One recording. Two looks.</h3><p>Drag between the original simulation and its Blender replay. Same source samples, same simulator clock, a different camera and scene.</p></div></a>
-<a class="card" href="vla/"><img src="showcase/vla.png" alt="SmolVLA's scene and wrist cameras after the recorded bowl-to-plate task." loading="lazy"><div class="body"><span class="meta">SmolVLA · LIBERO · 76 actions</span><h3>Words → robot actions</h3><p>A language instruction becomes an actual SmolVLA rollout. Inspect both camera views, measured state and each applied control.</p></div></a>
-<a class="card" href="director/"><img src="director/poster.png" alt="A Blender camera shows two recorded braking trials at the contact sequence." loading="lazy"><div class="body"><span class="meta orange">Agent director · MCP · Blender</span><h3>Brief → Blender film</h3><p>An MCP agent plans camera cuts, captions and slow motion. Every frame of the editable film maps back to the original recording.</p></div></a>
-<a class="card" href="newton/"><img src="showcase/newton.png" alt="Recorded Newton double-pendulum poses and their motion trail in the browser's 3D replay." loading="lazy"><div class="body"><span class="meta lavender">Newton · OpenUSD · 362 transforms</span><h3>Physics → editable 3D</h3><p>Record Newton physics on CPU, explore measured poses in the browser, then open the animated OpenUSD scene in Blender.</p></div></a>
-<a class="card" href="microduck/"><img src="microduck/media/poster.png" alt="Microduck's official ONNX walking policy recorded in MuJoCo, with measured joint telemetry." loading="lazy"><div class="body"><span class="meta">Microduck · ONNX policy · 50 Hz</span><h3>A tiny robot. A learned policy.</h3><p>Pollen Robotics' Microduck walks with its official policy. Follow 14 joint targets, measured responses and base motion frame by frame.</p></div></a>
-<a class="card" href="compare/microduck/"><img src="compare/microduck/poster.png" alt="Two Microduck runs at different speed commands, side by side on one clock." loading="lazy"><div class="body"><span class="meta">Comparison · two runs · one clock</span><h3>Two speed commands</h3><p>Two independent Microduck captures aligned on simulation time. Step both views together and read the measured difference.</p></div></a>
-<a class="card" href="compare/braking/"><img src="compare/braking/poster.png" alt="Early and late braking trials side by side." loading="lazy"><div class="body"><span class="meta orange">Comparison · braking · contact</span><h3>Early vs. late braking</h3><p>Two one-dimensional MuJoCo trials with the same initial conditions and different brake thresholds. Jump to the recorded contact.</p></div></a>
-<a class="card" href="blender/"><img src="blender/poster.png" alt="The recorded braking scene rebuilt as an editable Blender project." loading="lazy"><div class="body"><span class="meta orange">Blender · editable scene</span><h3>Keep the motion. Change the look.</h3><p>Download the braking replay as a Blender project whose keyframes come straight from the recorded trace.</p></div></a>
-<a class="card" href="braking/"><img src="braking/media/poster.png" alt="A single recorded braking trial with its telemetry." loading="lazy"><div class="body"><span class="meta orange">Braking · single run</span><h3>One braking trial</h3><p>The single-run replay behind the comparison: applied controls, measured state and frame links.</p></div></a>
-<a class="card text" href="studio/"><div class="body"><span class="meta lavender">SO-100 arm · MuJoCo · studio</span><h3>SO-100 arm studio</h3><p>A recorded SO-100 arm scene with shot navigation and per-frame telemetry, the starting point for the example shot plans in the repository.</p></div></a>
+<div class="section-title" id="demos"><h2>Choose what you want to explore.</h2><span id="demo-count" role="status" aria-live="polite" aria-atomic="true">Showing all 12 recorded demos</span></div>
+<div class="filters" id="filters" role="group" aria-label="Filter demos by purpose" hidden>
+<button type="button" data-filter="all" aria-pressed="true" aria-controls="demo-grid">All demos</button>
+<button type="button" data-filter="policies" aria-pressed="false" aria-controls="demo-grid">Policy runs</button>
+<button type="button" data-filter="experiments" aria-pressed="false" aria-controls="demo-grid">Compare experiments</button>
+<button type="button" data-filter="create" aria-pressed="false" aria-controls="demo-grid">Create in 3D</button>
+</div>
+<section class="grid" id="demo-grid" aria-label="Demo pages">
+<a class="card" data-categories="policies experiments" href="stress/"><img src="stress/poster.png" alt="Three SmolVLA rollouts from one initial state under reference lighting, reduced light and a shifted camera." loading="lazy"><div class="body"><span class="meta">Stress Lab · SmolVLA · CUDA</span><h3>Same task. Change the view.</h3><p>30 real closed-loop trials across ten paired initial states and three scene conditions. Compare both policy cameras and jump to the largest measured trajectory difference.</p></div></a>
+<a class="card" data-categories="experiments" href="chaos/"><img src="chaos/poster.png" alt="Neon 3D time sculpture of twelve Newton pendulum trajectories." loading="lazy"><div class="body"><span class="meta lavender">Butterfly Lab · Newton · OpenUSD</span><h3>0.05° apart. Worlds apart.</h3><p>Twelve isolated worlds begin at nearly identical angles. Drag to orbit their recorded paths and find where a tiny release difference becomes a 6.26 m gap.</p></div></a>
+<a class="card" data-categories="create" href="remix/"><img src="remix/poster.png" alt="Split view between the original MuJoCo footage and its Blender replay." loading="lazy"><div class="body"><span class="meta orange">Physics → Cinema · MuJoCo · Blender</span><h3>One recording. Two looks.</h3><p>Drag between the original simulation and its Blender replay. Same source samples, same simulator clock, a different camera and scene.</p></div></a>
+<a class="card" data-categories="policies" href="vla/"><img src="showcase/vla.png" alt="SmolVLA's scene and wrist cameras after the recorded bowl-to-plate task." loading="lazy"><div class="body"><span class="meta">SmolVLA · LIBERO · 76 actions</span><h3>Words → robot actions</h3><p>A language instruction becomes an actual SmolVLA rollout. Inspect both camera views, measured state and each applied control.</p></div></a>
+<a class="card" data-categories="create" href="director/"><img src="director/poster.png" alt="A Blender camera shows two recorded braking trials at the contact sequence." loading="lazy"><div class="body"><span class="meta orange">Agent director · MCP · Blender</span><h3>Brief → Blender film</h3><p>An MCP agent plans camera cuts, captions and slow motion. Every frame of the editable film maps back to the original recording.</p></div></a>
+<a class="card" data-categories="experiments create" href="newton/"><img src="showcase/newton.png" alt="Recorded Newton double-pendulum poses and their motion trail in the browser's 3D replay." loading="lazy"><div class="body"><span class="meta lavender">Newton · OpenUSD · 362 transforms</span><h3>Physics → editable 3D</h3><p>Record Newton physics on CPU, explore measured poses in the browser, then open the animated OpenUSD scene in Blender.</p></div></a>
+<a class="card" data-categories="policies" href="microduck/"><img src="microduck/media/poster.png" alt="Microduck's official ONNX walking policy recorded in MuJoCo, with measured joint telemetry." loading="lazy"><div class="body"><span class="meta">Microduck · ONNX policy · 50 Hz</span><h3>A tiny robot. A learned policy.</h3><p>Pollen Robotics' Microduck walks with its official policy. Follow 14 joint targets, measured responses and base motion frame by frame.</p></div></a>
+<a class="card" data-categories="policies experiments" href="compare/microduck/"><img src="compare/microduck/poster.png" alt="Two Microduck runs at different speed commands, side by side on one clock." loading="lazy"><div class="body"><span class="meta">Comparison · two runs · one clock</span><h3>Two speed commands</h3><p>Two independent Microduck captures aligned on simulation time. Step both views together and read the measured difference.</p></div></a>
+<a class="card" data-categories="experiments" href="compare/braking/"><img src="compare/braking/poster.png" alt="Early and late braking trials side by side." loading="lazy"><div class="body"><span class="meta orange">Comparison · braking · contact</span><h3>Early vs. late braking</h3><p>Two one-dimensional MuJoCo trials with the same initial conditions and different brake thresholds. Jump to the recorded contact.</p></div></a>
+<a class="card" data-categories="create" href="blender/"><img src="blender/poster.png" alt="The recorded braking scene rebuilt as an editable Blender project." loading="lazy"><div class="body"><span class="meta orange">Blender · editable scene</span><h3>Keep the motion. Change the look.</h3><p>Download the braking replay as a Blender project whose keyframes come straight from the recorded trace.</p></div></a>
+<a class="card" data-categories="experiments" href="braking/"><img src="braking/media/poster.png" alt="A single recorded braking trial with its telemetry." loading="lazy"><div class="body"><span class="meta orange">Braking · single run</span><h3>One braking trial</h3><p>The single-run replay behind the comparison: applied controls, measured state and frame links.</p></div></a>
+<a class="card text" data-categories="create" href="studio/"><div class="body"><span class="meta lavender">SO-100 arm · MuJoCo · studio</span><h3>SO-100 arm studio</h3><p>A recorded SO-100 arm scene with shot navigation and per-frame telemetry, the starting point for the example shot plans in the repository.</p></div></a>
 </section>
 
 <div class="section-title"><h2>Keep the run behind the film</h2><span>Evidence travels with every demo</span></div>
@@ -101,6 +137,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 const $ = id => document.getElementById(id);
 const copy = $("copy");
 const commands = $("commands");
+copy.hidden = false;
 copy.addEventListener("click", async () => {
   // Strip the comment lines so the clipboard holds only what runs.
   const text = commands.textContent.split("\n").filter(line => !line.startsWith("#")).join("\n");
@@ -112,5 +149,70 @@ copy.addEventListener("click", async () => {
   }
   setTimeout(() => { copy.textContent = "Copy commands"; }, 1800);
 });
+
+const video = $("hero-video");
+const previewPlay = $("preview-play");
+video.controls = false;
+previewPlay.hidden = false;
+function showPlayback() {
+  previewPlay.textContent = video.paused ? "Play preview" : "Pause preview";
+  previewPlay.setAttribute("aria-pressed", String(!video.paused));
+}
+function previewUnavailable() {
+  video.controls = true;
+  previewPlay.hidden = true;
+  $("preview-note").textContent = "Preview unavailable. Open the Butterfly Lab to explore the recorded trajectories.";
+}
+previewPlay.addEventListener("click", async () => {
+  try {
+    if (video.paused) await video.play();
+    else video.pause();
+  } catch (error) {
+    if (error.name !== "AbortError") previewUnavailable();
+  }
+});
+video.addEventListener("play", showPlayback);
+video.addEventListener("pause", showPlayback);
+video.addEventListener("error", previewUnavailable);
+new IntersectionObserver(entries => {
+  if (!entries[0].isIntersecting) video.pause();
+}).observe(video);
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) video.pause();
+});
+matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", event => {
+  if (event.matches) video.pause();
+});
+
+const filters = [...$("filters").querySelectorAll("button")];
+const cards = [...$("demo-grid").querySelectorAll(".card")];
+const labels = {all: "all", policies: "policy", experiments: "experiment", create: "3D creation"};
+function applyFilter(category) {
+  if (!Object.hasOwn(labels, category)) category = "all";
+  let count = 0;
+  for (const card of cards) {
+    card.hidden = category !== "all" && !card.dataset.categories.split(" ").includes(category);
+    if (!card.hidden) count++;
+  }
+  for (const button of filters) button.setAttribute("aria-pressed", String(button.dataset.filter === category));
+  $("demo-count").textContent = category === "all"
+    ? `Showing all ${count} recorded demos`
+    : `Showing ${count} ${labels[category]} demos`;
+}
+for (const button of filters) button.addEventListener("click", () => {
+  const category = button.dataset.filter;
+  applyFilter(category);
+  const url = new URL(location.href);
+  if (category === "all") url.searchParams.delete("category");
+  else url.searchParams.set("category", category);
+  url.hash = "demos";
+  // Some file:// browsers restrict History API changes. Filtering still works.
+  if (url.href !== location.href) {
+    try { history.pushState(null, "", url); } catch {}
+  }
+});
+window.addEventListener("popstate", () => applyFilter(new URL(location.href).searchParams.get("category")));
+applyFilter(new URL(location.href).searchParams.get("category"));
+$("filters").hidden = false;
 </script>
 </body></html>
