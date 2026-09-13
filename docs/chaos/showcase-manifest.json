@@ -69,16 +69,16 @@
   "selected_world": 3,
   "view": "sculpture",
   "files": {
-    "index.html": "a6b914ef8a81934dca56061678d56f17517ab2f1c9f367960e1b52cedc4b2f65",
+    "index.html": "82b3fe3aa6374df60008b1c59544ac51b01581fb55785c10b58a178ef3f457a2",
     "trace.json": "2cd0905eb0069df502b39f7d9d140e0ba4987696f72b6eb3e83a7ada5b206799",
     "scene.usdc": "1e014926dd74683f7958cf5538346ee0e969d163d5bc8cfd3203de2af1f7dcf4",
-    "manifest.json": "e009497c799b5b7da18815bc32fd954bd4df6b6b0ef3ae467302f59b55f54abc",
+    "manifest.json": "be5ab1fc41894264b7a7d432e91530b50cda3f2cbd84719ac94e92d764b31b07",
     "blender-check.json": "b820da6ca85a4b011e5331fe308f90659b9235dede87c521cac437e0bda5f447",
     "usd-check.json": "01d8516409a3f50524cab6394aed4cd821f811722f5b72d3e27a214387296fee",
     "NOTICE.txt": "43d6a5cd35ea0dea4861763a98cd2b5bdec16a16f934424865d07d60038bc046",
     "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
     "poster.png": "7c10b136721cb97fad9ede1f7aae5a6a7dae8c98b5da2ad591a4fa771563b6ff",
     "preview.gif": "6589d97f0163a10da7d138ae11f589ae6d00758d27be4627e24ba8b46e79af9a",
-    "experiment.zip": "b55f7a2aa5986fa49a01710c16a7c8912ad4e2a1395433f41e05f7339cdcd8b3"
+    "experiment.zip": "521668f753cec41bcd9a5a13754ee82e86be49f4fdcc06773119cacbe5a50f17"
   }
 }

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Host Cloth, Stress and Butterfly labs as a native Hugging Face static Space,
+  with original recordings, a dedicated landing page and model/dataset credits.
+  Publish the exact browser-tested artifact after the current main commit's
+  checks pass; verify its full inventory and source identity before upload.
+- Make sample links visible and directly openable when embedded browsers deny
+  clipboard access. Preserve the selected frame, condition and camera.
 - Open Cloth Lab sample JSON files, verify their source facts and restore their
   sample and camera offline. Reject changed or ambiguous files without moving
   the current view. Add `cloth --verify-sample` for independent standard-library

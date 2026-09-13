@@ -40,6 +40,18 @@ jobs:
         run: npm run check:js
       - run: npx playwright install --with-deps chromium
       - run: npm test
+      - name: Build and exercise the native Hugging Face Space inside an embedded host
+        run: |
+          python scripts/build_huggingface.py --output artifacts/huggingface-space
+          node scripts/check_huggingface.cjs artifacts/huggingface-space
+      - uses: actions/upload-artifact@v4
+        with:
+          name: huggingface-space
+          path: artifacts/huggingface-space/
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
       - uses: actions/download-artifact@v4
         with:
           name: offline-lab

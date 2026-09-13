@@ -1,6 +1,25 @@
 # Robot Reel launch copy
 
-Drafts for the repository owner to publish. No external outreach has been sent.
+Drafts for the repository owner to publish. Hugging Face launch copy and its
+publication record are maintained in [huggingface-launch.md](huggingface-launch.md).
+Other platform posts below remain drafts.
+
+## Hugging Face — three native replay labs
+
+Start here: https://huggingface.co/spaces/glayguo/robot-reel
+
+> Give Physical AI a replay button. Compare 30 real SmolVLA trials, orbit
+> GPU-recorded cloth and explore twelve Newton worlds as a 3D time sculpture.
+> The Space includes the original recordings, source checksums and portable
+> experiments. No installation or live inference is needed to explore.
+>
+> Built with SmolVLA / LeRobot, Newton, Blender and OpenUSD. These are recorded
+> simulations and a controlled single-task diagnostic, with all outcomes retained.
+> Which simulator or policy log would you like to inspect next?
+
+Use `huggingface/thumbnail.png` for the Space card. Link the concrete experiment
+when responding to relevant discussions; keep new-channel posts to their own
+audiences and track their publication separately.
 
 ## Landing page, Stress Lab and Butterfly Lab — September 2026
 
