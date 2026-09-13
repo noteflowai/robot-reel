@@ -283,13 +283,17 @@ def main(argv=None):
     parser.add_argument("--device", choices=("cpu", "cuda:0"), help="New recording device (default: cuda:0)")
     action = parser.add_mutually_exclusive_group()
     action.add_argument("--verify", action="store_true")
+    action.add_argument("--verify-sample", type=Path, metavar="JSON",
+                        help="Check a portable sample JSON against --output, without new simulation")
     action.add_argument("--export-from", type=Path, metavar="BUNDLE",
                         help="Export a checked recording to a fresh --output, without new simulation")
     parser.add_argument("--check-usd", action="store_true",
                         help="Also read back the USD with its optional native dependency")
     args = parser.parse_args(argv)
-    if (args.verify or args.export_from) and (args.seconds is not None or args.device is not None):
+    if (args.verify or args.export_from or args.verify_sample) and (args.seconds is not None or args.device is not None):
         parser.error("--seconds and --device apply only to new recordings")
+    if args.verify_sample and args.check_usd:
+        parser.error("--verify-sample checks saved facts; use --verify --check-usd for native USD readback")
     try:
         if args.export_from:
             from .cloth_site import build
@@ -297,6 +301,12 @@ def main(argv=None):
                 "summary": build(args.export_from, args.output, check_native=args.check_usd),
                 "exported_to": str(args.output.resolve()), "native_usd_checked": args.check_usd,
             }
+        elif args.verify_sample:
+            from .cloth_sample import read_sample, verify_record
+            document = read_sample(args.verify_sample)
+            verify(args.output)
+            trace, positions, _ = load(args.output)
+            result = verify_record(trace, positions, document)
         else:
             result = verify(args.output) if args.verify else record(
                 args.output, 4 if args.seconds is None else args.seconds, args.device or "cuda:0")

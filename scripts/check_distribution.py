@@ -53,6 +53,14 @@ def check(source, release_assets=None):
         for original, name in (("docs/cloth.md", "METHODS.md"), ("LICENSE", "LICENSE")):
             if (cloth_output/name).read_bytes() != (source/original).read_bytes():
                 raise ValueError(f"Installed cloth resource differs: {name}")
+        sample_command = [str(Path(sys.executable).with_name("robot-reel")), "cloth",
+                          "--output", str(cloth_output), "--verify-sample",
+                          str(source/"tests/fixtures/cloth-sample.json")]
+        sample = subprocess.run(sample_command, check=True, capture_output=True, text=True, timeout=120)
+        sample_check = json.loads(sample.stdout)
+        if (not sample_check["recorded_facts_match"] or sample_check["sample"] != 29
+                or sample_check["case_index"] != 2):
+            raise ValueError("Installed cloth sample validator did not check the browser export")
         output = Path(temporary)/"stress"
         summary = build(source/"docs/stress", output)
         if verify_site(output) != summary or summary["completed_trials"] != 30:
@@ -88,6 +96,7 @@ def check(source, release_assets=None):
             check=True, capture_output=True, text=True, timeout=120,
         )
         report = {"version": expected, "module": str(module), "cloth_vertex_samples": cloth["vertex_samples"],
+                  "cloth_sample": sample_check,
                   "stress_trials": summary["completed_trials"], "telemetry": telemetry,
                   "review": review_check, "vla": json.loads(result.stdout)}
         # Preserve the tested bytes before the temporary exported site is removed.

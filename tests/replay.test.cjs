@@ -141,10 +141,85 @@ test('Cloth figures and sample records carry binary-derived facts and restore th
       assert.deepEqual(separate.presentation.display_offsets_x_m,[-1.35,0,1.35]);
       assert.deepEqual(separate.metrics,record.metrics);
       assert.notDeepEqual((await download('#figure')).bytes,png.bytes);
+      const chooser=page.waitForEvent('filechooser');
+      await page.locator('#open-sample').click();
+      await (await chooser).setFiles({name:recordFile.name,mimeType:'application/json',buffer:recordFile.bytes});
+      await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Verified sample 61'));
+      assert.equal(await page.locator('#overlay').getAttribute('aria-pressed'),'true');
+      assert.equal(createHash('sha256').update((await download('#figure')).bytes).digest('hex'),createHash('sha256').update(png.bytes).digest('hex'));
+      const temporary=await mkdtemp(join(tmpdir(),'cloth-sample-'));
+      try{
+        const file=join(temporary,'sample.json');await writeFile(file,recordFile.bytes);
+        const checked=spawnSync('python3',['-S','-m','robot_reel.cli','cloth','--output','docs/cloth','--verify-sample',file],{encoding:'utf8',timeout:30000});
+        assert.equal(checked.status,0,checked.stderr);
+        const proof=JSON.parse(checked.stdout);assert.equal(proof.sample,61);assert.equal(proof.case_index,1);assert.equal(proof.recorded_facts_match,true);assert.equal(proof.positions_sha256,fingerprint);
+      }finally{await rm(temporary,{recursive:true,force:true});}
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
       assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
     }finally{await page.close();}
   }
+});
+test('Cloth sample import rejects changed facts and ambiguous files without changing the current view',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[],network=[];
+  page.on('pageerror',e=>errors.push(e.message));await page.route(/^https?:/,route=>{network.push(route.request().url());return route.abort();});
+  try{
+    await page.goto(pathToFileURL(resolve('docs/cloth/index.html')).href+'#frame=61&case=1&view=overlay&yaw=-0.9');
+    const state=async()=>({frame:await page.locator('#timeline').inputValue(),image:createHash('sha256').update(await page.locator('#scene').evaluate(c=>c.toDataURL())).digest('hex'),url:page.url()});
+    const before=await state(),fixture=JSON.parse(await readFile('tests/fixtures/cloth-sample.json','utf8'));
+    const invalid=[];
+    for(const mutate of [
+      r=>{r.metrics.rms_separation_m=.909;},r=>{r.metrics.max_pin_displacement_m=true;},
+      r=>{r.source.positions_sha256='0'.repeat(64);},r=>{r.source.independent_cases=1;},
+      r=>{r.source.device='cpu';},r=>{r.source.frame_count=120;},r=>{r.sample=121;},
+      r=>{r.sample=true;},r=>{r.case.index=3;},r=>{r.case.edge_ke=1;},
+      r=>{r.presentation.yaw_rad=4;},r=>{r.presentation.pitch_rad=1;},
+      r=>{r.presentation.display_offsets_x_m=[0,0,0];},r=>{r.time_s=0;},
+      r=>{r.blender_frame=29;},r=>{r.limits=[];},r=>{r.verified=true;},
+      r=>{r.replay_fragment+='\u0026yaw=0';},r=>{r.replay_fragment='https://example.com/';},
+    ]){const record=structuredClone(fixture);mutate(record);invalid.push(Buffer.from(JSON.stringify(record)));}
+    invalid.push(
+      Buffer.from('{"sample":0,"\\u0073ample":29,'+JSON.stringify(fixture).slice(1)),
+      Buffer.from('{"x":1e999}'),Buffer.alloc(65537,32),Buffer.from([255]),
+      Buffer.from('['.repeat(2000)+']'.repeat(2000)),Buffer.from('null'),Buffer.from('{'),
+    );
+    for(const [index,buffer] of invalid.entries()){
+      await page.locator('#sample-file').setInputFiles({name:`invalid-${index}.json`,mimeType:'application/json',buffer});
+      await page.waitForFunction(()=>!document.querySelector('#sample-file').value&&document.querySelector('#status').textContent.startsWith('Could not open sample:'));
+      assert.deepEqual(await state(),before,`invalid sample ${index} must not change the view`);
+    }
+    const valid=Buffer.concat([Buffer.from([239,187,191]),Buffer.from(JSON.stringify(fixture))]);
+    await page.locator('#sample-file').setInputFiles({name:'valid.json',mimeType:'application/json',buffer:valid});
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Verified sample 29'));
+    assert.equal(await page.locator('#timeline').inputValue(),'29');
+    assert.equal(await page.locator('#separate').getAttribute('aria-pressed'),'true');
+    assert.equal(await page.locator('#cases button[aria-pressed="true"]').textContent(),'k = 100CASE 3');
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+    assert.deepEqual(errors,[]);assert.deepEqual(network,[]);
+  }finally{await page.close();}
+});
+test('Cloth sample imports ignore an older file that finishes reading after the latest choice',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.goto(base+'/cloth/#frame=61&case=1&view=overlay&yaw=-0.9');
+    const download=page.waitForEvent('download');await page.locator('#sample-json').click();
+    const latest=await readFile(await (await download).path()),old=await readFile('tests/fixtures/cloth-sample.json');
+    await page.evaluate(()=>{
+      const original=File.prototype.arrayBuffer;
+      File.prototype.arrayBuffer=function(){
+        if(this.name!=='slow.json')return original.call(this);
+        return new Promise(resolve=>{window.finishSampleRead=()=>original.call(this).then(resolve);});
+      };
+    });
+    await page.locator('#sample-file').setInputFiles({name:'slow.json',mimeType:'application/json',buffer:old});
+    await page.waitForFunction(()=>typeof window.finishSampleRead==='function');
+    await page.locator('#sample-file').setInputFiles({name:'latest.json',mimeType:'application/json',buffer:latest});
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Verified sample 61'));
+    const image=await page.locator('#scene').evaluate(c=>c.toDataURL());
+    await page.evaluate(()=>window.finishSampleRead());
+    assert.equal(await page.locator('#timeline').inputValue(),'61');
+    assert.equal(await page.locator('#scene').evaluate(c=>c.toDataURL()),image);
+    assert.match(await page.locator('#status').textContent(),/^Verified sample 61/);
+  }finally{await page.close();}
 });
 test('Cloth PNG export freezes its sample during encoding and recovers from an encoder failure',async()=>{
   const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));

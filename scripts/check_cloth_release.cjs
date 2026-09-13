@@ -52,6 +52,14 @@ async function check(lab){
         await page.locator('#play').click();
         await page.waitForFunction(()=>Number(document.querySelector('#timeline').value)>=3);
         await page.locator('#play').click();
+        await page.locator('#sample-file').setInputFiles({name:'sample.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(record))});
+        await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Verified sample 30'));
+        assert.equal(await page.locator('#timeline').inputValue(),'30');
+        assert.equal(await page.locator('#scene').evaluate(c=>c.toDataURL()),image);
+        const changed=structuredClone(record);changed.source.positions_sha256='0'.repeat(64);
+        await page.locator('#sample-file').setInputFiles({name:'changed.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(changed))});
+        await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Could not open sample:'));
+        assert.equal(await page.locator('#scene').evaluate(c=>c.toDataURL()),image);
         const download=page.waitForEvent('download');
         await page.getByRole('link',{name:'OpenUSD scene ↓',exact:true}).click();
         assert.deepEqual(await readFile(await (await download).path()),await readFile(resolve(lab,'scene.usdc')));
@@ -59,7 +67,8 @@ async function check(lab){
         assert.deepEqual(network,[]);assert.deepEqual(errors,[]);
         results.push({width,height,vertex_samples:trace.summary.vertex_samples,played:true,
           binary_payload_matches:true,shared_sample_restored:true,shared_camera_restored:true,
-          figure_png:[1920,1080],sample_json_matches:true,usd_download_matches:true,network_requests:0});
+          figure_png:[1920,1080],sample_json_matches:true,sample_import_restored:true,
+          changed_sample_rejected:true,usd_download_matches:true,network_requests:0});
       }finally{await page.close();}
     }
   }finally{await browser.close();}

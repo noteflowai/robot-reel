@@ -36,12 +36,13 @@ button,a,input,select{touch-action:manipulation}button,.button{font:inherit;colo
 <p class="source-note">Colors identify cases, not stress. Metrics use original vertex coordinates; display spacing is excluded. Bending coefficients are solver settings, not calibrated fabric properties.</p>
 </aside></div>
 <div class="controls"><div class="time-label"><label for="timeline" id="counter"></label><span id="dcc-frame"></span></div><input type="range" id="timeline" min="0" step="1" value="0" aria-label="Recorded sample">
-<div class="transport"><div class="buttons"><button id="prev" aria-label="Previous sample">←</button><button id="play">Play ▶</button><button id="next" aria-label="Next sample">→</button><button id="start">Initial state</button><button id="peak">Largest difference</button></div><div class="buttons"><label for="rate">Speed <select id="rate"><option value=".25">0.25×</option><option value=".5">0.5×</option><option value="1" selected>1×</option></select></label><button id="share">Share sample ↗</button><button id="figure" title="Save a 1920 × 1080 image with this view, measurements and source">Figure PNG ↓</button><button id="sample-json" title="Save this sample’s measurements, camera and data fingerprint">Sample JSON ↓</button></div></div>
+<div class="transport"><div class="buttons"><button id="prev" aria-label="Previous sample">←</button><button id="play">Play ▶</button><button id="next" aria-label="Next sample">→</button><button id="start">Initial state</button><button id="peak">Largest difference</button></div><div class="buttons"><label for="rate">Speed <select id="rate"><option value=".25">0.25×</option><option value=".5">0.5×</option><option value="1" selected>1×</option></select></label><button id="share">Share sample ↗</button><button id="figure" title="Save a 1920 × 1080 image with this view, measurements and source">Figure PNG ↓</button><button id="sample-json" title="Save this sample’s measurements, camera and data fingerprint">Sample JSON ↓</button><button id="open-sample" title="Check a sample JSON against this recording and restore its view">Open sample JSON…</button></div></div>
+<input id="sample-file" type="file" accept=".json,application/json" aria-label="Open sample JSON" hidden>
 <p id="status" class="status" role="status">Paused at the largest recorded RMS difference. Press release to see how it began.</p></div>
 </section>
 <section class="below">
 <article><div class="caption">01 / A controlled release</div><h2>Only bending changes.</h2><p>Each 0.96 × 0.64 m sheet has 117 vertices and 192 triangles. Two columns are fixed. Every free vertex has mass 0.01 kg; gravity is 9.81 m/s². All three start at rest.</p><p id="recording-note"></p><p>No collisions, self-contact or learned policy. The dashed outline shows the initial sheet.</p></article>
-<article><div class="caption">02 / Measured deformation</div><h2>Take the evidence with you.</h2><p>Save a slide-ready <b>1920 × 1080 figure</b> with the selected view, source clock and measured deformation. Download the matching JSON for full-precision metrics, camera settings and the positions fingerprint. Both work offline.</p><p>RMS compares all 117 corresponding vertices; free-edge drop averages the nine edge vertices. <span id="strain-note"></span></p><p>These finite-step diagnostics describe this experiment; they are not a validation against real fabric.</p></article>
+<article><div class="caption">02 / Measured deformation</div><h2>Take the evidence with you.</h2><p>Save a slide-ready <b>1920 × 1080 figure</b> with the selected view, source clock and measured deformation. Download the matching JSON for full-precision metrics, camera settings and the positions fingerprint.</p><p><b>Open sample JSON</b> checks those facts against this recording, then restores the view. Files stay in your browser; exports and imports work offline. A match checks consistency, not recorder authenticity or real-fabric accuracy.</p><p>RMS compares all 117 corresponding vertices; free-edge drop averages the nine edge vertices. <span id="strain-note"></span></p></article>
 <article><div class="caption">03 / From solver to scene</div><h2>Edit it in Blender.</h2><p>The USD stores original mesh points and velocities at every sample. Set Blender to <b>30 fps</b>, then import. Frame 1 is the untouched initial state. Native readback checks the deformation.</p><div class="actions"><a class="button" id="download-archive"  href="experiment.zip" download>Offline experiment ↓</a><a class="button" href="https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md">Method & reproduction ↗</a></div></article>
 </section></main>
 <footer>Recorded physics; this page renders saved vertices and does not run Newton. Code and procedural meshes: Apache-2.0. <a href="trace.json" download>Metadata</a> · <a href="positions.f32" download>Positions</a> · <a href="velocities.f32" download>Velocities</a> · <a href="manifest.json" download>Checksums</a><noscript><p>JavaScript is needed for interactive replay. Download the original data or USD scene using the links above.</p></noscript></footer>
@@ -124,6 +125,42 @@ function sampleRecord(s){
   source:{...trace.source,positions_sha256:data.positions_sha256,vertex_count:n,frame_count:frames},replay_fragment:'#'+fragment(s),
   limits:['Recorded simulation; no collisions or self-contact.','Bending coefficients are solver settings, not calibrated fabric properties.','Colors identify cases, not stress. Metrics exclude display spacing.']};
 }
+function readSample(text){
+ const result=JSON.parse(text),stack=[];
+ // JSON.parse establishes syntax; scan decoded keys as well so duplicate keys,
+ // including escaped spellings, cannot silently replace a recorded fact.
+ for(const [token] of text.matchAll(/"(?:\\.|[^"\\])*"|[{}\[\]:,]/g)){
+  if(token==='{'||token==='['){stack.push({keys:token==='{'?new Set():null,wantKey:true});if(stack.length>32)throw Error('Sample JSON nesting exceeds 32 levels.');}
+  else if(token==='}'||token===']')stack.pop();
+  else if(stack.length){
+   const top=stack[stack.length-1];
+   if(token===',')top.wantKey=true;
+   else if(token===':')top.wantKey=false;
+   else if(top.keys&&top.wantKey){const key=JSON.parse(token);if(top.keys.has(key))throw Error('Duplicate sample JSON key.');top.keys.add(key);}
+  }
+ }
+ const pending=[result];while(pending.length){const value=pending.pop();if(typeof value==='number'&&!Number.isFinite(value))throw Error('Sample JSON must contain finite numbers.');if(value&&typeof value==='object')for(const child of Object.values(value))pending.push(child);}
+ return result;
+}
+function sameSample(a,b,path=''){
+ if(typeof b==='number')return typeof a==='number'&&Number.isFinite(a)&&(path.startsWith('metrics.')?Math.abs(a-b)<=Math.max(1e-12,1e-12*Math.max(Math.abs(a),Math.abs(b))):a===b);
+ if(a===null||b===null||typeof a!=='object'||typeof b!=='object')return a===b;
+ if(Array.isArray(a)!==Array.isArray(b))return false;
+ const keys=Object.keys(b);return Object.keys(a).length===keys.length&&keys.every(k=>Object.hasOwn(a,k)&&sameSample(a[k],b[k],path?path+'.'+k:k));
+}
+function verifySample(r){
+ if(!r||Array.isArray(r)||typeof r!=='object')throw Error('Expected a sample JSON object.');
+ const c=r.case,p=r.presentation;
+ if(!c||!p||!Number.isInteger(r.sample)||r.sample<0||r.sample>=frames||!Number.isInteger(c.index)||c.index<0||c.index>=cases.length)throw Error('Sample or case lies outside this recording.');
+ if(!['separate','overlay'].includes(p.mode)||!Number.isFinite(p.yaw_rad)||Math.abs(p.yaw_rad)>Math.PI||p.pitch_rad!==.65)throw Error('Invalid sample camera or presentation.');
+ if(typeof r.replay_fragment!=='string'||!r.replay_fragment.startsWith('#')||r.replay_fragment.length>512)throw Error('Invalid sample replay fragment.');
+ const params=new URLSearchParams(r.replay_fragment.slice(1)),keys=['frame','case','view','yaw'];
+ if([...params].length!==4||!keys.every(k=>params.getAll(k).length===1)||params.get('frame')!==String(r.sample)||params.get('case')!==String(c.index)||params.get('view')!==p.mode)throw Error('Sample replay fragment differs from its selection.');
+ const angle=JSON.parse(params.get('yaw'));if(typeof angle!=='number'||!Number.isFinite(angle)||angle!==p.yaw_rad)throw Error('Sample replay fragment differs from its camera.');
+ const s={sample:r.sample,selected:c.index,mode:p.mode,yaw:p.yaw_rad,pitch:p.pitch_rad},expected=sampleRecord(s);
+ if(!sameSample({...r,replay_fragment:expected.replay_fragment},expected))throw Error('Sample facts differ from this recording.');
+ return s;
+}
 function saveBlob(blob,name){
  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);
  try{a.click();}finally{a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
@@ -165,7 +202,21 @@ $('peak').onclick=()=>{pause();choose(trace.summary.peak.case);seek(trace.summar
 $('separate').onclick=()=>presentation('separate');$('overlay').onclick=()=>presentation('overlay');$('rate').onchange=()=>{tickStart=0;};
 $('rotate-left').onclick=()=>{yaw=wrapAngle(yaw-.2);draw();};$('rotate-right').onclick=()=>{yaw=wrapAngle(yaw+.2);draw();};$('reset-view').onclick=()=>{yaw=-.48;pitch=.65;draw();};
 $('share').onclick=async()=>{const url=new URL(location.href);url.hash=fragment(snapshot());history.replaceState(null,'',url);if(location.protocol==='file:'){$('status').textContent=`Share the experiment folder with ${url.hash} to restore this sample and camera.`;return;}try{await navigator.clipboard.writeText(url.href);$('status').textContent='Sample and camera link copied.';}catch{$('status').textContent='Copy this page URL to share the selected sample and camera.';}};
-$('sample-json').onclick=()=>{pause();const s=snapshot();try{saveBlob(new Blob([JSON.stringify(sampleRecord(s),null,2)+'\n'],{type:'application/json'}),filename(s,'json'));$('status').textContent=`Sample ${s.sample} JSON saved with full-precision measurements and camera.`;}catch{$('status').textContent='Could not save the sample JSON. Please try again.';}};
+$('sample-json').onclick=()=>{pause();const s=snapshot();try{const blob=new Blob([JSON.stringify(sampleRecord(s),null,2)+'\n'],{type:'application/json'});if(blob.size>65536)throw Error('Sample JSON exceeds 64 KiB.');saveBlob(blob,filename(s,'json'));$('status').textContent=`Sample ${s.sample} JSON saved with full-precision measurements and camera.`;}catch(error){$('status').textContent='Could not save the sample JSON. '+error.message;}};
+let sampleImport=0;
+$('open-sample').onclick=()=>$('sample-file').click();
+$('sample-file').onchange=async()=>{
+ const request=++sampleImport,file=$('sample-file').files[0];if(!file)return;
+ try{
+  if(file.size>65536)throw Error('Sample JSON exceeds 64 KiB.');
+  const bytes=await file.arrayBuffer();if(request!==sampleImport)return;
+  const text=new TextDecoder('utf-8',{fatal:true}).decode(bytes),s=verifySample(readSample(text));
+  pause();({sample,selected,mode,yaw,pitch}=s);choose(selected);presentation(mode);
+  try{history.replaceState(null,'','#'+fragment(s));}catch{}
+  $('status').textContent=`Verified sample ${s.sample} against this recording. Case, measurements and camera restored.`;
+ }catch(error){if(request===sampleImport)$('status').textContent='Could not open sample: '+error.message;}
+ finally{if(request===sampleImport)$('sample-file').value='';}
+};
 $('figure').onclick=async()=>{
  pause();const s=snapshot();$('figure').disabled=true;$('status').textContent=`Preparing figure for sample ${s.sample}…`;
  try{const image=figure(s),blob=await new Promise((resolve,reject)=>image.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG encoding failed')),'image/png'));saveBlob(blob,filename(s,'png'));$('status').textContent=`Figure for sample ${s.sample} saved at 1920 × 1080. Sample JSON includes the full-precision measurements.`;}

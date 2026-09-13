@@ -72,6 +72,8 @@ checked through OpenUSD and Blender.
 The current lab also exports **1920 × 1080 figures** with measured deformation
 and source fingerprints, plus full-precision sample JSON. Shared links preserve
 the camera angle so teammates can reopen the same view.
+Open a received sample JSON to check its facts and restore that view offline,
+or verify it independently against the source vertices with the current CLI.
 
 <a href="https://noteflowai.github.io/robot-reel/cloth/">
   <picture>
