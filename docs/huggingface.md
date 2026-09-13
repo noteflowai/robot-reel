@@ -71,6 +71,13 @@ propagation; missing files, changed bytes, a private page or a superseding commi
 cannot report successful readback. Unmanaged remote files are reported and
 preserved.
 
+The Space landing markup uses HTML entities for symbols and its Chinese link.
+Public readback exposed a corrupted UTF-8 degree sign at the static host's
+8 KiB boundary; entities retain the same visible text without splitting a
+multibyte character there. The browser check verifies the rendered degree sign
+and Chinese label; the builder rejects non-ASCII landing markup before upload.
+Readback still rejects encoding damage rather than repairing it.
+
 To repeat the public check against a downloaded CI artifact:
 
 ```bash

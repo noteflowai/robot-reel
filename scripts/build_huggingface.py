@@ -143,6 +143,8 @@ def build(destination, *, root=ROOT, allow_dirty=False):
         source_files = {}
         for original, target in inputs.items():
             source = _safe_file(root, original)
+            if target == "index.html" and not source.read_bytes().isascii():
+                raise ValueError("Use HTML entities for Space landing symbols to preserve static-host delivery")
             path = stage/target
             path.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, path)

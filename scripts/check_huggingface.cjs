@@ -35,6 +35,10 @@ async function check(directory){
    const frame=page.frameLocator('iframe');
    await frame.locator('#lab-cloth').waitFor();
    assert.equal(await frame.locator('.card').count(),3);
+   const homeText=await frame.locator('body').innerText();
+   assert.ok(homeText.includes('0.05° apart.'));
+   assert.ok(homeText.includes('中文'));
+   assert.ok(!homeText.includes('\uFFFD'));
    const home=page.frames().find(f=>f.url().includes('127.0.0.1'));
    assert.equal(await home.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    assert.equal(await frame.locator('video').evaluate(v=>v.paused&&v.preload==='none'),true);
