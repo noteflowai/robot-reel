@@ -79,7 +79,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 </a>
 
 **[对照策略运行 ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.4.0/robot-reel-stress-experiment.zip) ·
+[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.6.0/robot-reel-stress-experiment.zip) ·
 [MCAP 遥测数据 ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [在 Foxglove 中打开](docs/telemetry.md) ·
 [复现与检查](docs/stress.md)
@@ -88,6 +88,11 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 Markdown，重新导入可恢复原始样本位置，也可用命令行与完整本地实验逐项比对。
 记录明确标注末帧停留，保留完整实验统计，个人备注与录制事实分开。
 [复盘流程与核验命令](docs/stress.md#share-a-moment-for-review)。
+
+**0.6.0 离线实验包**已包含这些复盘工具。下载 ZIP 和
+[示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.6.0/robot-reel-seed-09-review.json)，
+按[快速上手说明](docs/offline-lab.md)解压打开即可回放，无需安装；使用同版本
+wheel 还可独立执行命令行核验。
 
 <sub>一个任务 × 三种原生场景条件 × 十个配对种子；每次固定最多 160 个动作、
 8 秒仿真时间。保留全部试次，执行错误另记入尝试历史；提供实际控制量、测量状态、
