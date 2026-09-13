@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.6.0 — Portable reviews and a complete offline lab
+
+- Deliver the complete Stress Lab ZIP, a source-checked sample review and a
+  start guide alongside the wheel, source distribution and native Rerun recording.
+  Publish the exact archive exported by the installed wheel and tested offline
+  in Chromium. Keep these assets separate from the Python distributions and
+  include every downloadable file in SHA256SUMS.
+
 - Export selected Stress Lab moments as portable JSON and readable Markdown with
   separate user notes. Import and compare facts before restoring a selection;
   verify reviews against a complete local collection with the standard-library

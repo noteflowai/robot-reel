@@ -172,8 +172,8 @@ selection and note intact. Processing is local and also works from `file://`;
 notes are not uploaded or stored between visits. User notes are limited to 4,000
 characters and imports to 128 KiB. In Markdown, notes appear as literal text.
 
-For an independent comparison, use the **current checkout** (this command is
-newer than the v0.5.0 package):
+For an independent comparison, use **Robot Reel 0.6.0 or newer**, or the current
+checkout:
 
 ```bash
 python3 -m robot_reel.cli stress docs/stress --review review.json
@@ -188,10 +188,11 @@ outcomes, clocks or counts fails verification. Notes are human interpretation.
 The plan hash identifies settings, not a unique recording or an external
 attestation. This check establishes consistency with the supplied collection.
 
-The existing v0.4.0 release ZIP remains an immutable older viewer. To use these
-controls offline, build a new pack with the current checkout; its exporter
-includes this viewer automatically. Its underlying 30-trial evidence is the
-same. The original ZIP can still be supplied to the current CLI after extraction.
+The 0.6.0 release includes this viewer in its complete offline ZIP, together with
+a separate sample review and start guide. The existing v0.4.0 release ZIP remains
+an immutable older viewer. Both contain the same underlying 30-trial evidence;
+either extracted collection can be supplied to the current CLI. Custom exports
+also include these review controls automatically.
 
 ## Reproduce
 

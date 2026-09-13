@@ -4,9 +4,11 @@ Run with a fresh environment containing the built wheel and the inspect extra.
 The source checkout supplies input recordings and reference notices only.
 """
 import argparse
+import hashlib
 from importlib.metadata import version
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -14,8 +16,12 @@ import tomllib
 import zipfile
 
 
-def check(source):
+def check(source, release_assets=None):
     source = source.resolve()
+    if release_assets is not None:
+        release_assets = release_assets.resolve()
+        if release_assets.exists() and any(release_assets.iterdir()):
+            raise ValueError("Choose an empty release-assets directory")
     # An editable install or PYTHONPATH pointing at the checkout must not make
     # this check pass. The caller also changes cwd to an unrelated directory.
     import robot_reel
@@ -41,7 +47,9 @@ def check(source):
         telemetry = check_mcap(traces, output/"telemetry.mcap")
         review_path = Path(temporary)/"review.json"
         review_path.write_text(json.dumps(record(payload(*collection),
-            {"seed": 9, "condition": "dim", "frame": 100, "camera": "wrist"}, "Installed wheel check")))
+            {"seed": 9, "condition": "dim", "frame": 100, "camera": "wrist"},
+            "Review prompt: inspect the dim-light run while the reference holds its final observation. "
+            "This note is human interpretation, not a measured conclusion."), indent=2)+"\n")
         review = subprocess.run(
             [str(Path(sys.executable).with_name("robot-reel")), "stress", str(output),
              "--review", str(review_path)],
@@ -62,14 +70,30 @@ def check(source):
              str(source/"docs/vla"), "--check-media"],
             check=True, capture_output=True, text=True, timeout=120,
         )
-        return {"version": expected, "module": str(module),
-                "stress_trials": summary["completed_trials"], "telemetry": telemetry,
-                "review": review_check,
-                "vla": json.loads(result.stdout)}
+        report = {"version": expected, "module": str(module),
+                  "stress_trials": summary["completed_trials"], "telemetry": telemetry,
+                  "review": review_check, "vla": json.loads(result.stdout)}
+        # Preserve the tested bytes before the temporary exported site is removed.
+        # The release workflow consumes this artifact; it does not rebuild the ZIP.
+        if release_assets is not None:
+            release_assets.mkdir(parents=True, exist_ok=True)
+            for original, name in (
+                (output/"experiment.zip", "robot-reel-stress-experiment.zip"),
+                (review_path, "robot-reel-seed-09-review.json"),
+                (source/"docs/offline-lab.md", "START-HERE.md"),
+            ):
+                shutil.copyfile(original, release_assets/name)
+            report["release_assets"] = {
+                path.name: {"bytes": path.stat().st_size, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+                for path in sorted(release_assets.iterdir())
+            }
+        return report
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", type=Path, required=True)
+    parser.add_argument("--release-assets", type=Path,
+                        help="Preserve the verified archive, sample review and guide in an empty directory")
     args = parser.parse_args()
-    print(json.dumps(check(args.source), indent=2))
+    print(json.dumps(check(args.source, args.release_assets), indent=2))
