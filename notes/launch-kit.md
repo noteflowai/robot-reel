@@ -1,8 +1,10 @@
 # Robot Reel launch copy
 
-Drafts for the repository owner to publish. Hugging Face launch copy and its
-publication record are maintained in [huggingface-launch.md](huggingface-launch.md).
-Other platform posts below remain drafts.
+Drafts and factual material for the repository owner. Actual external submissions
+and channel rules are tracked in [promotion-channels.md](promotion-channels.md);
+the [outreach directory](outreach/) retains their exact bodies. Hugging Face's
+record is in [huggingface-launch.md](huggingface-launch.md).
+Text below is not a claim that a platform post was published.
 
 ## Hugging Face — three native replay labs
 
@@ -26,40 +28,20 @@ audiences and track their publication separately.
 Assets: social preview `docs/showcase/social.png` (upload once under Settings →
 Social preview), landing page https://noteflowai.github.io/robot-reel/, Stress
 Lab GIF `docs/stress/preview.gif`, Butterfly Lab GIF `docs/chaos/preview.gif`.
-Timing hook: Newton 1.6 shipped days ago and the Butterfly Lab records it.
+The recordings pin Newton 1.6.0. Use the recorded version, not a relative
+"just shipped" claim, when reusing this material.
 
-### Show HN title candidates (≤ 80 characters)
+### Show HN
 
-- Show HN: Robot Reel – a replay button for physical AI (SmolVLA, Newton, Blender)
-- Show HN: 30 real SmolVLA rollouts you can step through frame by frame, in the browser
-- Show HN: Twelve Newton worlds 0.05° apart, recorded as a 3D time sculpture
-
-### Show HN first comment
-
-> Robot Reel records a run from a robotics stack and turns it into something you
-> can watch, inspect and reuse. Nothing is re-simulated in the browser; every page
-> is a self-contained HTML file with the source trace and checksums next to it.
->
-> Two new demos. The Stress Lab runs SmolVLA on the same LIBERO task under
-> reference lighting, reduced light and a shifted camera: 30 closed-loop trials
-> across ten paired initial states on an L40S, every trial retained, failures
-> included. Pick any outcome in the matrix, compare both policy cameras, jump to
-> the largest measured end-effector difference. The Butterfly Lab records twelve
-> isolated Newton 1.6 worlds released 0.05° apart and lets you orbit their paths
-> as a 3D time sculpture; the OpenUSD export was checked body-by-body in Blender.
->
-> What it is not: a simulator, a training framework or a benchmark. It sits after
-> LeRobot / MuJoCo / Newton and keeps the evidence behind the film. The Stress
-> Lab is a controlled diagnostic, not an official LIBERO score.
->
-> Standard-library quick start: clone, `python3 -m robot_reel.cli vla docs/vla`
-> verifies the included episode against its trace. Recording new runs needs the
-> full runtime (MuJoCo, LeRobot in its own venv; CUDA for the stress lab).
->
-> Most useful feedback: which policy or simulator log would you want to inspect
-> next, and what telemetry is missing when you step through a failure?
+The current HN guidelines prohibit generated or AI-edited comments. The owner
+should write the submission and discussion in their own words.
+Use the [fact brief and checked rules](promotion-channels.md#show-hn-fact-brief--not-a-post-draft)
+for reference. The previous generated first-comment draft has been removed.
 
 ### Reddit (r/robotics, r/MachineLearning, r/blender, r/LocalLLaMA)
+
+Audience ideas only. Current subreddit rules could not be verified because the
+public endpoint returned 403; check them before submitting.
 
 - r/robotics: lead with the Stress Lab GIF; ask which failure modes people want
   paired comparisons for.
@@ -75,7 +57,7 @@ Timing hook: Newton 1.6 shipped days ago and the Butterfly Lab records it.
 
 - 给物理 AI 加一个「回放键」：30 次真实 SmolVLA 运行、12 个 Newton 世界，浏览器里逐帧看
 - 策略在暗光下为什么失败？把每一次运行都留下来再看
-- 0.05° 的差别，如何在 12.5 秒后变成 6.26 米
+- 十二个双摆世界，如何变成一座可以旋转的三维时间雕塑
 
 正文要点：
 
