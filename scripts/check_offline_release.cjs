@@ -5,8 +5,9 @@ const {resolve}=require('node:path');
 const {pathToFileURL}=require('node:url');
 const {chromium}=require('playwright');
 
-async function check(lab,reviewFile){
+async function check(lab,reviewFile,pairedFile){
   const review=JSON.parse(await readFile(reviewFile,'utf8'));
+  const paired=JSON.parse(await readFile(pairedFile,'utf8'));
   const browser=await chromium.launch();
   const results=[];
   try{
@@ -36,9 +37,19 @@ async function check(lab,reviewFile){
         const pending=page.waitForEvent('download');await page.locator('#review-json').click();
         const download=await pending;
         assert.deepEqual(JSON.parse(await readFile(await download.path(),'utf8')),review);
+        await page.locator('#outcome-condition').selectOption('camera');
+        assert.deepEqual(await page.locator('#outcome-cells strong').allTextContents(),['4','1','3','2']);
+        await page.locator('[data-outcome="lost_success"]').click();
+        assert.deepEqual(await page.locator('#outcome-seeds button').allTextContents(),['Seed 09']);
+        await page.locator('#outcome-seeds button').click();
+        assert.equal(await page.locator('#seed').inputValue(),'9');
+        assert.equal(await page.locator('#condition').inputValue(),'camera');
+        const pairedPending=page.waitForEvent('download');
+        await page.locator('#outcome-download').click();
+        assert.deepEqual(JSON.parse(await readFile(await (await pairedPending).path(),'utf8')),paired);
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
         assert.deepEqual(network,[]);assert.deepEqual(errors,[]);
-        results.push({width,height,all_trials:30,review_matches:true,video_played:true,network_requests:0});
+        results.push({width,height,all_trials:30,review_matches:true,paired_matches:true,video_played:true,network_requests:0});
       }finally{await page.close();}
     }
   }finally{await browser.close();}
@@ -46,8 +57,8 @@ async function check(lab,reviewFile){
 }
 
 if(require.main===module){
-  const [lab,review]=process.argv.slice(2);
-  if(!lab||!review){console.error('Usage: node scripts/check_offline_release.cjs LAB_FOLDER REVIEW_JSON');process.exitCode=1;}
-  else check(resolve(lab),resolve(review)).then(r=>console.log(JSON.stringify(r,null,2))).catch(e=>{console.error(e);process.exitCode=1;});
+  const [lab,review,paired]=process.argv.slice(2);
+  if(!lab||!review||!paired){console.error('Usage: node scripts/check_offline_release.cjs LAB_FOLDER REVIEW_JSON PAIRED_JSON');process.exitCode=1;}
+  else check(resolve(lab),resolve(review),resolve(paired)).then(r=>console.log(JSON.stringify(r,null,2))).catch(e=>{console.error(e);process.exitCode=1;});
 }
 module.exports={check};
