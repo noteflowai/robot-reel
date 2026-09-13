@@ -22,6 +22,14 @@ ZIPs and the manifests that hash those archives. It preserves the original
 recorded media and source-capture manifests. Release assets are immutable
 snapshots: publish an updated archive separately when releasing a new version.
 
+Stress and cloth exports use separate input and output directories. Build in
+a temporary directory on the destination filesystem, validate the complete site
+and archive, and only then rename it into place. Validation errors or Python
+interruptions must not leave a partial output, and exports must never remove
+files another writer has added. Exercise failure and retry as well as a
+successful installed-wheel build. The Stress recovery fix is on `main` after
+0.7.0; the published 0.7.0 wheel retains its original behavior.
+
 The static landing page is synchronized in full, so its markup, styles and
 script travel together. Its on-demand Butterfly video is derived from the
 verified GIF, retaining the source samples and clock. Rebuild with

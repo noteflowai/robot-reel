@@ -1,4 +1,5 @@
 import copy
+from contextlib import contextmanager
 from html.parser import HTMLParser
 from importlib.resources import files
 import json
@@ -30,6 +31,19 @@ def archive_link(document):
     parser = Links()
     parser.feed(document)
     return parser.href
+
+
+@contextmanager
+def saved_export_evidence():
+    # Keep failure/packaging tests runnable under python -S. CI's installed
+    # distribution check separately regenerates MCAP and decodes every video.
+    with (
+        patch("robot_reel.stress_site.check_media",
+              return_value=json.loads((SITE/"media-checks.json").read_text())),
+        patch("robot_reel.stress_mcap.export_mcap",
+              side_effect=lambda traces, path: shutil.copyfile(SITE/"telemetry.mcap", path)),
+    ):
+        yield
 
 
 class StressTests(unittest.TestCase):
@@ -242,22 +256,103 @@ class StressTests(unittest.TestCase):
         self.assertEqual(json.loads(document.split(MARKER)[1].split("</script>", 1)[0]), data)
 
     def test_build_downloads_its_own_archive_by_default(self):
-        # Reuse checked camera/MCAP evidence so this packaging regression also
-        # runs under python -S; the separate media tests decode those recordings.
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary)/"pack"
-            with (
-                patch("robot_reel.stress_site.check_media",
-                      return_value=json.loads((SITE/"media-checks.json").read_text())),
-                patch("robot_reel.stress_mcap.export_mcap",
-                      side_effect=lambda traces, path: shutil.copyfile(SITE/"telemetry.mcap", path)),
-            ):
+            output.mkdir()
+            with saved_export_evidence():
                 summary = build(SITE, output)
             document = (output/"index.html").read_text()
             self.assertEqual(archive_link(document), "experiment.zip")
             with zipfile.ZipFile(output/"experiment.zip") as archive:
                 self.assertEqual(archive.read("index.html"), document.encode())
                 self.assertEqual(json.loads(archive.read("summary.json")), summary)
+            self.assertEqual(list(Path(temporary).iterdir()), [output])
+
+    def test_export_rejects_overlapping_occupied_and_symlink_outputs_before_reading(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root/"source"
+            source.mkdir()
+            (source/"keep.txt").write_text("original recording")
+            occupied = root/"occupied"
+            occupied.mkdir()
+            (occupied/"keep.txt").write_text("existing output")
+            file = root/"file"
+            file.write_text("existing file")
+            empty = root/"empty"
+            empty.mkdir()
+            link = root/"link"
+            link.symlink_to(empty, target_is_directory=True)
+            missing_link = root/"missing-link"
+            missing_link.symlink_to(root/"missing", target_is_directory=True)
+            source_alias = root/"source-alias"
+            source_alias.symlink_to(source, target_is_directory=True)
+            for output in (source, source/"nested"/"output", root, occupied, file,
+                           link, missing_link, source_alias/"output"):
+                with self.subTest(output=output), patch("robot_reel.stress_site.load_collection") as load:
+                    with self.assertRaises(ValueError):
+                        build(source, output)
+                    load.assert_not_called()
+            self.assertEqual((source/"keep.txt").read_text(), "original recording")
+            self.assertEqual((occupied/"keep.txt").read_text(), "existing output")
+            self.assertEqual(file.read_text(), "existing file")
+            self.assertEqual(list(empty.iterdir()), [])
+            self.assertTrue(link.is_symlink())
+            self.assertTrue(missing_link.is_symlink())
+            self.assertFalse((source/"nested").exists())
+
+    def test_missing_dependency_leaves_no_partial_export_and_can_be_retried(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary)/"pack"
+            result = subprocess.run(
+                [sys.executable, "-S", "-m", "robot_reel.stress_site", str(SITE), str(output)],
+                cwd=SITE.parents[1], capture_output=True, text=True, timeout=60,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("No module named 'mcap'", result.stderr)
+            self.assertFalse(output.exists())
+            self.assertEqual(list(Path(temporary).iterdir()), [])
+            with saved_export_evidence():
+                summary = build(SITE, output)
+            self.assertEqual(summary["completed_trials"], 30)
+            self.assertEqual(verify_site(output), summary)
+            self.assertEqual(list(Path(temporary).iterdir()), [output])
+
+    def test_media_failure_interruption_and_final_validation_preserve_empty_output(self):
+        for operation, failure in (
+            ("check_media", OSError("video decode failed")),
+            ("check_media", KeyboardInterrupt("export interrupted")),
+            ("verify_site", ValueError("archive validation failed")),
+        ):
+            with self.subTest(operation=operation, failure=type(failure).__name__), tempfile.TemporaryDirectory() as temporary:
+                output = Path(temporary)/"pack"
+                output.mkdir()
+                with saved_export_evidence(), patch("robot_reel.stress_site."+operation, side_effect=failure):
+                    with self.assertRaisesRegex(type(failure), str(failure)):
+                        build(SITE, output)
+                self.assertTrue(output.is_dir())
+                self.assertEqual(list(output.iterdir()), [])
+                self.assertEqual(list(Path(temporary).iterdir()), [output])
+
+    def test_export_does_not_replace_output_populated_during_validation(self):
+        for precreated in (False, True):
+            with self.subTest(precreated=precreated), tempfile.TemporaryDirectory() as temporary:
+                output = Path(temporary)/"pack"
+                if precreated:
+                    output.mkdir()
+
+                def concurrent_writer(staging):
+                    result = verify_site(staging)
+                    output.mkdir(exist_ok=True)
+                    (output/"keep.txt").write_text("written by another process")
+                    return result
+
+                with saved_export_evidence(), patch("robot_reel.stress_site.verify_site", side_effect=concurrent_writer):
+                    with self.assertRaises(OSError):
+                        build(SITE, output)
+                self.assertEqual((output/"keep.txt").read_text(), "written by another process")
+                self.assertEqual(list(output.iterdir()), [output/"keep.txt"])
+                self.assertEqual(list(Path(temporary).iterdir()), [output])
 
     def test_cli_uses_local_archive_unless_publication_link_is_explicit(self):
         for options, expected in (([], "experiment.zip"), (["--archive-href", PUBLISHED_ARCHIVE_HREF], PUBLISHED_ARCHIVE_HREF)):
