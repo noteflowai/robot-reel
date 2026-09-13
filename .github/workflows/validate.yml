@@ -48,6 +48,8 @@ jobs:
         run: |
           python -m zipfile -e "$RUNNER_TEMP/offline-assets/robot-reel-stress-experiment.zip" "$RUNNER_TEMP/offline-lab"
           node scripts/check_offline_release.cjs "$RUNNER_TEMP/offline-lab" "$RUNNER_TEMP/offline-assets/robot-reel-seed-09-review.json"
+          python -m zipfile -e "$RUNNER_TEMP/offline-assets/robot-reel-cloth-experiment.zip" "$RUNNER_TEMP/cloth-lab"
+          node scripts/check_cloth_release.cjs "$RUNNER_TEMP/cloth-lab"
   rerun:
     runs-on: ubuntu-latest
     steps:

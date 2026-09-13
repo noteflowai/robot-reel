@@ -15,6 +15,10 @@ Starting with 0.6.0, releases also carry the complete offline Stress Lab,
 [offline lab guide](offline-lab.md) to open the experiment and import a review
 without installing Python or using a GPU.
 
+Starting with 0.7.0, releases also include `robot-reel-cloth-experiment.zip`
+and its standalone USD scene. The installed CLI verifies and re-exports the
+complete cloth experiment without Newton, Blender, a GPU or a source checkout.
+
 Download the wheel and `SHA256SUMS` from the same release, then install the
 downloaded file in a virtual environment:
 
@@ -23,12 +27,12 @@ downloaded file in a virtual environment:
 sha256sum --check --ignore-missing SHA256SUMS
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.6.0-py3-none-any.whl
+python -m pip install ./robot_reel-0.7.0-py3-none-any.whl
 robot-reel --help
 ```
 
-The package contains its viewer templates and Stress export notices, license and
-methods. Recordings and model weights are separate inputs. For example, an
+The package contains its viewer templates and the Stress/Cloth export methods
+and licenses. Recordings and model weights are separate inputs. For example, an
 existing complete Stress collection can be exported from any working directory:
 
 ```bash
@@ -36,6 +40,18 @@ python -m pip install 'mcap==1.4.0'
 python -m robot_reel.stress_site /path/to/recording /path/to/new-site
 robot-reel stress /path/to/new-site --check-media --check-mcap
 ```
+
+After extracting the cloth experiment, use a fresh destination:
+
+```bash
+robot-reel cloth --output /path/to/cloth-lab --verify
+robot-reel cloth --export-from /path/to/cloth-lab --output /path/to/cloth-copy
+```
+
+The new folder includes an offline `experiment.zip`. Source data and saved
+native reports remain unchanged. Optional `--check-usd` performs native readback
+again after installing `usd-core==26.3`; plain export only verifies saved reports
+and their source hashes. See the [cloth method](cloth.md#use-the-installed-package).
 
 The VLA collector keeps its separately pinned GPU environment; installing the
 main runtime there would conflict with its MuJoCo version. See the
@@ -76,9 +92,10 @@ and installs it in a clean environment. From outside the checkout it rebuilds
 the complete thirty-trial Stress site, decodes all sixty videos, reads back
 3,915 MCAP records and compares the archived notices with their maintained
 sources. It also runs the installed CLI on the VLA recording and a sample review.
-CI retains that exact ZIP as an artifact; the browser job extracts it, blocks
-network access, checks playback and imports/exports the sample review at desktop
-and mobile sizes.
+The installed cloth CLI exports all 42,471 vertex samples, checks the complete
+archive, and preserves every source binary and native report. CI retains both
+exact ZIPs; the browser job extracts them, blocks network access, checks playback,
+source payloads, scene downloads and sharing at desktop and mobile sizes.
 
 To reproduce that check from a source checkout:
 
@@ -102,11 +119,15 @@ python3 -m venv "$reel_check/installed"
 python3 -m zipfile -e "$reel_check/offline-assets/robot-reel-stress-experiment.zip" "$reel_check/lab"
 node scripts/check_offline_release.cjs "$reel_check/lab" \
   "$reel_check/offline-assets/robot-reel-seed-09-review.json"
+python3 -m zipfile -e "$reel_check/offline-assets/robot-reel-cloth-experiment.zip" "$reel_check/cloth"
+node scripts/check_cloth_release.cjs "$reel_check/cloth"
 ```
 
 When updating `LICENSE`, `licenses/VLA-MEDIA-NOTICE.txt` or `docs/stress.md`,
 refresh the corresponding `LICENSE.txt`, `NOTICE.txt` or `METHODS.txt` under
 `robot_reel/resources/stress/`. A standard-library test rejects stale copies.
+Likewise, `robot_reel/resources/cloth/` contains copies of `LICENSE` and
+`docs/cloth.md` named `LICENSE.txt` and `METHODS.txt`.
 
 ## Publishing
 
@@ -117,7 +138,7 @@ six pass does a main-branch run invoke the Pages deployment. Manually rerunning
 
 A `v*` tag must exactly match `pyproject.toml` and have a version section in
 `CHANGELOG.md`. The release workflow runs the same six jobs and publishes their
-tested wheel, source distribution, offline ZIP, sample review and start guide
+tested wheel, source distribution, both offline ZIPs, cloth USD, sample review and start guide
 with SHA-256 checksums. It does not rebuild different artifacts after validation.
 The native Rerun recording is copied from the same checked commit and included
 in those checksums. The release assembler rejects missing, stale or extra files.

@@ -85,8 +85,9 @@ checked through OpenUSD and Blender.
 The coefficients are solver settings, not calibrated fabric properties. Colors
 identify cases; the page reports geometric diagnostics and preserves original
 float32 positions and velocities. No collisions or self-contact are modeled.
-The browser needs no GPU; recording new runs uses the optional Newton runtime
-from the current source checkout.
+The browser needs no GPU. Robot Reel **0.7.0+** includes the cloth CLI and complete
+offline export in its [installation package](docs/distribution.md).
+Recording new runs uses the optional Newton runtime.
 
 ## Same task. Change the view.
 

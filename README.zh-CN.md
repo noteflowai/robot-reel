@@ -84,7 +84,8 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 
 弯曲系数是求解器设置，不代表经过标定的真实织物属性；颜色用于区分实验。
 页面同时给出几何诊断，保留原始 float32 位置和速度。本场景未启用碰撞或自碰撞。
-网页观看无需 GPU；重新录制可从当前源码安装可选 Newton 环境。
+网页观看无需 GPU；**0.7.0+ 安装包**包含布料校验与完整离线导出，
+见[安装说明](docs/distribution.md)。重新录制需要可选 Newton 环境。
 
 ## 换一束光，看策略如何改变
 

@@ -28,7 +28,7 @@ def check(source, release_assets=None):
     from robot_reel.stress_site import build, verify_site
     from robot_reel.stress_mcap import check_mcap
     from robot_reel.stress_review import record
-    from robot_reel.cloth import export_viewer, load, verify as verify_cloth
+    from robot_reel.cloth_site import SOURCES, verify_site as verify_cloth_site
 
     module = Path(robot_reel.__file__).resolve()
     if module.is_relative_to(source/"robot_reel") or Path.cwd().is_relative_to(source):
@@ -37,11 +37,22 @@ def check(source, release_assets=None):
     if version("robot-reel") != expected:
         raise ValueError("Installed distribution version differs from pyproject.toml")
     with tempfile.TemporaryDirectory(prefix="robot-reel-installed-") as temporary:
-        cloth = verify_cloth(source/"docs/cloth")
-        cloth_viewer = Path(temporary)/"cloth.html"
-        export_viewer(*load(source/"docs/cloth"), cloth_viewer)
-        if "__CLOTH__" in cloth_viewer.read_text() or cloth["vertex_samples"] != 42471:
-            raise ValueError("Installed cloth template or source validation failed")
+        cloth_output = Path(temporary)/"cloth"
+        cloth_command = subprocess.run(
+            [str(Path(sys.executable).with_name("robot-reel")), "cloth",
+             "--export-from", str(source/"docs/cloth"), "--output", str(cloth_output)],
+            check=True, capture_output=True, text=True, timeout=120,
+        )
+        cloth_export = json.loads(cloth_command.stdout)
+        cloth = verify_cloth_site(cloth_output)
+        if cloth_export["summary"] != cloth or cloth_export["native_usd_checked"] or cloth["vertex_samples"] != 42471:
+            raise ValueError("Installed cloth CLI export or validation failed")
+        for name in SOURCES:
+            if (cloth_output/name).read_bytes() != (source/"docs/cloth"/name).read_bytes():
+                raise ValueError(f"Installed cloth export changed original evidence: {name}")
+        for original, name in (("docs/cloth.md", "METHODS.md"), ("LICENSE", "LICENSE")):
+            if (cloth_output/name).read_bytes() != (source/original).read_bytes():
+                raise ValueError(f"Installed cloth resource differs: {name}")
         output = Path(temporary)/"stress"
         summary = build(source/"docs/stress", output)
         if verify_site(output) != summary or summary["completed_trials"] != 30:
@@ -87,6 +98,8 @@ def check(source, release_assets=None):
                 (output/"experiment.zip", "robot-reel-stress-experiment.zip"),
                 (review_path, "robot-reel-seed-09-review.json"),
                 (source/"docs/offline-lab.md", "START-HERE.md"),
+                (cloth_output/"experiment.zip", "robot-reel-cloth-experiment.zip"),
+                (cloth_output/"scene.usdc", "robot-reel-cloth-scene.usdc"),
             ):
                 shutil.copyfile(original, release_assets/name)
             report["release_assets"] = {

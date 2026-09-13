@@ -94,12 +94,49 @@ payload to its source:
 python3 -m robot_reel.cli cloth --output docs/cloth --verify
 ```
 
-This feature is available in the source checkout after 0.6.0; the already
-published 0.6.0 installation packages do not include the `cloth` command.
+The `cloth` command is included in Robot Reel **0.7.0+**. Earlier 0.6.0
+packages do not include it. Download the wheel and the cloth experiment from
+the same GitHub release; Python 3.12+ is required for the CLI.
+
+## Use the installed package
+
+After extracting `robot-reel-cloth-experiment.zip` into `cloth-lab`, install
+the downloaded wheel in a virtual environment:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install ./robot_reel-0.7.0-py3-none-any.whl
+robot-reel cloth --output cloth-lab --verify
+
+# Produce a fresh viewer, source files and complete experiment.zip.
+robot-reel cloth --export-from cloth-lab --output cloth-copy
+```
+
+Verification and export use the standard library once the package is installed.
+They need no source checkout, GPU, Newton or Blender. The export verifies the
+original bytes and recomputes diagnostics, checks the saved native reports
+against their source hashes, and preserves those reports. It does **not** claim
+to rerun Blender or USD readback: `native_usd_checked` is false by default.
+The source and destination must be separate; existing nonempty output is
+rejected. A failed export leaves no partial site in the destination.
+
+To additionally rerun native USD readback, install its pinned dependency:
+
+```bash
+python -m pip install 'usd-core==26.3'
+robot-reel cloth --export-from cloth-lab --output cloth-with-native-check --check-usd
+```
+
+This checks the existing scene's points and velocities before writing output.
+The Blender report still describes its original import of the same source bytes.
+The standalone release file `robot-reel-cloth-scene.usdc` is identical to
+`scene.usdc` inside the experiment ZIP.
 
 ## Record and export your own
 
-From the current source checkout:
+From a source checkout (or install the downloaded 0.7.0 wheel with its
+`[newton]` extra instead):
 
 ```bash
 python3 -m venv .venv
@@ -116,7 +153,9 @@ robot-reel cloth --device cpu --seconds 0.1 --output artifacts/cloth-cpu
 
 Recording requires a fresh output directory. It produces both source binaries,
 metadata, a self-contained viewer, USD and the native USD readback report.
-The offline ZIP is created by the site builder after the Blender check.
+The offline ZIP is exported after the Blender check supplies its matching report.
+The maintainer helper scripts below run from a source checkout; they are not
+needed to verify or re-export the complete published experiment.
 The duration is bounded to 10 s to keep this small demo's output predictable.
 
 ## Native USD and Blender checks
