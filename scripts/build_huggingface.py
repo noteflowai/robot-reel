@@ -134,7 +134,7 @@ def build(destination, *, root=ROOT, allow_dirty=False):
     inputs = {name: name.removeprefix("docs/") for name in tracked if name}
     inputs.update({
         "huggingface/index.html": "index.html", "huggingface/README.md": "README.md",
-        "huggingface/.gitattributes": ".gitattributes", "huggingface/thumbnail.png": "thumbnail.png",
+        "huggingface/space.gitattributes": ".gitattributes", "huggingface/thumbnail.png": "thumbnail.png",
         "LICENSE": "LICENSE", "docs/showcase/butterfly-preview.mp4": "assets/butterfly-preview.mp4",
     })
     destination.parent.mkdir(parents=True, exist_ok=True)
