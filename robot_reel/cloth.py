@@ -110,7 +110,9 @@ def validate(trace, positions, velocities):
         for case in range(len(CASES)):
             if any(any(vertex(v, frame, case, i)) for i in PINS):
                 raise ValueError("Fixed cloth vertices have nonzero velocity")
-    if trace.get("summary") != result:
+    # Python equality accepts False as 0; a boolean would break numeric browser
+    # formatting despite appearing to match the measured summary.
+    if json.dumps(trace.get("summary"), sort_keys=True, allow_nan=False) != json.dumps(result, sort_keys=True):
         raise ValueError("Cloth summary differs from recorded vertex data")
     return result
 

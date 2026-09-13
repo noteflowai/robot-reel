@@ -62,10 +62,16 @@ class ClothEvidenceTests(unittest.TestCase):
         ):
             with self.subTest(length=len(q)), self.assertRaises(ValueError):
                 validate(self.trace, q, v)
-        trace = copy.deepcopy(self.trace)
-        trace["summary"]["peak"]["rms_m"] = 99
-        with self.assertRaisesRegex(ValueError, "summary"):
-            validate(trace, self.q, self.v)
+        for field in ("rms", "boolean", "curve"):
+            trace = copy.deepcopy(self.trace)
+            if field == "rms":
+                trace["summary"]["peak"]["rms_m"] = 99
+            elif field == "boolean":
+                trace["summary"]["max_pin_error_m"] = False
+            else:
+                trace["summary"]["cases"][0]["free_edge_drop_m"][0] = False
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "summary"):
+                validate(trace, self.q, self.v)
 
     def test_initial_state_and_fixed_vertices_are_checked_even_with_recomputed_metrics(self):
         for target, frame, index in (("q", 0, 3), ("v", 0, 3), ("q", 1, 0), ("v", 1, 0)):
