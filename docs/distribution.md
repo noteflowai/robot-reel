@@ -27,7 +27,7 @@ downloaded file in a virtual environment:
 sha256sum --check --ignore-missing SHA256SUMS
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.7.0-py3-none-any.whl
+python -m pip install ./robot_reel-0.7.1-py3-none-any.whl
 robot-reel --help
 ```
 
@@ -40,6 +40,13 @@ python -m pip install 'mcap==1.4.0'
 python -m robot_reel.stress_site /path/to/recording /path/to/new-site
 robot-reel stress /path/to/new-site --check-media --check-mcap
 ```
+
+Starting with 0.7.1, Stress exports validate the complete lab in a temporary
+directory before publishing it at the requested path. Missing dependencies,
+media errors or a Python interruption leave no partial export there, so fix the
+cause and retry the same command. The input and output must be separate; existing
+files and symlink destinations are protected. Earlier releases retain their
+original behavior.
 
 After extracting the cloth experiment, use a fresh destination:
 

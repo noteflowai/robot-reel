@@ -27,8 +27,8 @@ a temporary directory on the destination filesystem, validate the complete site
 and archive, and only then rename it into place. Validation errors or Python
 interruptions must not leave a partial output, and exports must never remove
 files another writer has added. Exercise failure and retry as well as a
-successful installed-wheel build. The Stress recovery fix is on `main` after
-0.7.0; the published 0.7.0 wheel retains its original behavior.
+successful installed-wheel build. Stress export recovery is included starting
+with 0.7.1; the published 0.7.0 wheel retains its original behavior.
 
 The static landing page is synchronized in full, so its markup, styles and
 script travel together. Its on-demand Butterfly video is derived from the
