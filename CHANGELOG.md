@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve Space homepage symbols and the Chinese link with HTML entities after
+  public readback caught a UTF-8 character damaged at the hosting boundary.
 - Connect the Space and both READMEs to a curated Hugging Face model/data
   collection and the public feedback thread. Credit the exact recording sources.
 - Verify uploads anonymously against the tested CI artifact: every Git/LFS
