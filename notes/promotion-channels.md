@@ -1,5 +1,16 @@
 # Robot Reel publication record and next channels
 
+## 0.9.1 UI publication · 2026-09-14
+
+[Release 0.9.1](https://github.com/noteflowai/robot-reel/releases/tag/v0.9.1) is public.
+[Release validation](https://github.com/noteflowai/robot-reel/actions/runs/34813887969) passed;
+the real Hugging Face iframe was exercised at 1440, 390 and 320 pixels.
+Motion Lab now has keyboard view controls, adjacent playback, video retry and clearer export feedback. Its complete template and offline archive stay synchronized while original recordings retain their bytes. All 12 public release files matched their checksums.
+
+The existing weekly and HelloGitHub submissions and HF introduction were rewritten around the current workflow, then read back exactly. Both editorial submissions remain open with no comments; no new issue or reminder comment was created. The existing five-item HF collection was updated. [Publication receipts](outreach/publication-0.9.1.json).
+
+Earlier publication history follows.
+
 Checked September 14, 2026. A submitted issue is a request for editorial review,
 not a listing or endorsement. Do not reopen or duplicate a submission to bump it.
 

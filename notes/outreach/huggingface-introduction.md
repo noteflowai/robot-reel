@@ -1,65 +1,9 @@
-Robot Reel is now on Hugging Face: four interactive experiments with the
-recordings that produced the pictures.
+Microduck Motion Lab now keeps playback beside its 3D schematic, provides four keyboard view controls, and lets you retry an unavailable video without losing the selected frame or joint. Frame exports still work from the bundled recording. Mobile phase labels, clipboard fallback and download feedback are clearer.
 
-![Robot Reel: recorded Microduck, SmolVLA, cloth and Newton experiments](https://huggingface.co/spaces/glayguo/robot-reel/resolve/main/thumbnail.png)
+Open a joint, compare measured and target angles, then share or export the observation. `robot-reel microduck-review` verifies a received offline bundle and frame JSON without a source checkout, GPU or model download. The original two walks are unchanged.
 
-- **SmolVLA Stress Lab:** 30 real closed-loop trials on one LIBERO task, across
-  ten paired initial states and three scene conditions. Every trial is retained,
-  including failures. Compare both camera views, applied controls and measured
-  trajectories.
-- **GPU Cloth Lab:** three independent Newton cloth runs with different bending
-  coefficients. Orbit the recorded meshes, export a measured figure, reopen a
-  checked sample JSON, or import the original OpenUSD geometry into Blender.
-- **Butterfly Lab:** twelve isolated Newton worlds released 0.05° apart,
-  arranged into a three-dimensional time sculpture.
+[Open the Space](https://huggingface.co/spaces/glayguo/robot-reel) · [Release 0.9.1](https://github.com/noteflowai/robot-reel/releases/tag/v0.9.1) · [Source and methods](https://github.com/noteflowai/robot-reel)
 
-- **Microduck Motion Lab:** select one of 14 joints, orbit a body-fixed schematic,
-  overlay policy targets and inspect all 8,400 measured joint samples. Switch
-  between 0.3 / 0.5 m/s command recordings and export source-linked JSON/CSV.
-  Both original videos, complete traces and the viewer download as one offline ZIP.
+The Space also hosts the SmolVLA Stress, GPU Cloth and Butterfly labs. All browser views replay saved data; no live inference or simulation runs here. Microduck uses simulation with the XML PD-actuator fallback. Its simplified schematic fixes the floating root, and model-derived geometry/media retain upstream noncommercial/share-alike terms.
 
-**Take one frame into an agent review.** Export a Microduck frame JSON, load the
-reusable review skill through Skills Anywhere, then have your agent run Robot
-Reel's independent verifier before explaining the recorded joint facts.
-[Walkthrough and sample frame](https://github.com/noteflowai/robot-reel/blob/main/docs/agent-review.md).
-The local MCP loading and deterministic verification were exercised without an
-LLM; the Space itself does not run agent commands or certify model reasoning.
-
-All four run directly in this Space from saved data. No live inference,
-simulation or model-service account is needed to explore.
-
-The policy recording uses `HuggingFaceVLA/smolvla_libero`, LeRobot and LIBERO;
-the code and all source revisions are credited in the lab. This is a controlled
-diagnostic, not an official benchmark or a real-robot result.
-
-The Microduck lab uses the official ONNX policy with a PD-actuator fallback.
-The schematic fixes root attitude because it was not saved in the recording.
-Model-derived geometry and footage retain upstream noncommercial/share-alike
-terms. Original implementation inspired by [mishig's Microduck Anatomy](https://huggingface.co/spaces/mishig/microduck-anatomy); no code or assets were copied from that Space.
-[Inspect a recorded walk](https://noteflowai.github.io/robot-reel/microduck-lab/).
-
-Try it: https://huggingface.co/spaces/glayguo/robot-reel
-
-Source and all 14 demos: https://github.com/noteflowai/robot-reel
-
-**Which recorded policy or simulator output would you like to inspect next?
-What telemetry is missing when you try to explain a failure?**
-
-**Model and data sources:** https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0
-
-Start with the Space, then inspect the actual SmolVLA policy and LIBERO asset snapshots. The collection notes record the source revisions and experiment scope.
-
-
-**New: see what a net success rate hides.** The Stress Lab now groups every paired seed into both-successful, success-lost, success-gained and neither-completed outcomes. The camera condition's net gain of two contains three gains and one loss. Select any group to inspect its source recordings; exporting still retains both conditions and all seeds.
-
-[Open paired outcomes](https://glayguo-robot-reel.static.hf.space/stress/index.html#outcomes). Robot Reel **0.8.0** now includes this workflow in the installed CLI and complete offline ZIP, with a matching, checksummed paired-outcome JSON. Cloth Lab also gains portable sample import and 1080p figures in the release. Both ZIPs are exported by the installed wheel and tested without network access at desktop and mobile sizes. [Download and verify](https://github.com/noteflowai/robot-reel/releases/tag/v0.8.0). These are descriptive results from one task, not a significance test or general robustness claim.
-
-Maintainer disclosure: Robot Reel is our independent project. This update was written with AI assistance.
-
-### Hand off a frame with Robot Reel 0.9
-
-Download the Microduck experiment ZIP and matching frame JSON from the new release. The installed `robot-reel microduck-review` command verifies the extracted lab and every exported frame fact without a source checkout, GPU or simulation. It reconstructs derived poses and metrics from the two bundled raw recordings. Pause now immediately aligns joint telemetry with the video's clock, including when rendering is throttled.
-
-[Download 0.9.0](https://github.com/noteflowai/robot-reel/releases/tag/v0.9.0) · [Offline workflow](https://github.com/noteflowai/robot-reel/blob/main/docs/offline-lab.md)
-
-The release carries Microduck, Cloth and Stress offline labs with checksums. These are recorded experiments; file consistency does not authenticate a producer or establish hardware performance. Original recorded motion is unchanged.
+Maintainer update to the existing introduction, developed with AI assistance. Independent community project; no upstream or Hugging Face endorsement is implied.

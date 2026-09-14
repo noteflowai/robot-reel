@@ -1,39 +1,21 @@
-自荐一个开源项目：Robot Reel，把机器人策略和物理仿真的一次运行，
-做成浏览器里可以逐帧检查、下载源数据的交互回放。
+维护者自荐：**robot-reel**。Robot Reel 将机器人策略与物理仿真录制做成交互网页。可对照 SmolVLA 的成功与失败、旋转 GPU 布料模型、探索 Microduck 关节和双摆轨迹，下载源数据与离线包。新版把播放控制放到三维视图旁，补齐键盘操作、视频重试和文件导出反馈；收到帧记录后可用安装包独立复核。适合具身智能教学、实验复盘与技术演示。
 
-体验：https://huggingface.co/spaces/glayguo/robot-reel
+在线体验：https://huggingface.co/spaces/glayguo/robot-reel
 
-![Robot Reel 的四个交互实验](https://huggingface.co/spaces/glayguo/robot-reel/resolve/main/thumbnail.png)
+- **Microduck 动作实验室**：两组原始步行记录，14 个关节、8,400 个实测角度样本，支持目标叠加、逐帧分享、JSON/CSV 和完整离线 ZIP。0.9.1 改善手机布局，支持四向键盘视角控制；视频失败可重试，并保留所选帧和关节。
+- **从演示到交付**：`robot-reel microduck-review` 可独立核对离线包和帧 JSON，不需要源码目录、GPU 或模型服务。发布过程同步整个查看器并核对清单，原始录制保留原样。
+- **GPU 布料与 Blender**：三组 Newton 布料录制只改变弯曲系数，可旋转叠加、导出测量图片，并通过 OpenUSD 进入 Blender。
+- **保留失败证据**：SmolVLA 的 30 次单任务闭环仿真全部保留；十二个双摆世界还可组成三维时间轨迹。
 
-可以从四个场景开始：
+```sh
+python3 -S -m robot_reel.cli cloth --output docs/cloth --verify
+```
 
-- **策略失败回放**：SmolVLA 在同一个 LIBERO 任务中，按十组配对初始状态、
-  三种光照/机位条件完成 30 次闭环仿真。成功和失败全部保留，支持双相机对照、
-  查看动作与轨迹差异。
-- **GPU 布料实验**：三个 Newton 布料算例，只改变弯曲系数。可以旋转、叠加对比，
-  导出带测量数据的图片与 JSON，再把同一段变形通过 OpenUSD 导入 Blender。
-- **蝴蝶效应**：十二个双摆世界的相邻释放角相差 0.05°，保存下来的轨迹组成
-  可以旋转的三维“时间雕塑”。
+从源码检出目录，用 Python 3.12+ 只读校验附带的布料记录，无需 GPU：
 
-这些网页回放不需要安装软件、登录账号或运行 GPU 服务。源轨迹、校验清单、
-离线实验包与复现说明一起提供，适合机器人教学、实验复盘和技术演示。
+项目：https://github.com/noteflowai/robot-reel
+版本：https://github.com/noteflowai/robot-reel/releases/tag/v0.9.1
 
-范围说明：策略实验是单任务受控诊断，不能作为 LIBERO 官方成绩或真实机器人
-能力证明；布料没有碰撞和自接触，也没有真实材料标定；双摆录制使用 CPU。
-原始仿真由 SmolVLA / LeRobot、Newton 等上游软件完成。
+![在浏览器里逐帧检查机器人与物理仿真实验](https://huggingface.co/spaces/glayguo/robot-reel/resolve/main/thumbnail.png)
 
-仓库：https://github.com/noteflowai/robot-reel
-
-项目由本账号维护，仍处于早期阶段。代码采用 Apache-2.0，第三方模型和素材
-遵循各自上游许可。
-
-交互功能更新：Stress Lab 新增完整配对结果分组。相机条件净增两次成功，实际包含三次改善和一次退步；可点击对应种子查看录像，导出完整报告，并用安装后的 CLI 独立核验。0.8.0 正式发行包已包含配对分析、布料样本导入与高清图导出，同时提供完整配对 JSON 和校验和；两个离线包均经过实际安装程序导出及桌面、手机断网检查。
-
-
-新增 **Microduck 动作实验室**：选择 14 个关节中的任意一个，旋转三维结构、叠加策略目标、点击误差热图，与两组原始录像同步对照。保留 8,400 个实测关节样本，支持指定帧分享、JSON/CSV 导出和完整离线包。它参考 Microduck Anatomy 的交互思路做原创实现；模型衍生结构与录像保留上游非商业、相同方式共享条款。三维结构固定机身坐标，实验使用 PD 执行器近似仿真，不推断真实硬件能力。
-
-体验：https://noteflowai.github.io/robot-reel/microduck-lab/
-
-**0.9.0 交付更新**：新增安装包命令 `robot-reel microduck-review`，收到离线 ZIP 和帧 JSON 后即可重算源记录与逐帧事实，无需克隆仓库或启动仿真。暂停时立即同步视频与关节读数；发行包附带 Microduck、Cloth、Stress 三组离线实验及校验和。只验证记录一致性，不认证发布者或真实机器人性能。
-
-使用说明：https://github.com/noteflowai/robot-reel/releases/tag/v0.9.0
+项目由本账号维护，与 AI 结对开发，仍处于早期阶段。代码采用 Apache-2.0；第三方模型与素材遵守上游许可。Microduck 使用 PD 近似仿真，模型衍生结构和录像保留非商业／相同方式共享条款。策略实验为单任务受控诊断，布料未启用碰撞和自接触；这些录制不提供真实机器人能力证明。

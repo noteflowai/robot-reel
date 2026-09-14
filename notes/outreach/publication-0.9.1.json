@@ -1,0 +1,41 @@
+{
+  "version": "0.9.1",
+  "checked": "2026-09-14",
+  "release": "https://github.com/noteflowai/robot-reel/releases/tag/v0.9.1",
+  "validation_run": "https://github.com/noteflowai/robot-reel/actions/runs/34813887969",
+  "public_browser_widths": [
+    1440,
+    390,
+    320
+  ],
+  "existing_posts_updated": [
+    {
+      "channel": "weekly",
+      "repo": "ruanyf/weekly",
+      "number": 11664,
+      "url": "https://github.com/ruanyf/weekly/issues/11664",
+      "state": "open",
+      "comments": 0,
+      "body_sha256": "e04463e99646787c2db9dba67f27dbc8ef4e5e4490cf7716dc84363398f1b2b3"
+    },
+    {
+      "channel": "hello",
+      "repo": "521xueweihan/HelloGitHub",
+      "number": 3694,
+      "url": "https://github.com/521xueweihan/HelloGitHub/issues/3694",
+      "state": "open",
+      "comments": 0,
+      "body_sha256": "63cc98faea587e867d0972f754dfa83077c12ab233d5e6838b0fe1da74eb7bd2"
+    },
+    {
+      "channel": "huggingface",
+      "repo": "glayguo/robot-reel",
+      "discussion": 1,
+      "comment_id": "6aa67c583011374ab7374841",
+      "title": "v0.9.1: inspect Microduck with keyboard controls and video recovery",
+      "body_sha256": "8b6f824ef7a11f9d2ac98d02e458eab9d1580b064445e73f60765f063048beef"
+    }
+  ],
+  "new_posts_created": 0,
+  "editorial_acceptance": false
+}
