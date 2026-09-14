@@ -5,12 +5,55 @@ import shutil
 import tempfile
 import unittest
 
-from scripts.build_microduck_lab import ROOT, poses, seal, validate_trace, verify_showcase
+from scripts.build_microduck_lab import (
+    ROOT, frame_record, poses, read_frame, seal, validate_trace, verify_frame, verify_showcase,
+)
 
 SITE = ROOT/"docs/microduck-lab"
 
 
 class MicroduckMotionTests(unittest.TestCase):
+    def test_frame_exports_match_original_traces_and_reject_changed_facts(self):
+        data = json.loads((SITE/"data.json").read_text())
+        for run in ("left", "right"):
+            trace = json.loads((SITE/f"{run}-trace.json").read_text())
+            for frame, joint in ((0, 0), (61, 3), (120, 12), (299, 13)):
+                name = trace["joints"][joint]
+                record = frame_record(data, run, frame, name)
+                self.assertEqual(record["measured_rad"], trace["frames"][frame]["qpos"][joint])
+                self.assertEqual(record["target_rad"], trace["frames"][frame]["target"][joint])
+                self.assertEqual(verify_frame(data, record)["frame"], frame)
+                for key, changed in (
+                    ("frame", True), ("frame", 300), ("frame", 1.5),
+                    ("run", "unknown"), ("joint", "unknown"),
+                    ("trace_sha256", "0"*64), ("model_commit", "0"*40),
+                    ("measured_rad", record["measured_rad"]+.001),
+                    ("policy_step", False), ("target_rad", float("nan")),
+                    ("scope", {}), ("extra", 0),
+                ):
+                    with self.subTest(run=run, frame=frame, key=key, changed=changed):
+                        with self.assertRaises(ValueError):
+                            verify_frame(data, {**record, key: changed})
+        for record in (None, [], {}, {"frame": []}):
+            with self.assertRaises(ValueError):
+                verify_frame(data, record)
+
+    def test_frame_file_rejects_ambiguous_keys_and_invalid_encoding(self):
+        data = json.loads((SITE/"data.json").read_text())
+        record = frame_record(data, "right", 120, "left_knee")
+        valid = json.dumps(record).encode()
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary)/"frame.json"
+            for raw in (valid, b"\xef\xbb\xbf"+valid):
+                path.write_bytes(raw)
+                self.assertTrue(verify_frame(data, read_frame(path))["recorded_facts_match"])
+            for raw in (valid[:-1]+b', "fr\\u0061me":120}', b'{"x":NaN}', b'\xff',
+                        b" "*16385, b"["*2000+b"]"*2000):
+                path.write_bytes(raw)
+                with self.subTest(raw=raw[:80]):
+                    with self.assertRaises(ValueError):
+                        read_frame(path)
+
     def test_original_recordings_and_every_derived_transform_are_reproducible(self):
         self.assertEqual(verify_showcase(SITE, check_sources=True)["joint_samples"], 8400)
         data = json.loads((SITE/"data.json").read_text())

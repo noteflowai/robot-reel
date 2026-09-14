@@ -1,11 +1,11 @@
 {
   "source_posters_sha256": {
-    "docs/microduck-lab/poster.png": "f1cd6368ed6b5695f1b4e0e727b1858ffee51e4a00e8123d2fbe4ec03a9bcb2f",
+    "docs/microduck-lab/poster.png": "92304180636b97928bda6f329b82615c39f3b31188644861c8e0e9d50017c06a",
     "docs/stress/poster.png": "f39553eee0cb0b068ccc078820ac65a122d68d399c08ad592c83a29fdfcc1341",
     "docs/cloth/poster.png": "0c28bb8a8b87387b487c2aab5a958bf70f10d050ec15de812275773fd2406d2a",
     "docs/chaos/poster.png": "7c10b136721cb97fad9ede1f7aae5a6a7dae8c98b5da2ad591a4fa771563b6ff"
   },
-  "thumbnail_sha256": "a702ef743332796aa15cfc946bc7f1c3d79dbf28274aff3b7c7006580b3a36c0",
+  "thumbnail_sha256": "4e5e8a618e0590b0ee9ef5ba0b1fd735a0db514f8ad426e5324714bae17209f5",
   "composition": "Four unaltered lab captures, fit inside labeled panels.",
   "media_notice": "NOTICE.txt"
 }

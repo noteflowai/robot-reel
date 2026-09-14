@@ -6,7 +6,7 @@ ask each joint to do, and what happened in the recorded simulation?**
 
 [Open the lab](https://noteflowai.github.io/robot-reel/microduck-lab/)
 or use the fourth lab in the [Robot Reel Space](https://huggingface.co/spaces/glayguo/robot-reel).
-Choose a joint, orbit the schematic, overlay its target pose, click a heatmap
+Tap a joint in the schematic (or use the joint selector), drag to orbit, overlay its target pose, click a heatmap
 cell, and compare the 0.3 and 0.5 m/s command recordings at the same frame.
 The selected joint's complete measured/target curves and signed residual remain
 in radians. “Largest residual” searches all 300 frames and all 14 joints in the
@@ -77,9 +77,24 @@ exact simulation clock, measured angle and target. CSV exports all 4,200 joint
 samples of the selected run. Neither export implies a security attestation.
 Share links preserve the frame, run, joint, orbit and target visibility.
 
+To review someone else's exported frame, choose **Open frame JSON**. The browser
+checks every field against its bundled recording, including the trace hash,
+model commit, run, joint, clocks, angles and signed residual. A matching file
+restores the run, frame and joint, pauses playback and preserves your orbit and
+target visibility. Files stay in the browser; this also works from the offline ZIP.
+Changed facts, extra fields, duplicate keys, invalid UTF-8 and files over 16 KiB
+are rejected without changing the selected view. This confirms agreement with
+the bundled recording; it does not authenticate who sent the file.
+
+From a source checkout, the independent standard-library verifier first checks
+the complete lab, then checks the exported frame against those source values:
+
 ```bash
 # Verify all copied sources, derived transforms, native readback and ZIP members.
 python scripts/build_microduck_lab.py --verify
+
+# Check a downloaded or received frame JSON (reads only; no rebuild).
+python scripts/build_microduck_lab.py --verify --frame-json /path/to/microduck-right-frame-120.json
 
 # Optional: independently check all 18,000 body transforms against MuJoCo.
 # Uses cached pinned model assets; no simulation, policy inference or GPU needed.

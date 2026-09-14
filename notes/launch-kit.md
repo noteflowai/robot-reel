@@ -6,12 +6,14 @@ the [outreach directory](outreach/) retains their exact bodies. Hugging Face's
 record is in [huggingface-launch.md](huggingface-launch.md).
 Text below is not a claim that a platform post was published.
 
-## Hugging Face — three native replay labs
+## Hugging Face — four native replay labs
 
 Start here: https://huggingface.co/spaces/glayguo/robot-reel
 
 > Give Physical AI a replay button. Compare 30 real SmolVLA trials, orbit
-> GPU-recorded cloth and explore twelve Newton worlds as a 3D time sculpture.
+> GPU-recorded cloth, explore twelve Newton worlds as a 3D time sculpture,
+> and inspect Microduck's 14 joints against the original policy targets.
+> Exchange a frame JSON and check its facts before reopening the same moment.
 > The Space includes the original recordings, source checksums and portable
 > experiments. No installation or live inference is needed to explore.
 >

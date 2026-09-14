@@ -1,6 +1,6 @@
 # Robot Reel publication record and next channels
 
-Checked September 13, 2026. A submitted issue is a request for editorial review,
+Checked September 14, 2026. A submitted issue is a request for editorial review,
 not a listing or endorsement. Do not reopen or duplicate a submission to bump it.
 
 ## Published and submitted
@@ -38,10 +38,11 @@ as submitted.
 
 ## Show HN fact brief — not a post draft
 
-- Usable entry: the direct Cloth Lab or the three-lab Space, without sign-up.
+- Usable entry: the direct Cloth Lab or the four-lab Space, without sign-up.
 - Creator should explain their own motivation and implementation choices.
-- Three labs: 30 SmolVLA closed-loop simulated trials; 42,471 recorded cloth
-  vertex samples; 12 CPU Newton worlds and 14,424 body poses.
+- Four labs: 30 SmolVLA closed-loop simulated trials; 42,471 recorded cloth
+  vertex samples; 12 CPU Newton worlds and 14,424 body poses; two Microduck
+  walks with 8,400 measured joint samples.
 - All SmolVLA outcomes remain available; one task and a 160-action cap.
 - Cloth replay contains original vertices and derived measurements. No
   collision, self-contact or calibrated material claims.
@@ -112,3 +113,16 @@ and the existing Chinese submission bodies describe this workflow. Release 0.8.0
 viewer, plus a checked paired report. The existing 0.7.1 assets remain unchanged.
 Existing threads are reused. LeRobot currently has no GitHub Discussions, so no showcase
 issue was opened in its bug tracker.
+
+## September 14: Microduck follow-up
+
+The live Space now hosts four labs and the project landing page links 14 demos.
+The Microduck lab adds a source-checked joint schematic, original videos and an
+offline ZIP; its current viewer supports direct joint selection and frame JSON
+exchange. The [customer brief](customer-brief.zh-CN.md) and launch kit describe
+these capabilities and their simulation limits.
+
+The weekly submission, HelloGitHub submission and Awesome Physical AI suggestion
+were rechecked: all remain open with no comments. No duplicate post or reminder
+was added. Existing HF and Chinese introductions already cover the Microduck lab;
+this viewer improvement does not require another launch thread.

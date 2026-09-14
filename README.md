@@ -72,10 +72,11 @@ Recording new runs needs the [full runtime](docs/recording.md); the browser demo
 
 ## New / Inside a learned Microduck walk.
 
-**Microduck Motion Lab.** Orbit the 3D joint schematic, overlay policy targets,
+**Microduck Motion Lab.** Tap a 3D joint to inspect it, drag to orbit, overlay policy targets,
 click a 14-joint residual heatmap, and follow the original video. Switch between
 **0.3 / 0.5 m/s speed commands** and inspect all **8,400 measured joint samples**.
-Share a frame, export JSON/CSV, or take both complete walks offline.
+Share a frame, export JSON/CSV, or reopen a received frame JSON after checking
+every fact against the recording. Take both complete walks offline.
 
 <a href="https://noteflowai.github.io/robot-reel/microduck-lab/"><img src="docs/microduck-lab/poster.png" width="100%" alt="Microduck's recorded walk beside an orbitable joint schematic and exact measured versus target curves."></a>
 

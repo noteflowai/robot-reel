@@ -30,6 +30,75 @@ JOINTS = ("left_hip_yaw", "left_hip_roll", "left_hip_pitch", "left_knee", "left_
           "right_hip_roll", "right_hip_pitch", "right_knee", "right_ankle")
 
 
+def frame_record(data, run_id, frame, joint):
+    """Reconstruct the browser export from this recording's source values."""
+    run = next((r for r in data["runs"] if r["id"] == run_id), None)
+    if (run is None or joint not in data["joints"]
+            or type(frame) not in (int, float) or not 0 <= frame < len(run["frames"])
+            or frame != int(frame)):
+        raise ValueError("Run, frame or joint is outside this recording")
+    frame = int(frame)
+    index = data["joints"].index(joint)
+    sample = run["frames"][frame]
+    return {
+        "schema": "robot-reel-microduck-frame-1",
+        "trace_sha256": run["trace_sha256"],
+        "model_commit": data["kinematics"]["model_commit"],
+        "run": run_id, "requested_speed_mps": run["speed"], "frame": frame,
+        "video_time_s": frame/data["fps"], "sim_time_s": sample["sim_time"],
+        "policy_step": sample["policy_step"], "joint": joint,
+        "measured_rad": sample["qpos"][index], "target_rad": sample["target"][index],
+        "residual_rad": sample["qpos"][index]-sample["target"][index],
+        "coordinate_frame": data["coordinate_frame"],
+        "scope": "Recorded simulation / PD fallback / not hardware",
+    }
+
+
+def read_frame(path):
+    """Read a small UTF-8 JSON file without ambiguous keys or numeric constants."""
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError("Duplicate frame JSON key")
+            result[key] = value
+        return result
+
+    def constant(value):
+        raise ValueError(f"Invalid JSON constant: {value}")
+
+    with Path(path).open("rb") as stream:
+        raw = stream.read(16385)
+    if len(raw) > 16384:
+        raise ValueError("Frame JSON exceeds 16 KiB")
+    try:
+        document = json.loads(raw.decode("utf-8-sig"), object_pairs_hook=pairs,
+                              parse_constant=constant)
+        if type(document) is not dict or any(type(v) not in (str, int, float) for v in document.values()):
+            raise ValueError("Expected a flat frame JSON object")
+        return document
+    except (UnicodeDecodeError, RecursionError) as error:
+        raise ValueError("Expected a flat UTF-8 frame JSON object") from error
+
+
+def verify_frame(data, document):
+    """Check every exported fact, including source identity; reject extra fields."""
+    if type(document) is not dict:
+        raise ValueError("Expected a frame JSON object")
+    expected = frame_record(data, document.get("run"), document.get("frame"),
+                            document.get("joint"))
+    if set(document) != set(expected):
+        raise ValueError("Frame fields differ from this recording")
+    for key, value in expected.items():
+        actual = document[key]
+        numeric = type(value) in (int, float)
+        valid_type = type(actual) in (int, float) if numeric else type(actual) is str
+        if not valid_type or actual != value:
+            raise ValueError(f"Frame fact differs from this recording: {key}")
+    return {"run": expected["run"], "frame": expected["frame"],
+            "joint": expected["joint"], "recorded_facts_match": True}
+
+
 def multiply(a, b):
     w, x, y, z = a
     v, i, j, k = b
@@ -230,6 +299,16 @@ if __name__ == "__main__":
     parser.add_argument("--output", type=Path, default=ROOT/"docs/microduck-lab")
     parser.add_argument("--verify", action="store_true")
     parser.add_argument("--seal", action="store_true")
+    parser.add_argument("--frame-json", type=Path,
+                        help="Verify a frame export against the verified lab; never builds or writes")
     args = parser.parse_args()
-    print(json.dumps(verify_showcase(args.output, check_sources=True) if args.verify else
-                     seal(args.output) if args.seal else {"runs": len(build(args.output)["runs"])}, indent=2))
+    if args.frame_json:
+        if args.seal:
+            parser.error("--frame-json cannot be combined with --seal")
+        result = verify_showcase(args.output, check_sources=True)
+        result["frame"] = verify_frame(json.loads((args.output/"data.json").read_text()),
+                                       read_frame(args.frame_json))
+    else:
+        result = (verify_showcase(args.output, check_sources=True) if args.verify else
+                  seal(args.output) if args.seal else {"runs": len(build(args.output)["runs"])})
+    print(json.dumps(result, indent=2))
