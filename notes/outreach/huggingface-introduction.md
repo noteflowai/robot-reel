@@ -1,7 +1,7 @@
-Robot Reel is now on Hugging Face: three interactive experiments with the
+Robot Reel is now on Hugging Face: four interactive experiments with the
 recordings that produced the pictures.
 
-![Robot Reel: recorded SmolVLA, cloth and Newton experiments](https://huggingface.co/spaces/glayguo/robot-reel/resolve/main/thumbnail.png)
+![Robot Reel: recorded Microduck, SmolVLA, cloth and Newton experiments](https://huggingface.co/spaces/glayguo/robot-reel/resolve/main/thumbnail.png)
 
 - **SmolVLA Stress Lab:** 30 real closed-loop trials on one LIBERO task, across
   ten paired initial states and three scene conditions. Every trial is retained,
@@ -13,16 +13,27 @@ recordings that produced the pictures.
 - **Butterfly Lab:** twelve isolated Newton worlds released 0.05° apart,
   arranged into a three-dimensional time sculpture.
 
-All three run directly in this Space from saved data. No live inference,
+- **Microduck Motion Lab:** select one of 14 joints, orbit a body-fixed schematic,
+  overlay policy targets and inspect all 8,400 measured joint samples. Switch
+  between 0.3 / 0.5 m/s command recordings and export source-linked JSON/CSV.
+  Both original videos, complete traces and the viewer download as one offline ZIP.
+
+All four run directly in this Space from saved data. No live inference,
 simulation or model-service account is needed to explore.
 
 The policy recording uses `HuggingFaceVLA/smolvla_libero`, LeRobot and LIBERO;
 the code and all source revisions are credited in the lab. This is a controlled
 diagnostic, not an official benchmark or a real-robot result.
 
+The Microduck lab uses the official ONNX policy with a PD-actuator fallback.
+The schematic fixes root attitude because it was not saved in the recording.
+Model-derived geometry and footage retain upstream noncommercial/share-alike
+terms. Original implementation inspired by [mishig's Microduck Anatomy](https://huggingface.co/spaces/mishig/microduck-anatomy); no code or assets were copied from that Space.
+[Inspect a recorded walk](https://noteflowai.github.io/robot-reel/microduck-lab/).
+
 Try it: https://huggingface.co/spaces/glayguo/robot-reel
 
-Source and all 13 demos: https://github.com/noteflowai/robot-reel
+Source and all 14 demos: https://github.com/noteflowai/robot-reel
 
 **Which recorded policy or simulator output would you like to inspect next?
 What telemetry is missing when you try to explain a failure?**

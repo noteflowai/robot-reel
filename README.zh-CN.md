@@ -18,8 +18,8 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI 检查状态"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="最新发布版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="代码许可证：Apache-2.0"></a>
-  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-13%20replays-ffca85" alt="在线演示：13 个回放"></a>
-  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-3%20interactive%20labs-ffd21e" alt="Hugging Face：三个交互实验室"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-14%20replays-ffca85" alt="在线演示：14 个回放"></a>
+  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-4%20interactive%20labs-ffd21e" alt="Hugging Face：四个交互实验室"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -38,7 +38,7 @@
 
 **[在 Hugging Face 体验 Robot Reel](https://huggingface.co/spaces/glayguo/robot-reel)**：
 在同一个 Space 对照 30 次 SmolVLA 运行、旋转查看 GPU 布料录制，
-探索 12 个 Newton 世界。无需安装或模型账号；Space 自带原始录制，
+探索 12 个 Newton 世界，并逐关节检查 Microduck 的两组步行记录。无需安装或模型账号；Space 自带原始录制，
 [构建与发布说明](docs/huggingface.md)提供对应源码提交和文件校验信息。
 [模型与数据资源合集](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0) · [体验反馈与讨论](https://huggingface.co/spaces/glayguo/robot-reel/discussions/1)。
 
@@ -70,7 +70,25 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)；浏览器演示什么都不用装。
 
 
-## 新场景 / 同一张布，三种形变
+## 新场景 / 看懂 Microduck 的每一步
+
+**Microduck 动作实验室。** 旋转查看三维关节结构，叠加策略目标姿态，点击
+14 关节误差热图，与原始录像同步检查。切换 **0.3 / 0.5 m/s 速度命令**，
+对照全部 **8,400 个实测关节样本**；分享指定帧，导出 JSON、CSV，或下载完整离线实验。
+
+<a href="https://noteflowai.github.io/robot-reel/microduck-lab/"><img src="docs/microduck-lab/poster.png" width="100%" alt="Microduck 原始步行录像与三维关节结构、策略目标和实际角度曲线同步展示。"></a>
+
+**[进入 Microduck 动作实验室 ↗](https://noteflowai.github.io/robot-reel/microduck-lab/)** ·
+[下载两组完整录制与离线查看器](https://noteflowai.github.io/robot-reel/microduck-lab/experiment.zip) ·
+[方法与校验](docs/microduck-lab.md) ·
+[交互灵感：mishig 的 Microduck Anatomy](https://huggingface.co/spaces/mishig/microduck-anatomy)
+
+三维结构由固定版本的 Pollen 模型与原始关节角度计算，全部 **18,000 个变换**
+已与 MuJoCo 核对。原录制没有机身朝向，因此结构图固定机身坐标，不推断足底接触。
+这是 **PD 执行器近似下的仿真**，不是硬件结果；模型衍生结构与录像保留上游非商业、
+相同方式共享条款。本实验室为原创实现，没有复制参考 Space 的代码或素材。
+
+## 同一张布，三种形变
 
 **布料实验室 Cloth Lab。** 在 **NVIDIA L40S** 上运行三组独立 Newton
 布料仿真，网格、固定边、质量和重力完全相同，只改变弯曲系数。

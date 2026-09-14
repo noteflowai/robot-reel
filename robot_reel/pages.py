@@ -30,6 +30,7 @@ PAGES = {
     "docs/index.html": "scripts/landing.html",
     "docs/studio/index.html": "robot_reel/replay.html",
     "docs/microduck/index.html": "robot_reel/replay.html",
+    "docs/microduck-lab/index.html": "scripts/microduck_lab.html",
     "docs/braking/index.html": "robot_reel/replay.html",
     "docs/compare/microduck/index.html": "robot_reel/comparison.html",
     "docs/compare/braking/index.html": "robot_reel/comparison.html",
