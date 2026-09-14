@@ -152,16 +152,37 @@ six pass does a main-branch run invoke the Pages deployment. Manually rerunning
 
 A `v*` tag must exactly match `pyproject.toml` and have a version section in
 `CHANGELOG.md`. The release workflow runs the same six jobs and publishes their
-tested wheel, source distribution, both offline ZIPs, cloth USD, sample review and start guide
+tested wheel, source distribution, four offline ZIPs, cloth USD, sample reviews and start guide
 with SHA-256 checksums. It does not rebuild different artifacts after validation.
 The native Rerun recording is copied from the same checked commit and included
 in those checksums. The release assembler rejects missing, stale or extra files.
 Offline artifacts remain separate from Python distributions, so optional PyPI
 publishing receives only the wheel and source distribution.
-Files are uploaded to a draft first and made public only after all uploads
-succeed. A tag that already has a release is rejected before any upload; a failed
-draft upload requires inspection before recovery, rather than overwriting an
-existing release on a rerun.
+Files are uploaded to a draft first. The uploader validates the complete local
+SHA256SUMS inventory, the tag's source commit, and every existing remote asset's
+size and GitHub SHA-256 digest before uploading missing files. A lost upload
+response triggers a state check before retrying, so an already completed upload
+is retained. A missing upload gets at most three attempts. Only a complete,
+verified draft reaches the separate publication step.
+
+An existing public release or draft stops a new release workflow. To recover an
+interrupted draft, download the **original** `dist` and `offline-lab` artifacts
+from the run whose package/browser jobs passed. Use `prepare_release.py` with
+that source revision to assemble the same files; do not rebuild a new wheel.
+Then invoke the upload helper with that tag and its tested commit:
+
+```bash
+python scripts/upload_release_assets.py --repo OWNER/REPO --tag vX.Y.Z \
+  --source-commit FULL_TESTED_COMMIT --assets release-assets
+```
+
+The helper never publishes or overwrites files. It rejects public releases,
+changed local checksums, unknown/duplicate remote files, partial starter assets
+and mismatching remote hashes. After a successful `verified: true` result,
+publish the complete draft with `gh release edit TAG --draft=false --latest`,
+then verify its public downloads. A mismatch requires investigation; preserve
+the existing files. The 0.10.0 recovery is recorded in
+[the publication receipts](../notes/outreach/publication-0.10.0.json).
 
 PyPI publishing additionally requires the project's trusted publisher and the
 GitHub `pypi` environment to be configured, then the repository variable

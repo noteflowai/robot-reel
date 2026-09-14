@@ -1,5 +1,36 @@
 # Robot Reel publication record and next channels
 
+## 0.10.0 Solver Lab publication · 2026-09-14
+
+[PR #47](https://github.com/noteflowai/robot-reel/pull/47) adds six real
+Genesis 1.4.1 / Newton 1.6.0 L40S recordings, an analytic timestep comparison,
+366 recorded position/velocity states, native trajectories and checked USD.
+The fifth HF lab and both README entries expose complete offline downloads.
+[Main CI](https://github.com/noteflowai/robot-reel/actions/runs/34830334293)
+passed all six validation jobs and Pages deployed the tested source.
+
+[Release 0.10.0](https://github.com/noteflowai/robot-reel/releases/tag/v0.10.0)
+is public. Its validation jobs passed, but the original release workflow ended
+in failure when the connection closed during the SHA256SUMS upload. Recovery
+used that run's original dist/offline artifacts, verified all twelve existing
+remote asset hashes, uploaded only the missing checksum file and published the
+complete draft. All thirteen public files were then downloaded anonymously and
+checked. The public wheel verified the complete offline experiment without
+installing simulation dependencies.
+
+HF readback verified 265 uploaded files, eight served files and the live solver
+ZIP. The actual Hub iframe passed at 1440, 390 and 320 pixels, including the
+new entry, timestep controls, view links and every exported JSON/CSV sample.
+The public test waits for the outer Hub page to finish loading before using
+its iframe, avoiding an initial remount during client initialization.
+
+The existing weekly and HelloGitHub submissions, HF introduction and collection
+note were updated in place and read back exactly. Both editorial submissions
+remain open with no comments. GitHub's description now includes the timestep
+lab, and the concrete Genesis topic replaces the generic ai-agents topic.
+[Publication and recovery receipts](outreach/publication-0.10.0.json).
+
+
 ## 0.9.1 UI publication · 2026-09-14
 
 [Release 0.9.1](https://github.com/noteflowai/robot-reel/releases/tag/v0.9.1) is public.

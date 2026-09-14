@@ -1,0 +1,155 @@
+{
+  "version": "0.10.0",
+  "checked": "2026-09-14",
+  "feature_pr": 47,
+  "release_source": "6d9fc525ef443d071ed11b4eefb491b3ca0d0c19",
+  "main_ci_run": 34830334293,
+  "release_run": 34830340261,
+  "release_workflow_conclusion": "failure",
+  "release_validation_jobs": "all six passed",
+  "upload_failure": "Connection closed while uploading SHA256SUMS; the release stayed a draft.",
+  "recovery": {
+    "verified": true,
+    "draft": true,
+    "files": 13,
+    "uploaded": [
+      "SHA256SUMS"
+    ],
+    "unchanged": [
+      "START-HERE.md",
+      "robot-reel-cloth-experiment.zip",
+      "robot-reel-cloth-scene.usdc",
+      "robot-reel-microduck-experiment.zip",
+      "robot-reel-microduck-frame.json",
+      "robot-reel-paired-outcomes.json",
+      "robot-reel-seed-09-review.json",
+      "robot-reel-seed-09.rrd",
+      "robot-reel-solver-experiment.zip",
+      "robot-reel-stress-experiment.zip",
+      "robot_reel-0.10.0-py3-none-any.whl",
+      "robot_reel-0.10.0.tar.gz"
+    ]
+  },
+  "public_release": {
+    "version": "0.10.0",
+    "release_id": 388295625,
+    "release_url": "https://github.com/noteflowai/robot-reel/releases/tag/v0.10.0",
+    "public_files": 13,
+    "all_checksums_match": true,
+    "files": {
+      "START-HERE.md": {
+        "sha256": "ca2d6000e37c25b69f5a247ebd9d1127cf21f584664b345dabbbc41b7948eccd",
+        "bytes": 8850
+      },
+      "robot-reel-cloth-experiment.zip": {
+        "sha256": "3d2ec342285b12b7e4ebff78621ed795b8f0c48f3d97ed0cfcbd2c5100e2768a",
+        "bytes": 2045314
+      },
+      "robot-reel-cloth-scene.usdc": {
+        "sha256": "8cbc0b87d4ec75764553ba71e7c533060e2598140c0c301ae22ddc806f9ad953",
+        "bytes": 1031279
+      },
+      "robot-reel-microduck-experiment.zip": {
+        "sha256": "79fdc2e300d6f34bb39e41b0f851cf137a39cb4bd306089ab9924b812a197b25",
+        "bytes": 12723101
+      },
+      "robot-reel-microduck-frame.json": {
+        "sha256": "b8d2e9449b286cb8ae0c3d77c0a1ac5eb3a343d7ddb51c2fcacdc5a820c2cf38",
+        "bytes": 615
+      },
+      "robot-reel-paired-outcomes.json": {
+        "sha256": "80afa86a53826deb72c78447f7badc6c994d30fd0c08ac3c7b9d693d24c4822d",
+        "bytes": 1205
+      },
+      "robot-reel-seed-09-review.json": {
+        "sha256": "21c31c368e332a21afb87e937ed3bce7cbe3b3ae1e7cc17a6080fb83ebeda361",
+        "bytes": 10925
+      },
+      "robot-reel-seed-09.rrd": {
+        "sha256": "f322c0d612ab3c9a7a6f6c27474edd1600214a0c2874a9db63053bacb10d2bbe",
+        "bytes": 6605979
+      },
+      "robot-reel-solver-experiment.zip": {
+        "sha256": "80b6fed5598e51753929d66267b1ca414ad623379a43e662d5616253b5a53a95",
+        "bytes": 220162
+      },
+      "robot-reel-stress-experiment.zip": {
+        "sha256": "13c977ab1dd3de4c46105d7d5b5adc0126293d5ee4dbc8f0a358ee7564f40737",
+        "bytes": 56253155
+      },
+      "robot_reel-0.10.0-py3-none-any.whl": {
+        "sha256": "e1551284d1edfe5ae8e86312e11eebfa0cd79edac050dea74a41653519b3ef45",
+        "bytes": 210883
+      },
+      "robot_reel-0.10.0.tar.gz": {
+        "sha256": "11d3f3c4fd6fd45fa5aaeb7a6983b9a815f137a8c721822632a89d0ff642fee9",
+        "bytes": 230249
+      }
+    }
+  },
+  "public_huggingface": {
+    "verified_files": 265,
+    "unmanaged_files": [],
+    "live_files": [
+      "space-manifest.json",
+      "index.html",
+      "cloth/index.html",
+      "stress/index.html",
+      "chaos/index.html",
+      "microduck-lab/index.html",
+      "solver-lab/index.html",
+      "thumbnail.png"
+    ],
+    "repo_id": "glayguo/robot-reel",
+    "source_commit": "6d9fc525ef443d071ed11b4eefb491b3ca0d0c19",
+    "hub_commit": "8451e355ac2c1636281544550f51cc58e8676774",
+    "public_app_url": "https://glayguo-robot-reel.static.hf.space",
+    "anonymous_readback": true,
+    "html_normalization": "Only the Hub's injected SPACE_CREATOR_USER_ID assignment",
+    "live_solver_archive_sha256": "80b6fed5598e51753929d66267b1ca414ad623379a43e662d5616253b5a53a95",
+    "live_solver_archive_bytes": 220162
+  },
+  "public_browser_widths": [
+    1440,
+    390,
+    320
+  ],
+  "public_wheel_verified": true,
+  "promotion": {
+    "existing_posts_updated": [
+      {
+        "channel": "weekly",
+        "repo": "ruanyf/weekly",
+        "number": 11664,
+        "state": "open",
+        "comments": 0,
+        "url": "https://github.com/ruanyf/weekly/issues/11664",
+        "body_sha256": "f43ad607daeb8d4a66de6d86fd403f79af48c312cf2a81719325f18d53c6838c"
+      },
+      {
+        "channel": "hello",
+        "repo": "521xueweihan/HelloGitHub",
+        "number": 3694,
+        "state": "open",
+        "comments": 0,
+        "url": "https://github.com/521xueweihan/HelloGitHub/issues/3694",
+        "body_sha256": "834a9495b4afd05ffffd5d40ae6a2d6e3929b4fddf61ef29495a098f7cd3e638"
+      },
+      {
+        "channel": "huggingface",
+        "repo": "glayguo/robot-reel",
+        "discussion": 1,
+        "comment_id": "6aa67c583011374ab7374841",
+        "title": "v0.10.0: Genesis \u00d7 Newton \u2014 one launch, mind the timestep",
+        "body_sha256": "40a8f0b88968971caa50ce98985641d115704adbfa400a7fac63fc776b0b78c4"
+      }
+    ],
+    "collection": {
+      "slug": "glayguo/noteflow-ai-open-source-playgrounds-6aa693c382b0184786eb8856",
+      "items": 5,
+      "note": "Robot Reel 0.10.0: compare six Genesis/Newton GPU flights with analytic motion; inspect all 366 states, native replays, OpenUSD and five offline-ready labs."
+    },
+    "new_posts_created": 0,
+    "editorial_acceptance": false
+  }
+}

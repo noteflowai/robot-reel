@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Verify draft assets against local checksums and GitHub SHA-256 digests, retry
+  missing uploads individually, and retain uploads whose response was lost.
+  Preserve existing public releases and drafts; document recovery using the
+  original tested CI artifacts. Record the completed 0.10.0 publication.
+
 ## 0.10.0 — One launch, six recorded futures
 
 - Add Solver Lab: six independent L40S/CUDA ballistic flights from Genesis 1.4.1
