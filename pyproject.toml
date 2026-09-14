@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "robot-reel"
-version = "0.11.0"
+version = "0.12.0"
 description = "Inspect real VLA rollouts and direct recorded physics into editable Blender/OpenUSD films."
 readme = "README.md"
 requires-python = ">=3.12"

@@ -2,8 +2,8 @@
 
 A success rate answers neither question. Fourteen of thirty recorded trials end at
 the step limit, and that label alone does not distinguish a policy that froze
-from one that was still reaching when the budget ran out. The two call for
-opposite responses: raise the step limit, or fix the policy.
+from one that was still moving when the budget ran out. This describes the
+recording; selecting an effective intervention requires a controlled experiment.
 
 Reproducibility is the other half. The paired design attributes an outcome flip
 to a condition, which only holds if the same seed and condition give the same
@@ -20,10 +20,9 @@ import math
 
 SCHEMA = "robot-reel-reliability-1"
 
-# A tenth of a millimetre of end-effector travel over the final tenth of an
-# episode is below anything a moving arm produces, so a run under it was not
-# merely slow. The threshold is stated rather than fitted: the smallest tail
-# motion in the recorded collection is 24.7 mm, three orders of magnitude above.
+# One millimetre of end-effector travel over the final tenth of recorded frames.
+# This descriptive threshold does not distinguish slow progress from a stall,
+# nor establish that a moving arm would succeed with a larger action budget.
 STALL_METRES = 1e-3
 
 
@@ -44,6 +43,8 @@ def classify_run(trace, *, stall_metres=STALL_METRES):
     early termination is a different event from exhausting the budget.
     """
     points = _positions(trace)
+    if not math.isfinite(stall_metres) or stall_metres <= 0:
+        raise ValueError("stall_metres must be finite and positive")
     if len(points) < 2:
         raise ValueError("A trial needs at least two recorded frames")
     outcome = trace["result"]["outcome"]
@@ -106,27 +107,38 @@ def compare_run(reference, repeat, action_steps):
     """Compare one trial against its repeat, from outcome down to pixels.
 
     Reported as separate levels because they are separate claims. Agreeing
-    outcomes are what the paired comparison rests on; identical physics is a
-    stronger statement; identical renders on consumed frames is stronger again.
+    outcomes are what the paired comparison rests on; matching recorded robot
+    states and matching consumed images provide separate evidence. State/action
+    arrays are compared numerically, not as floating-point bit patterns or as
+    a complete serialization of the simulator.
     """
     a, b = reference["frames"], repeat["frames"]
     action_steps = int(action_steps)
     if action_steps < 1:
         raise ValueError("action_steps must be positive")
-    consumed = _input_frames(a, action_steps) | _input_frames(b, action_steps)
+    inputs_a, inputs_b = _input_frames(a, action_steps), _input_frames(b, action_steps)
+    consumed = inputs_a | inputs_b
     shared = range(min(len(a), len(b)))
     render = {"input_frames": [0, 0], "recorded_frames": [0, 0]}
     for index in shared:
         key = "input_frames" if index in consumed else "recorded_frames"
         render[key][1] += 1
-        render[key][0] += a[index].get("raw_camera_sha256") == b[index].get("raw_camera_sha256")
+        hashes_a, hashes_b = a[index].get("raw_camera_sha256"), b[index].get("raw_camera_sha256")
+        complete = all(
+            isinstance(hashes, dict)
+            and all(isinstance(hashes.get(camera), str) and hashes[camera]
+                    for camera in ("main", "wrist"))
+            for hashes in (hashes_a, hashes_b)
+        )
+        render[key][0] += complete and hashes_a == hashes_b
     return {
         "same_outcome": reference["result"]["outcome"] == repeat["result"]["outcome"],
         "same_action_count": reference["result"]["actions"] == repeat["result"]["actions"],
         "same_frame_count": len(a) == len(b),
         "identical_states": [frame["state"] for frame in a] == [frame["state"] for frame in b],
         "identical_actions": [frame.get("action") for frame in a] == [frame.get("action") for frame in b],
-        "identical_input_renders": render["input_frames"][0] == render["input_frames"][1],
+        "identical_input_renders": bool(consumed) and inputs_a == inputs_b
+        and render["input_frames"][0] == len(consumed),
         "input_renders": {"identical": render["input_frames"][0], "compared": render["input_frames"][1]},
         "recorded_renders": {"identical": render["recorded_frames"][0], "compared": render["recorded_frames"][1]},
     }

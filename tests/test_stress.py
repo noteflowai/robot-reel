@@ -92,6 +92,24 @@ class StressTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(json.loads(result.stdout)["completed_trials"], 30)
 
+    def test_legacy_packs_without_taxonomy_still_verify_and_new_taxonomy_is_checked(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            target = Path(temporary)/"legacy"
+            shutil.copytree(SITE, target)
+            manifest = json.loads((target/"manifest.json").read_text())
+            manifest["files"].pop("reliability.json")
+            (target/"reliability.json").unlink()
+            (target/"manifest.json").write_text(json.dumps(manifest))
+            self.assertEqual(verify_site(target)["completed_trials"], 30)
+            # Once present and sealed, taxonomy is checked against the traces.
+            forged = json.loads((SITE/"reliability.json").read_text())
+            forged["counts"]["success"] += 1
+            (target/"reliability.json").write_text(json.dumps(forged))
+            manifest["files"]["reliability.json"] = file_hash(target/"reliability.json")
+            (target/"manifest.json").write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, "taxonomy differs"):
+                verify_site(target)
+
     def test_duplicate_missing_or_relabelled_trial_cannot_change_denominator(self):
         for runs in (self.traces[:-1], self.traces+[self.traces[0]]):
             with self.assertRaises(ValueError):

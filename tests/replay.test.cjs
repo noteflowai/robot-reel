@@ -620,6 +620,33 @@ test('Stress Lab is offline, accessible on mobile and keeps all seed choices',as
     assert.deepEqual(requests,[]);assert.deepEqual(errors,[]);
   }finally{await page.close();}
 });
+test('Failure review keeps denominators and opens the measured tail window',async()=>{
+  const taxonomy=JSON.parse(await readFile('docs/stress/reliability.json','utf8'));
+  for(const width of [1440,390,320]){
+    const page=await browser.newPage({viewport:{width,height:1000},reducedMotion:'reduce'}),errors=[];
+    page.on('pageerror',e=>errors.push(e.message));
+    try{
+      const url=width===320?pathToFileURL(resolve('docs/stress/index.html')).href:base+'/stress/';
+      await page.goto(url);
+      assert.equal(await page.locator('#failure-trials button').count(),14);
+      for(const id of taxonomy.kinds.step_limit_in_motion)
+        assert.equal(await page.locator(`#failure-trials [data-trial="${id}"]`).count(),1);
+      await page.locator('#failure-trials [data-trial="seed-02-camera"]').click();
+      assert.equal(await page.locator('#seed').inputValue(),'2');
+      assert.equal(await page.locator('#condition').inputValue(),'camera');
+      assert.match(await page.locator('#failure-detail').textContent(),/44\.8 mm.*145–160/);
+      assert.match(await page.locator('#counter').textContent(),/^Sample 145 /);
+      assert.equal(await page.evaluate(()=>document.activeElement.id),'play');
+      await page.locator('#failure-kind').selectOption('step_limit_stalled');
+      assert.match(await page.locator('#failure-count').textContent(),/No recorded trial matches/);
+      assert.equal(await page.locator('#matrix button').count(),30);
+      await page.locator('#failure-kind').selectOption('success');
+      assert.equal(await page.locator('#failure-trials button').count(),16);
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+      assert.deepEqual(errors,[]);
+    }finally{await page.close();}
+  }
+});
 test('Stress Lab bounds shared inputs and finishes on real final observations',async()=>{
   const page=await browser.newPage();
   try{
