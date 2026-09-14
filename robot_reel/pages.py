@@ -10,8 +10,9 @@ were built from it, refreshing local offline archives and dependent manifests.
     python -m robot_reel.pages           # report drift
     python -m robot_reel.pages --write   # copy templates into the published pages
 
-The static landing page is copied in full. For recorded replays, only the script
-is synchronized; new markup, recorded data or media still require their rebuild.
+The landing page is copied in full. Microduck's single-payload template also
+updates markup and styles while preserving its embedded recording verbatim.
+Other recorded replays synchronize only scripts; markup still needs a rebuild.
 """
 import argparse
 import copy
@@ -44,6 +45,21 @@ PAGES = {
     "docs/remix/index.html": "scripts/remix_demo.html",
 }
 OPEN, CLOSE = "<script>\n", "</script>"
+PAYLOAD_PAGES = {
+    "docs/microduck-lab/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
+}
+
+
+def recorded_template(page, template, marker, placeholder):
+    """Apply a single-payload template without serializing or changing its data."""
+    text, source = page.read_text(), template.read_text()
+    if text.count(marker) != 1 or source.count(placeholder) != 1:
+        raise ValueError(f"{page}: ambiguous recorded payload; rebuild the bundle")
+    start = text.index(marker) + len(marker)
+    end = text.find(CLOSE, start)
+    if end < 0:
+        raise ValueError(f"{page}: unterminated recorded payload")
+    return source.replace(placeholder, text[start:end])
 
 
 def inline_script(path):
@@ -70,11 +86,14 @@ def published(root=ROOT):
 
 
 def check(root=ROOT):
-    """Check the complete landing page and each recorded replay's inline script."""
+    """Check full supported templates and other recorded replays' inline scripts."""
     drifted = []
     for page, template in published(root):
         if page == root/"docs/index.html":
             same = page.read_bytes() == template.read_bytes()
+        elif page.relative_to(root).as_posix() in PAYLOAD_PAGES:
+            same = page.read_text() == recorded_template(
+                page, template, *PAYLOAD_PAGES[page.relative_to(root).as_posix()])
         else:
             same = inline_script(page)[0] == inline_script(template)[0]
         if not same:
@@ -188,6 +207,9 @@ def sync(root=ROOT):
         changed[page.resolve()] = digest(page)
         if page == root/"docs/index.html":
             page.write_bytes(template.read_bytes())
+        elif page.relative_to(root).as_posix() in PAYLOAD_PAGES:
+            page.write_text(recorded_template(
+                page, template, *PAYLOAD_PAGES[page.relative_to(root).as_posix()]))
         else:
             script = inline_script(template)[0]
             text = page.read_text()

@@ -96,9 +96,48 @@ test('Microduck invalid view parameters and absent video preserve inspectable so
   await page.goto(base+'/microduck-lab/#frame=NaN&joint=-1&yaw=Infinity&pitch=2&run=unknown');
   assert.equal(await page.locator('#counter').textContent(),'Frame 120 / 299');
   assert.equal(await page.locator('#joint').inputValue(),'3');
-  await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Video unavailable'));
+  await page.waitForFunction(()=>document.querySelector('#video-status').textContent.startsWith('Video unavailable'));
+  assert(await page.locator('#play').isDisabled());
   await page.locator('#next').click();
   assert.equal(await page.locator('#counter').textContent(),'Frame 121 / 299');
+  await page.unroute('**/microduck-lab/*.mp4');
+  await page.locator('#retry-video').click();
+  await page.waitForFunction(()=>{const v=document.querySelector('video');return v.readyState>=2&&!v.seeking;});
+  assert.equal(await page.locator('video').evaluate(v=>Math.floor(v.currentTime*30)),121);
+  assert(await page.locator('#retry-video').isHidden());
+  assert(await page.locator('#play').isEnabled());
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'recording');
+  assert.deepEqual(errors,[]);
+ }finally{await page.close();}
+});
+test('Microduck keyboard orbit, frame boundaries and stale playback recovery preserve the current view',async()=>{
+ const page=await browser.newPage({viewport:{width:390,height:1000}}),errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ try{
+  await page.goto(base+'/microduck-lab/#run=right&frame=61&joint=3');
+  await page.waitForFunction(()=>document.querySelector('video').readyState>=2);
+  const initialPitch=await page.evaluate(()=>pitch);
+  await page.locator('#orbit-up').focus();await page.keyboard.press('Enter');
+  assert.ok(await page.evaluate(()=>pitch)>initialPitch);
+  await page.locator('#orbit-down').focus();await page.keyboard.press('Enter');
+  assert.ok(Math.abs(await page.evaluate(()=>pitch)-initialPitch)<1e-12);
+  await page.locator('#timeline').focus();await page.keyboard.press('Home');
+  assert(await page.locator('#previous').isDisabled());
+  assert.match(await page.locator('#timeline').getAttribute('aria-valuetext'),/^Frame 0 of 299/);
+  await page.keyboard.press('End');assert(await page.locator('#next').isDisabled());
+  await page.evaluate(()=>{HTMLMediaElement.prototype.play=function(){return new Promise((resolve,reject)=>{window.rejectOldPlay=()=>reject(Error('old media request'));});};});
+  await page.locator('#play').click();
+  await page.locator('#run').selectOption('left');
+  await page.waitForFunction(()=>{const v=document.querySelector('video');return v.currentSrc.endsWith('left.mp4')&&v.readyState>=2&&!v.seeking;});
+  await page.evaluate(async()=>{window.rejectOldPlay();await Promise.resolve();});
+  assert.equal(await page.locator('#play').textContent(),'Play recording');
+  assert.equal(await page.locator('#play').getAttribute('aria-busy'),'false');
+  assert.match(await page.locator('#video-status').textContent(),/^Recording ready/);
+  await page.evaluate(()=>{URL.createObjectURL=()=>{throw Error('download denied');};});
+  await page.locator('#sample-json').click();
+  assert.match(await page.locator('#status').textContent(),/^Download could not start/);
+  assert.equal(await page.locator('#run').inputValue(),'left');
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   assert.deepEqual(errors,[]);
  }finally{await page.close();}
 });

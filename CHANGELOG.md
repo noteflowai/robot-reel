@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 0.9.1 — A more usable Motion Lab
+
+- Keep playback beside the schematic, with links between the recording and its
+  controls, four keyboard-operable orbit buttons, larger touch targets and
+  spoken frame/time values. Disable stepping past the first or last frame.
+- Recover unavailable videos in place while preserving the selected frame and
+  usable joint data. Ignore superseded playback promises after changing runs.
+- Expose clipboard fallback focus and download failure feedback.
+- Synchronize the complete Microduck template while preserving its embedded
+  recording verbatim, then refresh manifests and the offline ZIP. Test markup
+  drift as well as script drift so new controls reach every distribution.
+
+The two original walks and their numerical evidence are unchanged.
+
 ## 0.9.0 — Microduck evidence you can hand off
 
 - Ship `robot-reel microduck-review` in the wheel. Verify an extracted Motion Lab

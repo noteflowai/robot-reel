@@ -81,6 +81,8 @@ click a 14-joint residual heatmap, and follow the original video. Switch between
 **0.3 / 0.5 m/s speed commands** and inspect all **8,400 measured joint samples**.
 Share a frame, export JSON/CSV, or reopen a received frame JSON after checking
 every fact against the recording. Take both complete walks offline.
+Playback stays beside the schematic; four view buttons work from the keyboard.
+Retry a failed video without losing the selected frame or joint.
 [Review a frame with your agent](docs/agent-review.md): load a focused skill through
 Skills Anywhere, run the read-only source check, then explain the verified facts.
 
