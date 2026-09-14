@@ -1,3 +1,4 @@
+import fnmatch
 import hashlib
 import json
 from pathlib import Path
@@ -45,6 +46,23 @@ class HuggingFaceSpaceTests(unittest.TestCase):
             text = (self.site/lab/"index.html").read_text()
             self.assertIn('id="share-url"', text)
             self.assertIn('id="share-open"', text)
+
+    def test_binary_assets_have_explicit_lfs_rules_before_hub_upload(self):
+        patterns = [line.split()[0] for line in (self.site/".gitattributes").read_text().splitlines()
+                    if "filter=lfs" in line]
+        checked = []
+        for path in self.site.rglob("*"):
+            if not path.is_file():
+                continue
+            with path.open("rb") as stream:
+                binary = b"\0" in stream.read(4096)
+            if binary:
+                relative = path.relative_to(self.site).as_posix()
+                self.assertTrue(any(fnmatch.fnmatchcase(relative, pattern) for pattern in patterns),
+                                f"Hub would append an unrecorded LFS rule: {relative}")
+                checked.append(path.suffix)
+        self.assertIn(".glb", checked)
+        self.assertIn(".splat", checked)
 
     def test_changed_or_extra_files_and_symlinks_are_rejected(self):
         extra = self.site/".env"
