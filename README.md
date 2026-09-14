@@ -204,7 +204,7 @@ that extra actions would complete the task or that the motion made progress.
 **Whether a repeat agrees.** The paired groups blame a condition for an outcome
 flip, which only holds if the same seed and condition answer the same twice. The
 whole plan was re-run on the same L40S: **30 / 30 identical outcomes, action
-counts, physics states and actions**, and **360 / 360 identical renders on the
+counts, recorded robot states and actions**, and **360 / 360 identical renders on the
 frames a policy call consumed**. One of 3,195 recorded-only frames differed, on a
 frame no call consumed. That difference is reported rather than rounded away: it
 shows the renderer is not bitwise deterministic even on identical hardware, and it

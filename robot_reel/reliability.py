@@ -107,8 +107,10 @@ def compare_run(reference, repeat, action_steps):
     """Compare one trial against its repeat, from outcome down to pixels.
 
     Reported as separate levels because they are separate claims. Agreeing
-    outcomes are what the paired comparison rests on; identical physics is a
-    stronger statement; identical renders on consumed frames is stronger again.
+    outcomes are what the paired comparison rests on; matching recorded robot
+    states and matching consumed images provide separate evidence. State/action
+    arrays are compared numerically, not as floating-point bit patterns or as
+    a complete serialization of the simulator.
     """
     a, b = reference["frames"], repeat["frames"]
     action_steps = int(action_steps)

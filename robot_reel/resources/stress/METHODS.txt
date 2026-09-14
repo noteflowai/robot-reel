@@ -87,16 +87,18 @@ python3 -m robot_reel.cli stress docs/stress --repeat artifacts/repro-gpu-30
 | --- | --- |
 | Same outcome | 30 / 30 trials |
 | Same action count | 30 / 30 trials |
-| Bitwise identical physics states | 30 / 30 trials |
-| Bitwise identical actions | 30 / 30 trials |
+| Numerically equal recorded robot states | 30 / 30 trials |
+| Numerically equal recorded actions | 30 / 30 trials |
 | Identical renders on frames a policy call consumed | 360 / 360 frames |
 | Identical renders on frames recorded only | 3194 / 3195 frames |
 
 The two render levels are separated because only the first can change an
 outcome. The policy is called once every ten steps, so most recorded frames never
 reach it. The single differing frame is the wrist view at frame 3 of
-`seed-05-camera`, which no policy call consumed; the physics states and actions
-of that trial are bitwise identical throughout.
+`seed-05-camera`, which no policy call consumed; the recorded robot states and actions
+of that trial compare numerically equal throughout. This compares the saved
+`state` and `action` arrays, not every internal MuJoCo variable or floating-point
+bit pattern (for example, numeric equality treats signed zeros as equal).
 
 That difference is worth stating rather than rounding away. It shows the renderer
 is not bitwise deterministic across runs even on identical hardware, and it did
