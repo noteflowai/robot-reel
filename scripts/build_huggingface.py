@@ -22,8 +22,10 @@ from scripts.build_cloth_showcase import verify_showcase as verify_cloth
 from scripts.build_chaos_showcase import verify_showcase as verify_chaos
 from scripts.build_microduck_lab import verify_showcase as verify_microduck
 from robot_reel.solver_lab import verify as verify_solver
+from robot_reel.scene_lab import verify as verify_scene
+from robot_reel.libero_plus_site import verify as verify_plus
 
-LABS = ("cloth", "stress", "chaos", "microduck-lab", "solver-lab")
+LABS = ("cloth", "stress", "chaos", "microduck-lab", "solver-lab", "scene-lab", "libero-plus")
 SOURCE = "https://github.com/noteflowai/robot-reel"
 SITE = "https://noteflowai.github.io/robot-reel/"
 SCHEMA = "robot-reel-space-1"
@@ -113,6 +115,8 @@ def verify(directory):
     verify_chaos(directory/"chaos")  # Includes the fixed twelve-world source contract.
     verify_microduck(directory/"microduck-lab")
     verify_solver(directory/"solver-lab")
+    verify_scene(directory/"scene-lab")
+    verify_plus(directory/"libero-plus")
     if cloth["vertex_samples"] != 42471 or stress["completed_trials"] != 30:
         raise ValueError("Space evidence counts differ from the advertised experiments")
     return record

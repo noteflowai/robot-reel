@@ -3,7 +3,12 @@ import argparse
 import hashlib
 from pathlib import Path
 import shutil
+import sys
+import tempfile
 import tomllib
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from research_release_assets import fetch_assets
 
 OFFLINE_FILES = {
     "robot-reel-stress-experiment.zip", "robot-reel-seed-09-review.json", "START-HERE.md",
@@ -31,11 +36,21 @@ def prepare(source, distributions, offline, output):
         for path in directory.iterdir():
             shutil.copyfile(path, output/path.name)
     shutil.copyfile(source/"docs/rerun/seed-09.rrd", output/"robot-reel-seed-09.rrd")
+    with tempfile.TemporaryDirectory(prefix="robot-reel-release-") as temporary:
+        for path in fetch_assets(source, Path(temporary)/"research"):
+            shutil.copyfile(path, output/path.name)
     paths = sorted(output.iterdir())
     (output/"SHA256SUMS").write_text("".join(
         f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n" for path in paths
     ))
     return notes + """
+
+Scene Lab adds `scene-lab-native.zip`: both packed Blender scenes and their
+independent native checks. `research-records.zip` contains all 45 agent trials
+(27 skill delivery, 12 composition, 6 handoff), including failures and Harbor
+interop receipts. Both files are fetched from a pinned immutable public dataset
+revision, verified against committed sizes/SHA-256, and included in SHA256SUMS.
+OpenEnv's actual recipe controls are documented with raw evidence in the repository.
 
 Solver Lab includes six new CUDA recordings from Genesis 1.4.1 and Newton 1.6.0,
 the analytic-reference diagnostics, native Genesis replays and editable USD.

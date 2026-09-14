@@ -44,6 +44,7 @@ jobs:
         run: |
           python scripts/build_huggingface.py --output artifacts/huggingface-space
           node scripts/check_huggingface.cjs artifacts/huggingface-space
+          node scripts/check_research_labs.cjs artifacts/huggingface-space artifacts/research-browser
       - uses: actions/upload-artifact@v4
         with:
           name: huggingface-space

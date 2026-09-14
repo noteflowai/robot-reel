@@ -165,7 +165,20 @@ def check(source, release_assets=None):
         damaged.write_bytes(original)
         if rejected.returncode != 2 or json.loads(rejected.stdout)["verified"]:
             raise ValueError("Installed solver verifier accepted damaged evidence")
-        report = {"version": expected, "module": str(module), "cloth_vertex_samples": cloth["vertex_samples"],
+        new_labs = {}
+        for name, arguments in (
+            ("scene-lab", ["scene-lab", "--output", str(source/"docs/scene-lab"), "--verify"]),
+            ("libero-plus", ["libero-plus", "verify", "--output", str(source/"docs/libero-plus"), "--media"]),
+        ):
+            checked = subprocess.run(
+                [str(Path(sys.executable).with_name("robot-reel")), *arguments],
+                check=True, capture_output=True, text=True, timeout=120,
+            )
+            new_labs[name] = json.loads(checked.stdout)
+            if new_labs[name].get("valid") is not True:
+                raise ValueError(f"Installed {name} verifier failed")
+        report = {"version": expected, "module": str(module), "new_labs": new_labs,
+                  "cloth_vertex_samples": cloth["vertex_samples"],
                   "solver_lab": solver,
                   "microduck": microduck,
                   "cloth_sample": sample_check,

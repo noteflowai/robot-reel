@@ -1,0 +1,97 @@
+{
+  "schema": "robot-reel.libero-plus-site.v1",
+  "files": {
+    "METHODS.md": {
+      "sha256": "197b2af180e51da84ef1b103ab3828764c119cec3fd53c0f855bb6c270cb3b1d",
+      "bytes": 3224
+    },
+    "baseline/initial-state.json": {
+      "sha256": "f172863f6979dbf6e43f559f7bc3654273bc9599a6bc12f224b96225f6a58896",
+      "bytes": 2444
+    },
+    "baseline/native-scene.json": {
+      "sha256": "4388b4bad9fe409c9ac1ec75fdc2d691629e4253b1732a3eeb9e21995edabd4f",
+      "bytes": 7390
+    },
+    "baseline/poster.png": {
+      "sha256": "23fc8395ef1b5e87824769e089fd9b3d9b157f611b8ad05dad90d685eb22fe1d",
+      "bytes": 119184
+    },
+    "baseline/rollout.mp4": {
+      "sha256": "e115857e0c4adb46a40aa3213223977137e2adc8da54105bf6cd43e96bba3c93",
+      "bytes": 439246
+    },
+    "baseline/run.json": {
+      "sha256": "95c1f199b58914bab62a01bd31c62aaf1741801592f0b054950067e19dbbc1bd",
+      "bytes": 305000
+    },
+    "camera-viewpoints/initial-state.json": {
+      "sha256": "f172863f6979dbf6e43f559f7bc3654273bc9599a6bc12f224b96225f6a58896",
+      "bytes": 2444
+    },
+    "camera-viewpoints/native-scene.json": {
+      "sha256": "ebab68f1d9ab981d16b1075c81982e95145f43f3de76e51a71b6570a4674ad69",
+      "bytes": 7394
+    },
+    "camera-viewpoints/poster.png": {
+      "sha256": "a6b1bf3643b5b6f1ef742d9c9534591b444daf39b484fdd7b173c2faaa027946",
+      "bytes": 120507
+    },
+    "camera-viewpoints/rollout.mp4": {
+      "sha256": "f9201569d006f74f5cd63cdbbed784906e818469aa49f2714af1e539c3d63973",
+      "bytes": 1187303
+    },
+    "camera-viewpoints/run.json": {
+      "sha256": "2c7fb43a0b9c8d5aca715cd0c62991be0762425c588d2fcb9791af52b6efb134",
+      "bytes": 870639
+    },
+    "index.html": {
+      "sha256": "1e8ac1c392bba3d9e46a0d65a768aa72499e4bfef214147e491bfee8676f07d8",
+      "bytes": 10398
+    },
+    "lab.json": {
+      "sha256": "67cfe16927c991e3c69a601ffe41ab8fe9077b3648c48ff50366d9e31c0b15a9",
+      "bytes": 95850
+    },
+    "libero_plus.js": {
+      "sha256": "08fd7ebd11db7155738f861a746432090aa7ae06f5d6a9d97693864e2354d130",
+      "bytes": 6186
+    },
+    "light-conditions/initial-state.json": {
+      "sha256": "f172863f6979dbf6e43f559f7bc3654273bc9599a6bc12f224b96225f6a58896",
+      "bytes": 2444
+    },
+    "light-conditions/native-scene.json": {
+      "sha256": "c678c226dc67dcfba5ef70cd7c3af5e6b7df4ed1b2dfef12f836a1bdb204432a",
+      "bytes": 7306
+    },
+    "light-conditions/poster.png": {
+      "sha256": "14fd17f58b43356fd96f25ced150f496a64044945737890d107bb9e5519b1f63",
+      "bytes": 114105
+    },
+    "light-conditions/rollout.mp4": {
+      "sha256": "8ae4df1032e611ae80c691cbbddcf13395241e98f84b3c25f758b8c20506a730",
+      "bytes": 479371
+    },
+    "light-conditions/run.json": {
+      "sha256": "202d002e13dd84d2d2fbbc59ea67737c638f6cc9d79b8c78771853e88a0fe224",
+      "bytes": 344476
+    },
+    "plan.json": {
+      "sha256": "a210f6745e4c161db98df5db2d0b6d8f9ed32890514b5119c78cf7d5ceff80c2",
+      "bytes": 3108
+    },
+    "policy-server.py": {
+      "sha256": "78564f50808fa56807fbec76defe440278d989203b17b25f96094ace02d6d48a",
+      "bytes": 7690
+    },
+    "recorder.py": {
+      "sha256": "c2ba2e8b3e6a236426dcee09151c53da73d7b0faf15fd14ef615f7b3487e582e",
+      "bytes": 8510
+    },
+    "source.json": {
+      "sha256": "259f03fdeaa5825d995504d1d9bc883d6e72eef7aa01cb4f9e3a73923c5a8f77",
+      "bytes": 1180
+    }
+  }
+}

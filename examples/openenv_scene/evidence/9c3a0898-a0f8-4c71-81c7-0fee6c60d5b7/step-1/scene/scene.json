@@ -1,0 +1,127 @@
+{
+  "schema": "robot-reel.scene-lab.v1",
+  "source": {
+    "schema": "robot-reel.scene-source.v1",
+    "asset_id": "coast_rocks_02",
+    "title": "Coast Rocks 02",
+    "source": "Poly Haven",
+    "source_page": "https://polyhaven.com/a/coast_rocks_02",
+    "license": "CC0-1.0",
+    "authors": {
+      "Rob Tuytel": "Photography, processing",
+      "Rico Cilliers": "cleanup"
+    },
+    "files": {
+      "coast_rocks_02_1k.gltf": {
+        "sha256": "493b65e80b120deb6634dd1315add9fafb656616f1e27502494b6878613855c0",
+        "bytes": 2810,
+        "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/coast_rocks_02/coast_rocks_02_1k.gltf",
+        "source_md5": "477f8f18bfe307c2c51c21f1f3fbb655"
+      },
+      "textures/coast_rocks_02_diff_1k.jpg": {
+        "sha256": "a1dc4e2d18679712dbab2e924eb2132a23ba8566b51734078fd2f62c2b78febe",
+        "bytes": 853844,
+        "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/coast_rocks_02/coast_rocks_02_diff_1k.jpg",
+        "source_md5": "433c3a76d8557e351f8f2713301c351c"
+      },
+      "coast_rocks_02.bin": {
+        "sha256": "ed06872c8d06f415cde38f6093dc555b175e73b54838f8f16c163c9bdfca05be",
+        "bytes": 35867060,
+        "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/coast_rocks_02/coast_rocks_02.bin",
+        "source_md5": "0b9c2ab72446e40154681e87e0916272"
+      },
+      "textures/coast_rocks_02_arm_1k.jpg": {
+        "sha256": "ea492168ef17e3392974ae1b938f5c2b9297f00299e9450cab504332d8454e66",
+        "bytes": 785725,
+        "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/coast_rocks_02/coast_rocks_02_arm_1k.jpg",
+        "source_md5": "a04047466b8dd33d48da6670b066d706"
+      },
+      "textures/coast_rocks_02_nor_gl_1k.jpg": {
+        "sha256": "3d5f52a5e53e18c4e85b7928bfe3ea13b6250831a4a52768700f96ae58a8098a",
+        "bytes": 947627,
+        "source_url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/coast_rocks_02/coast_rocks_02_nor_gl_1k.jpg",
+        "source_md5": "e336b5fbe3e1c71fac7dca0eb994d971"
+      }
+    }
+  },
+  "source_manifest_sha256": "943a2d177978540b12f297a7ba9663b2a372360070746c96a22246d02c491b21",
+  "edit": {
+    "terrain_z_scale": 1.0,
+    "sun_azimuth_degrees": 310.0,
+    "sun_energy": 3.0
+  },
+  "blender_version": "4.5.13 LTS",
+  "renderer": {
+    "engine": "Cycles",
+    "backend": "OptiX",
+    "devices": [
+      "NVIDIA L40S"
+    ],
+    "samples": 32
+  },
+  "geometry": {
+    "source_polygons": 1260423,
+    "display_triangles": 119999,
+    "world_unit": "metre",
+    "native_up": "Z",
+    "browser_up": "Y",
+    "recentre_translation_m": [
+      6.040017127990723,
+      9.044393539428711,
+      0.9200870394706726
+    ],
+    "bounds_m": [
+      [
+        -22.981727600097656,
+        -24.733022689819336,
+        0.0
+      ],
+      [
+        22.981727600097656,
+        24.73302459716797,
+        3.174970865249634
+      ]
+    ]
+  },
+  "representations": {
+    "mesh": "Decimated photogrammetry surface with source texture coordinates.",
+    "gaussians": {
+      "count": 25000,
+      "seed": 20260914,
+      "method": "Area-weighted mesh samples with sampled texture colour and surface normals.",
+      "trained_3dgs": false,
+      "radius_m": 0.14377043289464067
+    },
+    "collision": {
+      "kind": "65x65 top-surface heightfield proxy",
+      "filled_samples": 1789,
+      "limitations": "Does not preserve overhangs; absent surface samples become base plane."
+    }
+  },
+  "files": {
+    "collision-heightfield.json": {
+      "sha256": "1b54217fb312e49d434f943de729448a6a1d0270fc1e8f17beac75b584ea005b",
+      "bytes": 74202
+    },
+    "edit.json": {
+      "sha256": "043089aaa1891661c5afb2ec67bae3130983743d2a4d3e9a4041bbfa4b113a3b",
+      "bytes": 122
+    },
+    "preview.png": {
+      "sha256": "850c14f9282d3631684188bd9ecbeac736706b27c964166f39d17548676801d9",
+      "bytes": 984108
+    },
+    "scene.blend": {
+      "sha256": "910a875f36fed452f6305963600c93111aba81a08521455b7b38c9196e5a44b7",
+      "bytes": 7546726
+    },
+    "scene.glb": {
+      "sha256": "3ed37b4a5984dc7f345fd893226bf43f747f84c6380ad665ea2a5a8c8dcb296d",
+      "bytes": 6690360
+    },
+    "terrain.splat": {
+      "sha256": "679567e417c681c99332a6053d0d1ba376358997d035219a0103d3a48325d5fb",
+      "bytes": 800000
+    }
+  }
+}

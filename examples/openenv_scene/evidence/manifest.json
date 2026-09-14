@@ -1,0 +1,97 @@
+{
+  "schema": "robot-reel.openenv-evidence.v1",
+  "files": {
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/edit.json": {
+      "sha256": "043089aaa1891661c5afb2ec67bae3130983743d2a4d3e9a4041bbfa4b113a3b",
+      "bytes": 122
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/observation.json": {
+      "sha256": "23f14a3760555b4ec401104c424961ea03a6215c63639d7d8bc71766eddafe73",
+      "bytes": 978
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/process-0.log": {
+      "sha256": "83bd37d811f5c2a0d25501c19060c140d90d1e23647de0aaae68ca7c516d258f",
+      "bytes": 7343
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/process-1.log": {
+      "sha256": "524a8ed16259a8d5c14686123d513204418f6c53b40a29bf56c16eddfa9b8c90",
+      "bytes": 1036
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/scene/collision-heightfield.json": {
+      "sha256": "1b54217fb312e49d434f943de729448a6a1d0270fc1e8f17beac75b584ea005b",
+      "bytes": 74202
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/scene/edit.json": {
+      "sha256": "043089aaa1891661c5afb2ec67bae3130983743d2a4d3e9a4041bbfa4b113a3b",
+      "bytes": 122
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/scene/native-check.json": {
+      "sha256": "0e656a78de05c1f810c35054e94c6603ca6836adde3cb9d1aec36cc9c2449008",
+      "bytes": 911
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/scene/preview.png": {
+      "sha256": "850c14f9282d3631684188bd9ecbeac736706b27c964166f39d17548676801d9",
+      "bytes": 984108
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/scene/scene.json": {
+      "sha256": "ff0aaa0c84c2cf5b7e60d6bae2e75a09d885381256a4cf47c997eab092260793",
+      "bytes": 4316
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/edit.json": {
+      "sha256": "29c23c06e1ba7b94c63ee3541bb08b56e30a356d377ac5baadf5900773487784",
+      "bytes": 122
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/observation.json": {
+      "sha256": "99edd13e4d6904400b8d7ccee8db9681a0eff18c0eac8c9683ccb22703ffc182",
+      "bytes": 975
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/process-0.log": {
+      "sha256": "0beb417849d1d984408905693bb2e49bbfef95a6f968d029d2109bee5bd17ce1",
+      "bytes": 7511
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/process-1.log": {
+      "sha256": "138db2e7780ba6999cd2e5d505696e36d8e34ac7c7164984fd1225cc80201997",
+      "bytes": 1037
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/scene/collision-heightfield.json": {
+      "sha256": "62e5211778afbe3ef762338a72e026ed88adaf010d015ee63b28279be7940f80",
+      "bytes": 74003
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/scene/edit.json": {
+      "sha256": "29c23c06e1ba7b94c63ee3541bb08b56e30a356d377ac5baadf5900773487784",
+      "bytes": 122
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/scene/native-check.json": {
+      "sha256": "e6b1fe10f61dc0724e67f0b1007bdd4b15d421fbdfd9c5bb2e6d4887675d68bd",
+      "bytes": 912
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/scene/preview.png": {
+      "sha256": "faf81a381a932da28a54ebe0b724a4b48389b57e2c2b64c46cb9e4827d26363a",
+      "bytes": 982914
+    },
+    "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/scene/scene.json": {
+      "sha256": "48d740f16d72441913c425225ad9e29933f5d9ce121f452101e41ab2fb933bb2",
+      "bytes": 4317
+    },
+    "harness/build_scene_lab.py": {
+      "sha256": "fe305ed85acb51b118849e5d01e3f5107996377d750d4853223ec2bc6db05d53",
+      "bytes": 12594
+    },
+    "harness/check_scene_lab.py": {
+      "sha256": "787b8f4b8f36b5302149cceb95c427b31aada15909b432201fa096e02fa028bb",
+      "bytes": 5021
+    },
+    "harness/environment.py": {
+      "sha256": "bef399bc663f233ee6b4dadf237114e90059db7347aa4f1424f2982bc74e9288",
+      "bytes": 7853
+    },
+    "harness/record.py": {
+      "sha256": "e9435228fc870b9967572fb5a5e5ec3a580ef7900fdc4ea40f2636ffe63ea212",
+      "bytes": 2573
+    },
+    "pilot.json": {
+      "sha256": "b9f3bf66dec5f3e021529cdc420465edb5c37b9ae6d1cce929d825491420a2d0",
+      "bytes": 4298
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "robot-reel.libero-plus-plan.v1",
+  "suite": "libero_spatial",
+  "base_task": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+  "seed": 195,
+  "initial_state_index": 0,
+  "settle_steps": 10,
+  "max_steps": 220,
+  "conditions": [
+    {
+      "name": "baseline",
+      "task_name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate",
+      "category": "Original task",
+      "official_task_id": null,
+      "runtime_index": null,
+      "difficulty_level": null,
+      "bddl_file": "bddl_files/libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.bddl",
+      "bddl_sha256": "9b59eb1287802868ad9bc78d58e6d36d4ba31134e679cfdbdf4b0feb660c959b"
+    },
+    {
+      "name": "camera-viewpoints",
+      "task_name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate_view_0_0_100_2_352_initstate_0",
+      "category": "Camera Viewpoints",
+      "official_task_id": 609,
+      "runtime_index": 608,
+      "difficulty_level": 1,
+      "bddl_file": "bddl_files/libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.bddl",
+      "bddl_sha256": "9b59eb1287802868ad9bc78d58e6d36d4ba31134e679cfdbdf4b0feb660c959b"
+    },
+    {
+      "name": "light-conditions",
+      "task_name": "pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate_light_21",
+      "category": "Light Conditions",
+      "official_task_id": 2124,
+      "runtime_index": 2123,
+      "difficulty_level": 1,
+      "bddl_file": "bddl_files/libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate_light_21.bddl",
+      "bddl_sha256": "093e319d29332c8d7a7c95414f7aea64fd549101c619cadf139feb8bc5ca807e"
+    }
+  ],
+  "source": {
+    "repository": "https://github.com/sylvestf/LIBERO-plus",
+    "revision": "4976dc30028e805ff8094b55501d532c48fec182",
+    "source_files": {
+      "libero/libero/benchmark/libero_suite_task_map.py": "41640d2f542169b400be7e94249e3b1f862e7500745dc318bab49b19576b31ac",
+      "libero/libero/benchmark/task_classification.json": "faa87cce3e3ba434da01df7c77523a391b5f2912e4774330b0aa1be5f6a999e6",
+      "libero/libero/envs/env_wrapper.py": "e91d7b7b35cc3ad2b073606c99860def6b3ac43b66eba00ef0ddb6bfd8f39c3c"
+    },
+    "assets_repository": "Sylvest/LIBERO-plus",
+    "assets_revision": "dd2bd61b7d9a6fef1abc52d606e983b41886a149",
+    "assets_archive_sha256": "96764a4bfbdaea98d4411598caeab235458318fe0f549611b93d1a323027b3cf",
+    "initial_state_file": "init_files/libero_spatial/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate.pruned_init",
+    "initial_state_sha256": "cbbc73792ce546c9bec181fd328a411d3183074840b282671dee481511381d0a"
+  },
+  "scope": "Original task plus a preselected official LIBERO-Plus subset. One episode per condition, not the full 10030-task benchmark. The upstream environment applies perturbations; rendered pixels are not edited. Official IDs are one-based and runtime indices are zero-based."
+}

@@ -41,11 +41,14 @@ PAGES = {
     "docs/chaos/index.html": "robot_reel/chaos.html",
     "docs/cloth/index.html": "robot_reel/cloth.html",
     "docs/solver-lab/index.html": "robot_reel/solver_lab.html",
+    "docs/scene-lab/index.html": "robot_reel/scene_lab.html",
+    "docs/libero-plus/index.html": "robot_reel/libero_plus.html",
     "docs/stress/index.html": "robot_reel/stress.html",
     "docs/blender/index.html": "scripts/blender_demo.html",
     "docs/remix/index.html": "scripts/remix_demo.html",
 }
 OPEN, CLOSE = "<script>\n", "</script>"
+STATIC_PAGES = {"docs/index.html", "docs/scene-lab/index.html", "docs/libero-plus/index.html"}
 PAYLOAD_PAGES = {
     "docs/solver-lab/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
     "docs/microduck-lab/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
@@ -91,7 +94,7 @@ def check(root=ROOT):
     """Check full supported templates and other recorded replays' inline scripts."""
     drifted = []
     for page, template in published(root):
-        if page == root/"docs/index.html":
+        if page.relative_to(root).as_posix() in STATIC_PAGES:
             same = page.read_bytes() == template.read_bytes()
         elif page.relative_to(root).as_posix() in PAYLOAD_PAGES:
             same = page.read_text() == recorded_template(
@@ -180,12 +183,16 @@ def refresh_hashes(root, changed):
                     if not isinstance(entry, dict):
                         continue
                     for name, recorded in entry.items():
+                        recorded_hash = recorded.get("sha256") if isinstance(recorded, dict) else recorded
                         # Bundle manifests name siblings; input manifests may
                         # name paths from the docs root or the repository root.
                         for target in ((path.parent/name).resolve(), (root/"docs"/name).resolve(),
                                        (root/name).resolve()):
-                            if target in pending and pending[target] == recorded:
-                                entry[name] = digest(target)
+                            if target in pending and pending[target] == recorded_hash:
+                                entry[name] = (
+                                    {**recorded, "sha256": digest(target), "bytes": target.stat().st_size}
+                                    if isinstance(recorded, dict) else digest(target)
+                                )
                                 touched = True
                                 break
                 if touched:
@@ -207,7 +214,7 @@ def sync(root=ROOT):
     for page in check(root):
         template = root/PAGES[page.relative_to(root).as_posix()]
         changed[page.resolve()] = digest(page)
-        if page == root/"docs/index.html":
+        if page.relative_to(root).as_posix() in STATIC_PAGES:
             page.write_bytes(template.read_bytes())
         elif page.relative_to(root).as_posix() in PAYLOAD_PAGES:
             page.write_text(recorded_template(

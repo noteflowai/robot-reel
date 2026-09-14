@@ -1,0 +1,14 @@
+{
+  "dataset": "glayguo/noteflow-research-pilots",
+  "revision": "d42ad1d0e1073029254e9e5c3980541a3b166c92",
+  "files": {
+    "research-records.zip": {
+      "sha256": "d7d9084f4b8b69ed7b5faf82b4cb387e5f4c91e68816799f400701fa5aa50fd7",
+      "bytes": 2957370
+    },
+    "scene-lab-native.zip": {
+      "sha256": "d3d648c0d9f1d81a560979a56e1aca6e345f32e3d1f75da44995c9cf2acc9f6d",
+      "bytes": 15105924
+    }
+  }
+}

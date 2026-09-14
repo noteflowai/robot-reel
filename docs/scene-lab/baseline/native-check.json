@@ -1,0 +1,37 @@
+{
+  "schema": "robot-reel.scene-native-check.v1",
+  "blender_version": "4.5.13 LTS",
+  "scene_sha256": "a4e41ef9d27e5f4d5c55bd775b4361116c3e7bad46e3bcfb05bc935ee0560eb0",
+  "native_bounds_m": [
+    [
+      -22.981727600097656,
+      -24.733022689819336,
+      0.0
+    ],
+    [
+      22.981727600097656,
+      24.73302459716797,
+      3.174970865249634
+    ]
+  ],
+  "edit": {
+    "sun_azimuth_degrees": 135.0,
+    "sun_energy": 2.0,
+    "terrain_z_scale": 1.0
+  },
+  "native_sun_azimuth_degrees": 135.00000034162267,
+  "native_sun_energy": 2.0,
+  "packed_textures": [
+    "coast_rocks_02_diff",
+    "coast_rocks_02_nor_gl",
+    "coast_rocks_02_rough"
+  ],
+  "glb_meshes": [
+    "CollisionHeightfield",
+    "ScanTerrain"
+  ],
+  "checked_surface_gaussians": 25000,
+  "checked_collision_samples": 4225,
+  "passed": true,
+  "scope": "File identities and native scene data; no real-world collision fidelity claim."
+}

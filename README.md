@@ -38,6 +38,11 @@
 frame JSON, then verify both with the installed `robot-reel microduck-review`
 command. No source checkout or GPU is needed. [Offline workflow](docs/offline-lab.md).
 
+## New in 0.11.0: research you can inspect
+
+[Explore all 27 real GPU skill trials](https://noteflowai.github.io/evalarc/skill-impact/) and [the research pilots](docs/research-pilots.md). Robot Reel's [captured-scene editor](https://noteflowai.github.io/robot-reel/scene-lab/) and [official LIBERO-Plus replay](https://noteflowai.github.io/robot-reel/libero-plus/) connect real source records with portable skill delivery and independent grading. Every failed attempt stays visible; no skill efficacy, full-benchmark or real-hardware result is implied.
+
+
 ## Quick start
 
 **[Try Robot Reel on Hugging Face](https://huggingface.co/spaces/glayguo/robot-reel)**:
