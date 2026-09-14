@@ -10,6 +10,7 @@ OFFLINE_FILES = {
     "robot-reel-cloth-experiment.zip", "robot-reel-cloth-scene.usdc",
     "robot-reel-paired-outcomes.json",
     "robot-reel-microduck-experiment.zip", "robot-reel-microduck-frame.json",
+    "robot-reel-solver-experiment.zip",
 }
 
 
@@ -36,6 +37,11 @@ def prepare(source, distributions, offline, output):
     ))
     return notes + """
 
+Solver Lab includes six new CUDA recordings from Genesis 1.4.1 and Newton 1.6.0,
+the analytic-reference diagnostics, native Genesis replays and editable USD.
+The installed wheel exports its offline ZIP and verifies all 366 source samples.
+Run `robot-reel solver-lab --output solver-lab --verify` after extraction.
+
 Start with `START-HERE.md`. Extract an experiment ZIP and open its `index.html`
 locally. Cloth Lab includes all 42,471 recorded vertex samples, original velocities,
 the editable USD and native readback reports. The standalone cloth USD contains
@@ -59,8 +65,8 @@ portable JSON and 1080p figure export.
 
 The wheel, source distribution and Rerun recording passed the same six validation
 jobs. Open `robot-reel-seed-09.rrd` in Rerun 0.37.2. `SHA256SUMS` covers every asset.
-The original recordings are unchanged; neither policy inference nor cloth
-simulation was rerun for this release. PyPI publishing is configured separately.
+The existing policy and cloth recordings are unchanged. Solver Lab contains new
+ballistic-flight recordings. PyPI publishing is configured separately.
 """
 
 

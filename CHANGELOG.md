@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+## 0.10.0 — One launch, six recorded futures
+
+- Add Solver Lab: six independent L40S/CUDA ballistic flights from Genesis 1.4.1
+  and Newton 1.6.0 at 30, 120 and 480 integration steps per second. Preserve all
+  366 position/velocity samples, including each initial state.
+- Compare recorded trajectories, velocity errors and specific-energy drift with
+  the constant-gravity analytic solution. Inspect every run, scrub or replay,
+  select the largest error, share a view and export full-precision JSON/CSV.
+- Reopen all Genesis native trajectories and read back every recorded state;
+  export all six trajectories to editable OpenUSD with native sample checks.
+- Ship a self-contained offline ZIP and installed `solver-lab` verifier/exporter.
+  Verification recomputes metrics and checks source files; native-check receipts
+  describe earlier reads, with optional fresh USD validation.
+- Add the fifth Hugging Face lab, a homepage showcase and bilingual methods.
+
+This is a no-contact, no-drag integration experiment, not a benchmark ranking or
+real-world validation. Existing policy, cloth and Microduck recordings are unchanged.
+
 ## 0.9.1 — A more usable Motion Lab
 
 - Keep playback beside the schematic, with links between the recording and its

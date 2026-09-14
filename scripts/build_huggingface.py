@@ -1,4 +1,4 @@
-"""Build a bounded, verified static Space from the four recorded labs."""
+"""Build a bounded, verified static Space from the five recorded labs."""
 from __future__ import annotations
 
 import argparse
@@ -21,8 +21,9 @@ from robot_reel.stress_site import verify_site as verify_stress
 from scripts.build_cloth_showcase import verify_showcase as verify_cloth
 from scripts.build_chaos_showcase import verify_showcase as verify_chaos
 from scripts.build_microduck_lab import verify_showcase as verify_microduck
+from robot_reel.solver_lab import verify as verify_solver
 
-LABS = ("cloth", "stress", "chaos", "microduck-lab")
+LABS = ("cloth", "stress", "chaos", "microduck-lab", "solver-lab")
 SOURCE = "https://github.com/noteflowai/robot-reel"
 SITE = "https://noteflowai.github.io/robot-reel/"
 SCHEMA = "robot-reel-space-1"
@@ -111,6 +112,7 @@ def verify(directory):
     cloth, stress = verify_cloth(directory/"cloth"), verify_stress(directory/"stress")
     verify_chaos(directory/"chaos")  # Includes the fixed twelve-world source contract.
     verify_microduck(directory/"microduck-lab")
+    verify_solver(directory/"solver-lab")
     if cloth["vertex_samples"] != 42471 or stress["completed_trials"] != 30:
         raise ValueError("Space evidence counts differ from the advertised experiments")
     return record

@@ -18,8 +18,8 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI status"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="Latest release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="Code license: Apache-2.0"></a>
-  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-14%20replays-ffca85" alt="Live demos: 14 replays"></a>
-  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-4%20interactive%20labs-ffd21e" alt="Hugging Face: four interactive labs"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-15%20replays-ffca85" alt="Live demos: 15 replays"></a>
+  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-5%20interactive%20labs-ffd21e" alt="Hugging Face: five interactive labs"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -73,6 +73,26 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 Or use the [verified installation packages or non-root Docker image](docs/distribution.md).
 Recording new runs needs the [full runtime](docs/recording.md); the browser demos need nothing.
 
+
+## New / One launch. Mind the timestep.
+
+**Solver Lab — Genesis × Newton.** Six independent **L40S / CUDA** flights
+use the same initial state and gravity at 30, 120 and 480 integration steps per
+second. Compare each recorded arc with the analytic solution, inspect position
+and velocity errors, and follow specific-energy drift. Smaller steps reduce
+this pilot's maximum position error from **32.70 cm to 2.05 cm**.
+
+[![Genesis and Newton recorded flights, timestep controls and measured error curves](docs/solver-lab/poster.png)](https://noteflowai.github.io/robot-reel/solver-lab/)
+
+**[Open Solver Lab ↗](https://noteflowai.github.io/robot-reel/solver-lab/)** ·
+[Complete offline experiment](https://noteflowai.github.io/robot-reel/solver-lab/experiment.zip) ·
+[Scene, equations and reproduction](docs/solver-lab.md)
+
+All **366 recorded position/velocity states** remain downloadable as JSON/CSV.
+Genesis native trajectories were reopened and checked; the editable OpenUSD
+retains every sample. The 0.10.0 installed CLI verifies and exports the lab
+without a GPU. Both engines produce matching values in this simple no-contact,
+no-drag flight; it is an integration diagnostic, not a ranking of simulators.
 
 ## New / Inside a learned Microduck walk.
 

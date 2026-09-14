@@ -1,0 +1,77 @@
+{
+  "schema": "robot-reel-solver-lab-1",
+  "files": {
+    "lab.json": {
+      "sha256": "51a7d23aa49057f90fb1816c617328c1c8c03469f829a2bfb85761cad5288b9c",
+      "bytes": 187416
+    },
+    "index.html": {
+      "sha256": "c83adfc0d4c7830241ac7e25a4a7dcac5a6a86e9fb0b7db3d08923aa51a1c3d7",
+      "bytes": 124447
+    },
+    "METHODS.md": {
+      "sha256": "55f23e82f975b958c71144f7adc179fc0c529c7d7a205f1c93c654ec999a0d0d",
+      "bytes": 6248
+    },
+    "LICENSE": {
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "bytes": 11357
+    },
+    "scene.usda": {
+      "sha256": "b34c662a8c0d4c64c3819acf82b95f59d5b0c6ca04864364b63244b61ace11cf",
+      "bytes": 43758
+    },
+    "native-check.json": {
+      "sha256": "e3df8bba36e4291f4a9a78315d9d447f36d1947af04ada6ef8ee78ed94a71aa1",
+      "bytes": 1330
+    },
+    "genesis-1.json": {
+      "sha256": "cd1ac6190690f03ed590f4657df5c77158efaad73a55cfa8c2593651b3850aa5",
+      "bytes": 15842
+    },
+    "genesis-4.json": {
+      "sha256": "a758cf0dc8da1ca3c94a2ee3f6ddf1bd14d9766117181ca036276895f80374dd",
+      "bytes": 15868
+    },
+    "genesis-16.json": {
+      "sha256": "3a88a8f8902e367684d7bf8a613569c24ccc8cd1f086c38fbd1b62ae96777a1e",
+      "bytes": 15861
+    },
+    "newton-1.json": {
+      "sha256": "31a20c5c4c16174c4431e4a65ce7777862076108b9916fc388360d70077a53b3",
+      "bytes": 15802
+    },
+    "newton-4.json": {
+      "sha256": "912938805535476cc19edbc3059cf5659530996e89985e15d8e8d9e20a2e7ad6",
+      "bytes": 15828
+    },
+    "newton-16.json": {
+      "sha256": "ed8caf612cae5c056d5a9f32b2074f1f7c6cdd1e50214b26ad70ebeaecb56b2e",
+      "bytes": 15821
+    },
+    "genesis-1.gs": {
+      "sha256": "5920af22a11f72c4ebf9b81777ef1c9eaf619d1e909ee43eae1f2f7c4fc25554",
+      "bytes": 17373
+    },
+    "genesis-1.gstraj": {
+      "sha256": "144087394bd8120e1390ec88cd46b6249356067a689b69727d2787b4020f22a5",
+      "bytes": 78818
+    },
+    "genesis-4.gs": {
+      "sha256": "72fa741c0d431876de44160410bcc380b7154a7c403776ddf5b7aa7ac0dbb221",
+      "bytes": 17369
+    },
+    "genesis-4.gstraj": {
+      "sha256": "bcc33d8f90c741b7225dc0bce4e383590a655f25952d0c6928e2b6fc1c4b33b3",
+      "bytes": 78838
+    },
+    "genesis-16.gs": {
+      "sha256": "79f2087ada36aa3c362c9e34c07c9bb19c054ebd37fcc69a78e1359f73fe81ce",
+      "bytes": 17374
+    },
+    "genesis-16.gstraj": {
+      "sha256": "3be87130971d50557ecdf8192c8fa4a4965d6ba5228593c0fe27b714b321e2b0",
+      "bytes": 78837
+    }
+  }
+}

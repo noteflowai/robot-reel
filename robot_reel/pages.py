@@ -40,12 +40,14 @@ PAGES = {
     "docs/newton/index.html": "robot_reel/newton.html",
     "docs/chaos/index.html": "robot_reel/chaos.html",
     "docs/cloth/index.html": "robot_reel/cloth.html",
+    "docs/solver-lab/index.html": "robot_reel/solver_lab.html",
     "docs/stress/index.html": "robot_reel/stress.html",
     "docs/blender/index.html": "scripts/blender_demo.html",
     "docs/remix/index.html": "scripts/remix_demo.html",
 }
 OPEN, CLOSE = "<script>\n", "</script>"
 PAYLOAD_PAGES = {
+    "docs/solver-lab/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
     "docs/microduck-lab/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
 }
 
