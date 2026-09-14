@@ -88,6 +88,9 @@ python scripts/export_microduck_kinematics.py --check
 
 The native check covers every body in both measured and target poses, for both
 runs. Position and rotation-matrix differences must each remain below 1e-9.
+Standard-library replay verification allows 1e-12 roundoff in derived body
+transforms across platform math libraries. Recorded values, source hashes and
+video bytes remain exact.
 No checks depend on the look of the final preview. The committed preview is
 captured from the actual viewer at frame 120, 0.5 m/s run, left knee selected.
 

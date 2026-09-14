@@ -108,6 +108,22 @@ def make_data(source, kinematics):
             "joints": list(JOINTS), "kinematics": kinematics, "runs": runs}
 
 
+def same_data(actual, expected):
+    """Keep source values exact; allow platform libm roundoff only in derived FK."""
+    try:
+        for actual_run, expected_run in zip(actual["runs"], expected["runs"], strict=True):
+            for actual_frame, expected_frame in zip(actual_run["frames"], expected_run["frames"], strict=True):
+                for key in ("measured_pose", "target_pose"):
+                    for actual_body, expected_body in zip(actual_frame[key], expected_frame[key], strict=True):
+                        for a, b in zip(actual_body, expected_body, strict=True):
+                            if type(a) not in (float, int) or not math.isfinite(a) or abs(a-b) > 1e-12:
+                                return False
+                    expected_frame[key] = actual_frame[key]
+        return actual == expected
+    except (KeyError, TypeError, ValueError):
+        return False
+
+
 def verify_showcase(site, *, check_sources=False):
     site = Path(site)
     record = json.loads((site/"showcase-manifest.json").read_text())
@@ -131,7 +147,7 @@ def verify_showcase(site, *, check_sources=False):
                 raise ValueError(f"Changed offline Microduck file: {name}")
     kin = json.loads((site/"kinematics.json").read_text())
     data = json.loads((site/"data.json").read_text())
-    if data != make_data(site, kin):
+    if not same_data(data, make_data(site, kin)):
         raise ValueError("Microduck poses or metrics differ from original traces")
     report = json.loads((site/"kinematics-check.json").read_text())
     if (report["kinematics_sha256"] != digest(site/"kinematics.json")

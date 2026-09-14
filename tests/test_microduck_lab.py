@@ -71,11 +71,17 @@ class MicroduckMotionTests(unittest.TestCase):
             site = Path(temporary)/"lab"
             shutil.copytree(SITE, site)
             data = json.loads((site/"data.json").read_text())
-            data["runs"][1]["frames"][120]["measured_pose"][4][0] += .01
-            payload = json.dumps(data, separators=(",", ":"))
-            (site/"data.json").write_text(payload+"\n")
             template = (ROOT/"scripts/microduck_lab.html").read_text()
-            (site/"index.html").write_text(template.replace("__LAB_DATA__", payload))
+            def write():
+                payload = json.dumps(data, separators=(",", ":"))
+                (site/"data.json").write_text(payload+"\n")
+                (site/"index.html").write_text(template.replace("__LAB_DATA__", payload))
+            # Platform math roundoff is allowed in FK, never in recorded angles.
+            data["runs"][1]["frames"][120]["measured_pose"][4][0] += 1e-15
+            write()
+            self.assertEqual(seal(site)["frames"], 600)
+            data["runs"][1]["frames"][120]["measured_pose"][4][0] += .01
+            write()
             with self.assertRaisesRegex(ValueError, "poses or metrics"):
                 seal(site)
 
