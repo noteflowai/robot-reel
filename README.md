@@ -190,12 +190,16 @@ report for independent verification with the 0.8.0+ installed CLI.
 [Compare paired outcomes](https://noteflowai.github.io/robot-reel/stress/#outcomes)
 · [Report method and CLI](docs/stress.md#compare-paired-outcomes).
 
+**[Inspect every failure](https://noteflowai.github.io/robot-reel/stress/#failures).** Filter the recorded classifications and jump to each final motion window, with measured end-effector travel.
+
+[![Recorded failure review: classified episodes, complete denominators and a jump to the final motion window.](docs/failure-review.png)](https://noteflowai.github.io/robot-reel/stress/#failures)
+
 **What the failures were.** A success rate does not say. All 14 failures here end
 at the step limit, and that covers a policy that froze and one still reaching when
 the budget expired. Measured: **every one was still in motion at the cut-off**,
 44.8 mm to 138.6 mm of end-effector travel over the final tenth of its episode,
-against a 1 mm stall threshold. So 160 actions is binding on the reported success
-rate, not a policy that gave up.
+against a 1 mm stall threshold. The recorded budget expired while the arm was moving. This does not show
+that extra actions would complete the task or that the motion made progress.
 
 **Whether a repeat agrees.** The paired groups blame a condition for an outcome
 flip, which only holds if the same seed and condition answer the same twice. The

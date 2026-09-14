@@ -20,7 +20,7 @@ MARKER = '<script id="stress-data" type="application/json">'
 # Only the published experiment uses this release asset. Custom builds link to
 # their own local archive unless the caller explicitly supplies another location.
 PUBLISHED_ARCHIVE_HREF = ("https://github.com/noteflowai/robot-reel/releases/download/"
-                          "v0.8.0/robot-reel-stress-experiment.zip")
+                          "v0.12.0/robot-reel-stress-experiment.zip")
 
 
 def page(data, archive_href="experiment.zip"):
@@ -93,14 +93,13 @@ def payload(document, attempts, traces):
     return {"experiment": document, "attempts": attempts, "traces": traces, "summary": summarize(document, traces, attempts)}
 
 
-def required_files(attempts):
+def required_files(attempts, *, reliability=True):
     names = {
         "index.html", "experiment.json", "attempts.json", "summary.json", "results.csv",
         "telemetry.mcap", "media-checks.json", "NOTICE.txt", "LICENSE", "METHODS.md",
-        # Failure taxonomy and the measured repeat, sealed with everything else so
-        # a claim about reproducibility cannot be edited independently of it.
-        "reliability.json",
     }
+    if reliability:
+        names.add("reliability.json")
     for attempt in attempts:
         if attempt["status"] == "completed":
             names.update(f'{attempt["directory"]}/{name}' for name in ("trace.json", "run-manifest.json", *MEDIA))
@@ -110,8 +109,11 @@ def required_files(attempts):
 def verify_site(directory):
     directory = Path(directory)
     document, attempts, traces = load_collection(directory)
-    expected = required_files(attempts)
     manifest = json.loads((directory/"manifest.json").read_text())
+    # Releases through v0.11 used the same schema before taxonomy was added.
+    # Verify their original exact inventory; new packs also seal/recompute it.
+    has_reliability = "reliability.json" in manifest.get("files", {})
+    expected = required_files(attempts, reliability=has_reliability)
     if manifest.get("schema") != SCHEMA or set(manifest.get("files", {})) != expected:
         raise ValueError("Incomplete experiment manifest")
     for name, digest in manifest["files"].items():
@@ -123,7 +125,7 @@ def verify_site(directory):
         raise ValueError("Published rates differ from all planned trials")
     if (directory/"results.csv").read_text() != csv_text(traces):
         raise ValueError("CSV differs from recorded results")
-    if json.loads((directory/"reliability.json").read_text()) != taxonomy(
+    if has_reliability and json.loads((directory/"reliability.json").read_text()) != taxonomy(
         {t["stress"]["trial_id"]: t for t in traces}
     ):
         raise ValueError("Published failure taxonomy differs from the recorded traces")

@@ -51,8 +51,8 @@ UI filter never removes pairs from the report. “Not completed” combines
 
 A success rate does not say what a failure was. All fourteen failures here end at
 the step limit, and that label covers two different things: a policy that stopped,
-and a policy still reaching when the budget expired. They call for opposite
-responses.
+and an arm still moving when the budget expired. This measurement describes
+the recorded motion; it does not identify which intervention would fix the task.
 
 ```bash
 python3 -m robot_reel.cli stress docs/stress --reliability
@@ -61,9 +61,9 @@ python3 -m robot_reel.cli stress docs/stress --reliability
 Measured over the published collection, **every one of the fourteen failures was
 still in motion at the cut-off**; none had stalled. End-effector travel over the
 final tenth of each episode ranges from 44.8 mm to 138.6 mm, against a stall
-threshold of 1 mm chosen to sit far below anything a moving arm produces. So the
-step limit of 160 actions is binding on the reported success rate rather than the
-policy having given up, and raising it would be expected to change that rate.
+threshold of 1 mm. The 160-action budget expired while motion continued.
+That does not establish progress toward the goal or that a larger budget would
+change the success rate; either conclusion would require a new controlled run.
 
 Failures also wander further to end up no further along: median path-to-
 displacement ratio 3.17 against 1.92 for successes. The ranges overlap, so that
@@ -383,3 +383,9 @@ the ordinary imageio-ffmpeg/Pillow dependencies. Neither check reruns a policy.
 
 See the included media notice for third-party attribution. Model weights and
 upstream simulation meshes are not redistributed in the public experiment.
+
+## Inspect final motion and retain legacy packs
+
+Stress Lab now groups the recorded outcomes and lets a reviewer jump to the final tenth of samples of any selected episode. It displays the exact sample window and end-effector path length, with a stated 1 mm threshold. Movement alone cannot establish progress or the effect of a larger action budget. The full matrix, denominators and attempt ledger remain available.
+
+The verifier accepts the original exact inventory of releases through v0.11.0, which predated `reliability.json`. New exports include the derived taxonomy and independently recompute it. A missing consumed frame, or absent camera hashes in both runs, cannot count as identical policy input.

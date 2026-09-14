@@ -38,6 +38,14 @@ Watch a fresh policy rollout in every condition, then inspect where its behavior
 <p class="note">“Not completed” includes step limits and terminated runs; execution errors remain in the attempt ledger. Groups use the complete set of paired seeds. These are observed outcomes on one task, not a significance test or a general robustness score.</p>
 <details><summary>Check an exported report independently</summary><p class="note">With Robot Reel 0.8.0+ installed: <code>robot-reel stress stress-lab --paired-report paired-outcomes.json</code>. Replace <code>stress-lab</code> with your extracted experiment folder. The command checks the full experiment before comparing every group and count. From a source checkout, use <code>python3 -m robot_reel.cli stress docs/stress --paired-report paired-outcomes.json</code>.</p></details>
 </section>
+<section class="outcome-lens" id="failures" aria-labelledby="failures-title">
+<div class="toolbar"><h2 id="failures-title">What happened at the cut-off?</h2><label>Inspect recorded outcomes <select id="failure-kind" aria-label="Failure classification"></select></label></div>
+<p id="failure-summary" class="note"></p>
+<div id="failure-trials" class="outcome-seeds" aria-label="Trials in this classification"></div>
+<p id="failure-count" class="status" role="status"></p>
+<article class="telemetry"><h3>Selected episode</h3><p id="failure-detail"></p><div class="downloads"><button id="failure-tail" type="button">Inspect final motion window</button><a href="reliability.json" download>Complete classification JSON ↓</a></div></article>
+<p class="note">Motion is measured over the final tenth of recorded samples, with a 1 mm stall threshold. It does not establish task progress, the cause of failure, or success with a larger action budget. Filtering keeps the experiment totals and attempt ledger intact.</p>
+</section>
 <div class="experiment">
 <aside class="matrix"><h2>All trials. No highlights filter.</h2><p>Select any seed and condition.</p>
 <div class="grid" id="matrix" aria-label="Select a recorded trial"></div>
@@ -99,6 +107,34 @@ const videos=[$('left-video'),$('right-video')];
 let pair=[],master=null,distances=[],peakFrame=0;
 let outcomeFilter='all',outcomeCondition=condition==='reference'?'dim':condition;
 function element(tag,text,className){const el=document.createElement(tag);el.textContent=text;if(className)el.className=className;return el;}
+const failureLabels={success:'Success',step_limit_in_motion:'Step limit · still moving',step_limit_stalled:'Step limit · below motion threshold',terminated:'Terminated'};
+const failureRuns=new Map(data.traces.map(t=>{
+  const points=t.frames.map(f=>f.state.slice(0,3)),start=points.length-Math.max(2,Math.floor(points.length/10));
+  let travel=0;for(let i=start+1;i<points.length;i++)travel+=Math.hypot(...points[i].map((v,j)=>v-points[i-1][j]));
+  const kind=t.result.outcome==='step_limit'?(travel<.001?'step_limit_stalled':'step_limit_in_motion'):t.result.outcome;
+  return [t.stress.trial_id,{kind,travel,start}];
+}));
+for(const kind of ['all',...Object.keys(failureLabels)]){
+  const count=kind==='all'?failureRuns.size:[...failureRuns.values()].filter(r=>r.kind===kind).length;
+  const option=element('option',`${kind==='all'?'All completed trials':failureLabels[kind]} · ${count}`);option.value=kind;$('failure-kind').append(option);
+}
+$('failure-kind').value=[...failureRuns.values()].some(r=>r.kind==='step_limit_in_motion')?'step_limit_in_motion':'all';
+$('failure-summary').textContent=`${data.summary.completed_trials} recorded trials / ${data.summary.planned_trials} planned. Select a trial to inspect its final motion window alongside the paired reference.`;
+function renderFailures(){
+  const kind=$('failure-kind').value,box=$('failure-trials');box.replaceChildren();
+  for(const t of data.traces){
+    const run=failureRuns.get(t.stress.trial_id);if(kind!=='all'&&run.kind!==kind)continue;
+    const button=element('button',`Seed ${t.seed} · ${label(t.stress.condition)}`);button.type='button';
+    button.dataset.trial=t.stress.trial_id;button.setAttribute('aria-pressed',String(seed===t.seed&&condition===t.stress.condition));
+    button.onclick=()=>{seed=t.seed;condition=t.stress.condition;frame=run.start;loadPair();document.querySelector('.workbench').scrollIntoView({block:'start'});$('play').focus({preventScroll:true});};
+    box.append(button);
+  }
+  $('failure-count').textContent=`${box.childElementCount} of ${failureRuns.size} recorded trials in this view.${box.childElementCount?'':' No recorded trial matches this classification.'}`;
+  const selected=get(seed,condition),run=failureRuns.get(selected.stress.trial_id);
+  $('failure-detail').textContent=`${selected.stress.trial_id} · ${failureLabels[run.kind]||run.kind}. ${(run.travel*1000).toFixed(1)} mm of end-effector travel across the last ${selected.frames.length-run.start} samples (${run.start}–${selected.frames.length-1}).`;
+}
+$('failure-kind').onchange=renderFailures;
+$('failure-tail').onclick=()=>{selectFrame(failureRuns.get(get(seed,condition).stress.trial_id).start,'Inspecting the recorded final motion window.');document.querySelector('.workbench').scrollIntoView({block:'start'});$('play').focus({preventScroll:true});};
 const outcomeLabels={both_success:'Success → success',lost_success:'Success → not completed',gained_success:'Not completed → success',neither_success:'Neither completed'};
 function pairedOutcomes(){
   return {
@@ -241,7 +277,7 @@ function loadPair(){
   const curve=distances.map((v,n)=>`${n?'L':'M'}${n/(distances.length-1)*720},${70-v/high*66}`).join(' ');
   $('distance-line').setAttribute('d',curve);$('distance-area').setAttribute('d',curve+' L720,72 L0,72 Z');
   $('distance-caption').textContent=`Peak ${(distances[peakFrame]*100).toFixed(1)} cm at sample ${peakFrame} · ${distances.length} shared observations. Measured trajectory difference, not a task-error or accuracy score.`;
-  master=videos[end(pair[0])>=end(pair[1])?0:1];render();renderOutcomeLens();
+  master=videos[end(pair[0])>=end(pair[1])?0:1];render();renderOutcomeLens();renderFailures();
 }
 function selectFrame(n,message){pause(message);frame=n;render();}
 function tick(){

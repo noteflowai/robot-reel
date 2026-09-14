@@ -120,6 +120,23 @@ class Reproducibility(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "at least one trial"):
             reproducibility({}, {}, 10)
 
+    def test_missing_consumed_frames_or_hashes_cannot_report_identical_inputs(self):
+        reference = {
+            "result": {"outcome": "success", "actions": 20},
+            "frames": [frame(i, [i * .01, 0, 0], action=[0.0] * 7) for i in range(21)],
+        }
+        truncated = copy.deepcopy(reference)
+        truncated["frames"] = truncated["frames"][:10]
+        self.assertFalse(compare_run(reference, truncated, 10)["identical_input_renders"])
+        no_hashes = copy.deepcopy(reference)
+        for row in no_hashes["frames"]:
+            row.pop("raw_camera_sha256")
+        self.assertFalse(compare_run(no_hashes, no_hashes, 10)["identical_input_renders"])
+        no_inputs = copy.deepcopy(reference)
+        for row in no_inputs["frames"]:
+            row["action"] = None
+        self.assertFalse(compare_run(no_inputs, no_inputs, 10)["identical_input_renders"])
+
 
 if __name__ == "__main__":
     unittest.main()

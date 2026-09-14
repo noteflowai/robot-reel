@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+## 0.12.0 — 2026-09-14
+
+- Inspect failure classifications in Stress Lab and jump to each recorded final motion window without dropping experiment totals. Show measured travel in millimetres and keep causal limits explicit.
+- Accept original released stress packs that predate `reliability.json`; new packs still seal and independently recompute it.
+- Reject identical-input claims when a repeat lacks consumed frames or both records lack camera hashes.
+
+- Say what a failure was, not only that it happened: split step-limit failures by whether the arm was still moving at the cut-off. All 14 recorded failures were still in motion, under the stated motion threshold; continued movement does not establish progress or success with a larger action budget.
+- Measure whether a repeat of the identical plan agrees, on the same L40S, at every level: 30/30 outcomes, action counts, bitwise physics states and actions, and 360/360 renders on the frames a policy call consumed. Report renders on consumed frames apart from recorded-only frames, because only the former can change an outcome. One recorded-only frame of 3,195 differed and did not propagate.
+- Seal the failure taxonomy inside the experiment pack and recompute it on verification, rather than only checking its hash. Keep the reproducibility aggregate beside the pack, since it is a property of two collections and belongs to neither.
+
+- Verify draft assets against local checksums and GitHub SHA-256 digests, retry
+  missing uploads individually, and retain uploads whose response was lost.
+  Preserve existing public releases and drafts; document recovery using the
+  original tested CI artifacts. Record the completed 0.10.0 publication.
+
 ## 0.11.0 — 2026-09-14
 
 - Add Scene Lab: CC0 captured geometry, 25,000 mesh-derived surface Gaussians, separate collision heightfield, two actual L40S OptiX renders, bounded edit recipes and independent native Blender readback.
@@ -9,16 +26,6 @@
 - Link all 27 cross-project skill trials from the homepage and Hugging Face Space; improve mobile layouts, video seeking and lazy Gaussian loading.
 
 
-## Unreleased
-
-- Say what a failure was, not only that it happened: split step-limit failures by whether the arm was still moving at the cut-off. All 14 recorded failures were still in motion, so the 160-action budget is binding on the reported success rate rather than the policy having given up.
-- Measure whether a repeat of the identical plan agrees, on the same L40S, at every level: 30/30 outcomes, action counts, bitwise physics states and actions, and 360/360 renders on the frames a policy call consumed. Report renders on consumed frames apart from recorded-only frames, because only the former can change an outcome. One recorded-only frame of 3,195 differed and did not propagate.
-- Seal the failure taxonomy inside the experiment pack and recompute it on verification, rather than only checking its hash. Keep the reproducibility aggregate beside the pack, since it is a property of two collections and belongs to neither.
-
-- Verify draft assets against local checksums and GitHub SHA-256 digests, retry
-  missing uploads individually, and retain uploads whose response was lost.
-  Preserve existing public releases and drafts; document recovery using the
-  original tested CI artifacts. Record the completed 0.10.0 publication.
 
 ## 0.10.0 — One launch, six recorded futures
 
