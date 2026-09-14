@@ -136,3 +136,36 @@ independent verifier; an altered angle was rejected. This checks the protocol
 and deterministic facts, not LLM reasoning. The maintained HF introduction
 includes the workflow; reuse the existing thread rather than opening another
 editorial submission.
+
+## Release 0.9.0 · offline Microduck handoffs
+
+[PR #45](https://github.com/noteflowai/robot-reel/pull/45) shipped
+`robot-reel microduck-review` and immediate telemetry synchronization on pause.
+The [0.9.0 release](https://github.com/noteflowai/robot-reel/releases/tag/v0.9.0)
+is public at source commit `839b256ab6d4c8166f46af47e9bfea3c1afb0614`.
+All [release checks](https://github.com/noteflowai/robot-reel/actions/runs/34811275025)
+passed, including installed-package, native Rerun/Newton, browser and non-root
+container verification. Standard-library tests passed with 171 cases and nine
+optional-runtime skips; those runtimes have separate CI jobs.
+
+All twelve public release files were downloaded anonymously; their sizes and
+complete SHA256SUMS inventory matched. The public wheel checked the public
+Microduck ZIP and frame JSON outside the checkout, with no tools on PATH, and
+rejected a changed measured angle. Key digests:
+
+| Asset | SHA-256 |
+| --- | --- |
+| Wheel | `a0353ca263d8395d4fd414a9d0208ff0b8b6fcb737e46674063acb08e3032293` |
+| Microduck experiment | `5064fb93ac72b6fbccdb8c82c6e9f8387aa1b604aa0f73c468dfaf6b58cc3e7a` |
+| SHA256SUMS | `ace187cfcd40820754e51008a57da5ec3011c90e7ac0d9d83bf75908852c0f71` |
+
+The existing weekly and HelloGitHub submissions, HF introduction and collection
+note now describe the installed verifier and all three released offline labs.
+Exact public readbacks matched. Both editorial submissions remain open with
+no comments; no duplicate issue or bump was created. Source recordings and
+upstream media terms remain unchanged.
+
+The homepage download section points to the three 0.9.0 archives, and the Space
+links the offline guide. [Customer wording](customer-brief.zh-CN.md) includes a
+combined introduction to Robot Reel, Skills Anywhere 0.7 and EvalArc 0.7, with
+each verification boundary stated.

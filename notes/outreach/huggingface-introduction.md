@@ -55,3 +55,11 @@ Start with the Space, then inspect the actual SmolVLA policy and LIBERO asset sn
 [Open paired outcomes](https://glayguo-robot-reel.static.hf.space/stress/index.html#outcomes). Robot Reel **0.8.0** now includes this workflow in the installed CLI and complete offline ZIP, with a matching, checksummed paired-outcome JSON. Cloth Lab also gains portable sample import and 1080p figures in the release. Both ZIPs are exported by the installed wheel and tested without network access at desktop and mobile sizes. [Download and verify](https://github.com/noteflowai/robot-reel/releases/tag/v0.8.0). These are descriptive results from one task, not a significance test or general robustness claim.
 
 Maintainer disclosure: Robot Reel is our independent project. This update was written with AI assistance.
+
+### Hand off a frame with Robot Reel 0.9
+
+Download the Microduck experiment ZIP and matching frame JSON from the new release. The installed `robot-reel microduck-review` command verifies the extracted lab and every exported frame fact without a source checkout, GPU or simulation. It reconstructs derived poses and metrics from the two bundled raw recordings. Pause now immediately aligns joint telemetry with the video's clock, including when rendering is throttled.
+
+[Download 0.9.0](https://github.com/noteflowai/robot-reel/releases/tag/v0.9.0) · [Offline workflow](https://github.com/noteflowai/robot-reel/blob/main/docs/offline-lab.md)
+
+The release carries Microduck, Cloth and Stress offline labs with checksums. These are recorded experiments; file consistency does not authenticate a producer or establish hardware performance. Original recorded motion is unchanged.

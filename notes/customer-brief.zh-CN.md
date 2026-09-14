@@ -4,6 +4,10 @@
 
 > Robot Reel 是面向物理 AI 创新场景的开源交互实验台：在 Hugging Face 直接点选 Microduck 的三维关节，对照策略目标与实际仿真响应；复盘 SmolVLA 的 30 次闭环实验，旋转查看 GPU 布料形变与 Newton 三维时间雕塑，并将记录带入 Blender 继续创作。无需安装或自备 GPU，即可逐帧查数据、分享视角、导出图片及完整离线实验。团队还能交换帧 JSON，与原始记录逐项核对后恢复同一时刻，让具身智能概念验证、技术交流与三维内容制作有直观效果，也有可复核依据。
 
+本轮新增：0.9.0 安装包可以直接复核解压后的 Microduck 实验与帧 JSON，无需克隆源码、
+GPU 或仿真。收到某一帧后，可逐项核对关节实测值、目标值、时间及源记录指纹；
+暂停播放时读数立即与视频对齐。发行版同时提供三组完整离线实验和校验和。
+
 直接体验：https://huggingface.co/spaces/glayguo/robot-reel
 
 资源合集：https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0
@@ -93,3 +97,16 @@ Microduck 动作实验室保留两组原始步行录像、8,400 个关节样本�
 Microduck 的帧 JSON，通过 MCP 加载专门的复盘技能，让 Agent 的执行工具先调用
 只读校验器，再整理关节角度、目标和时间映射。教程提供真实样例；已验证技能
 搜索、加载、资源读取和篡改检测，不将这些检查包装成所有模型的推理能力保证。
+
+## 三个项目一起介绍
+
+> NoteFlow AI 提供一组可直接体验、可带回团队验证的开源创新工具：Robot Reel 将具身智能和 GPU 物理实验变成可逐帧检查的三维回放，支持 Microduck、SmolVLA、Blender 与 OpenUSD 场景；Skills Anywhere 让不同 Agent 共享技能，并按文件指纹加载已审核的指令；EvalArc 保留评测原始证据，让接收方在不执行候选程序的情况下独立复核报告。它们适合 PAI 创新展示、具身智能实验复盘、团队技能复用和评测验收概念验证，从直观演示进一步走向可检查的文件交付。
+
+三个在线入口：
+
+- Robot Reel：https://huggingface.co/spaces/glayguo/robot-reel
+- Skills Anywhere：https://huggingface.co/spaces/glayguo/dsh-skills-anywhere
+- EvalArc：https://huggingface.co/spaces/glayguo/evalarc
+
+这是三项互补的开源工具，不声称已完成某厂商 PAI 平台集成。回放来自仿真录制；
+技能哈希仅覆盖 SKILL.md，评测复核仅验证记录一致性，具体边界均附有说明。

@@ -12,9 +12,12 @@ https://github.com/noteflowai/robot-reel
 
 ### 项目描述
 
-Robot Reel 将机器人策略和物理仿真的录制结果做成可交互网页。无需安装即可对照机器人动作、旋转布料模型、探索双摆轨迹，并下载源数据、校验清单和离线实验包。支持将已录制的运动通过 OpenUSD 带入 Blender，适合具身智能教学、实验复盘与技术演示。代码采用 Apache-2.0，第三方模型和素材遵循上游许可。
+Robot Reel 将机器人策略与物理仿真录制做成交互网页。可逐帧对照动作、旋转 GPU 布料模型、探索 Microduck 关节与双摆轨迹，并下载原始数据和离线实验包。新版安装包可独立复核 Microduck 帧记录，无需源码目录或 GPU；录制的运动可经 OpenUSD 带入 Blender。适合具身智能教学、实验复盘和技术演示，第三方素材保留上游许可。
 
 ### 亮点
+
+- **0.9.0 交付更新**：新增安装包命令 `robot-reel microduck-review`，收到离线 ZIP 和帧 JSON 后即可重算源记录与逐帧事实，无需克隆仓库或启动仿真。暂停时立即同步视频与关节读数；发行包附带 Microduck、Cloth、Stress 三组离线实验及校验和。只验证记录一致性，不认证发布者或真实机器人性能。
+  使用说明：https://github.com/noteflowai/robot-reel/releases/tag/v0.9.0
 
 - 不只提供演示视频：30 次 SmolVLA 单任务闭环仿真的全部结果都可检查，
   包括失败，支持双相机对照和轨迹差异定位。

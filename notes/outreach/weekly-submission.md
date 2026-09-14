@@ -33,3 +33,7 @@
 新增 **Microduck 动作实验室**：选择 14 个关节中的任意一个，旋转三维结构、叠加策略目标、点击误差热图，与两组原始录像同步对照。保留 8,400 个实测关节样本，支持指定帧分享、JSON/CSV 导出和完整离线包。它参考 Microduck Anatomy 的交互思路做原创实现；模型衍生结构与录像保留上游非商业、相同方式共享条款。三维结构固定机身坐标，实验使用 PD 执行器近似仿真，不推断真实硬件能力。
 
 体验：https://noteflowai.github.io/robot-reel/microduck-lab/
+
+**0.9.0 交付更新**：新增安装包命令 `robot-reel microduck-review`，收到离线 ZIP 和帧 JSON 后即可重算源记录与逐帧事实，无需克隆仓库或启动仿真。暂停时立即同步视频与关节读数；发行包附带 Microduck、Cloth、Stress 三组离线实验及校验和。只验证记录一致性，不认证发布者或真实机器人性能。
+
+使用说明：https://github.com/noteflowai/robot-reel/releases/tag/v0.9.0
