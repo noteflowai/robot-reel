@@ -1,13 +1,14 @@
 # Hugging Face: an interactive entry point for Robot Reel
 
 The native Space is **`glayguo/robot-reel`**. It hosts the complete Cloth,
-Stress and Butterfly browser experiments and their original evidence.
+Stress, Butterfly and Microduck browser experiments and their original evidence.
 The remaining project demos are linked from the Space.
 
 The Space uses Hugging Face's **static HTML SDK**. Its visitors replay saved
 data; it does not run a model, simulator or GPU service. The Space card names
-the actual SmolVLA model and LIBERO asset snapshot used to record the policy
-experiment. All upstream media notices travel with the recordings.
+the actual SmolVLA and Microduck policies and LIBERO asset snapshot used to record
+the experiments. All upstream media notices travel with the recordings,
+including Microduck's noncommercial/share-alike model and footage terms.
 
 ## Rebuild locally
 
@@ -22,12 +23,14 @@ python3 -m http.server 8080 --directory artifacts/huggingface-space
 For an uncommitted local preview, add `--allow-dirty` to the build command.
 Preview bundles cannot be published. Choose an empty destination each time.
 
-The builder copies only Git-tracked files from the three lab directories and
+The builder copies only Git-tracked files from the four lab directories and
 explicitly listed public assets. It adapts navigation, refreshes affected
 manifests and copied archives, and revalidates the source data before publishing
 the output directory. `space-manifest.json` records the source commit, original
 input hashes and every output file's hash. Unrelated workspace files, caches,
 credentials and model weights are not part of the upload.
+The bundle is tested against a 128 MiB budget, including both complete Microduck
+videos and its independent offline ZIP.
 
 The browser check uses a cross-origin iframe with clipboard access denied,
 at desktop and mobile widths. It checks native media, source sample links,
@@ -62,7 +65,7 @@ cannot publish. Obsolete main commits are skipped.
 
 After uploading, the workflow reads the Space back **without authentication**.
 It checks every artifact file's Git blob or LFS content ID at the uploaded Hub
-commit, then checks the publicly served manifest, homepage, three viewers and
+commit, then checks the publicly served manifest, homepage, four viewers and
 thumbnail against the same artifact. The static host inserts a creator-ID
 assignment at the start of `<head>`; the HTML comparison recognizes only that
 exact metadata shape and compares every remaining byte. Arbitrary injected
@@ -109,7 +112,9 @@ Published entry points are recorded in
 
 Keep the experiment scope visible: 30 policy trials are one controlled task,
 not an official LIBERO result; cloth properties are not calibrated real fabric;
-the Butterfly sculpture's depth is time. A useful launch asks for missing
+the Butterfly sculpture's depth is time; Microduck uses a PD fallback and a
+body-fixed schematic, not reconstructed root attitude or hardware telemetry.
+A useful launch asks for missing
 telemetry or reproduction feedback rather than implying a new foundation model.
 
 Official references checked on 2026-09-13:

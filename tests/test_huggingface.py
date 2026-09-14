@@ -23,7 +23,7 @@ class HuggingFaceSpaceTests(unittest.TestCase):
 
     def test_package_preserves_original_evidence_and_includes_no_private_workspace(self):
         manifest = verify(self.site)
-        self.assertLess(self.result["bytes"], 100*1024*1024)
+        self.assertLess(self.result["bytes"], 128*1024*1024)
         self.assertNotIn(".git", {p.name for p in self.site.iterdir()})
         self.assertTrue(all(path.startswith(tuple(f"docs/{lab}/" for lab in LABS))
                             or path.startswith("huggingface/") or path in

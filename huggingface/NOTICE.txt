@@ -1,0 +1,19 @@
+Robot Reel / four recorded Physical AI labs
+
+The implementation is Apache-2.0. This does not relicense third-party robot
+models, model-derived geometry or depicted assets.
+
+The thumbnail combines the four actual lab posters. Source mappings and
+SHA-256 hashes are in thumbnail.json. It contains no AI-generated pictures.
+
+Microduck geometry, derived schematic and depicted footage retain Pollen
+Robotics' upstream Creative Commons BY-SA-NC terms (version unspecified).
+Keep microduck-lab/MICRODUCK-MEDIA-NOTICE.txt with these assets. This applies
+to the Microduck panel of the composed thumbnail as well.
+
+SmolVLA/LIBERO depicted assets retain their upstream terms; see stress/NOTICE.txt.
+Procedural cloth and pendulum scenes are Apache-2.0; see each lab's NOTICE.txt.
+
+Microduck interaction inspiration: mishig/microduck-anatomy on Hugging Face.
+No code or assets were copied from that Space. The lab is an independent
+implementation and implies no endorsement by any upstream project.

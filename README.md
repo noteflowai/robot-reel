@@ -18,8 +18,8 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI status"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="Latest release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="Code license: Apache-2.0"></a>
-  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-13%20replays-ffca85" alt="Live demos: 13 replays"></a>
-  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-3%20interactive%20labs-ffd21e" alt="Hugging Face: three interactive labs"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-14%20replays-ffca85" alt="Live demos: 14 replays"></a>
+  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-4%20interactive%20labs-ffd21e" alt="Hugging Face: four interactive labs"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -38,7 +38,7 @@
 
 **[Try Robot Reel on Hugging Face](https://huggingface.co/spaces/glayguo/robot-reel)**:
 compare 30 SmolVLA trials, orbit recorded GPU cloth, and explore twelve Newton
-worlds in one Space. No installation or model account needed. The Space hosts
+worlds and both Microduck walks in one Space. No installation or model account needed. The Space hosts
 the original recordings; [build and publication details](docs/huggingface.md)
 include their source commit and checksums.
 [Model & data collection](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0) · [Feedback & discussion](https://huggingface.co/spaces/glayguo/robot-reel/discussions/1).
@@ -70,7 +70,27 @@ Or use the [verified installation packages or non-root Docker image](docs/distri
 Recording new runs needs the [full runtime](docs/recording.md); the browser demos need nothing.
 
 
-## New / Same sheet. Three ways to fall.
+## New / Inside a learned Microduck walk.
+
+**Microduck Motion Lab.** Orbit the 3D joint schematic, overlay policy targets,
+click a 14-joint residual heatmap, and follow the original video. Switch between
+**0.3 / 0.5 m/s speed commands** and inspect all **8,400 measured joint samples**.
+Share a frame, export JSON/CSV, or take both complete walks offline.
+
+<a href="https://noteflowai.github.io/robot-reel/microduck-lab/"><img src="docs/microduck-lab/poster.png" width="100%" alt="Microduck's recorded walk beside an orbitable joint schematic and exact measured versus target curves."></a>
+
+**[Enter the Microduck Motion Lab ↗](https://noteflowai.github.io/robot-reel/microduck-lab/)** ·
+[Both recordings and offline viewer](https://noteflowai.github.io/robot-reel/microduck-lab/experiment.zip) ·
+[Methods and checks](docs/microduck-lab.md) ·
+[Interaction inspiration: mishig's Microduck Anatomy](https://huggingface.co/spaces/mishig/microduck-anatomy)
+
+All **18,000 body transforms** were checked against MuJoCo. The schematic fixes
+the floating root because the original recordings did not save root orientation;
+it does not infer foot contact. This is **simulation with PD-actuator fallback**,
+not hardware. Model-derived geometry and footage retain upstream noncommercial/
+share-alike terms. Original implementation; no code or assets copied from the reference Space.
+
+## Same sheet. Three ways to fall.
 
 **Cloth Lab.** Release three independent Newton cloth simulations on **NVIDIA
 L40S**, changing only the bending coefficient. Orbit the deforming meshes,

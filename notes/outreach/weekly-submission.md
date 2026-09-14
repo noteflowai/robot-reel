@@ -3,9 +3,9 @@
 
 体验：https://huggingface.co/spaces/glayguo/robot-reel
 
-![Robot Reel 的三个交互实验](https://raw.githubusercontent.com/noteflowai/robot-reel/858886243c100f866be773d2c32eb13c2e2da917/huggingface/thumbnail.png)
+![Robot Reel 的四个交互实验](https://huggingface.co/spaces/glayguo/robot-reel/resolve/main/thumbnail.png)
 
-可以从三个场景开始：
+可以从四个场景开始：
 
 - **策略失败回放**：SmolVLA 在同一个 LIBERO 任务中，按十组配对初始状态、
   三种光照/机位条件完成 30 次闭环仿真。成功和失败全部保留，支持双相机对照、
@@ -28,3 +28,8 @@
 遵循各自上游许可。
 
 交互功能更新：Stress Lab 新增完整配对结果分组。相机条件净增两次成功，实际包含三次改善和一次退步；可点击对应种子查看录像，导出完整报告，并用安装后的 CLI 独立核验。0.8.0 正式发行包已包含配对分析、布料样本导入与高清图导出，同时提供完整配对 JSON 和校验和；两个离线包均经过实际安装程序导出及桌面、手机断网检查。
+
+
+新增 **Microduck 动作实验室**：选择 14 个关节中的任意一个，旋转三维结构、叠加策略目标、点击误差热图，与两组原始录像同步对照。保留 8,400 个实测关节样本，支持指定帧分享、JSON/CSV 导出和完整离线包。它参考 Microduck Anatomy 的交互思路做原创实现；模型衍生结构与录像保留上游非商业、相同方式共享条款。三维结构固定机身坐标，实验使用 PD 执行器近似仿真，不推断真实硬件能力。
+
+体验：https://noteflowai.github.io/robot-reel/microduck-lab/

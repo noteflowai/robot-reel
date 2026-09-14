@@ -34,7 +34,7 @@ async function check(directory){
    await page.goto(`http://localhost:${server.address().port}/embed`);
    const frame=page.frameLocator('iframe');
    await frame.locator('#lab-cloth').waitFor();
-   assert.equal(await frame.locator('.card').count(),3);
+   assert.equal(await frame.locator('.card').count(),4);
    const homeText=await frame.locator('body').innerText();
    assert.ok(homeText.includes('0.05° apart.'));
    assert.ok(homeText.includes('中文'));
@@ -42,7 +42,7 @@ async function check(directory){
    const home=page.frames().find(f=>f.url().includes('127.0.0.1'));
    assert.equal(await home.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    assert.equal(await frame.locator('video').evaluate(v=>v.paused&&v.preload==='none'),true);
-   for(const [lab,fragment] of [['cloth','frame=61&case=1&view=overlay&yaw=-0.9'],['stress','seed=9&condition=dim&frame=61&camera=wrist'],['chaos','frame=61&world=4&view=overlay']]){
+   for(const [lab,fragment] of [['cloth','frame=61&case=1&view=overlay&yaw=-0.9'],['stress','seed=9&condition=dim&frame=61&camera=wrist'],['chaos','frame=61&world=4&view=overlay'],['microduck-lab','run=right&frame=61&joint=3']]){
     const inside=page.frames().find(f=>f.url().includes('127.0.0.1'));
     await inside.goto(`http://127.0.0.1:${server.address().port}/${lab}/index.html#${fragment}`);
     if(lab==='stress')await inside.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=2&&!v.seeking));
@@ -72,10 +72,20 @@ async function check(directory){
      assert.equal(report.comparisons.length,2);
      assert.equal(report.scope.completed_trials,30);
     }
+    if(lab==='microduck-lab'){
+     await inside.waitForFunction(()=>{const v=document.querySelector('video');return v.readyState>=2&&!v.seeking;});
+     assert.equal(await frame.locator('#counter').textContent(),'Frame 61 / 299');
+     const pending=page.waitForEvent('download');await frame.locator('#sample-json').click();
+     const sample=JSON.parse(await readFile(await (await pending).path(),'utf8'));
+     assert.equal(sample.frame,61);assert.equal(sample.joint,'left_knee');assert.equal(sample.run,'right');
+     await frame.locator('#run').selectOption('left');
+     await inside.waitForFunction(()=>{const v=document.querySelector('video');return v.readyState>=2&&!v.seeking&&v.currentSrc.endsWith('left.mp4');});
+     assert.equal(await frame.locator('#counter').textContent(),'Frame 61 / 299');
+    }
    }
    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(external,[]);
-   rows.push({width,labs:3,cross_origin_embed:true,clipboard_denied:true,share_links:true,
-    cloth_figure_and_sample:true,missing_assets:0,external_runtime_requests:0});
+   rows.push({width,labs:4,cross_origin_embed:true,clipboard_denied:true,share_links:true,
+    cloth_figure_and_sample:true,microduck_video_and_frame_json:true,missing_assets:0,external_runtime_requests:0});
    await page.close();
   }
  }finally{await browser.close();await new Promise(r=>server.close(r));}

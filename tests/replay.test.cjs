@@ -10,6 +10,82 @@ const {chromium} = require('playwright');
 const {spawnSync} = require('node:child_process');
 const {createHash} = require('node:crypto');
 let browser, server, base;
+test('Microduck motion links original angles, clocks and videos at desktop/mobile widths, online and offline',async()=>{
+  const source=JSON.parse(await readFile('docs/microduck-lab/right-trace.json','utf8'));
+  const left=JSON.parse(await readFile('docs/microduck-lab/left-trace.json','utf8'));
+  for(const width of [1440,390]){
+    const page=await browser.newPage({viewport:{width,height:1050},reducedMotion:'reduce'}),errors=[],external=[];
+    page.on('pageerror',e=>errors.push(e.message));
+    await page.route(/^https?:/,route=>route.request().url().startsWith(base)?route.continue():(external.push(route.request().url()),route.abort()));
+    try{
+      const target=width===390?pathToFileURL(resolve('docs/microduck-lab/index.html')).href:base+'/microduck-lab/';
+      await page.goto(target+'#run=right&frame=120&joint=3');
+      await page.waitForFunction(()=>{const v=document.querySelector('video');return v.readyState>=2&&!v.seeking;});
+      assert.equal(await page.locator('#counter').textContent(),'Frame 120 / 299');
+      assert.equal(await page.locator('#measured').textContent(),source.frames[120].qpos[3].toFixed(3));
+      assert.equal(await page.locator('#target').textContent(),source.frames[120].target[3].toFixed(3));
+      assert.equal(await page.locator('#sample-time').textContent(),source.frames[120].sim_time.toFixed(3)+' s');
+      assert.equal(await page.locator('video').evaluate(v=>Math.floor(v.currentTime*30)),120);
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+      const image=await page.locator('#scene').evaluate(c=>c.toDataURL());
+      await page.locator('#orbit-left').click();
+      assert.notEqual(await page.locator('#scene').evaluate(c=>c.toDataURL()),image);
+      await page.locator('#ghost').click();assert.equal(await page.locator('#ghost').getAttribute('aria-pressed'),'false');
+      await page.locator('#share').click();const url=await page.locator('#share-url').inputValue();
+      const expectedImage=await page.locator('#scene').evaluate(c=>c.toDataURL());
+      await page.goto(url);
+      assert.equal(await page.locator('#scene').evaluate(c=>c.toDataURL()),expectedImage);
+      const pending=page.waitForEvent('download');await page.locator('#sample-json').click();
+      const sample=JSON.parse(await readFile(await (await pending).path(),'utf8'));
+      assert.equal(sample.trace_sha256,createHash('sha256').update(await readFile('docs/microduck-lab/right-trace.json')).digest('hex'));
+      assert.equal(sample.measured_rad,source.frames[120].qpos[3]);
+      assert.equal(sample.target_rad,source.frames[120].target[3]);
+      assert.equal(sample.policy_step,source.frames[120].policy_step);
+      await page.locator('#run').selectOption('left');
+      await page.waitForFunction(()=>{const v=document.querySelector('video');return v.readyState>=2&&!v.seeking&&v.currentSrc.endsWith('left.mp4');});
+      assert.equal(await page.locator('#counter').textContent(),'Frame 120 / 299');
+      assert.equal(await page.locator('#measured').textContent(),left.frames[120].qpos[3].toFixed(3));
+      const csvPending=page.waitForEvent('download');await page.locator('#csv').click();
+      const csv=(await readFile(await (await csvPending).path(),'utf8')).trim().split('\n');
+      assert.equal(csv.length,4201);
+      const row=csv[120*14+3+1].split(',');
+      assert.equal(row[5],'left_knee');assert.equal(Number(row[6]),left.frames[120].qpos[3]);
+      let peak={error:-1,frame:0,joint:0};
+      left.frames.forEach(f=>f.qpos.forEach((q,j)=>{const error=Math.abs(q-f.target[j]);if(error>peak.error)peak={error,frame:f.frame,joint:j};}));
+      await page.locator('#peak').click();
+      assert.equal(await page.locator('#counter').textContent(),`Frame ${peak.frame} / 299`);
+      assert.equal(await page.locator('#joint').inputValue(),String(peak.joint));
+      const map=await page.locator('#heatmap').boundingBox(),offset=map.width<500?111:137;
+      await page.locator('#heatmap').click({position:{x:offset+(map.width-offset-12)*.505,y:12+2.5*(map.height-35)/14}});
+      assert.equal(await page.locator('#joint').inputValue(),'2');
+      const clicked=Number((await page.locator('#counter').textContent()).match(/\d+/)[0]);
+      // On mobile a heatmap pixel covers more than one video frame.
+      assert.ok(clicked>=150&&clicked<=152);
+      await page.locator('#next').click();
+      assert.equal(await page.locator('#counter').textContent(),`Frame ${clicked+1} / 299`);
+      await page.locator('#play').click();
+      await page.waitForFunction(previous=>document.querySelector('#counter').textContent!==previous,`Frame ${clicked+1} / 299`);
+      await page.locator('#play').click();
+      const clock=await page.locator('video').evaluate(v=>Math.floor(v.currentTime*30+1e-5));
+      assert.ok(Math.abs(Number((await page.locator('#counter').textContent()).match(/\d+/)[0])-clock)<=1);
+      assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
+    }finally{await page.close();}
+  }
+});
+test('Microduck invalid view parameters and absent video preserve inspectable source telemetry',async()=>{
+ const page=await browser.newPage({viewport:{width:390,height:1000}}),errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ try{
+  await page.route('**/microduck-lab/*.mp4',route=>route.abort());
+  await page.goto(base+'/microduck-lab/#frame=NaN&joint=-1&yaw=Infinity&pitch=2&run=unknown');
+  assert.equal(await page.locator('#counter').textContent(),'Frame 120 / 299');
+  assert.equal(await page.locator('#joint').inputValue(),'3');
+  await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Video unavailable'));
+  await page.locator('#next').click();
+  assert.equal(await page.locator('#counter').textContent(),'Frame 121 / 299');
+  assert.deepEqual(errors,[]);
+ }finally{await page.close();}
+});
 before(async()=>{
   server = createServer(async(req,res)=>{
     const path = new URL(req.url, 'http://localhost').pathname;
@@ -931,7 +1007,7 @@ test('landing page indexes every published demo and copies the quick start',asyn
   try{
     await page.goto(base+'/');
     const cards=page.locator('.card');
-    assert.equal(await cards.count(),13);
+    assert.equal(await cards.count(),14);
     const hrefs=await cards.evaluateAll(links=>links.map(link=>link.getAttribute('href')));
     for(const href of hrefs){
       assert.ok(existsSync(resolve('docs',href,'index.html')),`${href} has no published page`);
@@ -991,25 +1067,25 @@ test('homepage purpose filters preserve keyboard focus, share links and browser 
     await page.goto(base+'/#demos');
     const policies=page.locator('[data-filter="policies"]');
     await policies.focus();await page.keyboard.press('Enter');
-    assert.deepEqual(await visible(),['compare/microduck/','microduck/','stress/','vla/']);
+    assert.deepEqual(await visible(),['compare/microduck/','microduck-lab/','microduck/','stress/','vla/']);
     assert.equal(await policies.evaluate(el=>el===document.activeElement),true);
     assert.equal(await policies.getAttribute('aria-pressed'),'true');
-    assert.equal(await page.locator('#demo-count').textContent(),'Showing 4 policy demos');
+    assert.equal(await page.locator('#demo-count').textContent(),'Showing 5 policy demos');
     assert.equal(new URL(page.url()).searchParams.get('category'),'policies');
     await page.locator('[data-filter="create"]').click();
     assert.deepEqual(await visible(),['blender/','cloth/','director/','newton/','remix/','studio/']);
     await page.goBack();
     await page.waitForFunction(()=>document.querySelector('[data-filter="policies"]').getAttribute('aria-pressed')==='true');
-    assert.equal((await visible()).length,4);
+    assert.equal((await visible()).length,5);
     await page.goForward();await page.reload();
     assert.equal((await visible()).length,6);
     await page.locator('[data-filter="experiments"]').click();
-    assert.deepEqual(await visible(),['braking/','chaos/','cloth/','compare/braking/','compare/microduck/','newton/','stress/']);
+    assert.deepEqual(await visible(),['braking/','chaos/','cloth/','compare/braking/','compare/microduck/','microduck-lab/','newton/','stress/']);
     await page.locator('[data-filter="all"]').click();
-    assert.equal((await visible()).length,13);
+    assert.equal((await visible()).length,14);
     assert.equal(new URL(page.url()).searchParams.has('category'),false);
     await page.goto(base+'/?category=__proto__#demos');
-    assert.equal((await visible()).length,13);
+    assert.equal((await visible()).length,14);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   }finally{await page.close();}
 });
@@ -1049,7 +1125,7 @@ test('homepage remains navigable without JavaScript and its filters work from fi
     const page=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
     try{
       await page.goto(target);
-      assert.equal(await page.locator('#demo-grid .card:visible').count(),13);
+      assert.equal(await page.locator('#demo-grid .card:visible').count(),14);
       assert.equal(await page.locator('#filters').isVisible(),false);
       assert.equal(await page.locator('#copy').isVisible(),false);
       await page.locator('#tour-inspect').click();
@@ -1061,11 +1137,11 @@ test('homepage remains navigable without JavaScript and its filters work from fi
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   try{
     await page.goto(url+'?category=policies#demos');
-    assert.equal(await page.locator('#demo-grid .card:visible').count(),4);
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),5);
     await page.locator('[data-filter="create"]').click();
     assert.equal(await page.locator('#demo-grid .card:visible').count(),6);
     await page.locator('[data-filter="all"]').click();
-    assert.equal(await page.locator('#demo-grid .card:visible').count(),13);
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),14);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     assert.deepEqual(errors,[]);
   }finally{await page.close();}

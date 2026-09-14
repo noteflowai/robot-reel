@@ -17,9 +17,9 @@ it does not imply an upstream endorsement or change any asset license.
 
 ## Space Community announcement
 
-Title: **Three Physical AI experiments you can replay and inspect**
+Title: **Four Physical AI experiments you can replay and inspect**
 
-Robot Reel is now on Hugging Face: three interactive experiments with the
+Robot Reel is now on Hugging Face: four interactive experiments with the
 recordings that produced the pictures.
 
 - **SmolVLA Stress Lab:** 30 real closed-loop trials on one LIBERO task, across
@@ -32,26 +32,38 @@ recordings that produced the pictures.
 - **Butterfly Lab:** twelve isolated Newton worlds released 0.05° apart,
   arranged into a three-dimensional time sculpture.
 
-All three run directly in this Space from saved data. No live inference,
+- **Microduck Motion Lab:** select one of 14 joints, orbit a body-fixed schematic,
+  overlay policy targets and inspect all 8,400 measured joint samples. Switch
+  between 0.3 / 0.5 m/s command recordings and export source-linked JSON/CSV.
+  Both original videos, complete traces and the viewer download as one offline ZIP.
+
+All four run directly in this Space from saved data. No live inference,
 simulation or model-service account is needed to explore.
 
 The policy recording uses `HuggingFaceVLA/smolvla_libero`, LeRobot and LIBERO;
 the code and all source revisions are credited in the lab. This is a controlled
 diagnostic, not an official benchmark or a real-robot result.
 
+The Microduck lab uses the official ONNX policy with a PD-actuator fallback.
+The schematic fixes root attitude because it was not saved in the recording.
+Model-derived geometry and footage retain upstream noncommercial/share-alike
+terms. Original implementation inspired by [mishig's Microduck Anatomy](https://huggingface.co/spaces/mishig/microduck-anatomy); no code or assets were copied from that Space.
+[Inspect a recorded walk](https://noteflowai.github.io/robot-reel/microduck-lab/).
+
 Try it: https://huggingface.co/spaces/glayguo/robot-reel
 
-Source and all 13 demos: https://github.com/noteflowai/robot-reel
+Source and all 14 demos: https://github.com/noteflowai/robot-reel
 
 **Which recorded policy or simulator output would you like to inspect next?
 What telemetry is missing when you try to explain a failure?**
 
 ## Chinese short post
 
-Robot Reel 已准备好把三个物理 AI 实验带到 Hugging Face：逐帧检查 30 次
+Robot Reel 已准备好把四个物理 AI 实验带到 Hugging Face：逐帧检查 30 次
 SmolVLA 闭环运行，旋转对照 GPU 布料形变，或探索 12 个 Newton 世界如何展开成
 三维时间雕塑。网页托管原始录制，打开即可体验；还能导出附实测指标的图片，
-核验共享样本，并把 OpenUSD 场景带入 Blender。
+核验共享样本，并把 OpenUSD 场景带入 Blender。新增 Microduck 动作实验室，
+可逐关节对照策略目标与实际仿真响应，保留两组原始录像及离线查看器。
 
 欢迎反馈：你希望下一步接入哪一种策略或仿真日志？复盘失败时还缺哪些记录？
 

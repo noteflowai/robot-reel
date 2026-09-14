@@ -1,0 +1,11 @@
+{
+  "mujoco": "3.13.0",
+  "checked_body_transforms": 18000,
+  "max_position_error_m": 4.163336342344337e-17,
+  "max_rotation_matrix_error": 2.220446049250313e-16,
+  "trace_sha256": {
+    "left": "bc43190d4b75915e3010f4a0ca979eb6d08105f4cbbd84a97d3e45e53da38247",
+    "right": "dcc3200bd954bdcd2f2914d609aec30c6e9bcee57a41fe97a600861f18eb0241"
+  },
+  "kinematics_sha256": "950eef938cdaf3dec8b7b5dc3d0c765db4cc7f4742740c8b2647372830a17c2b"
+}

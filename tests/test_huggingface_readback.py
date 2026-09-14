@@ -35,7 +35,7 @@ class HuggingFaceReadbackTests(unittest.TestCase):
         extra = SimpleNamespace(path="maintainer-note.txt", blob_id="outside-the-artifact")
         folder = SimpleNamespace(path="cloth", tree_id="directory")
         report = verify_objects(self.root, self.record, [*self.entries, extra, folder])
-        self.assertEqual(report["verified_files"], 6)
+        self.assertEqual(report["verified_files"], len(LABS)+3)
         self.assertEqual(report["unmanaged_files"], ["maintainer-note.txt"])
         with self.assertRaisesRegex(ValueError, "Missing"):
             verify_objects(self.root, self.record, self.entries[1:])
@@ -67,7 +67,7 @@ class HuggingFaceReadbackTests(unittest.TestCase):
         with patch("scripts.verify_huggingface.urlopen", side_effect=fetch), \
                 patch("scripts.verify_huggingface.time.sleep") as sleep:
             files = verify_live(self.root, "https://demo.static.hf.space", timeout=10)
-        self.assertEqual(len(files), 6)
+        self.assertEqual(len(files), len(LABS)+3)
         self.assertEqual(calls[MANIFEST], 2)
         self.assertEqual(calls["index.html"], 2)
         self.assertEqual(calls["cloth/index.html"], 1)

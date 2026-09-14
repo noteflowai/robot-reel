@@ -1,0 +1,16 @@
+{
+  "schema": "robot-reel-microduck-motion-bundle-1",
+  "sha256": {
+    "index.html": "e5b55297bdd5bd88fb3b0bf5a64a483ec9c7c318789b4a68d763861d8b01aa34",
+    "data.json": "ef6f65e7e42bce70cdb3cb04a29ea7b50744b6a73d12198b094803fa488be444",
+    "kinematics.json": "950eef938cdaf3dec8b7b5dc3d0c765db4cc7f4742740c8b2647372830a17c2b",
+    "kinematics-check.json": "fec0d7a13ab6e592d463126a4505d2f1d0de471e40ea8ade660fcc5d77b0df69",
+    "left-trace.json": "bc43190d4b75915e3010f4a0ca979eb6d08105f4cbbd84a97d3e45e53da38247",
+    "right-trace.json": "dcc3200bd954bdcd2f2914d609aec30c6e9bcee57a41fe97a600861f18eb0241",
+    "left.mp4": "2ebc06ed04546e3631ed006c2c77b9d0df28f83e65694509e6951e98ccbcef2d",
+    "right.mp4": "ad0a602bdc563ba514fc2457799f12be2c4d6e4f82e579afa51dab26655fe95a",
+    "MICRODUCK-MEDIA-NOTICE.txt": "2131e481e424639b2c886e5a58166c23dbe6defd94c3f2a1947315a2b53eb9c8",
+    "METHODS.md": "12747c4f19a86d6d046a041ff2b38b5c432c7c6fd213e4eed444e7a9f8a1a5b2",
+    "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  }
+}

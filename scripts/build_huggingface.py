@@ -1,4 +1,4 @@
-"""Build a bounded, verified static Space from the three recorded labs."""
+"""Build a bounded, verified static Space from the four recorded labs."""
 from __future__ import annotations
 
 import argparse
@@ -20,8 +20,9 @@ from robot_reel.pages import digest, refresh_hashes
 from robot_reel.stress_site import verify_site as verify_stress
 from scripts.build_cloth_showcase import verify_showcase as verify_cloth
 from scripts.build_chaos_showcase import verify_showcase as verify_chaos
+from scripts.build_microduck_lab import verify_showcase as verify_microduck
 
-LABS = ("cloth", "stress", "chaos")
+LABS = ("cloth", "stress", "chaos", "microduck-lab")
 SOURCE = "https://github.com/noteflowai/robot-reel"
 SITE = "https://noteflowai.github.io/robot-reel/"
 SCHEMA = "robot-reel-space-1"
@@ -109,6 +110,7 @@ def verify(directory):
             raise ValueError(f"Changed Space file: {name}")
     cloth, stress = verify_cloth(directory/"cloth"), verify_stress(directory/"stress")
     verify_chaos(directory/"chaos")  # Includes the fixed twelve-world source contract.
+    verify_microduck(directory/"microduck-lab")
     if cloth["vertex_samples"] != 42471 or stress["completed_trials"] != 30:
         raise ValueError("Space evidence counts differ from the advertised experiments")
     return record
@@ -135,6 +137,7 @@ def build(destination, *, root=ROOT, allow_dirty=False):
     inputs.update({
         "huggingface/index.html": "index.html", "huggingface/README.md": "README.md",
         "huggingface/space.gitattributes": ".gitattributes", "huggingface/thumbnail.png": "thumbnail.png",
+        "huggingface/thumbnail.json": "thumbnail.json", "huggingface/NOTICE.txt": "NOTICE.txt",
         "LICENSE": "LICENSE", "docs/showcase/butterfly-preview.mp4": "assets/butterfly-preview.mp4",
     })
     destination.parent.mkdir(parents=True, exist_ok=True)
