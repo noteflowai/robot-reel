@@ -6,7 +6,7 @@
     "joint": 3
   },
   "files": {
-    "index.html": "ac4fb9ccf1076c5373d8f63963af9b2e8b18c4cb6d4c6aa571dca4d8dc0b185b",
+    "index.html": "69057cf49e2b491aa1057b2c7327fc9b2f8ace3cd94bc093db0c8fd3118e9eba",
     "data.json": "ef6f65e7e42bce70cdb3cb04a29ea7b50744b6a73d12198b094803fa488be444",
     "kinematics.json": "950eef938cdaf3dec8b7b5dc3d0c765db4cc7f4742740c8b2647372830a17c2b",
     "kinematics-check.json": "fec0d7a13ab6e592d463126a4505d2f1d0de471e40ea8ade660fcc5d77b0df69",
@@ -17,8 +17,8 @@
     "MICRODUCK-MEDIA-NOTICE.txt": "2131e481e424639b2c886e5a58166c23dbe6defd94c3f2a1947315a2b53eb9c8",
     "METHODS.md": "df450e5183ca97507bd84989075952bf30c46de41776d764034062d092dcc200",
     "LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
-    "manifest.json": "756fe73991b0f52f78b8556dd482f6d80d83d3fa4e0046eab819cbed62fb1db7",
+    "manifest.json": "74c4fe5114b95ea582967f657b4a60371b4efe6eb541cf328e61e8db0f27e3de",
     "poster.png": "92304180636b97928bda6f329b82615c39f3b31188644861c8e0e9d50017c06a",
-    "experiment.zip": "5064fb93ac72b6fbccdb8c82c6e9f8387aa1b604aa0f73c468dfaf6b58cc3e7a"
+    "experiment.zip": "79fdc2e300d6f34bb39e41b0f851cf137a39cb4bd306089ab9924b812a197b25"
   }
 }

@@ -50,6 +50,11 @@ Space.** SmolVLA inference and the cloth recording used an NVIDIA L40S; the
 Butterfly Lab and Microduck policy ran on CPU. Share links also work when the viewer is
 embedded and clipboard access is unavailable.
 
+**For a closer review:** use the four view buttons with a keyboard, step between
+frames beside the schematic, or follow the link to the original video. If a video
+request fails, **Retry video** keeps your selected frame and joint in place.
+Frame JSON and joint CSV remain available from the bundled data.
+
 ## Inspect and reproduce
 
 [Explore the curated model and data collection](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0): start with this

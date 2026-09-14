@@ -39,6 +39,37 @@ class PublishedPageTest(unittest.TestCase):
             # scripts/check_viewer_js.cjs type-checks these two directories.
             self.assertIn(Path(template).parent.as_posix(), {"robot_reel", "scripts"}, template)
 
+    def test_microduck_markup_sync_preserves_payload_and_refreshes_offline_archive(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            page = root/"docs/microduck-lab/index.html"
+            template = root/"scripts/microduck_lab.html"
+            page.parent.mkdir(parents=True)
+            template.parent.mkdir()
+            marker = '<script id="lab-data" type="application/json">'
+            payload = '{ "recorded": [1.00000000001, "\\\\u003c"] }'
+            script = '<script>\nconsole.log("same script");\n</script>'
+            page.write_text("<h1>Before</h1>"+marker+payload+"</script>"+script)
+            template.write_text('<button id="retry">Retry</button>'+marker+"__LAB_DATA__</script>"+script)
+            manifest = page.with_name("manifest.json")
+            manifest.write_text(json.dumps({"files": {"index.html": digest(page)}}))
+            archive = page.with_name("experiment.zip")
+            with zipfile.ZipFile(archive, "w") as bundle:
+                bundle.write(page, "index.html")
+                bundle.write(manifest, "manifest.json")
+            self.assertEqual(check(root), [page])
+            self.assertIn(archive, sync(root))
+            self.assertIn(marker+payload+"</script>", page.read_text())
+            self.assertIn('<button id="retry">', page.read_text())
+            with zipfile.ZipFile(archive) as bundle:
+                self.assertEqual(bundle.read("index.html"), page.read_bytes())
+                self.assertEqual(bundle.read("manifest.json"), manifest.read_bytes())
+            self.assertEqual(check(root), [])
+            self.assertEqual(sync(root), [])
+            page.write_text(page.read_text()+marker+"{}</script>")
+            with self.assertRaisesRegex(ValueError, "ambiguous recorded payload"):
+                sync(root)
+
     def test_payload_blocks_are_not_mistaken_for_the_script(self):
         for template in sorted(set(PAGES.values())):
             script = inline_script(ROOT/template)[0]
