@@ -8,32 +8,34 @@ https://github.com/noteflowai/robot-reel
 
 ### 项目标题
 
-在浏览器里逐帧检查机器人与物理仿真实验
+在浏览器里核对机器人与多引擎物理实验
 
 ### 项目描述
 
-Robot Reel 将机器人策略与物理仿真录制做成交互网页。可对照 SmolVLA 的成功与失败、旋转 GPU 布料模型、探索 Microduck 关节和双摆轨迹，下载源数据与离线包。新版把播放控制放到三维视图旁，补齐键盘操作、视频重试和文件导出反馈；收到帧记录后可用安装包独立复核。适合具身智能教学、实验复盘与技术演示。
+Robot Reel 将机器人策略与物理仿真录制做成交互实验室。新版在 L40S 上录制 Genesis 与 Newton 的六次抛体运动，对照解析解检查步长误差，保留全部 366 个状态和原生回放，并导出可编辑 OpenUSD。另有 SmolVLA 失败复盘、GPU 布料和 Microduck 关节探索，适合具身智能教学、实验复盘与客户技术演示。
 
 ### 亮点
 
-- **Microduck 动作实验室**：两组原始步行记录，14 个关节、8,400 个实测角度样本，支持目标叠加、逐帧分享、JSON/CSV 和完整离线 ZIP。0.9.1 改善手机布局，支持四向键盘视角控制；视频失败可重试，并保留所选帧和关节。
-- **从演示到交付**：`robot-reel microduck-review` 可独立核对离线包和帧 JSON，不需要源码目录、GPU 或模型服务。发布过程同步整个查看器并核对清单，原始录制保留原样。
-- **GPU 布料与 Blender**：三组 Newton 布料录制只改变弯曲系数，可旋转叠加、导出测量图片，并通过 OpenUSD 进入 Blender。
-- **保留失败证据**：SmolVLA 的 30 次单任务闭环仿真全部保留；十二个双摆世界还可组成三维时间轨迹。
+- **Solver Lab**：Genesis 1.4.1 与 Newton 1.6.0 各录制三种步长，支持轨迹、误差曲线、逐帧操作和完整 JSON/CSV；最大位置误差随步长缩小从约 32.70 厘米降到 2.05 厘米。
+- **原生记录可复核**：逐帧读回 Genesis 轨迹和全部 OpenUSD 样本；安装包可独立核验并导出完整离线实验。
+- **五个在线实验室**：保留 30 次 SmolVLA 单任务运行、42,471 个布料顶点样本、十二组双摆和两段 Microduck 步行，支持按场景查看记录。
 
-项目由本账号维护，与 AI 结对开发，仍处于早期阶段。代码采用 Apache-2.0；第三方模型与素材遵守上游许可。Microduck 使用 PD 近似仿真，模型衍生结构和录像保留非商业／相同方式共享条款。策略实验为单任务受控诊断，布料未启用碰撞和自接触；这些录制不提供真实机器人能力证明。
+项目由本账号维护，与 AI 结对开发，仍处于早期阶段。代码及原创抛体场景采用 Apache-2.0；第三方素材遵守上游许可。Solver Lab 是无接触、无阻力的积分误差实验，两引擎在此场景中数值相同，不构成仿真器排名或真实机器人准确率证明。Microduck 衍生结构与录像保留非商业／相同方式共享条款。
 
 ### 示例代码
 
-从源码检出目录，用 Python 3.12+ 只读校验附带的布料记录，无需 GPU：
+从源码检出目录，以 Python 3.12+ 只读核对完整实验：
 
 ```sh
-python3 -S -m robot_reel.cli cloth --output docs/cloth --verify
+python3 -S -m robot_reel.cli solver-lab --output docs/solver-lab --verify
 ```
 
 ### 截图或演示视频
 
 在线体验：https://huggingface.co/spaces/glayguo/robot-reel
-版本：https://github.com/noteflowai/robot-reel/releases/tag/v0.9.1
 
-![在浏览器里逐帧检查机器人与物理仿真实验](https://huggingface.co/spaces/glayguo/robot-reel/resolve/main/thumbnail.png)
+项目：https://github.com/noteflowai/robot-reel
+
+版本：https://github.com/noteflowai/robot-reel/releases/tag/v0.10.0
+
+![Solver Lab：真实 CUDA 轨迹、步长控制与误差曲线](https://github.com/noteflowai/robot-reel/raw/v0.10.0/docs/solver-lab/poster.png)

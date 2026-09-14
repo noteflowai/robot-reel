@@ -108,7 +108,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 <p class="note">Ready to collect new GPU trials? Follow the <a href="https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md#reproduce">recording recipe</a>. Prefer an installation package? See <a href="https://github.com/noteflowai/robot-reel/blob/main/docs/distribution.md">verified downloads and Docker</a>.</p>
 </section>
 
-<div class="section-title" id="demos"><h2>Choose what you want to explore.</h2><span id="demo-count" role="status" aria-live="polite" aria-atomic="true">Showing all 14 recorded demos</span></div>
+<div class="section-title" id="demos"><h2>Choose what you want to explore.</h2><span id="demo-count" role="status" aria-live="polite" aria-atomic="true">Showing all 15 recorded demos</span></div>
 <div class="filters" id="filters" role="group" aria-label="Filter demos by purpose" hidden>
 <button type="button" data-filter="all" aria-pressed="true" aria-controls="demo-grid">All demos</button>
 <button type="button" data-filter="policies" aria-pressed="false" aria-controls="demo-grid">Policy runs</button>
@@ -116,6 +116,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 <button type="button" data-filter="create" aria-pressed="false" aria-controls="demo-grid">Create in 3D</button>
 </div>
 <section class="grid" id="demo-grid" aria-label="Demo pages">
+<a class="card" data-categories="experiments create" href="solver-lab/"><img src="solver-lab/poster.png" alt="Six recorded Genesis and Newton flights compared with an analytic trajectory and timestep error curves." loading="lazy"><div class="body"><span class="meta lavender">NEW · Genesis × Newton · L40S CUDA</span><h3>One launch. Mind the timestep.</h3><p>Change the timestep, inspect the shift, and compare every position and velocity with the analytic flight. Native replays, editable USD and the complete offline lab.</p></div></a>
 <a class="card" data-categories="experiments create" href="cloth/"><img src="cloth/poster.png" alt="Three real GPU cloth recordings with different bending coefficients, fixed vertices and source clocks." loading="lazy"><div class="body"><span class="meta lavender">Cloth Lab · L40S · Figures &amp; OpenUSD</span><h3>Same sheet. Three ways to fall.</h3><p>Export a slide-ready figure, or open a shared sample and check it against the original recording. Orbit the meshes and take the scene into Blender.</p></div></a>
 <a class="card" data-categories="policies experiments" href="stress/"><img src="stress/poster.png" alt="Three SmolVLA rollouts from one initial state under reference lighting, reduced light and a shifted camera." loading="lazy"><div class="body"><span class="meta">Stress Lab · SmolVLA · CUDA</span><h3>Same task. Change the view.</h3><p>Inspect all 30 trials. Group paired successes, gains and losses; open any seed and export a complete outcome report for independent checks.</p></div></a>
 <a class="card" data-categories="experiments" href="chaos/"><img src="chaos/poster.png" alt="Neon 3D time sculpture of twelve Newton pendulum trajectories." loading="lazy"><div class="body"><span class="meta lavender">Butterfly Lab · Newton · OpenUSD</span><h3>0.05° apart. Worlds apart.</h3><p>Twelve isolated worlds begin at nearly identical angles. Drag to orbit their recorded paths and find where a tiny release difference becomes a 6.26 m gap.</p></div></a>
@@ -139,7 +140,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 <article><span class="eyebrow">Reuse</span><h3>Take the scene with you</h3><p>Offline episodes, MP4s, JSON and MCAP traces, editable Blender projects and animated OpenUSD scenes.</p></article>
 </section>
 </main>
-<footer>Independent project built with LeRobot, MuJoCo, Newton, Blender, OpenUSD, Strands Robots and Pollen Robotics' Microduck; no upstream endorsement is implied. Recorder code Apache-2.0; recorded media keep their <a href="https://github.com/noteflowai/robot-reel/blob/main/THIRD_PARTY.md">upstream attribution and asset terms</a>. <a href="https://github.com/noteflowai/robot-reel#quick-start">Quick start</a> · <a href="https://github.com/noteflowai/robot-reel/blob/main/CONTRIBUTING.md">Contributing</a> · <a href="https://github.com/noteflowai/robot-reel/releases/latest">Latest release</a></footer>
+<footer>Independent project built with LeRobot, MuJoCo, Newton, Genesis, Blender, OpenUSD, Strands Robots and Pollen Robotics' Microduck; no upstream endorsement is implied. Recorder code Apache-2.0; recorded media keep their <a href="https://github.com/noteflowai/robot-reel/blob/main/THIRD_PARTY.md">upstream attribution and asset terms</a>. <a href="https://github.com/noteflowai/robot-reel#quick-start">Quick start</a> · <a href="https://github.com/noteflowai/robot-reel/blob/main/CONTRIBUTING.md">Contributing</a> · <a href="https://github.com/noteflowai/robot-reel/releases/latest">Latest release</a></footer>
 <script>
 "use strict";
 const $ = id => document.getElementById(id);

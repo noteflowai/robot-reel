@@ -20,6 +20,7 @@ tags:
   - smolvla
   - lerobot
   - newton
+  - genesis
   - blender
   - openusd
   - simulation
@@ -32,7 +33,7 @@ pinned: true
 
 # Give Physical AI a replay button.
 
-**Four interactive experiments, with their original recordings hosted in this
+**Five interactive experiments, with their original recordings hosted in this
 Space.** Explore a failure, rotate a deforming mesh, or turn physics into a
 three-dimensional motion sculpture. Inspect the 14 joints inside a learned
 Microduck walk. No installation or model-service account
@@ -40,13 +41,14 @@ is needed to watch.
 
 | Experiment | Try this | Evidence you can take away |
 | --- | --- | --- |
+| **Solver Lab** | Compare three timesteps in Genesis and Newton against the analytic flight. | 366 recorded positions/velocities, native Genesis trajectories, OpenUSD, CSV and an offline ZIP. |
 | **SmolVLA Stress Lab** | Group paired successes and failures, open any seed, then inspect all 30 trials. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
 | **GPU Cloth Lab** | Release three identical sheets with different bending coefficients. Orbit, overlay, export a figure, and reopen a checked sample JSON. | 42,471 original vertex samples, positions and velocities, OpenUSD, native Blender checks. |
 | **Butterfly Lab** | Orbit twelve Newton worlds released 0.05° apart. | Original poses, measured separation, source clocks and an editable OpenUSD scene. |
 | **Microduck Motion Lab** | Tap a joint, orbit its body-fixed schematic, overlay targets and reopen a shared frame JSON after checking its facts. | Two original walks, 8,400 measured joint samples, 18,000 body transforms checked against MuJoCo, JSON/CSV and an offline ZIP. |
 
 The browser replays saved data. **No model inference or simulation runs in this
-Space.** SmolVLA inference and the cloth recording used an NVIDIA L40S; the
+Space.** SmolVLA inference, cloth recording and the Solver Lab used an NVIDIA L40S; the
 Butterfly Lab and Microduck policy ran on CPU. Share links also work when the viewer is
 embedded and clipboard access is unavailable.
 
@@ -60,7 +62,7 @@ Frame JSON and joint CSV remain available from the bundled data.
 [Explore the curated model and data collection](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0): start with this
 Space, then inspect the actual policy and asset snapshots behind its recordings.
 
-- [Source code, all 14 demos and Chinese README](https://github.com/noteflowai/robot-reel)
+- [Source code, all 15 demos and Chinese README](https://github.com/noteflowai/robot-reel)
 - [Complete project website](https://noteflowai.github.io/robot-reel/)
 - [SmolVLA protocol and limits](https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md)
 - [Cloth data, checked samples and Blender workflow](https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md)
@@ -110,3 +112,14 @@ Blender.
 Feedback is welcome in this Space's Community tab or in the
 [GitHub issues](https://github.com/noteflowai/robot-reel/issues):
 **which recorded policy or simulator output would you want to inspect next?**
+
+
+## Solver Lab: one launch, three timesteps
+
+Version 0.10.0 adds six independent Genesis 1.4.1 / Newton 1.6.0 CUDA flights.
+Compare recorded motion with a constant-gravity analytic solution, inspect all
+366 position/velocity states and energy drift, then download CSV, source JSON,
+native Genesis replays or the editable USD. The complete lab works offline.
+The measured maximum position error drops from about 32.70 cm to 2.05 cm as
+integration frequency rises from 30 to 480 Hz. Both engines match in this
+no-contact flight; this is a timestep diagnostic, not an engine ranking.

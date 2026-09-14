@@ -34,7 +34,7 @@ async function check(directory){
    await page.goto(`http://localhost:${server.address().port}/embed`);
    const frame=page.frameLocator('iframe');
    await frame.locator('#lab-cloth').waitFor();
-   assert.equal(await frame.locator('.card').count(),4);
+   assert.equal(await frame.locator('.card').count(),5);
    const homeText=await frame.locator('body').innerText();
    assert.ok(homeText.includes('0.05° apart.'));
    assert.ok(homeText.includes('中文'));
@@ -88,8 +88,16 @@ async function check(directory){
      assert.equal(await frame.locator('#joint').inputValue(),'3');
     }
    }
+   const solver=page.frames().find(f=>f.url().includes('127.0.0.1'));
+   await solver.goto(`http://127.0.0.1:${server.address().port}/solver-lab/index.html#engine=newton&substeps=16&sample=60`);
+   assert.equal(await frame.locator('#position-error').textContent(),'2.046 cm');
+   await frame.locator('#share').click();
+   assert.ok((await frame.locator('#share-url').inputValue()).includes('engine=newton'));
+   assert.equal(await solver.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+   const solverDownload=page.waitForEvent('download');await frame.locator('#csv').click();
+   assert.equal((await readFile(await (await solverDownload).path(),'utf8')).trim().split('\n').length,367);
    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(external,[]);
-   rows.push({width,labs:4,cross_origin_embed:true,clipboard_denied:true,share_links:true,
+   rows.push({width,labs:5,cross_origin_embed:true,clipboard_denied:true,share_links:true,solver_export:true,
     cloth_figure_and_sample:true,microduck_video_and_frame_json:true,missing_assets:0,external_runtime_requests:0});
    await page.close();
   }

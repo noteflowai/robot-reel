@@ -18,8 +18,8 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI 检查状态"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="最新发布版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="代码许可证：Apache-2.0"></a>
-  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-14%20replays-ffca85" alt="在线演示：14 个回放"></a>
-  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-4%20interactive%20labs-ffd21e" alt="Hugging Face：四个交互实验室"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-15%20replays-ffca85" alt="在线演示：15 个回放"></a>
+  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-5%20interactive%20labs-ffd21e" alt="Hugging Face：四个交互实验室"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -73,6 +73,24 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 安装包发布在 GitHub Releases，容器支持按宿主机 UID/GID 写出文件。
 录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)；浏览器演示什么都不用装。
 
+
+## 新增 / 同一抛体，步长有多大影响？
+
+**Solver Lab — Genesis × Newton。** 在 **L40S / CUDA** 上独立录制六次
+抛体运动，以相同初始状态和重力，对比每秒 30、120、480 次积分的轨迹。
+逐帧检查解析解、位置与速度误差，以及单位质量机械能变化。本次实验的
+最大位置误差随步长缩小，从 **32.70 厘米降至 2.05 厘米**。
+
+[![Genesis 与 Newton 六次真实录制、步长控制和误差曲线](docs/solver-lab/poster.png)](https://noteflowai.github.io/robot-reel/solver-lab/)
+
+**[打开 Solver Lab ↗](https://noteflowai.github.io/robot-reel/solver-lab/)** ·
+[完整离线实验](https://noteflowai.github.io/robot-reel/solver-lab/experiment.zip) ·
+[场景、方程与复现方法](docs/solver-lab.md)
+
+保留全部 **366 个位置与速度状态**，支持 JSON/CSV 导出，并逐帧核对
+Genesis 原生回放与可编辑 OpenUSD。0.10.0 安装包可直接校验和导出离线实验。
+两引擎在这个无碰撞、无阻力的简单场景中产生相同数值；这是积分误差诊断，
+不代表仿真器排名或真实机器人准确率。
 
 ## 新场景 / 看懂 Microduck 的每一步
 

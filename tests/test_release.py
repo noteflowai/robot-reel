@@ -29,7 +29,7 @@ class ReleaseTests(unittest.TestCase):
             notes = prepare(source, dist, offline, output)
             self.assertIn("Export both labs.", notes)
             self.assertNotIn("Previous", notes)
-            self.assertEqual(len(list(output.iterdir())), 12)
+            self.assertEqual(len(list(output.iterdir())), len(OFFLINE_FILES) + 4)
             names = set()
             for line in (output/"SHA256SUMS").read_text().splitlines():
                 digest, name = line.split("  ")

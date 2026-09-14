@@ -62,6 +62,8 @@ jobs:
           node scripts/check_offline_release.cjs "$RUNNER_TEMP/offline-lab" "$RUNNER_TEMP/offline-assets/robot-reel-seed-09-review.json" "$RUNNER_TEMP/offline-assets/robot-reel-paired-outcomes.json"
           python -m zipfile -e "$RUNNER_TEMP/offline-assets/robot-reel-cloth-experiment.zip" "$RUNNER_TEMP/cloth-lab"
           node scripts/check_cloth_release.cjs "$RUNNER_TEMP/cloth-lab"
+          python -m zipfile -e "$RUNNER_TEMP/offline-assets/robot-reel-solver-experiment.zip" "$RUNNER_TEMP/solver-lab"
+          node scripts/check_solver_lab.cjs "$RUNNER_TEMP/solver-lab"
   rerun:
     runs-on: ubuntu-latest
     steps:
@@ -94,6 +96,8 @@ jobs:
           robot-reel cloth --device cpu --seconds 0.1 --output artifacts/cloth-ci
           robot-reel cloth --output artifacts/cloth-ci --verify --check-usd
           python -m unittest discover -s tests -p test_cloth.py -v
+      - name: Read back every published solver-lab USD position and velocity
+        run: robot-reel solver-lab --output docs/solver-lab --verify --check-usd
   package:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,21 @@
+{
+  "schema": "robot-reel-solver-lab-1",
+  "inputs": {
+    "scene.usda": "b34c662a8c0d4c64c3819acf82b95f59d5b0c6ca04864364b63244b61ace11cf",
+    "genesis-1.gstraj": "144087394bd8120e1390ec88cd46b6249356067a689b69727d2787b4020f22a5",
+    "genesis-4.gstraj": "bcc33d8f90c741b7225dc0bce4e383590a655f25952d0c6928e2b6fc1c4b33b3",
+    "genesis-16.gstraj": "3be87130971d50557ecdf8192c8fa4a4965d6ba5228593c0fe27b714b321e2b0",
+    "genesis-1.gs": "5920af22a11f72c4ebf9b81777ef1c9eaf619d1e909ee43eae1f2f7c4fc25554",
+    "genesis-4.gs": "72fa741c0d431876de44160410bcc380b7154a7c403776ddf5b7aa7ac0dbb221",
+    "genesis-16.gs": "79f2087ada36aa3c362c9e34c07c9bb19c054ebd37fcc69a78e1359f73fe81ce",
+    "genesis-1.json": "cd1ac6190690f03ed590f4657df5c77158efaad73a55cfa8c2593651b3850aa5",
+    "genesis-4.json": "a758cf0dc8da1ca3c94a2ee3f6ddf1bd14d9766117181ca036276895f80374dd",
+    "genesis-16.json": "3a88a8f8902e367684d7bf8a613569c24ccc8cd1f086c38fbd1b62ae96777a1e",
+    "newton-1.json": "31a20c5c4c16174c4431e4a65ce7777862076108b9916fc388360d70077a53b3",
+    "newton-4.json": "912938805535476cc19edbc3059cf5659530996e89985e15d8e8d9e20a2e7ad6",
+    "newton-16.json": "ed8caf612cae5c056d5a9f32b2074f1f7c6cdd1e50214b26ad70ebeaecb56b2e"
+  },
+  "usd_samples_checked": 366,
+  "genesis_replay_samples_checked": 183,
+  "genesis_exact_replay": true
+}
