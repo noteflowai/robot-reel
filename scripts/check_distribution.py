@@ -37,6 +37,28 @@ def check(source, release_assets=None):
     if version("robot-reel") != expected:
         raise ValueError("Installed distribution version differs from pyproject.toml")
     with tempfile.TemporaryDirectory(prefix="robot-reel-installed-") as temporary:
+        microduck_output = Path(temporary)/"microduck"
+        with zipfile.ZipFile(source/"docs/microduck-lab/experiment.zip") as archive:
+            archive.extractall(microduck_output)
+        microduck_command = [
+            str(Path(sys.executable).with_name("robot-reel")), "microduck-review",
+            str(microduck_output), "--frame-json", str(source/"examples/microduck-frame.json"),
+        ]
+        microduck = json.loads(subprocess.run(
+            microduck_command, check=True, capture_output=True, text=True, timeout=120,
+        ).stdout)
+        if not microduck["verified"] or not microduck["frame"]["recorded_facts_match"]:
+            raise ValueError("Installed Microduck verifier did not check the offline frame")
+        changed_frame = Path(temporary)/"changed-frame.json"
+        frame = json.loads((source/"examples/microduck-frame.json").read_text())
+        frame["target_rad"] += .01
+        changed_frame.write_text(json.dumps(frame))
+        rejected = subprocess.run(
+            microduck_command[:-1]+[str(changed_frame)],
+            capture_output=True, text=True, timeout=120,
+        )
+        if rejected.returncode != 2 or json.loads(rejected.stdout)["verified"]:
+            raise ValueError("Installed Microduck verifier accepted a changed frame")
         cloth_output = Path(temporary)/"cloth"
         cloth_command = subprocess.run(
             [str(Path(sys.executable).with_name("robot-reel")), "cloth",
@@ -117,6 +139,7 @@ def check(source, release_assets=None):
             check=True, capture_output=True, text=True, timeout=120,
         )
         report = {"version": expected, "module": str(module), "cloth_vertex_samples": cloth["vertex_samples"],
+                  "microduck": microduck,
                   "cloth_sample": sample_check,
                   "stress_trials": summary["completed_trials"], "telemetry": telemetry,
                   "review": review_check, "paired_outcomes_verified": True,
@@ -132,6 +155,8 @@ def check(source, release_assets=None):
                 (source/"docs/offline-lab.md", "START-HERE.md"),
                 (cloth_output/"experiment.zip", "robot-reel-cloth-experiment.zip"),
                 (cloth_output/"scene.usdc", "robot-reel-cloth-scene.usdc"),
+                (source/"docs/microduck-lab/experiment.zip", "robot-reel-microduck-experiment.zip"),
+                (source/"examples/microduck-frame.json", "robot-reel-microduck-frame.json"),
             ):
                 shutil.copyfile(original, release_assets/name)
             report["release_assets"] = {

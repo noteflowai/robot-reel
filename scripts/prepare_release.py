@@ -9,6 +9,7 @@ OFFLINE_FILES = {
     "robot-reel-stress-experiment.zip", "robot-reel-seed-09-review.json", "START-HERE.md",
     "robot-reel-cloth-experiment.zip", "robot-reel-cloth-scene.usdc",
     "robot-reel-paired-outcomes.json",
+    "robot-reel-microduck-experiment.zip", "robot-reel-microduck-frame.json",
 }
 
 
@@ -35,14 +36,19 @@ def prepare(source, distributions, offline, output):
     ))
     return notes + """
 
-Start with `START-HERE.md`. Extract either experiment ZIP and open its `index.html`
+Start with `START-HERE.md`. Extract an experiment ZIP and open its `index.html`
 locally. Cloth Lab includes all 42,471 recorded vertex samples, original velocities,
 the editable USD and native readback reports. The standalone cloth USD contains
 the same bytes as the scene in the ZIP; import it into Blender at 30 fps.
 For Stress Lab, import `robot-reel-seed-09-review.json` to inspect a selected moment
-in the complete thirty-trial experiment. Both ZIPs are the exact artifacts
+in the complete thirty-trial experiment. The Cloth and Stress ZIPs are the exact artifacts
 exported by the installed wheel and tested offline in Chromium at desktop and
 mobile sizes. No GPU or Python is needed to use these recorded browser labs.
+
+Microduck Lab includes both original walks, all derived poses, and a frame sample.
+With the wheel installed, run `robot-reel microduck-review microduck-lab
+--frame-json robot-reel-microduck-frame.json` on the extracted archive. The installed
+verifier checks all source facts and rejects an altered frame without simulation.
 
 Stress Lab includes all four paired outcome groups and complete report export.
 `robot-reel-paired-outcomes.json` was exported and verified by the installed CLI;

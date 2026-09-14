@@ -1,4 +1,4 @@
-# Robot Reel 0.8.0 — choose an offline lab
+# Robot Reel 0.9.0 — choose an offline lab
 
 Download these files from the same Robot Reel GitHub release:
 
@@ -9,13 +9,32 @@ Download these files from the same Robot Reel GitHub release:
 | `robot-reel-stress-experiment.zip` | Complete offline Stress Lab: 30 trials, 60 videos, telemetry and review tools |
 | `robot-reel-seed-09-review.json` | A sample review to import into the lab |
 | `robot-reel-paired-outcomes.json` | Complete outcome report: ten paired seeds for each changed condition |
+| `robot-reel-microduck-experiment.zip` | Both original Microduck walks, joint explorer, source traces and methods |
+| `robot-reel-microduck-frame.json` | Matching frame 120 / left_knee sample for independent checks |
 | `SHA256SUMS` | SHA-256 checksums for the release files |
-| `robot_reel-0.8.0-py3-none-any.whl` | Optional Python installation for independent checks and exports |
+| `robot_reel-0.9.0-py3-none-any.whl` | Optional Python installation for independent checks and exports |
 | `robot-reel-seed-09.rrd` | Optional native Rerun workspace; open in Rerun 0.37.2 |
 
-Both ZIPs open in a browser without Python, a GPU or a network connection.
+All three ZIPs open in a browser without Python, a GPU or a network connection.
 They contain recorded runs; opening them does not execute policy inference or
-cloth simulation. Keep the two experiments in separate extracted folders.
+cloth simulation. Keep the experiments in separate extracted folders.
+
+## Hand off a Microduck frame
+
+Extract `robot-reel-microduck-experiment.zip` into `microduck-lab`. Open its
+`index.html` for offline inspection. Install the wheel from this release to
+independently check the archive and the matching sample:
+
+```bash
+robot-reel microduck-review microduck-lab --frame-json robot-reel-microduck-frame.json
+```
+
+Expect `verified: true` and `frame.recorded_facts_match: true`. Exit 2 and
+`verified: false` indicate an input or consistency failure. The command writes
+nothing, downloads nothing and does not run a simulation. It verifies the
+bundle's own source records; it does not authenticate the sender or certify
+hardware performance. The source builder additionally compares the bundle
+against the repository's original files. [Review workflow](agent-review.md).
 
 ## Compare every paired outcome
 
@@ -106,7 +125,7 @@ on Linux/macOS:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.8.0-py3-none-any.whl
+python -m pip install ./robot_reel-0.9.0-py3-none-any.whl
 robot-reel stress stress-lab --review robot-reel-seed-09-review.json
 ```
 
@@ -115,7 +134,7 @@ directly without changing its activation policy:
 
 ```powershell
 py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.8.0-py3-none-any.whl
+.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.9.0-py3-none-any.whl
 .\.venv\Scripts\robot-reel.exe stress stress-lab --review robot-reel-seed-09-review.json
 ```
 
