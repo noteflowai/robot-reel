@@ -119,7 +119,9 @@ def same_data(actual, expected):
                             if type(a) not in (float, int) or not math.isfinite(a) or abs(a-b) > 1e-12:
                                 return False
                     expected_frame[key] = actual_frame[key]
-        return actual == expected
+        # Python considers False == 0 and True == 1; source JSON must not.
+        return json.dumps(actual, sort_keys=True, allow_nan=False) == json.dumps(
+            expected, sort_keys=True, allow_nan=False)
     except (KeyError, TypeError, ValueError):
         return False
 

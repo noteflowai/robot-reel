@@ -84,6 +84,11 @@ class MicroduckMotionTests(unittest.TestCase):
             write()
             with self.assertRaisesRegex(ValueError, "poses or metrics"):
                 seal(site)
+            data = json.loads((SITE/"data.json").read_text())
+            data["runs"][0]["frames"][0]["commanded_forward_speed_mps"] = False
+            write()
+            with self.assertRaisesRegex(ValueError, "poses or metrics"):
+                seal(site)
 
 
 if __name__ == "__main__":
