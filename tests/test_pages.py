@@ -7,7 +7,7 @@ import tempfile
 import unittest
 import zipfile
 
-from robot_reel.pages import PAGES, check, digest, inline_script, main, refresh_hashes, sync
+from robot_reel.pages import PAGES, STATIC_PAGES, check, digest, inline_script, main, refresh_hashes, sync
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -38,6 +38,26 @@ class PublishedPageTest(unittest.TestCase):
             self.assertTrue((ROOT/template).exists(), template)
             # scripts/check_viewer_js.cjs type-checks these two directories.
             self.assertIn(Path(template).parent.as_posix(), {"robot_reel", "scripts"}, template)
+
+    def test_nested_file_metadata_refreshes_only_the_matching_prior_bytes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            page = root/"docs/scene-lab/index.html"
+            page.parent.mkdir(parents=True)
+            page.write_text("old scene")
+            previous = digest(page)
+            manifest = page.with_name("manifest.json")
+            manifest.write_text(json.dumps({"files": {
+                "index.html": {"sha256": previous, "bytes": page.stat().st_size},
+            }}))
+            source = page.with_name("source-manifest.json")
+            source.write_text(json.dumps({"files": {"index.html": {"sha256": "0"*64, "bytes": 9}}}))
+            captured = source.read_bytes()
+            page.write_text("new scene with more text")
+            refresh_hashes(root, {page.resolve(): previous})
+            self.assertEqual(json.loads(manifest.read_text())["files"]["index.html"],
+                             {"sha256": digest(page), "bytes": page.stat().st_size})
+            self.assertEqual(source.read_bytes(), captured)
 
     def test_microduck_markup_sync_preserves_payload_and_refreshes_offline_archive(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -71,7 +91,11 @@ class PublishedPageTest(unittest.TestCase):
                 sync(root)
 
     def test_payload_blocks_are_not_mistaken_for_the_script(self):
-        for template in sorted(set(PAGES.values())):
+        templates = {
+            template for page, template in PAGES.items()
+            if page not in STATIC_PAGES or page == "docs/index.html"
+        }
+        for template in sorted(templates):
             script = inline_script(ROOT/template)[0]
             self.assertNotIn("<script", script, template)
             self.assertNotIn("__", script.split("\n")[0], template)

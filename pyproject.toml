@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "robot-reel"
-version = "0.10.0"
+version = "0.11.0"
 description = "Inspect real VLA rollouts and direct recorded physics into editable Blender/OpenUSD films."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -24,7 +24,7 @@ robot-reel = "robot_reel.cli:main"
 include = ["robot_reel*"]
 
 [tool.setuptools.package-data]
-robot_reel = ["replay.html", "comparison.html", "newton.html", "cloth.html", "solver_lab.html", "director.html", "vla.html", "chaos.html", "stress.html", "resources/stress/*.txt", "resources/cloth/*.txt"]
+robot_reel = ["replay.html", "comparison.html", "newton.html", "cloth.html", "solver_lab.html", "scene_lab.html", "scene_lab.js", "libero_plus.html", "libero_plus.js", "director.html", "vla.html", "chaos.html", "stress.html", "resources/stress/*.txt", "resources/cloth/*.txt"]
 
 [project.optional-dependencies]
 microduck = ["onnxruntime==1.30.0"]

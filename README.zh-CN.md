@@ -38,6 +38,11 @@
 `robot-reel microduck-review` 独立检查原始记录与帧事实，无需克隆源码或 GPU。
 [离线操作说明](docs/offline-lab.md)。
 
+## 0.11.0：有原始证据的研究场景
+
+[查看 27 次真实 GPU 技能评测](https://noteflowai.github.io/evalarc/skill-impact/)，并阅读[完整方法与限制](docs/research-pilots.md)。新增[实景 Blender 编辑](https://noteflowai.github.io/robot-reel/scene-lab/)与[官方 LIBERO-Plus 子集回放](https://noteflowai.github.io/robot-reel/libero-plus/)，把原始记录、技能交付与独立验收连接起来。失败尝试全部保留；不宣称技能提分、完整基准成绩或真机效果。
+
+
 ## 快速开始
 
 **[在 Hugging Face 体验 Robot Reel](https://huggingface.co/spaces/glayguo/robot-reel)**：

@@ -1,0 +1,23 @@
+{
+  "repository": "nvidia/Cosmos-Policy-LIBERO-Predict2-2B",
+  "revision": "cb689ec0e3347c13667d70a78a3447388f5c3bb8",
+  "license": "NVIDIA One-Way Noncommercial License (NSCLv1)",
+  "files": {
+    "Cosmos-Policy-LIBERO-Predict2-2B.pt": {
+      "sha256": "8818528d8c9150cda0ddf8c711b0f221b21dac8ac379bd26d5690235954d33e2",
+      "bytes": 3913017345
+    },
+    "config.json": {
+      "sha256": "6c246e6588762546fd91c4fac62af570583da1156aa9b2800f2268e6a2c31f43",
+      "bytes": 1354
+    },
+    "libero_dataset_statistics.json": {
+      "sha256": "5b119a98ad7824507ddff3c6c7507ca244261ee416dcfa623876702160c580d3",
+      "bytes": 2372
+    },
+    "libero_t5_embeddings.pkl": {
+      "sha256": "8a03499676c6c196127c577144b9fd09bb02c30f9caf058adbcef09bb99ad8f5",
+      "bytes": 41957938
+    }
+  }
+}

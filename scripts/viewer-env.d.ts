@@ -15,3 +15,9 @@ interface Document {
   // Keyboard shortcuts read event.target.tagName to skip form controls.
   addEventListener(type: string, listener: (event: any) => any, options?: any): void;
 }
+
+// These pinned import-map dependencies are exercised by the actual 3D browser
+// checks. Ambient module names let checkJs analyze our orchestration separately.
+declare module "three";
+declare module "three/addons/*";
+declare module "@sparkjsdev/spark";

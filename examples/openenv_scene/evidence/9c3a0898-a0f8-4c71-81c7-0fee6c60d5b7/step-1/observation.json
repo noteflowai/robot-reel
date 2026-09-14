@@ -1,0 +1,22 @@
+{
+  "done": false,
+  "reward": 0,
+  "metadata": {
+    "failure": null,
+    "elapsed_seconds": 30.861923265998485,
+    "scene_sha256": "910a875f36fed452f6305963600c93111aba81a08521455b7b38c9196e5a44b7",
+    "reward_semantics": "All independent native requirements pass; not aesthetic quality."
+  },
+  "instruction": "Raise the captured terrain by 40% in Z while preserving its XY bounds and source. Set sun azimuth to 310 degrees and energy to 3. Deliver a packed native Blender scene, standard GLB, surface SPLAT and a separately identified collision heightfield. Acceptance requires independent native readback; a completion statement earns no reward.",
+  "checks": {
+    "native_readback": true,
+    "source_preserved": true,
+    "xy_preserved": true,
+    "height_increased_40_percent": false,
+    "sun_azimuth": true,
+    "sun_energy": true,
+    "packed_textures": true,
+    "separate_collision": true
+  },
+  "artifact": "9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-1/scene"
+}

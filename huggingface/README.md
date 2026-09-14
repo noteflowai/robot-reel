@@ -14,6 +14,7 @@ models:
   - pollen-robotics/microduck-policies
 datasets:
   - lerobot/libero-assets
+  - Sylvest/LIBERO-plus
 tags:
   - robotics
   - physical-ai
@@ -33,7 +34,7 @@ pinned: true
 
 # Give Physical AI a replay button.
 
-**Five interactive experiments, with their original recordings hosted in this
+**Seven interactive experiments, with their original recordings hosted in this
 Space.** Explore a failure, rotate a deforming mesh, or turn physics into a
 three-dimensional motion sculpture. Inspect the 14 joints inside a learned
 Microduck walk. No installation or model-service account
@@ -41,6 +42,8 @@ is needed to watch.
 
 | Experiment | Try this | Evidence you can take away |
 | --- | --- | --- |
+| **Scene Lab** | Compare captured mesh, surface Gaussians and a separate collision proxy. | Two native Blender edits, real GPU renders, GLB/SPLAT and numeric recipes. |
+| **LIBERO-Plus** | Seek paired baseline/camera/light recordings at a common source time. | Official condition IDs, source clips, applied controls and native scene parameters. |
 | **Solver Lab** | Compare three timesteps in Genesis and Newton against the analytic flight. | 366 recorded positions/velocities, native Genesis trajectories, OpenUSD, CSV and an offline ZIP. |
 | **SmolVLA Stress Lab** | Group paired successes and failures, open any seed, then inspect all 30 trials. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
 | **GPU Cloth Lab** | Release three identical sheets with different bending coefficients. Orbit, overlay, export a figure, and reopen a checked sample JSON. | 42,471 original vertex samples, positions and velocities, OpenUSD, native Blender checks. |
@@ -62,7 +65,7 @@ Frame JSON and joint CSV remain available from the bundled data.
 [Explore the curated model and data collection](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0): start with this
 Space, then inspect the actual policy and asset snapshots behind its recordings.
 
-- [Source code, all 15 demos and Chinese README](https://github.com/noteflowai/robot-reel)
+- [Source code, all recorded demos and Chinese README](https://github.com/noteflowai/robot-reel)
 - [Complete project website](https://noteflowai.github.io/robot-reel/)
 - [SmolVLA protocol and limits](https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md)
 - [Cloth data, checked samples and Blender workflow](https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md)
@@ -123,3 +126,5 @@ native Genesis replays or the editable USD. The complete lab works offline.
 The measured maximum position error drops from about 32.70 cm to 2.05 cm as
 integration frequency rises from 30 to 480 Hz. Both engines match in this
 no-contact flight; this is a timestep diagnostic, not an engine ranking.
+
+[Inspect the cross-project Skill Impact Lab](https://noteflowai.github.io/evalarc/skill-impact/): all 27 model trials, including failures. See [research scope](https://github.com/noteflowai/robot-reel/blob/main/docs/research-pilots.md).

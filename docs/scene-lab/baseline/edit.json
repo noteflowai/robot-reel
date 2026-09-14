@@ -1,0 +1,6 @@
+{
+  "schema": "robot-reel.scene-edit.v1",
+  "terrain_z_scale": 1.0,
+  "sun_azimuth_degrees": 135.0,
+  "sun_energy": 2.0
+}

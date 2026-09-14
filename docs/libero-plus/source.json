@@ -1,0 +1,32 @@
+{
+  "policy": {
+    "policy": "HuggingFaceVLA/smolvla_libero",
+    "policy_revision": "6721902bc4d61e50a3bfdb11dfb4cb626f05d102",
+    "vlm": "HuggingFaceTB/SmolVLM2-500M-Instruct",
+    "vlm_revision": "7b375e1b73b11138ff12fe22c8f2822d8fe03467",
+    "checkpoint_sha256": "71d9563c8295284acba8fc2d5c19de000d6fe9ba58a406832af7ef3d221ed52f",
+    "gpu": "NVIDIA L40S",
+    "device": "cuda",
+    "precision": "float32",
+    "tf32": false,
+    "threads": 4,
+    "action_steps": 10,
+    "versions": {
+      "lerobot": "0.6.1",
+      "torch": "2.11.0+cu130",
+      "transformers": "5.5.4"
+    },
+    "server_sha256": "78564f50808fa56807fbec76defe440278d989203b17b25f96094ace02d6d48a",
+    "preprocessing": "LeRobot LiberoProcessorStep: 180-degree RGB rotation, axis-angle + gripper state"
+  },
+  "recorder_sha256": "c2ba2e8b3e6a236426dcee09151c53da73d7b0faf15fd14ef615f7b3487e582e",
+  "plan_sha256": "a210f6745e4c161db98df5db2d0b6d8f9ed32890514b5119c78cf7d5ceff80c2",
+  "python": "3.10.21",
+  "versions": {
+    "libero": "0.1.0",
+    "robosuite": "1.4.0",
+    "mujoco": "3.3.2",
+    "numpy": "2.2.6"
+  },
+  "runtime": "official LIBERO-Plus source; separate local LeRobot policy process"
+}

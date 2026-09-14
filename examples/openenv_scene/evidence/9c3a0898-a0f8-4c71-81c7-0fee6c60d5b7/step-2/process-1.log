@@ -1,0 +1,5 @@
+{"schema": "robot-reel.scene-native-check.v1", "blender_version": "4.5.13 LTS", "scene_sha256": "259f6465b3857173aa95a50440d7643ccfb02e5ebdc0b3b15b4fb3383d7510b1", "native_bounds_m": [[-22.981727600097656, -24.733022689819336, 0.0], [22.981727600097656, 24.73302459716797, 4.4449591636657715]], "edit": {"sun_azimuth_degrees": 310.0, "sun_energy": 3.0, "terrain_z_scale": 1.4}, "native_sun_azimuth_degrees": 309.99999268942787, "native_sun_energy": 3.0, "packed_textures": ["coast_rocks_02_diff", "coast_rocks_02_nor_gl", "coast_rocks_02_rough"], "glb_meshes": ["CollisionHeightfield", "ScanTerrain"], "checked_surface_gaussians": 25000, "checked_collision_samples": 4225, "passed": true, "scope": "File identities and native scene data; no real-world collision fidelity claim."}
+Blender 4.5.13 LTS (hash daeeeca98fb0 built 2026-08-25 01:31:19)
+Read blend: "/home/dcvuser/work/robot-reel-agents/codex/artifacts/research-rollout-20260914/openenv-creation-pilot/9c3a0898-a0f8-4c71-81c7-0fee6c60d5b7/step-2/scene/scene.blend"
+
+Blender quit

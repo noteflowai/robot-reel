@@ -1,4 +1,4 @@
-// Type-check the viewer scripts that live inline in the replay templates.
+// Type-check inline offline replays and the explicit scripts of hosted 3D labs.
 //
 // The exported replays must stay single self-contained HTML files that open from
 // file://, so the scripts cannot move into separate modules or a bundler. This
@@ -60,11 +60,23 @@ function main() {
   try {
     for (const template of templates) {
       const name = path.relative(root, template);
-      const { source, offset } = extract(fs.readFileSync(template, "utf8"), name);
+      const html = fs.readFileSync(template, "utf8");
+      const external = [...html.matchAll(/<script src="([^"]+)" defer><\/script>/g)];
+      let source, offset, sourceName = name;
+      if (external.length) {
+        assert.equal(external.length, 1, `${name}: expected one external viewer script`);
+        assert.match(external[0][1], /^[a-z_]+\.js$/, `${name}: unexpected script path`);
+        const filename = path.join(path.dirname(template), external[0][1]);
+        source = fs.readFileSync(filename, "utf8");
+        offset = 0;
+        sourceName = path.relative(root, filename);
+      } else {
+        ({ source, offset } = extract(html, name));
+      }
       // Directory-qualified so two templates cannot collide on their base name.
       const script = name.replace(/[/\\]/g, "-").replace(/\.html$/, ".js");
       fs.writeFileSync(path.join(workspace, script), source);
-      offsets.set(script, { offset, name });
+      offsets.set(script, { offset, name: sourceName });
     }
     fs.copyFileSync(environment, path.join(workspace, "viewer-env.d.ts"));
     fs.writeFileSync(path.join(workspace, "tsconfig.json"), JSON.stringify(CONFIG, null, 2));

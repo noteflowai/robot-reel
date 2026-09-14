@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.11.0 — 2026-09-14
+
+- Add Scene Lab: CC0 captured geometry, 25,000 mesh-derived surface Gaussians, separate collision heightfield, two actual L40S OptiX renders, bounded edit recipes and independent native Blender readback.
+- Add the official LIBERO-Plus adapter and source-linked SmolVLA replay: paired baseline, camera viewpoint ID 609 and lighting ID 2124. Outcomes are success at 77 actions, step limit at 220, and success at 87. This is a diagnostic subset, not a benchmark score.
+- Add an OpenEnv 0.4.2 verifiable creation environment. Numeric actions build and independently reopen a native scene; completion claims do not earn reward.
+- Add a pinned Cosmos Policy recorder/access preflight. Actual Cosmos inference remains unavailable until the account receives access to its gated NVIDIA dependency. No prediction results are claimed.
+- Link all 27 cross-project skill trials from the homepage and Hugging Face Space; improve mobile layouts, video seeking and lazy Gaussian loading.
+
+
 ## Unreleased
 
 - Verify draft assets against local checksums and GitHub SHA-256 digests, retry
