@@ -86,6 +86,72 @@ test('Microduck invalid view parameters and absent video preserve inspectable so
   assert.deepEqual(errors,[]);
  }finally{await page.close();}
 });
+test('Microduck tap selection, orbit and verified frame exchange work online and offline',async()=>{
+ const trace=JSON.parse(await readFile('docs/microduck-lab/left-trace.json','utf8'));
+ for(const width of [1440,390]){
+  const page=await browser.newPage({viewport:{width,height:1050},hasTouch:width===390}),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  try{
+   await page.goto((width===390?pathToFileURL(resolve('docs/microduck-lab/index.html')).href:base+'/microduck-lab/')+'#run=left&frame=61&joint=3');
+   await page.locator('#scene').scrollIntoViewIfNeeded();
+   // Hit an isolated, actually rendered joint. Its readout must match the raw trace.
+   const point=await page.evaluate(()=>jointPoints.find(p=>p.joint!==3&&jointPoints.every(q=>q===p||Math.hypot(q.x-p.x,q.y-p.y)>24)));
+   assert.ok(point);
+   const box=await page.locator('#scene').boundingBox();
+   if(width===390)await page.touchscreen.tap(box.x+point.x,box.y+point.y);
+   else await page.mouse.click(box.x+point.x,box.y+point.y);
+   assert.equal(await page.locator('#joint').inputValue(),String(point.joint));
+   assert.equal(await page.locator('#measured').textContent(),trace.frames[61].qpos[point.joint].toFixed(3));
+   const before=await page.locator('#scene').evaluate(c=>c.toDataURL());
+   await page.mouse.move(box.x+point.x,box.y+point.y);await page.mouse.down();
+   await page.mouse.move(box.x+point.x+50,box.y+point.y+20,{steps:5});await page.mouse.up();
+   assert.equal(await page.locator('#joint').inputValue(),String(point.joint));
+   assert.notEqual(await page.locator('#scene').evaluate(c=>c.toDataURL()),before);
+   await page.mouse.click(box.x+8,box.y+8);
+   assert.equal(await page.locator('#joint').inputValue(),String(point.joint));
+   const pending=page.waitForEvent('download');await page.locator('#sample-json').click();
+   const file=await (await pending).path(),bytes=await readFile(file),record=JSON.parse(bytes);
+   // The independent Python verifier consumes the actual browser download.
+   const checked=spawnSync('python3',['scripts/build_microduck_lab.py','--verify','--frame-json',file],{encoding:'utf8'});
+   assert.equal(checked.status,0,checked.stderr);
+   assert.equal(JSON.parse(checked.stdout).frame.joint,trace.joints[point.joint]);
+   await page.locator('#run').selectOption('right');await page.locator('#next').click();
+   await page.locator('#joint').selectOption('9');await page.locator('#orbit-right').click();
+   const orbit=await page.evaluate(()=>({yaw,pitch,ghost}));
+   await page.locator('#frame-file').setInputFiles({name:'shared.json',mimeType:'application/json',buffer:bytes});
+   await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Verified frame 61'));
+   assert.equal(await page.locator('#run').inputValue(),'left');
+   assert.equal(await page.locator('#joint').inputValue(),String(point.joint));
+   assert.equal(await page.locator('#counter').textContent(),'Frame 61 / 299');
+   assert.deepEqual(await page.evaluate(()=>({yaw,pitch,ghost})),orbit);
+   await page.waitForFunction(()=>{const v=document.querySelector('video');return v.readyState>=2&&!v.seeking&&v.currentSrc.endsWith('left.mp4');});
+   assert.equal(await page.locator('video').evaluate(v=>Math.floor(v.currentTime*30)),61);
+   const state=await page.evaluate(()=>({runIndex,frame,joint,yaw,pitch,ghost,hash:location.hash}));
+   for(const bad of [
+    {...record,measured_rad:record.measured_rad+.001},{...record,trace_sha256:'0'.repeat(64)},
+    {...record,frame:true},{...record,extra:1},{...record,model_commit:'0'.repeat(40)},
+    {...record,scope:{}},{...record,frame:300},{...record,schema:'unknown'},
+    bytes.toString().trim().slice(0,-1)+',"fr\\u0061me":61}',
+    '['.repeat(33)+']'.repeat(33),Buffer.from([0xff]),' '.repeat(16385),
+   ]){
+    const buffer=Buffer.isBuffer(bad)?bad:Buffer.from(typeof bad==='string'?bad:JSON.stringify(bad));
+    await page.locator('#frame-file').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer});
+    await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Could not open frame:'));
+    assert.deepEqual(await page.evaluate(()=>({runIndex,frame,joint,yaw,pitch,ghost,hash:location.hash})),state);
+   }
+   // A slower earlier selection cannot overwrite a newer file choice.
+   await page.evaluate(()=>{const original=File.prototype.arrayBuffer;window.releaseFrameRead=null;let first=true;File.prototype.arrayBuffer=function(){if(first){first=false;return new Promise(resolve=>{window.releaseFrameRead=()=>original.call(this).then(resolve);});}return original.call(this);};});
+   await page.locator('#frame-file').setInputFiles({name:'slow.json',mimeType:'application/json',buffer:bytes});
+   await page.locator('#run').selectOption('right');
+   const newer=page.waitForEvent('download');await page.locator('#sample-json').click();
+   await page.locator('#frame-file').setInputFiles({name:'newer.json',mimeType:'application/json',buffer:await readFile(await (await newer).path())});
+   await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Verified frame 61'));
+   await page.evaluate(async()=>{await window.releaseFrameRead();await new Promise(resolve=>setTimeout(resolve,0));});
+   assert.equal(await page.locator('#run').inputValue(),'right');
+   assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+ }
+});
 before(async()=>{
   server = createServer(async(req,res)=>{
     const path = new URL(req.url, 'http://localhost').pathname;

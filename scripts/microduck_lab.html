@@ -16,7 +16,7 @@
 <section class="panel" aria-label="Three-dimensional joint schematic">
 <div class="panel-head"><h2>Joint structure <span class="subtle">/ 3D schematic</span></h2><span id="selected-name"></span></div>
 <canvas id="scene" width="900" height="600" role="img" aria-label="Orbitable body-fixed Microduck schematic showing recorded and target joint poses"></canvas>
-<div class="scene-foot"><span>Drag to orbit &#183; select joints below or on the heatmap</span><span>Root fixed &#183; simplified body envelopes</span></div>
+<div class="scene-foot"><span>Tap a joint to inspect &#183; drag to orbit</span><span>Root fixed &#183; simplified body envelopes</span></div>
 <div class="pad row"><button id="orbit-left" aria-label="Rotate left">&#8630;</button><button id="orbit-right" aria-label="Rotate right">&#8631;</button><button id="reset-view">Reset view</button><button id="ghost" aria-pressed="true">Target ghost</button><span class="legend"><span class="measured">&#9679; measured</span><span class="target">&#9476; target</span></span></div>
 </section>
 <section class="panel" aria-label="Recorded video and selected joint">
@@ -34,7 +34,7 @@
 <div class="timeline-labels"><span>0 s / stand</span><span>1 s / walk command</span><span>8 s / stop command</span><span>10 s</span></div></section>
 <div class="analysis-grid">
 <section class="panel"><div class="panel-head"><h2>Every joint. Every frame.</h2><span id="heat-key">|measured &#8722; target| &#183; 0 &#8594; 0.5+ rad</span></div><canvas id="heatmap" width="1000" height="350" role="img" aria-label="Tracking residual heatmap, 14 joints by 300 frames; select a joint and frame using the adjacent controls"></canvas><div class="scene-foot">Click to inspect a cell. Both runs use the same color scale. This shows tracking residual, not contact or failure.</div></section>
-<section class="panel readout"><div class="eyebrow">Source readout</div><h2>Keep the evidence.</h2><dl><dt>Video time</dt><dd id="video-time"></dd><dt>Simulation sample time</dt><dd id="sample-time"></dd><dt>Preceding policy step</dt><dd id="policy-step"></dd><dt>Forward command now</dt><dd id="command"></dd><dt>Measured speed now</dt><dd id="speed"></dd><dt>Mean speed while commanded</dt><dd id="mean-speed"></dd><dt>World base X / Y</dt><dd id="base-xy"></dd></dl><p>Commanded speed and measured speed differ. Body attitude is visible in the original video; the schematic fixes the floating root because its orientation was not saved.</p><div class="row"><button id="share">Share this view</button><button id="sample-json">Frame JSON</button><button id="csv">Joint CSV</button></div><div id="share-box" class="share-box"><input id="share-url" aria-label="Share URL" readonly><a id="share-open" class="button" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div><p class="status" id="status" role="status" aria-live="polite"></p></section>
+<section class="panel readout"><div class="eyebrow">Source readout</div><h2>Keep the evidence.</h2><dl><dt>Video time</dt><dd id="video-time"></dd><dt>Simulation sample time</dt><dd id="sample-time"></dd><dt>Preceding policy step</dt><dd id="policy-step"></dd><dt>Forward command now</dt><dd id="command"></dd><dt>Measured speed now</dt><dd id="speed"></dd><dt>Mean speed while commanded</dt><dd id="mean-speed"></dd><dt>World base X / Y</dt><dd id="base-xy"></dd></dl><p>Commanded speed and measured speed differ. Body attitude is visible in the original video; the schematic fixes the floating root because its orientation was not saved.</p><div class="row"><button id="share">Share this view</button><button id="sample-json">Frame JSON</button><button id="open-frame">Open frame JSON</button><input id="frame-file" type="file" accept=".json,application/json" aria-label="Open frame JSON" hidden><button id="csv">Joint CSV</button></div><div id="share-box" class="share-box"><input id="share-url" aria-label="Share URL" readonly><a id="share-open" class="button" target="_blank" rel="noopener noreferrer">Open &#8599;</a></div><p>Open a shared frame JSON to check its recorded facts and restore the run, frame and joint. Your orbit view stays in place. The file stays in this browser.</p><p class="status" id="status" role="status" aria-live="polite"></p></section>
 </div>
 <section class="panel pad downloads"><div class="row"><a id="download-archive" class="button" href="experiment.zip" download>&#8595; Take both walks offline</a><a href="METHODS.md">Methods &amp; limits</a><a href="kinematics-check.json">Native MuJoCo check</a><a href="manifest.json">File checksums</a><a href="../compare/microduck/">Side-by-side video comparison &#8599;</a></div><p>The ZIP contains both original videos, full policy traces and this viewer. Unzip and open index.html. No live inference, external runtime downloads or server required.</p><details><summary>How the schematic is built, and what it cannot tell you</summary><p>Forward kinematics uses the pinned Pollen Robotics model and the original 14 measured or target angles. Each box bounds one body's visual geometry; it is an abstraction, not a CAD mesh or collision model. All 18,000 body transforms were checked against native MuJoCo. Target poses are geometric references, not independently simulated outcomes. Root position and orientation are fixed in the schematic; no foot contact, hardware behavior or balance conclusion is inferred.</p><p>Policy: Pollen Robotics alpha_walking.onnx, 50 Hz CPU inference. Simulation: MuJoCo, XML position-actuator fallback, not BAM. The upstream model and depicted media retain noncommercial/share-alike terms; see <a href="MICRODUCK-MEDIA-NOTICE.txt">the media notice</a>. Independent implementation inspired by <a href="https://huggingface.co/spaces/mishig/microduck-anatomy" target="_blank" rel="noopener noreferrer">mishig's Microduck Anatomy</a>; no code or assets were copied from that Space.</p></details></section>
 </main><footer>Robot Reel &#183; Original implementation &#183; Pollen Robotics model and official policy &#183; Simulation, not physical hardware. <a href="https://github.com/noteflowai/robot-reel/blob/main/docs/microduck-lab.md">Reproduce this lab &#8599;</a></footer>
@@ -42,7 +42,7 @@
 <script>
 'use strict';
 const $=id=>document.getElementById(id),D=JSON.parse($('lab-data').textContent),v=$('video');
-let runIndex=1,frame=120,joint=3,yaw=-.85,pitch=.18,ghost=true,ready=false;
+let runIndex=1,frame=120,joint=3,yaw=-.85,pitch=.18,ghost=true,ready=false,jointPoints=[];
 const mint='#72efd2',amber='#ffc277',blue='#8baeff',muted='#9db6bd';
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const current=()=>D.runs[runIndex],sample=()=>current().frames[frame];
@@ -55,6 +55,7 @@ function multiply(a,b){const [w,x,y,z]=a,[v,i,j,k]=b;return [w*v-x*i-y*j-z*k,w*i
 function rotate(q,p){return multiply(multiply(q,[0,...p]),[q[0],-q[1],-q[2],-q[3]]).slice(1);}
 function world(body,p){const a=rotate(body.slice(3),p);return a.map((n,i)=>n+body[i]);}
 function drawScene(){
+ jointPoints=[];
  const {ctx,w,h}=canvas('scene'),scale=Math.min(w*2.9,h*3.05),cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
  const project=p=>{const x=p[0]*cy-p[1]*sy,depth=p[0]*sy+p[1]*cy,z=p[2]-.025;return [w*.49+x*scale,h*.5-(z*cp-depth*sp)*scale,depth*cp+z*sp];};
  const line=(a,b,color,width=1,dash=[])=>{const p=project(a),q=project(b);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);ctx.stroke();ctx.setLineDash([]);};
@@ -70,7 +71,7 @@ function drawScene(){
    for(let k=0;k<8;k++)for(let a=0;a<3;a++)if(!(k&(1<<a)))line(corners[k],corners[k|(1<<a)],isGhost?color:color+(selected?'ee':'66'),selected?1.5:.8,isGhost?[3,4]:[]);
    if(b.parent>=0)line(pose[b.parent].slice(0,3),pose[i].slice(0,3),color,isGhost?1:2,isGhost?[3,4]:[]);
    if(!isGhost&&b.joint>=0){
-    const p=project(pose[i]);ctx.beginPath();ctx.arc(p[0],p[1],selected?6:3.2,0,Math.PI*2);ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=selected?14:5;ctx.fill();ctx.shadowBlur=0;
+    const p=project(pose[i]);jointPoints.push({joint:b.joint,x:p[0],y:p[1],depth:p[2]});ctx.beginPath();ctx.arc(p[0],p[1],selected?6:3.2,0,Math.PI*2);ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=selected?14:5;ctx.fill();ctx.shadowBlur=0;
     if(selected){const origin=world(pose[i],b.offset),axis=rotate(pose[i].slice(3),b.axis);line(origin.map((n,k)=>n-axis[k]*.021),origin.map((n,k)=>n+axis[k]*.021),amber,3);ctx.fillStyle='#eaf6ef';ctx.font='11px ui-monospace,monospace';const text=D.joints[joint],tw=ctx.measureText(text).width,tx=clamp(p[0]+13,12,w-tw-12),ty=clamp(p[1]-15,25,h-20);ctx.fillText(text,tx,ty);}
    }
   }
@@ -112,12 +113,77 @@ $('joint').onchange=()=>{joint=Number($('joint').value);render();};$('run').onch
 $('peak').onclick=()=>{joint=current().peak_error.joint;seek(current().peak_error.frame);};
 $('ghost').onclick=()=>{ghost=!ghost;render();};const wrap=n=>Math.atan2(Math.sin(n),Math.cos(n));
 $('orbit-left').onclick=()=>{yaw=wrap(yaw-.25);drawScene();};$('orbit-right').onclick=()=>{yaw=wrap(yaw+.25);drawScene();};$('reset-view').onclick=()=>{yaw=-.85;pitch=.18;render();};
-let drag=null;$('scene').onpointerdown=e=>{if(e.button!==0)return;drag=[e.clientX,e.clientY,yaw,pitch];$('scene').setPointerCapture(e.pointerId);};$('scene').onpointermove=e=>{if(!drag)return;yaw=wrap(drag[2]+(e.clientX-drag[0])*.009);pitch=clamp(drag[3]+(e.clientY-drag[1])*.006,-.8,.8);drawScene();};$('scene').onpointerup=$('scene').onpointercancel=()=>{drag=null;};
+let drag=null;
+$('scene').onpointerdown=e=>{
+ if(drag||e.button!==0||!e.isPrimary)return;
+ drag={id:e.pointerId,x:e.clientX,y:e.clientY,yaw,pitch,moved:false};$('scene').setPointerCapture(e.pointerId);
+};
+$('scene').onpointermove=e=>{
+ if(!drag||drag.id!==e.pointerId)return;
+ if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>4)drag.moved=true;
+ if(!drag.moved)return;
+ yaw=wrap(drag.yaw+(e.clientX-drag.x)*.009);pitch=clamp(drag.pitch+(e.clientY-drag.y)*.006,-.8,.8);drawScene();
+};
+$('scene').onpointerup=e=>{
+ if(!drag||drag.id!==e.pointerId)return;
+ const moved=drag.moved;drag=null;
+ if($('scene').hasPointerCapture(e.pointerId))$('scene').releasePointerCapture(e.pointerId);
+ if(moved)return;
+ const r=$('scene').getBoundingClientRect(),radius=e.pointerType==='touch'?22:14;
+ const hits=jointPoints.map(p=>({...p,distance:Math.hypot(p.x-e.clientX+r.left,p.y-e.clientY+r.top)}))
+  .filter(p=>p.distance<=radius).sort((a,b)=>a.distance-b.distance||a.depth-b.depth);
+ if(hits.length){pause();joint=hits[0].joint;render();}
+};
+$('scene').onpointercancel=$('scene').onlostpointercapture=e=>{if(drag?.id===e.pointerId)drag=null;};
 $('heatmap').onclick=e=>{const r=$('heatmap').getBoundingClientRect(),g=heatGeometry(r.width,r.height),x=e.clientX-r.left,y=e.clientY-r.top;if(x<g.left||x>g.left+g.width||y<g.top||y>=g.top+14*g.row)return;joint=Math.floor((y-g.top)/g.row);seek(Math.floor((x-g.left)/g.width*300));};
 function shareURL(){const u=new URL(location.href);u.hash=new URLSearchParams({run:current().id,frame:String(frame),joint:String(joint),yaw:String(yaw),pitch:String(pitch),ghost:ghost?'1':'0'}).toString();return u.href;}
 $('share').onclick=async()=>{const url=shareURL();try{history.replaceState(null,'',url);}catch{}$('share-url').value=url;$('share-open').href=url;$('share-box').classList.add('open');try{await navigator.clipboard.writeText(url);$('status').textContent='View link copied. It contains no new policy output.';}catch{$('status').textContent='Copy the view link below, or open it in a new tab.';}};
 function download(name,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-$('sample-json').onclick=()=>{const f=sample(),run=current();download(`microduck-${run.id}-frame-${frame}.json`,JSON.stringify({schema:'robot-reel-microduck-frame-1',trace_sha256:run.trace_sha256,model_commit:D.kinematics.model_commit,run:run.id,requested_speed_mps:run.speed,frame,video_time_s:frame/30,sim_time_s:f.sim_time,policy_step:f.policy_step,joint:D.joints[joint],measured_rad:f.qpos[joint],target_rad:f.target[joint],residual_rad:f.qpos[joint]-f.target[joint],coordinate_frame:D.coordinate_frame,scope:'Recorded simulation / PD fallback / not hardware'},null,2)+'\n','application/json');};
+function frameRecord(run,frameIndex,jointIndex){
+ const f=run.frames[frameIndex];
+ return {schema:'robot-reel-microduck-frame-1',trace_sha256:run.trace_sha256,model_commit:D.kinematics.model_commit,run:run.id,requested_speed_mps:run.speed,frame:frameIndex,video_time_s:frameIndex/D.fps,sim_time_s:f.sim_time,policy_step:f.policy_step,joint:D.joints[jointIndex],measured_rad:f.qpos[jointIndex],target_rad:f.target[jointIndex],residual_rad:f.qpos[jointIndex]-f.target[jointIndex],coordinate_frame:D.coordinate_frame,scope:'Recorded simulation / PD fallback / not hardware'};
+}
+$('sample-json').onclick=()=>{
+ pause();
+ download(`microduck-${current().id}-frame-${frame}.json`,JSON.stringify(frameRecord(current(),frame,joint),null,2)+'\n','application/json');
+};
+function readFrame(text){
+ const record=JSON.parse(text),stack=[];
+ // Reject ambiguous decoded keys, including escaped spellings. JSON.parse has
+ // already checked syntax; this scanner only enforces bounds and uniqueness.
+ for(const [token] of text.matchAll(/"(?:\\.|[^"\\])*"|[{}\[\]:,]/g)){
+  if(token==='{'||token==='['){stack.push({keys:token==='{'?new Set():null,wantKey:true});if(stack.length>32)throw Error('Frame JSON nesting exceeds 32 levels.');}
+  else if(token==='}'||token===']')stack.pop();
+  else if(stack.length){
+   const top=stack[stack.length-1];
+   if(token===',')top.wantKey=true;
+   else if(token===':')top.wantKey=false;
+   else if(top.keys&&top.wantKey){const key=JSON.parse(token);if(top.keys.has(key))throw Error('Duplicate frame JSON key.');top.keys.add(key);}
+  }
+ }
+ if(!record||Array.isArray(record)||typeof record!=='object')throw Error('Expected a frame JSON object.');
+ const run=D.runs.findIndex(r=>r.id===record.run),j=D.joints.indexOf(record.joint);
+ if(run<0||j<0||!Number.isInteger(record.frame)||record.frame<0||record.frame>=D.runs[run].frames.length)throw Error('Run, frame or joint is outside this recording.');
+ const expected=frameRecord(D.runs[run],record.frame,j),keys=Object.keys(expected);
+ if(Object.keys(record).length!==keys.length||!keys.every(key=>Object.hasOwn(record,key)&&record[key]===expected[key]))throw Error('Frame facts differ from this recording.');
+ return {run,frame:record.frame,joint:j};
+}
+let frameImport=0;
+$('open-frame').onclick=()=>$('frame-file').click();
+$('frame-file').onchange=async()=>{
+ const request=++frameImport,file=$('frame-file').files[0];if(!file)return;
+ try{
+  if(file.size>16384)throw Error('Frame JSON exceeds 16 KiB.');
+  const bytes=await file.arrayBuffer();if(request!==frameImport)return;
+  const checked=readFrame(new TextDecoder('utf-8',{fatal:true}).decode(bytes)),different=runIndex!==checked.run;
+  pause();runIndex=checked.run;joint=checked.joint;frame=checked.frame;
+  if(different)loadRun();else seek(frame);
+  $('share-box').classList.remove('open');
+  try{history.replaceState(null,'',shareURL());}catch{}
+  $('status').textContent=`Verified frame ${frame}: ${D.joints[joint]} in the ${current().speed.toFixed(1)} m/s command run. Recorded facts match; your orbit view is preserved.`;
+ }catch(error){if(request===frameImport)$('status').textContent='Could not open frame: '+error.message;}
+ finally{if(request===frameImport)$('frame-file').value='';}
+};
 $('csv').onclick=()=>{const run=current(),rows=['run,trace_sha256,frame,sim_time_s,policy_step,joint,measured_rad,target_rad,residual_rad'];run.frames.forEach(f=>D.joints.forEach((name,j)=>rows.push([run.id,run.trace_sha256,f.frame,f.sim_time,f.policy_step,name,f.qpos[j],f.target[j],f.qpos[j]-f.target[j]].join(','))));download(`microduck-${run.id}-joints.csv`,rows.join('\n')+'\n','text/csv');};
 document.addEventListener('keydown',e=>{if(/INPUT|SELECT|TEXTAREA|BUTTON|A/.test(e.target.tagName)||e.altKey||e.ctrlKey||e.metaKey)return;if(e.key==='ArrowRight'){e.preventDefault();seek(frame+1);}if(e.key==='ArrowLeft'){e.preventDefault();seek(frame-1);}});
 new ResizeObserver(()=>render()).observe($('scene'));loadRun();requestAnimationFrame(tick);

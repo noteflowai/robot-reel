@@ -72,9 +72,10 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 
 ## 新场景 / 看懂 Microduck 的每一步
 
-**Microduck 动作实验室。** 旋转查看三维关节结构，叠加策略目标姿态，点击
+**Microduck 动作实验室。** 直接点选三维关节，拖动旋转查看结构，叠加策略目标姿态，点击
 14 关节误差热图，与原始录像同步检查。切换 **0.3 / 0.5 m/s 速度命令**，
-对照全部 **8,400 个实测关节样本**；分享指定帧，导出 JSON、CSV，或下载完整离线实验。
+对照全部 **8,400 个实测关节样本**；分享指定帧，导出 JSON、CSV，
+也能导入收到的帧 JSON，逐字段核对原始记录后恢复画面。支持完整离线实验。
 
 <a href="https://noteflowai.github.io/robot-reel/microduck-lab/"><img src="docs/microduck-lab/poster.png" width="100%" alt="Microduck 原始步行录像与三维关节结构、策略目标和实际角度曲线同步展示。"></a>
 

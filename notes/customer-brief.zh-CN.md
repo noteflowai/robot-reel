@@ -2,7 +2,7 @@
 
 可直接发给客户：
 
-> Robot Reel 是面向物理 AI 创新场景的开源交互实验台，客户可直接在 Hugging Face 体验：对照 SmolVLA 在不同光照和视角下的 30 次真实仿真运行，旋转查看 NVIDIA L40S 录制的布料形变，探索 12 个 Newton 世界构成的三维时间雕塑，并将物理记录带入 Blender 继续创作。无需安装或自备 GPU，即可逐帧检查原始数据、分享同一视角、导出高清图片和离线实验，让具身智能概念验证、技术交流与三维内容制作既有直观效果，也有可复核的依据。
+> Robot Reel 是面向物理 AI 创新场景的开源交互实验台：在 Hugging Face 直接点选 Microduck 的三维关节，对照策略目标与实际仿真响应；复盘 SmolVLA 的 30 次闭环实验，旋转查看 GPU 布料形变与 Newton 三维时间雕塑，并将记录带入 Blender 继续创作。无需安装或自备 GPU，即可逐帧查数据、分享视角、导出图片及完整离线实验。团队还能交换帧 JSON，与原始记录逐项核对后恢复同一时刻，让具身智能概念验证、技术交流与三维内容制作有直观效果，也有可复核依据。
 
 直接体验：https://huggingface.co/spaces/glayguo/robot-reel
 
@@ -11,8 +11,8 @@
 合集按“先体验、再看模型、再核对数据来源”组织，并注明实际录制使用的版本，
 便于客户从交互演示进一步进入复现与技术交流。
 
-Hugging Face Space 原生托管三个实验的录制和回放页面；GitHub 首页保留完整
-13 个演示入口。Space 使用通过浏览器检查的同一份构建产物，并记录源码提交
+Hugging Face Space 原生托管四个实验的录制和回放页面；GitHub 首页保留完整
+14 个演示入口。Space 使用通过浏览器检查的同一份构建产物，并记录源码提交
 与文件指纹。观看已有录制无需模型推理；新增策略运行或 GPU 仿真需另行配置环境。
 
 首页提供三步导览：先对照同一初始状态下策略的不同结局，再同步检查双相机、
@@ -67,7 +67,7 @@ Markdown，接收方导入后恢复相同的实验、视角和样本位置，并
 - Agent 导演：https://noteflowai.github.io/robot-reel/director/
 - Newton／OpenUSD：https://noteflowai.github.io/robot-reel/newton/
 - 原生检查工作区：https://noteflowai.github.io/robot-reel/#inspect
-- Microduck：https://noteflowai.github.io/robot-reel/microduck/
+- Microduck 动作实验室：https://noteflowai.github.io/robot-reel/microduck-lab/
 
 对外交流口径：原有 VLA 示例是一次成功的仿真运行；新增压力实验是一个任务、
 三种条件、十个配对种子、每次最多 160 步的受控实验。其统计结果只针对这组设置，
@@ -83,3 +83,8 @@ Markdown，接收方导入后恢复相同的实验、视角和样本位置，并
 从 0.7.0 起，安装包已包含布料数据校验和完整离线导出，客户无需源码、
 Newton 或 GPU 即可复用现有录制；重新仿真仍需可选 Newton 环境。既有
 0.6.0 和 0.7.0 发布文件保持原内容。
+
+Microduck 动作实验室保留两组原始步行录像、8,400 个关节样本和模型来源。
+三维结构是固定机身坐标系的简化示意图；仿真使用 PD 执行器近似，不能据此推断
+实机表现、接触或平衡。帧 JSON 支持浏览器本地核对，也可从源码使用 Python 标准库
+独立校验。模型派生几何和画面保留上游非商业／相同方式共享条款。

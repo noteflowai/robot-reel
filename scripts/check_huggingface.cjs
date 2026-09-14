@@ -81,6 +81,11 @@ async function check(directory){
      await frame.locator('#run').selectOption('left');
      await inside.waitForFunction(()=>{const v=document.querySelector('video');return v.readyState>=2&&!v.seeking&&v.currentSrc.endsWith('left.mp4');});
      assert.equal(await frame.locator('#counter').textContent(),'Frame 61 / 299');
+     await frame.locator('#next').click();
+     await frame.locator('#frame-file').setInputFiles({name:'shared-frame.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(sample))});
+     await inside.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Verified frame 61'));
+     assert.equal(await frame.locator('#run').inputValue(),'right');
+     assert.equal(await frame.locator('#joint').inputValue(),'3');
     }
    }
    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(external,[]);

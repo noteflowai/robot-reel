@@ -43,7 +43,7 @@ is needed to watch.
 | **SmolVLA Stress Lab** | Group paired successes and failures, open any seed, then inspect all 30 trials. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
 | **GPU Cloth Lab** | Release three identical sheets with different bending coefficients. Orbit, overlay, export a figure, and reopen a checked sample JSON. | 42,471 original vertex samples, positions and velocities, OpenUSD, native Blender checks. |
 | **Butterfly Lab** | Orbit twelve Newton worlds released 0.05° apart. | Original poses, measured separation, source clocks and an editable OpenUSD scene. |
-| **Microduck Motion Lab** | Select a joint, orbit its body-fixed schematic, overlay targets and inspect the residual heatmap. | Two original walks, 8,400 measured joint samples, 18,000 body transforms checked against MuJoCo, JSON/CSV and an offline ZIP. |
+| **Microduck Motion Lab** | Tap a joint, orbit its body-fixed schematic, overlay targets and reopen a shared frame JSON after checking its facts. | Two original walks, 8,400 measured joint samples, 18,000 body transforms checked against MuJoCo, JSON/CSV and an offline ZIP. |
 
 The browser replays saved data. **No model inference or simulation runs in this
 Space.** SmolVLA inference and the cloth recording used an NVIDIA L40S; the
