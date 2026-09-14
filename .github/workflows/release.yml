@@ -56,21 +56,16 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           python - <<'PY'
-          import os, urllib.error, urllib.parse, urllib.request
-          tag = urllib.parse.quote(os.environ["RELEASE_TAG"], safe="")
-          url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/releases/tags/{tag}"
-          request = urllib.request.Request(url, headers={
-              "Authorization": "Bearer " + os.environ["GH_TOKEN"],
-              "Accept": "application/vnd.github+json",
-          })
-          try:
-              with urllib.request.urlopen(request) as response:
-                  response.read()
-          except urllib.error.HTTPError as error:
-              if error.code != 404:
-                  raise
-          else:
-              raise SystemExit("This tag already has a release. Existing assets will not be overwritten.")
+          import os, subprocess
+          # The by-tag REST endpoint can omit drafts. The CLI also searches drafts.
+          result = subprocess.run([
+              "gh", "release", "view", os.environ["RELEASE_TAG"],
+              "--repo", os.environ["GITHUB_REPOSITORY"], "--json", "databaseId,isDraft",
+          ], capture_output=True, text=True, timeout=60)
+          if result.returncode == 0:
+              raise SystemExit("This tag already has a release or draft. Preserve it; resume a draft only with the original tested assets.")
+          if "release not found" not in result.stderr.lower():
+              raise SystemExit("Could not establish whether a release exists: " + result.stderr)
           PY
       - uses: actions/download-artifact@v4
         with:
@@ -84,14 +79,15 @@ jobs:
         run: |
           python scripts/prepare_release.py --distributions dist --offline offline-assets \
             --output release-assets --notes release-notes.md
-      - name: Upload the tested files to a draft
-        uses: softprops/action-gh-release@v2
-        with:
-          body_path: release-notes.md
-          files: release-assets/*
-          fail_on_unmatched_files: true
-          draft: true
-          overwrite_files: false
+      - name: Upload and verify the tested files in a draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" --verify-tag --draft \
+            --title "$RELEASE_TAG" --notes-file release-notes.md
+          python scripts/upload_release_assets.py --repo "$GITHUB_REPOSITORY" \
+            --tag "$RELEASE_TAG" --source-commit "$GITHUB_SHA" --assets release-assets
       - name: Publish only after every file has uploaded
         env:
           GH_TOKEN: ${{ github.token }}
