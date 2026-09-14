@@ -34,6 +34,10 @@
 
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
 
+**Hand off a Microduck frame.** Download the offline experiment and matching
+frame JSON, then verify both with the installed `robot-reel microduck-review`
+command. No source checkout or GPU is needed. [Offline workflow](docs/offline-lab.md).
+
 ## Quick start
 
 **[Try Robot Reel on Hugging Face](https://huggingface.co/spaces/glayguo/robot-reel)**:

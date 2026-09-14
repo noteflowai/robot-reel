@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+## 0.9.0 — Microduck evidence you can hand off
+
+- Ship `robot-reel microduck-review` in the wheel. Verify an extracted Motion Lab
+  ZIP and optional browser frame JSON without a source checkout, GPU, simulation
+  dependencies or model download. Reconstruct all derived poses and metrics from
+  the two bundled raw recordings and check their manifests and frame facts.
+- Publish the original Microduck experiment ZIP and a matching frame JSON with
+  checksums alongside the existing Cloth and Stress labs. Test successful and
+  altered frame inputs from an installed wheel outside the checkout.
+- Share the verifier with the source builder; reject ambiguous JSON, non-finite
+  numbers, symlink files and non-regular inputs with structured error output.
+- Synchronize Microduck telemetry to the video clock on pause, including when
+  browser animation frames are throttled. Exercise that case explicitly.
+- Include the interactive Microduck Motion Lab, frame exchange and agent-review
+  workflow developed since 0.8. The two original recordings remain unchanged.
+
+Verification checks bundled evidence consistency, not producer authenticity,
+a fresh MuJoCo run, physical hardware or the correctness of agent commentary.
+
 ## 0.8.0 — Portable outcome reports and sample exchange
 
 - Ship the paired policy outcome explorer in the installed package and complete

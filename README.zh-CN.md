@@ -34,6 +34,10 @@
 
 <p align="center"><sub>观看无需安装，无需账号。封面各面板展示独立录制的运行。</sub></p>
 
+**把 Microduck 的一帧交给客户复核。** 下载离线实验和配套帧 JSON，使用安装包中的
+`robot-reel microduck-review` 独立检查原始记录与帧事实，无需克隆源码或 GPU。
+[离线操作说明](docs/offline-lab.md)。
+
 ## 快速开始
 
 **[在 Hugging Face 体验 Robot Reel](https://huggingface.co/spaces/glayguo/robot-reel)**：

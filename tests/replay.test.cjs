@@ -10,6 +10,22 @@ const {chromium} = require('playwright');
 const {spawnSync} = require('node:child_process');
 const {createHash} = require('node:crypto');
 let browser, server, base;
+test('Microduck pause synchronizes telemetry when animation frames were throttled',async()=>{
+ const page=await browser.newPage();
+ try{
+  await page.addInitScript(()=>{window.requestAnimationFrame=()=>0;});
+  await page.goto(base+'/microduck-lab/#run=right&frame=120&joint=3');
+  await page.waitForFunction(()=>{const v=document.querySelector('video');return v.readyState>=2&&!v.seeking;},null,{polling:50});
+  await page.locator('#play').click();
+  await page.waitForFunction(()=>document.querySelector('video').currentTime>4.3,null,{polling:50});
+  assert.equal(await page.locator('#counter').textContent(),'Frame 120 / 299');
+  await page.locator('#play').click();
+  const state=await page.evaluate(()=>({paused:document.querySelector('video').paused,
+   clock:Math.floor(document.querySelector('video').currentTime*30+1e-5),
+   frame:Number(document.querySelector('#counter').textContent.match(/\d+/)[0])}));
+  assert.equal(state.paused,true);assert.equal(state.frame,state.clock);assert.ok(state.frame>120);
+ }finally{await page.close();}
+});
 test('Microduck motion links original angles, clocks and videos at desktop/mobile widths, online and offline',async()=>{
   const source=JSON.parse(await readFile('docs/microduck-lab/right-trace.json','utf8'));
   const left=JSON.parse(await readFile('docs/microduck-lab/left-trace.json','utf8'));

@@ -100,7 +100,7 @@ function render(){
  $('command').textContent=f.commanded_forward_speed_mps.toFixed(3)+' m/s';$('speed').textContent=f.measured_forward_speed_mps.toFixed(3)+' m/s';$('mean-speed').textContent=run.mean_walking_speed_mps.toFixed(3)+' m/s';$('base-xy').textContent=f.base_position_m.slice(0,2).map(n=>n.toFixed(3)).join(' / ')+' m';
  drawScene();drawCurve();drawHeat();
 }
-function pause(){v.pause();$('play').textContent='Play recording';}
+function pause(){const wasPlaying=!v.paused;v.pause();if(wasPlaying&&ready&&!v.seeking){frame=clamp(Math.floor(v.currentTime*30+1e-5),0,299);render();}$('play').textContent='Play recording';}
 function seek(index){pause();frame=clamp(index,0,299);if(ready)v.currentTime=(frame+.05)/30;render();}
 function loadRun(){pause();ready=false;v.src=current().id+'.mp4';v.load();render();}
 v.addEventListener('loadedmetadata',()=>{ready=true;v.currentTime=(frame+.05)/30;v.playbackRate=Number($('rate').value);});

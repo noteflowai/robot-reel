@@ -6,6 +6,9 @@ from pathlib import Path
 
 
 def main():
+    if sys.argv[1:2] == ["microduck-review"]:
+        from .microduck_review import main as review_main
+        return review_main(sys.argv[2:])
     if sys.argv[1:2] == ["cloth"]:
         from .cloth import main as cloth_main
         return cloth_main(sys.argv[2:])
@@ -32,7 +35,7 @@ def main():
         return compare_main(sys.argv[2:])
     ap = argparse.ArgumentParser(
         description="Record a robot simulation and export shareable films.",
-        epilog="Other commands: compare, blender, newton, cloth, direct, mcp, vla, stress. Use COMMAND --help for details.",
+        epilog="Other commands: microduck-review, compare, blender, newton, cloth, direct, mcp, vla, stress. Use COMMAND --help for details.",
     )
     ap.add_argument("--pack", choices=["studio", "microduck", "braking"], default="studio")
     ap.add_argument("--speed", type=float, help="Microduck forward command in m/s (0–0.6; default 0.5)")
@@ -106,4 +109,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

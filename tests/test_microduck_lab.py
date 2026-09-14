@@ -2,8 +2,11 @@ import copy
 import json
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
+import zipfile
 
 from scripts.build_microduck_lab import (
     ROOT, frame_record, poses, read_frame, seal, validate_trace, verify_frame, verify_showcase,
@@ -13,6 +16,47 @@ SITE = ROOT/"docs/microduck-lab"
 
 
 class MicroduckMotionTests(unittest.TestCase):
+    def test_extracted_offline_archive_verifies_with_packaged_cli_without_dependencies(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            with zipfile.ZipFile(SITE/"experiment.zip") as archive:
+                archive.extractall(temporary)
+            command = [sys.executable, "-S", "-m", "robot_reel.cli", "microduck-review",
+                       temporary, "--frame-json", str(ROOT/"examples/microduck-frame.json")]
+            result = subprocess.run(command, capture_output=True, text=True, timeout=30)
+            self.assertEqual(result.returncode, 0, result.stderr+result.stdout)
+            record = json.loads(result.stdout)
+            self.assertTrue(record["verified"])
+            self.assertTrue(record["frame"]["recorded_facts_match"])
+            self.assertEqual(record["joint_samples"], 8400)
+            path = Path(temporary)/"left-trace.json"
+            path.write_bytes(path.read_bytes()+b"\n")
+            result = subprocess.run(command, capture_output=True, text=True, timeout=30)
+            self.assertEqual(result.returncode, 2)
+            self.assertFalse(json.loads(result.stdout)["verified"])
+
+    def test_packaged_verifier_rejects_special_files_and_ambiguous_json(self):
+        import os
+        from robot_reel.microduck_review import read_json, verify_bundle
+        with tempfile.TemporaryDirectory() as temporary:
+            site = Path(temporary)/"lab"
+            with zipfile.ZipFile(SITE/"experiment.zip") as archive:
+                archive.extractall(site)
+            path = site/"left-trace.json"
+            path.unlink()
+            path.symlink_to(SITE/"left-trace.json")
+            with self.assertRaises((ValueError, OSError)):
+                verify_bundle(site)
+            path.unlink()
+            if hasattr(os, "mkfifo"):
+                os.mkfifo(path)
+                with self.assertRaisesRegex(ValueError, "regular file"):
+                    verify_bundle(site)
+                path.unlink()
+            for raw in (b'{"x":0,"x":1}', b'{"x":1e999}', b'\xff'):
+                path.write_bytes(raw)
+                with self.assertRaises(ValueError):
+                    read_json(path)
+
     def test_frame_exports_match_original_traces_and_reject_changed_facts(self):
         data = json.loads((SITE/"data.json").read_text())
         for run in ("left", "right"):

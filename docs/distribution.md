@@ -27,7 +27,7 @@ downloaded file in a virtual environment:
 sha256sum --check --ignore-missing SHA256SUMS
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.8.0-py3-none-any.whl
+python -m pip install ./robot_reel-0.9.0-py3-none-any.whl
 robot-reel --help
 ```
 

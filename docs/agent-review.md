@@ -8,6 +8,21 @@ review. The same frame can be reopened in the browser for a visual inspection.
 [Sample frame JSON](../examples/microduck-frame.json) ·
 [Skill and MCP walkthrough](https://github.com/noteflowai/dsh-skills-anywhere/blob/main/docs/PHYSICAL_AI.md)
 
+## Verify without cloning the source
+
+With the 0.9.0+ wheel installed, extract the release's Microduck experiment ZIP
+and run:
+
+```bash
+robot-reel microduck-review microduck-lab --frame-json robot-reel-microduck-frame.json
+```
+
+The command uses only Python's standard library. It checks the bundle manifest,
+raw traces, all derived poses/metrics and every exported frame fact. It does not
+re-run MuJoCo or authenticate the sender. Success returns JSON with `verified:
+true`; failures return `verified: false` and exit 2. No files are written.
+See the [offline guide](offline-lab.md) for download names and installation.
+
 ## Start with one known frame
 
 In the lab, choose a run, frame and joint, then select **Frame JSON**. The bundled
