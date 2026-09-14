@@ -60,6 +60,7 @@ Space, then inspect the actual policy and asset snapshots behind its recordings.
 - [SmolVLA protocol and limits](https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md)
 - [Cloth data, checked samples and Blender workflow](https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md)
 - [Newton release sweep](https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md)
+- [Review a Microduck frame with an agent and Skills Anywhere](https://github.com/noteflowai/robot-reel/blob/main/docs/agent-review.md)
 - [Microduck methods, source model and numerical checks](https://github.com/noteflowai/robot-reel/blob/main/docs/microduck-lab.md)
 
 `space-manifest.json` identifies the source Git commit and hashes every

@@ -77,6 +77,8 @@ click a 14-joint residual heatmap, and follow the original video. Switch between
 **0.3 / 0.5 m/s speed commands** and inspect all **8,400 measured joint samples**.
 Share a frame, export JSON/CSV, or reopen a received frame JSON after checking
 every fact against the recording. Take both complete walks offline.
+[Review a frame with your agent](docs/agent-review.md): load a focused skill through
+Skills Anywhere, run the read-only source check, then explain the verified facts.
 
 <a href="https://noteflowai.github.io/robot-reel/microduck-lab/"><img src="docs/microduck-lab/poster.png" width="100%" alt="Microduck's recorded walk beside an orbitable joint schematic and exact measured versus target curves."></a>
 
