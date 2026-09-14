@@ -190,6 +190,23 @@ report for independent verification with the 0.8.0+ installed CLI.
 [Compare paired outcomes](https://noteflowai.github.io/robot-reel/stress/#outcomes)
 · [Report method and CLI](docs/stress.md#compare-paired-outcomes).
 
+**What the failures were.** A success rate does not say. All 14 failures here end
+at the step limit, and that covers a policy that froze and one still reaching when
+the budget expired. Measured: **every one was still in motion at the cut-off**,
+44.8 mm to 138.6 mm of end-effector travel over the final tenth of its episode,
+against a 1 mm stall threshold. So 160 actions is binding on the reported success
+rate, not a policy that gave up.
+
+**Whether a repeat agrees.** The paired groups blame a condition for an outcome
+flip, which only holds if the same seed and condition answer the same twice. The
+whole plan was re-run on the same L40S: **30 / 30 identical outcomes, action
+counts, physics states and actions**, and **360 / 360 identical renders on the
+frames a policy call consumed**. One of 3,195 recorded-only frames differed, on a
+frame no call consumed. That difference is reported rather than rounded away: it
+shows the renderer is not bitwise deterministic even on identical hardware, and it
+failed to propagate only because of where it landed.
+[Taxonomy, reproducibility and their limits](docs/stress.md#what-the-failures-were-and-whether-a-repeat-agrees).
+
 **[Browse the results on Hugging Face Datasets](https://huggingface.co/datasets/glayguo/robot-reel-paired-outcomes)**:
 30 trial rows and 20 paired rows, with source hashes, units and the full method.
 This is the recorded pilot's tabular evidence, not a training dataset or official benchmark.

@@ -1,0 +1,316 @@
+{
+  "trials": 30,
+  "kinds": {
+    "step_limit_in_motion": [
+      "seed-01-camera",
+      "seed-01-dim",
+      "seed-01-reference",
+      "seed-02-camera",
+      "seed-02-dim",
+      "seed-02-reference",
+      "seed-03-dim",
+      "seed-03-reference",
+      "seed-04-dim",
+      "seed-04-reference",
+      "seed-05-dim",
+      "seed-05-reference",
+      "seed-09-camera",
+      "seed-09-dim"
+    ],
+    "success": [
+      "seed-00-camera",
+      "seed-00-dim",
+      "seed-00-reference",
+      "seed-03-camera",
+      "seed-04-camera",
+      "seed-05-camera",
+      "seed-06-camera",
+      "seed-06-dim",
+      "seed-06-reference",
+      "seed-07-camera",
+      "seed-07-dim",
+      "seed-07-reference",
+      "seed-08-camera",
+      "seed-08-dim",
+      "seed-08-reference",
+      "seed-09-reference"
+    ]
+  },
+  "counts": {
+    "step_limit_in_motion": 14,
+    "success": 16
+  },
+  "stall_threshold_m": 0.001,
+  "runs": {
+    "seed-00-reference": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 79,
+      "tail_travel_m": 0.06113008840737816,
+      "travel_m": 0.7753471909905578,
+      "displacement_m": 0.3676922225486411,
+      "wander_ratio": 2.108685317345784
+    },
+    "seed-00-dim": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 76,
+      "tail_travel_m": 0.05989059356284683,
+      "travel_m": 0.7488323437139391,
+      "displacement_m": 0.3723368275207877,
+      "wander_ratio": 2.011169157507342
+    },
+    "seed-00-camera": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 78,
+      "tail_travel_m": 0.053443228048737454,
+      "travel_m": 0.7296106707924466,
+      "displacement_m": 0.37871170734117104,
+      "wander_ratio": 1.9265595878058246
+    },
+    "seed-01-reference": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.04829203644050358,
+      "travel_m": 1.1715408854981348,
+      "displacement_m": 0.3649222474456522,
+      "wander_ratio": 3.2103849345951763
+    },
+    "seed-01-dim": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.0496747399836875,
+      "travel_m": 1.1659013606034727,
+      "displacement_m": 0.3813964965546162,
+      "wander_ratio": 3.0569272951790603
+    },
+    "seed-01-camera": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.05421767562770974,
+      "travel_m": 1.0439803637118268,
+      "displacement_m": 0.3940394193049379,
+      "wander_ratio": 2.6494312816553887
+    },
+    "seed-02-reference": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.09773802089766057,
+      "travel_m": 1.1599441897882778,
+      "displacement_m": 0.35737775873744837,
+      "wander_ratio": 3.245708949225472
+    },
+    "seed-02-dim": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.08001442417235051,
+      "travel_m": 1.1043682086624393,
+      "displacement_m": 0.35735875713370857,
+      "wander_ratio": 3.090362798215216
+    },
+    "seed-02-camera": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.04482594700913828,
+      "travel_m": 1.0976359118223324,
+      "displacement_m": 0.36425927515110024,
+      "wander_ratio": 3.0133368913310896
+    },
+    "seed-03-reference": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.09572689310275122,
+      "travel_m": 1.3335415051077064,
+      "displacement_m": 0.36244932452485407,
+      "wander_ratio": 3.6792495250360497
+    },
+    "seed-03-dim": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.10063125662523513,
+      "travel_m": 1.283829171968554,
+      "displacement_m": 0.37472694761690073,
+      "wander_ratio": 3.426039093620422
+    },
+    "seed-03-camera": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 78,
+      "tail_travel_m": 0.04803633894437485,
+      "travel_m": 0.7090209597630726,
+      "displacement_m": 0.39186302856959915,
+      "wander_ratio": 1.8093591588652327
+    },
+    "seed-04-reference": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.13860360176737746,
+      "travel_m": 1.2045876530753825,
+      "displacement_m": 0.38101719253550587,
+      "wander_ratio": 3.1615047212420224
+    },
+    "seed-04-dim": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.13329912238280436,
+      "travel_m": 1.0682780634157962,
+      "displacement_m": 0.33662395431225156,
+      "wander_ratio": 3.1735057761957846
+    },
+    "seed-04-camera": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 69,
+      "tail_travel_m": 0.049092087817583355,
+      "travel_m": 0.6570251152846978,
+      "displacement_m": 0.3796161313289063,
+      "wander_ratio": 1.73076184350933
+    },
+    "seed-05-reference": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.09628544802218167,
+      "travel_m": 1.2293943994688328,
+      "displacement_m": 0.3434146335977233,
+      "wander_ratio": 3.579912674626872
+    },
+    "seed-05-dim": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.09943263537407551,
+      "travel_m": 1.2551085659181997,
+      "displacement_m": 0.37015437625780195,
+      "wander_ratio": 3.390770571476514
+    },
+    "seed-05-camera": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 91,
+      "tail_travel_m": 0.05728159751800581,
+      "travel_m": 0.8624451572004885,
+      "displacement_m": 0.3384797930746285,
+      "wander_ratio": 2.5479959951710778
+    },
+    "seed-06-reference": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 77,
+      "tail_travel_m": 0.052802995148241834,
+      "travel_m": 0.7580867748597575,
+      "displacement_m": 0.3841604497747194,
+      "wander_ratio": 1.9733597649219672
+    },
+    "seed-06-dim": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 73,
+      "tail_travel_m": 0.050559462692539144,
+      "travel_m": 0.7136765790123555,
+      "displacement_m": 0.3802519210980536,
+      "wander_ratio": 1.8768520010404455
+    },
+    "seed-06-camera": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 78,
+      "tail_travel_m": 0.05054600510334453,
+      "travel_m": 0.745673158846591,
+      "displacement_m": 0.39216166576900924,
+      "wander_ratio": 1.9014432667312435
+    },
+    "seed-07-reference": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 84,
+      "tail_travel_m": 0.05616740332598877,
+      "travel_m": 0.8489743544833425,
+      "displacement_m": 0.40593693523357605,
+      "wander_ratio": 2.0913946990185623
+    },
+    "seed-07-dim": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 82,
+      "tail_travel_m": 0.058124941895164456,
+      "travel_m": 0.8313494983589864,
+      "displacement_m": 0.40404617436505036,
+      "wander_ratio": 2.0575606232763715
+    },
+    "seed-07-camera": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 123,
+      "tail_travel_m": 0.09673261157114751,
+      "travel_m": 1.032151051471666,
+      "displacement_m": 0.35734756634005166,
+      "wander_ratio": 2.888367373095447
+    },
+    "seed-08-reference": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 79,
+      "tail_travel_m": 0.037153931674648075,
+      "travel_m": 0.7616156098979028,
+      "displacement_m": 0.3985204136100775,
+      "wander_ratio": 1.9111081487611996
+    },
+    "seed-08-dim": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 78,
+      "tail_travel_m": 0.03862188549657723,
+      "travel_m": 0.7663216248626123,
+      "displacement_m": 0.40024594431115423,
+      "wander_ratio": 1.9146268332125012
+    },
+    "seed-08-camera": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 73,
+      "tail_travel_m": 0.062361752757504205,
+      "travel_m": 0.7222092091335227,
+      "displacement_m": 0.4071071396279131,
+      "wander_ratio": 1.7740028086798132
+    },
+    "seed-09-reference": {
+      "kind": "success",
+      "outcome": "success",
+      "frames": 83,
+      "tail_travel_m": 0.024709907500920936,
+      "travel_m": 0.7096242950674585,
+      "displacement_m": 0.37199280782525806,
+      "wander_ratio": 1.907629072766378
+    },
+    "seed-09-dim": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.04781130594802784,
+      "travel_m": 1.0743312562869187,
+      "displacement_m": 0.3464478546935878,
+      "wander_ratio": 3.1009897787853236
+    },
+    "seed-09-camera": {
+      "kind": "step_limit_in_motion",
+      "outcome": "step_limit",
+      "frames": 161,
+      "tail_travel_m": 0.060038853900991014,
+      "travel_m": 0.8615269765335399,
+      "displacement_m": 0.40756174580611754,
+      "wander_ratio": 2.1138563307248655
+    }
+  }
+}

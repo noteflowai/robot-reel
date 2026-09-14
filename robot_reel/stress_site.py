@@ -14,6 +14,7 @@ import tempfile
 import zipfile
 
 from .stress import CONDITIONS, MEDIA, SCHEMA, file_hash, summarize, trial_id, validate_plan, verify_run, write_json
+from .reliability import taxonomy
 
 MARKER = '<script id="stress-data" type="application/json">'
 # Only the published experiment uses this release asset. Custom builds link to
@@ -96,6 +97,9 @@ def required_files(attempts):
     names = {
         "index.html", "experiment.json", "attempts.json", "summary.json", "results.csv",
         "telemetry.mcap", "media-checks.json", "NOTICE.txt", "LICENSE", "METHODS.md",
+        # Failure taxonomy and the measured repeat, sealed with everything else so
+        # a claim about reproducibility cannot be edited independently of it.
+        "reliability.json",
     }
     for attempt in attempts:
         if attempt["status"] == "completed":
@@ -119,6 +123,10 @@ def verify_site(directory):
         raise ValueError("Published rates differ from all planned trials")
     if (directory/"results.csv").read_text() != csv_text(traces):
         raise ValueError("CSV differs from recorded results")
+    if json.loads((directory/"reliability.json").read_text()) != taxonomy(
+        {t["stress"]["trial_id"]: t for t in traces}
+    ):
+        raise ValueError("Published failure taxonomy differs from the recorded traces")
     html = (directory/"index.html").read_text()
     if html.count(MARKER) != 1 or json.loads(html.split(MARKER)[1].split("</script>", 1)[0]) != payload(document, attempts, traces):
         raise ValueError("Viewer payload differs from source evidence")
@@ -225,6 +233,9 @@ def _write_site(recording, output, document, attempts, traces, archive_href):
     write_json(output/"summary.json", data["summary"])
     (output/"results.csv").write_text(csv_text(traces))
     write_json(output/"media-checks.json", check_media(output))
+    # A derived property of this collection, so it is computed here rather than
+    # copied, and recomputed on verification like the summary and the CSV.
+    write_json(output/"reliability.json", taxonomy({t["stress"]["trial_id"]: t for t in traces}))
     resources = files("robot_reel").joinpath("resources", "stress")
     for source, name in (("NOTICE.txt", "NOTICE.txt"), ("LICENSE.txt", "LICENSE"), ("METHODS.txt", "METHODS.md")):
         (output/name).write_bytes(resources.joinpath(source).read_bytes())

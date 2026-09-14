@@ -1,0 +1,26 @@
+{
+  "schema": "robot-reel-reliability-1",
+  "reference": "docs/stress",
+  "repeat": "one full re-run of the identical locked plan on the same NVIDIA L40S",
+  "trials": 30,
+  "action_steps": 10,
+  "levels": {
+    "same_outcome": 30,
+    "same_action_count": 30,
+    "identical_states": 30,
+    "identical_actions": 30,
+    "identical_input_renders": 30
+  },
+  "frames": {
+    "input_renders": {
+      "identical": 360,
+      "compared": 360
+    },
+    "recorded_renders": {
+      "identical": 3194,
+      "compared": 3195
+    }
+  },
+  "differing_trials": [],
+  "scope": "One repeat of one plan on one machine. Agreement here does not establish determinism on other hardware, drivers or stack versions, and a render difference on a frame no policy call consumed cannot change an outcome but does not prove rendering is deterministic."
+}

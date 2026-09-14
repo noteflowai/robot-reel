@@ -11,6 +11,10 @@
 
 ## Unreleased
 
+- Say what a failure was, not only that it happened: split step-limit failures by whether the arm was still moving at the cut-off. All 14 recorded failures were still in motion, so the 160-action budget is binding on the reported success rate rather than the policy having given up.
+- Measure whether a repeat of the identical plan agrees, on the same L40S, at every level: 30/30 outcomes, action counts, bitwise physics states and actions, and 360/360 renders on the frames a policy call consumed. Report renders on consumed frames apart from recorded-only frames, because only the former can change an outcome. One recorded-only frame of 3,195 differed and did not propagate.
+- Seal the failure taxonomy inside the experiment pack and recompute it on verification, rather than only checking its hash. Keep the reproducibility aggregate beside the pack, since it is a property of two collections and belongs to neither.
+
 - Verify draft assets against local checksums and GitHub SHA-256 digests, retry
   missing uploads individually, and retain uploads whose response was lost.
   Preserve existing public releases and drafts; document recovery using the

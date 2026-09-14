@@ -47,6 +47,70 @@ lost success**; the grouped view keeps both directions visible.
 the full experiment's trial/attempt counts and the locked plan hash. The active
 UI filter never removes pairs from the report. “Not completed” combines
 `step_limit` and `terminated`; execution errors stay separately counted.
+## What the failures were, and whether a repeat agrees
+
+A success rate does not say what a failure was. All fourteen failures here end at
+the step limit, and that label covers two different things: a policy that stopped,
+and a policy still reaching when the budget expired. They call for opposite
+responses.
+
+```bash
+python3 -m robot_reel.cli stress docs/stress --reliability
+```
+
+Measured over the published collection, **every one of the fourteen failures was
+still in motion at the cut-off**; none had stalled. End-effector travel over the
+final tenth of each episode ranges from 44.8 mm to 138.6 mm, against a stall
+threshold of 1 mm chosen to sit far below anything a moving arm produces. So the
+step limit of 160 actions is binding on the reported success rate rather than the
+policy having given up, and raising it would be expected to change that rate.
+
+Failures also wander further to end up no further along: median path-to-
+displacement ratio 3.17 against 1.92 for successes. The ranges overlap, so that
+is a description of what these failures look like and not a way to tell them
+apart.
+
+## Reproducibility of the paired comparison
+
+The paired groups attribute an outcome flip to a condition. That only holds if
+the same seed and condition give the same answer twice, which is a fact about a
+machine and a stack rather than something the plan can assert about itself.
+
+The full plan was re-run once on the same NVIDIA L40S, with the pinned policy,
+assets and simulator versions, and compared at every level:
+
+```bash
+python3 -m robot_reel.cli stress docs/stress --repeat artifacts/repro-gpu-30
+```
+
+| Level | Result |
+| --- | --- |
+| Same outcome | 30 / 30 trials |
+| Same action count | 30 / 30 trials |
+| Bitwise identical physics states | 30 / 30 trials |
+| Bitwise identical actions | 30 / 30 trials |
+| Identical renders on frames a policy call consumed | 360 / 360 frames |
+| Identical renders on frames recorded only | 3194 / 3195 frames |
+
+The two render levels are separated because only the first can change an
+outcome. The policy is called once every ten steps, so most recorded frames never
+reach it. The single differing frame is the wrist view at frame 3 of
+`seed-05-camera`, which no policy call consumed; the physics states and actions
+of that trial are bitwise identical throughout.
+
+That difference is worth stating rather than rounding away. It shows the renderer
+is not bitwise deterministic across runs even on identical hardware, and it did
+not propagate here only because of where it landed. Had the same deviation
+occurred on a call boundary it would have reached the policy, and a changed
+action could have changed the outcome the paired groups attribute to a condition.
+
+The failure taxonomy is committed inside the pack as `reliability.json`, and
+verification recomputes it from the traces rather than only checking its hash.
+The reproducibility aggregate is `docs/stress-reproducibility.json`, beside the
+pack rather than inside it: it is a property of two collections, so it does not
+belong to either one. This is one repeat of one plan on one machine, and it does
+not establish determinism on other hardware, drivers or stack versions.
+
 These are descriptive paired outcomes, not a significance test or a claim of
 general robustness.
 

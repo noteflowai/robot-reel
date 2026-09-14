@@ -281,6 +281,14 @@ def main(argv=None):
     parser.add_argument("--check-media", action="store_true", help="Decode both policy cameras in every completed trial")
     parser.add_argument("--check-mcap", action="store_true", help="Read back and compare every MCAP telemetry message")
     parser.add_argument("--review", type=Path, help="Compare an exported review JSON with this complete collection")
+    parser.add_argument(
+        "--reliability", action="store_true",
+        help="Group failures by what they were, not only whether they passed",
+    )
+    parser.add_argument(
+        "--repeat", type=Path,
+        help="Compare this collection against a repeat of the same plan and report reproducibility",
+    )
     paired = parser.add_mutually_exclusive_group()
     paired.add_argument("--paired", action="store_true", help="Export paired outcome groups for every condition as JSON")
     paired.add_argument("--paired-report", type=Path, help="Verify a downloaded paired-outcome report against all source trials")
@@ -296,6 +304,22 @@ def main(argv=None):
                 result["paired_report_verified"] = verify_report(args.paired_report, report)
             if args.paired:
                 result = report
+        if args.reliability or args.repeat:
+            from .reliability import reproducibility, taxonomy
+            from .stress_site import load_collection
+            document, _, traces = load_collection(args.source)
+            named = {t["stress"]["trial_id"]: t for t in traces}
+            if args.reliability:
+                result["reliability"] = taxonomy(named)
+            if args.repeat:
+                repeat_document, _, repeat_traces = load_collection(args.repeat)
+                if canonical_hash(repeat_document) != canonical_hash(document):
+                    raise ValueError("A repeat must run the identical locked plan")
+                result["reproducibility"] = reproducibility(
+                    named,
+                    {t["stress"]["trial_id"]: t for t in repeat_traces},
+                    document["action_steps"],
+                )
         if args.review:
             from .stress_review import read_review, verify_record
             from .stress_site import payload
