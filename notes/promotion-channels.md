@@ -126,3 +126,13 @@ The weekly submission, HelloGitHub submission and Awesome Physical AI suggestion
 were rechecked: all remain open with no comments. No duplicate post or reminder
 was added. Existing HF and Chinese introductions already cover the Microduck lab;
 this viewer improvement does not require another launch thread.
+
+## September 14: reusable agent-review workflow
+
+The [frame-review walkthrough](../docs/agent-review.md) links a full-precision
+sample frame to Skills Anywhere's usable review skill and local MCP setup.
+The public 0.6.0 skill server was exercised over stdio, followed by Robot Reel's
+independent verifier; an altered angle was rejected. This checks the protocol
+and deterministic facts, not LLM reasoning. The maintained HF introduction
+includes the workflow; reuse the existing thread rather than opening another
+editorial submission.

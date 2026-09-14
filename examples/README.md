@@ -80,3 +80,10 @@ Expected export output:
 Building and rendering the Blender project from that bundle is described in
 [docs/director.md](../docs/director.md). The same storyboard is used by
 `tests/test_director.py` and `scripts/check_director_mcp.py`.
+
+## Microduck frame review
+
+`microduck-frame.json` is a full-precision export of the original right-run
+frame 120, left knee selected. [Verify it and load the agent review skill](../docs/agent-review.md).
+The JSON preserves the original trace hash and model identity; no new simulation
+or policy output is generated.

@@ -18,6 +18,13 @@ recordings that produced the pictures.
   between 0.3 / 0.5 m/s command recordings and export source-linked JSON/CSV.
   Both original videos, complete traces and the viewer download as one offline ZIP.
 
+**Take one frame into an agent review.** Export a Microduck frame JSON, load the
+reusable review skill through Skills Anywhere, then have your agent run Robot
+Reel's independent verifier before explaining the recorded joint facts.
+[Walkthrough and sample frame](https://github.com/noteflowai/robot-reel/blob/main/docs/agent-review.md).
+The local MCP loading and deterministic verification were exercised without an
+LLM; the Space itself does not run agent commands or certify model reasoning.
+
 All four run directly in this Space from saved data. No live inference,
 simulation or model-service account is needed to explore.
 

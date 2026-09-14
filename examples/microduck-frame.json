@@ -1,0 +1,17 @@
+{
+  "schema": "robot-reel-microduck-frame-1",
+  "trace_sha256": "dcc3200bd954bdcd2f2914d609aec30c6e9bcee57a41fe97a600861f18eb0241",
+  "model_commit": "53b8971b61baf5b7f3c16d135dd7cac37623de4b",
+  "run": "right",
+  "requested_speed_mps": 0.5,
+  "frame": 120,
+  "video_time_s": 4.0,
+  "sim_time_s": 4.034999999999936,
+  "policy_step": 201,
+  "joint": "left_knee",
+  "measured_rad": 0.24953761276189215,
+  "target_rad": 0.3131396174430847,
+  "residual_rad": -0.06360200468119256,
+  "coordinate_frame": "floating root fixed at origin, identity rotation",
+  "scope": "Recorded simulation / PD fallback / not hardware"
+}

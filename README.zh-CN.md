@@ -76,6 +76,8 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 14 关节误差热图，与原始录像同步检查。切换 **0.3 / 0.5 m/s 速度命令**，
 对照全部 **8,400 个实测关节样本**；分享指定帧，导出 JSON、CSV，
 也能导入收到的帧 JSON，逐字段核对原始记录后恢复画面。支持完整离线实验。
+也可[让 Agent 复盘一帧](docs/agent-review.md)：通过 Skills Anywhere 加载技能，
+先执行只读来源校验，再解释核实后的事实。
 
 <a href="https://noteflowai.github.io/robot-reel/microduck-lab/"><img src="docs/microduck-lab/poster.png" width="100%" alt="Microduck 原始步行录像与三维关节结构、策略目标和实际角度曲线同步展示。"></a>
 
