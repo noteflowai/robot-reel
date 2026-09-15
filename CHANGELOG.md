@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.12.1 — 2026-09-15
+
+- Bind Microduck view links to the recorded trace fingerprint and model revision. Restore in-page navigation; reject mismatched or ambiguous links without changing the current view. Label legacy links explicitly. Source-file verification remains available through the offline CLI.
+- Derive the Hugging Face experiment count and package version at build time; the seven hosted labs no longer advertise four or five experiments.
+
 ## 0.12.0 — 2026-09-14
 
 - Inspect failure classifications in Stress Lab and jump to each recorded final motion window without dropping experiment totals. Show measured travel in millimetres and keep causal limits explicit.

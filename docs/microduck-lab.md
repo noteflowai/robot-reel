@@ -75,7 +75,7 @@ and open `index.html`; no server or external runtime request is needed.
 Selected-frame JSON contains the original trace hash, run, joint, policy step,
 exact simulation clock, measured angle and target. CSV exports all 4,200 joint
 samples of the selected run. Neither export implies a security attestation.
-Share links preserve the frame, run, joint, orbit and target visibility.
+Share links preserve the frame, run, joint, orbit and target visibility. New links also carry the recorded trace SHA-256 and model commit. A different identifier or ambiguous parameter leaves the current view unchanged, with a visible explanation. Browser back/forward and in-page links restore matching views. Legacy links still open, but say that the original recording identity was not saved. This compares identifiers in the viewer; use the offline verifier to check actual source files. Neither operation authenticates an author.
 
 To review someone else's exported frame, choose **Open frame JSON**. The browser
 checks every field against its bundled recording, including the trace hash,

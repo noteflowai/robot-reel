@@ -1,4 +1,4 @@
-"""Build a bounded, verified static Space from the five recorded labs."""
+"""Build a bounded, verified static Space from the recorded labs."""
 from __future__ import annotations
 
 import argparse
@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 from urllib.parse import urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -159,6 +160,11 @@ def build(destination, *, root=ROOT, allow_dirty=False):
             shutil.copyfile(source, path)
             source_files[original] = digest(source)
         changed = {}
+        landing = stage/"index.html"
+        version = tomllib.loads((root/"pyproject.toml").read_text())["project"]["version"]
+        source_files["pyproject.toml"] = digest(root/"pyproject.toml")
+        landing.write_text(landing.read_text().replace("__LAB_COUNT__", str(len(LABS)))
+                           .replace("__PACKAGE_VERSION__", html.escape(version, quote=True)))
         for lab in LABS:
             page = stage/lab/"index.html"
             changed[page] = digest(page)
