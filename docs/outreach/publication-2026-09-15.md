@@ -9,12 +9,20 @@ Robot Reel appears in a finding-led thread from
 [@glay_oneai](https://x.com/glay_oneai/status/2099745359224578381), one post among four, sharing
 the observation that each project's own green number was hiding something.
 
-The post says: the 30-trial SmolVLA experiment was re-run on the same GPU, physics states were
-bitwise identical 30 of 30, and renders matched on 3194 of 3195 frames. The frame that differed
-was never consumed by a policy call, so it could not propagate, and it is reported rather than
-rounded into "29 of 30 trials matched".
+**Scope correction:** the published post described the physics states as "bitwise
+identical." The verifier establishes numerical equality of the saved state and
+action arrays in all 30 trials. It does not compare floating-point bit patterns
+or serialize and compare the complete simulator state.
 
-No GitHub issue was opened anywhere on this project's behalf. The VLA reproducibility literature
+Recorded render hashes agree on 3194 of 3195 frames. All 360 policy-consumed
+render hashes agree, so the differing recorded frame is outside the recorded
+policy inputs. These are separate checks with separate denominators.
+
+This document corrects the repository's account of the evidence. It does not
+claim that the published X post was edited or that a correction reply was sent.
+
+No new third-party GitHub issue was opened for this project's September 15
+outreach round. The VLA reproducibility literature
 is an obvious neighbour for this work, but a note to any of those authors should say something
 they do not already know, and the honest version of that note is still being worked out. It will
 be drafted here first and reviewed before anything is sent, in the same way as the OWASP and HVE
@@ -24,11 +32,11 @@ notes in the sibling projects.
 
 | Claim | Where it is checked |
 | --- | --- |
-| Physics states bitwise identical, 30/30 | `robot-reel stress docs/stress --repeat <run>` reports `identical_states` for every trial |
+| Saved state and action arrays numerically equal, 30/30 | `robot-reel stress docs/stress --repeat <run>` reports `identical_states` for every trial; see the [comparison scope](../stress.md#what-the-failures-were-and-whether-a-repeat-agrees) |
 | Renders identical on 3194 of 3195 recorded frames | The same report's `recorded_renders` counts |
 | The differing frame was never consumed | `input_renders` is 360 of 360, and the policy is called once every ten steps |
 | Aggregates are committed | [`docs/stress-reproducibility.json`](../stress-reproducibility.json) beside the sealed pack |
-| Failure taxonomy | [`docs/stress/reliability.json`](../stress/reliability.json), recomputed on verification rather than hash-checked |
+| Failure taxonomy | [`docs/stress/reliability.json`](../stress/reliability.json), recomputed during verification in addition to the sealed inventory checks |
 
 The repeat run itself is 36 MB and rebuildable from the recorded plan, so only the aggregates are
 committed. It is one repeat of one plan on one machine and does not establish determinism on other
