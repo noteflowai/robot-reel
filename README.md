@@ -34,6 +34,8 @@
 
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
 
+**Share the recording, too.** Microduck links now carry the trace fingerprint and model revision. A mismatch keeps the current view and explains why; older links disclose their missing identity. Offline verification checks the actual files.
+
 **Hand off a Microduck frame.** Download the offline experiment and matching
 frame JSON, then verify both with the installed `robot-reel microduck-review`
 command. No source checkout or GPU is needed. [Offline workflow](docs/offline-lab.md).

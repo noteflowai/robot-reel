@@ -29,7 +29,7 @@ class HuggingFaceSpaceTests(unittest.TestCase):
         self.assertNotIn(".git", {p.name for p in self.site.iterdir()})
         self.assertTrue(all(path.startswith(tuple(f"docs/{lab}/" for lab in LABS))
                             or path.startswith("huggingface/") or path in
-                            ("LICENSE", "docs/showcase/butterfly-preview.mp4")
+                            ("LICENSE", "pyproject.toml", "docs/showcase/butterfly-preview.mp4")
                             for path in manifest["source_files"]))
         transformed = {f"{lab}/{name}" for lab in LABS for name in
                        ("index.html", "manifest.json", "showcase-manifest.json", "experiment.zip")}
@@ -42,6 +42,15 @@ class HuggingFaceSpaceTests(unittest.TestCase):
                 self.assertEqual(hashlib.sha256((self.site/relative).read_bytes()).hexdigest(), checksum, relative)
                 count += 1
         self.assertGreater(count, 190)
+        landing = (self.site/"index.html").read_text()
+        self.assertIn(f"{len(LABS)} recorded experiments", landing)
+        self.assertIn(f"<strong>{len(LABS)}</strong><span>labs hosted", landing)
+        self.assertEqual(landing.count('class="card"'), len(LABS))
+        self.assertNotIn("__LAB_COUNT__", landing)
+        self.assertNotIn("__PACKAGE_VERSION__", landing)
+        import tomllib
+        version = tomllib.loads((ROOT/"pyproject.toml").read_text())["project"]["version"]
+        self.assertIn(f"release {version}", landing)
         for lab in ("cloth", "stress", "chaos", "microduck-lab", "solver-lab"):
             text = (self.site/lab/"index.html").read_text()
             self.assertIn('id="share-url"', text)

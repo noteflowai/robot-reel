@@ -10,6 +10,53 @@ const {chromium} = require('playwright');
 const {spawnSync} = require('node:child_process');
 const {createHash} = require('node:crypto');
 let browser, server, base;
+test('Microduck shared views bind recording identity and support in-page navigation without accepting mismatches',async()=>{
+ for(const offline of [false,true]){
+  const page=await browser.newPage({viewport:{width:390,height:1000}}),errors=[];
+  page.on('pageerror',error=>errors.push(error.message));
+  try{
+   const url=offline?pathToFileURL(resolve('docs/microduck-lab/index.html')).href:base+'/microduck-lab/';
+   await page.goto(url+'#run=left&frame=61&joint=3');
+   assert.match(await page.locator('#status').innerText(),/Legacy view restored/);
+   await page.locator('#share').click();
+   const saved=await page.locator('#share-url').inputValue();
+   const fragment=new URLSearchParams(new URL(saved).hash.slice(1));
+   assert.equal(fragment.get('v'),'1');
+   assert.equal(fragment.get('trace'),createHash('sha256').update(await readFile('docs/microduck-lab/left-trace.json')).digest('hex'));
+   assert.equal(fragment.get('model'),'53b8971b61baf5b7f3c16d135dd7cac37623de4b');
+   await page.goto(saved);
+   await page.reload();
+   await page.locator('#status').filter({hasText:'View restored.'}).waitFor();
+   await page.evaluate(()=>{location.hash='run=right&frame=299&joint=13';});
+   await page.waitForFunction(()=>document.querySelector('#counter').textContent==='Frame 299 / 299');
+   await page.evaluate(hash=>{location.hash=hash;},new URL(saved).hash);
+   await page.waitForFunction(()=>document.querySelector('#counter').textContent==='Frame 61 / 299');
+   assert.equal(await page.locator('#run').inputValue(),'left');
+   for(const suffix of ['&trace='+'0'.repeat(64),'&frame=61']){
+    await page.evaluate(hash=>{location.hash=hash;},new URL(saved).hash+suffix);
+    await page.locator('#status').filter({hasText:'ambiguous view link'}).waitFor();
+    assert.equal(await page.locator('#counter').innerText(),'Frame 61 / 299');
+   }
+   fragment.set('frame','120');fragment.set('trace','0'.repeat(64));
+   await page.evaluate(hash=>{location.hash=hash;},fragment.toString());
+   await page.locator('#status').filter({hasText:'Recording mismatch'}).waitFor();
+   assert.equal(await page.locator('#counter').innerText(),'Frame 61 / 299');
+   // A viewer with another recorded trace identifier must also reject an old
+   // saved link at startup, even when run/frame/joint coordinates still exist.
+   if(!offline){
+    const html=await readFile('docs/microduck-lab/index.html','utf8');
+    const original=new URLSearchParams(new URL(saved).hash.slice(1)).get('trace');
+    await page.route('**/microduck-lab/',route=>route.fulfill({contentType:'text/html',body:html.replaceAll(original,'f'.repeat(64))}));
+    await page.goto(saved);
+    await page.reload();
+    await page.locator('#status').filter({hasText:'Recording mismatch'}).waitFor();
+    assert.equal(await page.locator('#counter').innerText(),'Frame 120 / 299');
+   }
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+   assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+ }
+});
 test('Microduck pause synchronizes telemetry when animation frames were throttled',async()=>{
  const page=await browser.newPage();
  try{

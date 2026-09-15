@@ -53,9 +53,40 @@ let runIndex=1,frame=120,joint=3,yaw=-.85,pitch=.18,ghost=true,ready=false,joint
 const mint='#72efd2',amber='#ffc277',blue='#8baeff',muted='#9db6bd';
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const current=()=>D.runs[runIndex],sample=()=>current().frames[frame];
-const params=new URLSearchParams(location.hash.slice(1));
-function numberParam(key,fallback,min,max,integer=false){const raw=params.get(key);if(raw===null||raw.trim()==='')return fallback;const n=Number(raw);return Number.isFinite(n)&&n>=min&&n<=max&&(!integer||Number.isInteger(n))?n:fallback;}
-runIndex=params.get('run')==='left'?0:1;frame=numberParam('frame',120,0,299,true);joint=numberParam('joint',3,0,13,true);yaw=numberParam('yaw',-.85,-Math.PI,Math.PI);pitch=numberParam('pitch',.18,-.8,.8);ghost=params.get('ghost')!=='0';
+function restoreView(live=false){
+ if(!location.hash.includes('='))return;
+ const params=new URLSearchParams(location.hash.slice(1)),version=params.get('v');
+ const keys=new Set(['v','trace','model','run','frame','joint','yaw','pitch','ghost']);
+ const reject=message=>{$('share-box').classList.remove('open');$('status').textContent=message+' The linked view was not restored; the current view is unchanged.';};
+ if(location.hash.length>2048||(version!==null&&version!=='1')||[...params.keys()].some(key=>!keys.has(key)||params.getAll(key).length!==1)){
+  reject('Unsupported or ambiguous view link.');return;
+ }
+ const run=params.has('run')?D.runs.findIndex(r=>r.id===params.get('run')):1;
+ if(run<0){reject('Unknown recorded run.');return;}
+ if(version==='1'){
+  if(params.get('trace')!==D.runs[run].trace_sha256||params.get('model')!==D.kinematics.model_commit){
+   reject('Recording mismatch: the trace fingerprint or model revision differs from this lab.');return;
+  }
+ }else if(params.has('trace')||params.has('model')){reject('Recording identity requires a versioned link.');return;}
+ function numeric(key,fallback,min,max,integer=false){
+  const raw=params.get(key);if(raw===null)return fallback;
+  const n=Number(raw);
+  if(raw.trim()===''||!Number.isFinite(n)||n<min||n>max||(integer&&!Number.isInteger(n)))throw Error('View coordinates are outside this recording.');
+  return n;
+ }
+ try{
+  const f=numeric('frame',120,0,D.runs[run].frames.length-1,true),j=numeric('joint',3,0,D.joints.length-1,true),
+   y=numeric('yaw',-.85,-Math.PI,Math.PI),p=numeric('pitch',.18,-.8,.8);
+  if(params.has('ghost')&&!['0','1'].includes(params.get('ghost')))throw Error('Unknown target-overlay value.');
+  if(live)pause();
+  runIndex=run;frame=f;joint=j;yaw=y;pitch=p;ghost=params.get('ghost')!=='0';
+  $('share-box').classList.remove('open');
+  $('status').textContent=version==='1'
+   ?'View restored. Its trace fingerprint and model revision match this lab. Use the offline verifier to check the source files; this link does not authenticate authorship.'
+   :'Legacy view restored from the current recording. This link did not save the original trace fingerprint or model revision.';
+  if(live)loadRun();
+ }catch(error){reject(error.message);}
+}
 D.joints.forEach((name,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=name.replaceAll('_',' ');$('joint').append(o);});
 function canvas(id){const c=$(id),r=c.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,2);c.width=Math.round(r.width*ratio);c.height=Math.round(r.height*ratio);const ctx=c.getContext('2d');ctx.setTransform(ratio,0,0,ratio,0,0);return {ctx,w:r.width,h:r.height};}
 function multiply(a,b){const [w,x,y,z]=a,[v,i,j,k]=b;return [w*v-x*i-y*j-z*k,w*i+x*v+y*k-z*j,w*j-x*k+y*v+z*i,w*k+x*j-y*i+z*v];}
@@ -149,7 +180,7 @@ $('scene').onpointerup=e=>{
 };
 $('scene').onpointercancel=$('scene').onlostpointercapture=e=>{if(drag?.id===e.pointerId)drag=null;};
 $('heatmap').onclick=e=>{const r=$('heatmap').getBoundingClientRect(),g=heatGeometry(r.width,r.height),x=e.clientX-r.left,y=e.clientY-r.top;if(x<g.left||x>g.left+g.width||y<g.top||y>=g.top+14*g.row)return;joint=Math.floor((y-g.top)/g.row);seek(Math.floor((x-g.left)/g.width*300));};
-function shareURL(){const u=new URL(location.href);u.hash=new URLSearchParams({run:current().id,frame:String(frame),joint:String(joint),yaw:String(yaw),pitch:String(pitch),ghost:ghost?'1':'0'}).toString();return u.href;}
+function shareURL(){const u=new URL(location.href);u.hash=new URLSearchParams({v:'1',trace:current().trace_sha256,model:D.kinematics.model_commit,run:current().id,frame:String(frame),joint:String(joint),yaw:String(yaw),pitch:String(pitch),ghost:ghost?'1':'0'}).toString();return u.href;}
 $('share').onclick=async()=>{const url=shareURL();try{history.replaceState(null,'',url);}catch{}$('share-url').value=url;$('share-open').href=url;$('share-box').classList.add('open');try{await navigator.clipboard.writeText(url);$('status').textContent='View link copied. It contains no new policy output.';}catch{$('status').textContent='Copy the view link below, or open it in a new tab.';$('share-url').focus();$('share-url').select();}};
 function download(name,data,type){try{const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('status').textContent=`Download started: ${name}.`;}catch{$('status').textContent='Download could not start. Try again, or use the complete offline archive below.';}}
 function frameRecord(run,frameIndex,jointIndex){
@@ -199,5 +230,6 @@ $('frame-file').onchange=async()=>{
 };
 $('csv').onclick=()=>{const run=current(),rows=['run,trace_sha256,frame,sim_time_s,policy_step,joint,measured_rad,target_rad,residual_rad'];run.frames.forEach(f=>D.joints.forEach((name,j)=>rows.push([run.id,run.trace_sha256,f.frame,f.sim_time,f.policy_step,name,f.qpos[j],f.target[j],f.qpos[j]-f.target[j]].join(','))));download(`microduck-${run.id}-joints.csv`,rows.join('\n')+'\n','text/csv');};
 document.addEventListener('keydown',e=>{if(/INPUT|SELECT|TEXTAREA|BUTTON|A/.test(e.target.tagName)||e.altKey||e.ctrlKey||e.metaKey)return;if(e.key==='ArrowRight'){e.preventDefault();seek(frame+1);}if(e.key==='ArrowLeft'){e.preventDefault();seek(frame-1);}});
-new ResizeObserver(()=>render()).observe($('scene'));loadRun();requestAnimationFrame(tick);
+window.addEventListener('hashchange',()=>restoreView(true));
+restoreView();new ResizeObserver(()=>render()).observe($('scene'));loadRun();requestAnimationFrame(tick);
 </script></body></html>
