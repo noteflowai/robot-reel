@@ -18,8 +18,11 @@ Recorded render hashes agree on 3194 of 3195 frames. All 360 policy-consumed
 render hashes agree, so the differing recorded frame is outside the recorded
 policy inputs. These are separate checks with separate denominators.
 
-This document corrects the repository's account of the evidence. It does not
-claim that the published X post was edited or that a correction reply was sent.
+The [public correction reply](https://x.com/glay_oneai/status/2099763551942713795)
+was opened and its text verified on September 15. It explicitly distinguishes
+numerical equality of the saved arrays from full simulator state and floating-point
+bit patterns, and reports the two render-hash counts separately. The original
+post remains historical context; the reply supplies the corrected scope.
 
 No new third-party GitHub issue was opened for this project's September 15
 outreach round. The VLA reproducibility literature
