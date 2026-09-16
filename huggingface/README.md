@@ -119,7 +119,7 @@ Feedback is welcome in this Space's Community tab or in the
 
 ## Solver Lab: one launch, three timesteps
 
-Version 0.10.0 adds six independent Genesis 1.4.1 / Newton 1.6.0 CUDA flights.
+The lab contains six independent Genesis 1.4.1 / Newton 1.6.0 CUDA flights.
 Compare recorded motion with a constant-gravity analytic solution, inspect all
 366 position/velocity states and energy drift, then download CSV, source JSON,
 native Genesis replays or the editable USD. The complete lab works offline.

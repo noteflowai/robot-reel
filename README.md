@@ -18,8 +18,8 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI status"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="Latest release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="Code license: Apache-2.0"></a>
-  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-15%20replays-ffca85" alt="Live demos: 15 replays"></a>
-  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-5%20interactive%20labs-ffd21e" alt="Hugging Face: five interactive labs"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-recorded%20replays-ffca85" alt="Live demos: recorded replays"></a>
+  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-interactive%20labs-ffd21e" alt="Hugging Face: interactive labs"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -34,16 +34,10 @@
 
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
 
-**Share the recording, too.** Microduck links now carry the trace fingerprint and model revision. A mismatch keeps the current view and explains why; older links disclose their missing identity. Offline verification checks the actual files.
-
-**Hand off a Microduck frame.** Download the offline experiment and matching
-frame JSON, then verify both with the installed `robot-reel microduck-review`
-command. No source checkout or GPU is needed. [Offline workflow](docs/offline-lab.md).
-
-## New in 0.11.0: research you can inspect
-
-[Explore all 27 real GPU skill trials](https://noteflowai.github.io/evalarc/skill-impact/) and [the research pilots](docs/research-pilots.md). Robot Reel's [captured-scene editor](https://noteflowai.github.io/robot-reel/scene-lab/) and [official LIBERO-Plus replay](https://noteflowai.github.io/robot-reel/libero-plus/) connect real source records with portable skill delivery and independent grading. Every failed attempt stays visible; no skill efficacy, full-benchmark or real-hardware result is implied.
-
+**Share a verifiable Microduck frame.** Frame links identify the trace and model
+revision. Download the matching experiment and frame JSON, then check them with
+`robot-reel microduck-review`. The installed verifier needs no source checkout
+or GPU. [Offline workflow](docs/offline-lab.md).
 
 ## Quick start
 
@@ -81,7 +75,7 @@ Or use the [verified installation packages or non-root Docker image](docs/distri
 Recording new runs needs the [full runtime](docs/recording.md); the browser demos need nothing.
 
 
-## New / One launch. Mind the timestep.
+## One launch. Mind the timestep.
 
 **Solver Lab — Genesis × Newton.** Six independent **L40S / CUDA** flights
 use the same initial state and gravity at 30, 120 and 480 integration steps per
@@ -101,7 +95,7 @@ retains every sample. The 0.10.0 installed CLI verifies and exports the lab
 without a GPU. Both engines produce matching values in this simple no-contact,
 no-drag flight; it is an integration diagnostic, not a ranking of simulators.
 
-## New / Inside a learned Microduck walk.
+## Inside a learned Microduck walk.
 
 **Microduck Motion Lab.** Tap a 3D joint to inspect it, drag to orbit, overlay policy targets,
 click a 14-joint residual heatmap, and follow the original video. Switch between
@@ -196,21 +190,18 @@ report for independent verification with the 0.8.0+ installed CLI.
 
 [![Recorded failure review: classified episodes, complete denominators and a jump to the final motion window.](docs/failure-review.png)](https://noteflowai.github.io/robot-reel/stress/#failures)
 
-**What the failures were.** A success rate does not say. All 14 failures here end
-at the step limit, and that covers a policy that froze and one still reaching when
-the budget expired. Measured: **every one was still in motion at the cut-off**,
-44.8 mm to 138.6 mm of end-effector travel over the final tenth of its episode,
-against a 1 mm stall threshold. The recorded budget expired while the arm was moving. This does not show
-that extra actions would complete the task or that the motion made progress.
+**Failure analysis.** All 14 unsuccessful trials reached the action limit.
+Every trial remained above the 1 mm stall threshold: end-effector travel over
+the final tenth of each episode ranged from **44.8 mm to 138.6 mm**. These
+measurements establish motion at the cut-off; task progress and success with a
+larger action budget require separate evaluation.
 
-**Whether a repeat agrees.** The paired groups blame a condition for an outcome
-flip, which only holds if the same seed and condition answer the same twice. The
-whole plan was re-run on the same L40S: **30 / 30 identical outcomes, action
-counts, recorded robot states and actions**, and **360 / 360 identical renders on the
-frames a policy call consumed**. One of 3,195 recorded-only frames differed, on a
-frame no call consumed. That difference is reported rather than rounded away: it
-shows the renderer is not bitwise deterministic even on identical hardware, and it
-failed to propagate only because of where it landed.
+**Repeatability check.** One repeat of the full plan on the same L40S matched
+**30 / 30 outcomes, action counts, recorded robot states and actions**, and
+**360 / 360 rendered frames consumed by policy calls**. One of 3,195
+recording-only frames differed; that frame was not used for inference.
+The result documents repeatability under these recorded conditions. It does
+not establish general determinism or, by itself, causal attribution.
 [Taxonomy, reproducibility and their limits](docs/stress.md#what-the-failures-were-and-whether-a-repeat-agrees).
 
 **[Browse the results on Hugging Face Datasets](https://huggingface.co/datasets/glayguo/robot-reel-paired-outcomes)**:
@@ -348,22 +339,32 @@ with inference waiting time omitted; new director briefs use your connected
 agent and a new render. Microduck uses the XML PD-actuator fallback.
 [Scope, provenance and asset terms](THIRD_PARTY.md).
 
-## How it differs
+## Project role and supported workflows
 
-Robot Reel is not a simulator, a training framework or a benchmark. It sits
-after them: it records a run from those tools, verifies the trace, and turns it
-into something people can watch, inspect and reuse.
+Robot Reel connects policy and simulator recordings to review and scene-creation
+workflows. It preserves applied actions, measured state and source identities
+through synchronized replay, paired comparison and editable export.
 
-| | Focus | Where Robot Reel fits |
+| Workflow | Recorded integration | Evidence and guide |
 | --- | --- | --- |
-| [LeRobot](https://github.com/huggingface/lerobot) | Datasets, policies and training for real and simulated robots | Runs a LeRobot policy (SmolVLA), then keeps every applied action, both cameras and the hardware/timing record as a replay |
-| [MuJoCo Playground](https://github.com/google-deepmind/mujoco_playground), [Isaac Lab](https://github.com/isaac-sim/IsaacLab) | GPU-scale environments and RL training | Takes a single rollout from a simulator and makes it inspectable, comparable and editable |
-| [Genesis](https://github.com/Genesis-Embodied-AI/Genesis), [Newton](https://github.com/newton-physics/newton) | Physics engines | Records Newton on CPU and exports the measured motion as an animated OpenUSD scene with a native Blender check |
-| Rerun, Foxglove | General telemetry viewers | Publishes self-contained HTML replays, MCAP telemetry and a verified native Rerun workspace with embedded videos |
+| Policy review | SmolVLA through LeRobot, recorded in LIBERO/MuJoCo | [Camera views, actions and timing](docs/stress.md) |
+| Physics inspection | Newton CPU/CUDA recordings and Genesis CUDA flights | [Newton export](docs/newton.md), [cloth](docs/cloth.md), [timestep comparison](docs/solver-lab.md) |
+| Scene creation | Blender and OpenUSD | [Recorded samples mapped into editable scenes](docs/director.md) |
+| Telemetry review | Rerun and Foxglove | [Native Rerun workspace and MCAP export](docs/telemetry.md) |
 
-What is unique here is the chain: hash-verified traces, paired comparisons on
-one clock, an MCP agent that directs a Blender film from the recording, and 3D
-scenes whose keyframes map back to the original samples.
+Each example documents its recording method, checked quantities and execution
+requirements. New simulator or policy integrations need their own recorder and
+validation against the original samples.
+
+## Recorded research examples
+
+[Captured-scene editing](https://noteflowai.github.io/robot-reel/scene-lab/),
+a [limited LIBERO-Plus experiment](https://noteflowai.github.io/robot-reel/libero-plus/)
+and [27 GPU skill-delivery trials](https://noteflowai.github.io/evalarc/skill-impact/index.html)
+explore how recordings, skill delivery and independent grading work together.
+All attempts are retained. The [research guide](docs/research-pilots.md)
+separates each pilot's methods and findings; the records do not establish a
+general skill-accuracy gain, a full benchmark score or real-hardware performance.
 
 ## Build your own scene
 
