@@ -5,11 +5,10 @@ the step limit, and that label alone does not distinguish a policy that froze
 from one that was still moving when the budget ran out. This describes the
 recording; selecting an effective intervention requires a controlled experiment.
 
-Reproducibility is the other half. The paired design attributes an outcome flip
-to a condition, which only holds if the same seed and condition give the same
-answer twice. That is an empirical question about a particular machine and stack,
-not something a plan can assert about itself, so it is measured rather than
-claimed.
+The paired groups describe outcome differences under recorded conditions.
+A repeat measures observation stability on a particular machine and stack;
+matching results alone do not establish causal attribution or general
+determinism.
 
 Nothing here re-runs a policy. Both measurements read recorded traces.
 """

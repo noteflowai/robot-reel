@@ -18,8 +18,8 @@
   <a href="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml"><img src="https://github.com/noteflowai/robot-reel/actions/workflows/check.yml/badge.svg?branch=main" alt="CI 检查状态"></a>
   <a href="https://github.com/noteflowai/robot-reel/releases/latest"><img src="https://img.shields.io/github/v/release/noteflowai/robot-reel?color=79dfc3&amp;label=release" alt="最新发布版本"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache--2.0-c1b1ff" alt="代码许可证：Apache-2.0"></a>
-  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-15%20replays-ffca85" alt="在线演示：15 个回放"></a>
-  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-5%20interactive%20labs-ffd21e" alt="Hugging Face：五个交互实验室"></a>
+  <a href="https://noteflowai.github.io/robot-reel/"><img src="https://img.shields.io/badge/live%20demos-recorded%20replays-ffca85" alt="在线演示：录制回放"></a>
+  <a href="https://huggingface.co/spaces/glayguo/robot-reel"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-interactive%20labs-ffd21e" alt="Hugging Face：交互实验室"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12%2B-3776ab" alt="Python 3.12+"></a>
   <a href="https://github.com/noteflowai/robot-reel/stargazers"><img src="https://img.shields.io/github/stars/noteflowai/robot-reel?style=flat&amp;color=edf4ef" alt="GitHub stars"></a>
 </p>
@@ -34,16 +34,9 @@
 
 <p align="center"><sub>观看无需安装，无需账号。封面各面板展示独立录制的运行。</sub></p>
 
-**分享时保留记录身份。** Microduck 链接现携带轨迹指纹和模型版本；不匹配时保留当前视图并说明原因，旧链接明确提示未记录原始身份。实际文件仍可通过离线核验器检查。
-
-**把 Microduck 的一帧交给客户复核。** 下载离线实验和配套帧 JSON，使用安装包中的
-`robot-reel microduck-review` 独立检查原始记录与帧事实，无需克隆源码或 GPU。
-[离线操作说明](docs/offline-lab.md)。
-
-## 0.11.0：有原始证据的研究场景
-
-[查看 27 次真实 GPU 技能评测](https://noteflowai.github.io/evalarc/skill-impact/)，并阅读[完整方法与限制](docs/research-pilots.md)。新增[实景 Blender 编辑](https://noteflowai.github.io/robot-reel/scene-lab/)与[官方 LIBERO-Plus 子集回放](https://noteflowai.github.io/robot-reel/libero-plus/)，把原始记录、技能交付与独立验收连接起来。失败尝试全部保留；不宣称技能提分、完整基准成绩或真机效果。
-
+**分享可复核的 Microduck 帧。** 帧链接关联轨迹指纹和模型版本。下载对应实验与帧 JSON，
+使用 `robot-reel microduck-review` 核对原始记录和帧事实。安装包中的校验器
+无需克隆源码或 GPU。[离线操作说明](docs/offline-lab.md)。
 
 ## 快速开始
 
@@ -81,7 +74,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)；浏览器演示什么都不用装。
 
 
-## 新增 / 同一抛体，步长有多大影响？
+## 同一抛体，步长有多大影响？
 
 **Solver Lab — Genesis × Newton。** 在 **L40S / CUDA** 上独立录制六次
 抛体运动，以相同初始状态和重力，对比每秒 30、120、480 次积分的轨迹。
@@ -99,7 +92,7 @@ Genesis 原生回放与可编辑 OpenUSD。0.10.0 安装包可直接校验和导
 两引擎在这个无碰撞、无阻力的简单场景中产生相同数值；这是积分误差诊断，
 不代表仿真器排名或真实机器人准确率。
 
-## 新场景 / 看懂 Microduck 的每一步
+## 看懂 Microduck 的每一步
 
 **Microduck 动作实验室。** 直接点选三维关节，拖动旋转查看结构，叠加策略目标姿态，点击
 14 关节误差热图，与原始录像同步检查。切换 **0.3 / 0.5 m/s 速度命令**，
@@ -180,16 +173,14 @@ Markdown，重新导入可恢复原始样本位置，也可用命令行与完整
 
 [![真实失败分类与末段运动复盘界面](docs/failure-review.png)](https://noteflowai.github.io/robot-reel/stress/#failures)
 
-**失败究竟是什么。** 成功率不回答这个问题。这里 14 次失败全部止于步数上限，而这个标签
-同时涵盖「策略停住了」和「预算耗尽时仍在伸手」两种情形。实测结果是：**每一次失败在截断时
-都仍在运动**，末端在最后十分之一个回合内移动 44.8 mm 到 138.6 mm，而停滞阈值为 1 mm。
-记录预算耗尽时机械臂仍在运动，但这不能证明增加步数会成功，也不能证明该运动代表任务进展。
+**失败分析。** 14 次未成功试次均达到动作预算上限。各回合最后十分之一时段的末端移动距离
+为 **44.8–138.6 mm**，均高于 1 mm 停滞阈值。这些测量说明截断时机械臂仍在运动；
+是否取得任务进展、增加预算后是否成功，需要另行评估。
 
-**重跑是否给出同样的答案。** 配对分组把结果翻转归因于条件，这只在同一种子与条件两次给出
-同样答案时才成立。整个计划在同一块 L40S 上重跑了一遍：**结果、动作步数、记录中的机器人状态与
-动作数值均为 30 / 30 一致**，**策略调用实际消费的帧渲染 360 / 360 一致**。3,195 个仅记录帧中
-有 1 帧不同，且该帧未被任何推理调用消费。这个差异被如实报告而非抹平：它说明即使在同一硬件上
-渲染也不是逐位确定的，而它没有传播仅仅是因为落点位置。
+**重复运行检查。** 在同一块 L40S 上完整重复一次实验，**30 / 30 试次的结果、动作步数、
+机器人状态和动作数值一致**，**策略调用使用的 360 / 360 个渲染帧一致**。
+3,195 个仅用于记录的帧中有 1 帧不同，该帧未用于推理。这说明实验在已记录条件下
+具有重复一致性，不能单独据此确立普遍确定性或因果归因。
 [分类、可复现性及其局限](docs/stress.md#what-the-failures-were-and-whether-a-repeat-agrees)。
 
 **看清净成功率背后的变化。** 在线实验现可按配对结果分组：相机条件净增两次成功，
@@ -325,20 +316,29 @@ Blender 原生检查覆盖导演影片中的全部 420 个车辆状态，以及 
 新的导演需求由你连接的 Agent 解读，并重新渲染。Microduck 使用 XML PD 执行器回退方案。
 [适用范围、来源与资产条款](THIRD_PARTY.md)。
 
-## 与同类项目的区别
+## 项目定位与已验证工作流
 
-Robot Reel 不是仿真器、训练框架或基准测试。它位于这些工具之后：
-录下一次运行，校验轨迹，再把它变成可观看、可检查、可复用的东西。
+Robot Reel 将策略和仿真运行记录连接到复核与三维创作流程，在同步回放、配对对照
+和可编辑导出中保留执行动作、实测状态与来源标识。
 
-| | 侧重 | Robot Reel 的位置 |
+| 工作流 | 已录制集成 | 证据与指南 |
 | --- | --- | --- |
-| [LeRobot](https://github.com/huggingface/lerobot) | 真实与仿真机器人的数据集、策略与训练 | 运行 LeRobot 策略（SmolVLA），保留每个执行动作、双相机画面以及硬件与耗时记录，做成回放 |
-| [MuJoCo Playground](https://github.com/google-deepmind/mujoco_playground)、[Isaac Lab](https://github.com/isaac-sim/IsaacLab) | GPU 规模的环境与强化学习训练 | 取仿真器的一次运行，让它可检查、可对照、可编辑 |
-| [Genesis](https://github.com/Genesis-Embodied-AI/Genesis)、[Newton](https://github.com/newton-physics/newton) | 物理引擎 | 在 CPU 上录制 Newton，把实测运动导出为带动画的 OpenUSD 场景，并用 Blender 原生检查 |
-| Rerun、Foxglove | 通用遥测查看器 | 发布自包含 HTML 回放、MCAP 遥测，以及内嵌视频并经过核验的 Rerun 原生工作区 |
+| 策略复核 | 通过 LeRobot 运行 SmolVLA，在 LIBERO/MuJoCo 中录制 | [相机视角、动作与耗时](docs/stress.md) |
+| 物理过程检查 | Newton CPU/CUDA 录制与 Genesis CUDA 抛体实验 | [Newton 导出](docs/newton.md)、[布料](docs/cloth.md)、[步长对照](docs/solver-lab.md) |
+| 三维创作 | Blender 与 OpenUSD | [将记录样本映射到可编辑场景](docs/director.md) |
+| 遥测复核 | Rerun 与 Foxglove | [Rerun 原生工作区与 MCAP 导出](docs/telemetry.md) |
 
-独特之处在于这条链：哈希校验的轨迹、同一时钟上的配对对照、
-由 MCP Agent 根据录制指挥 Blender 成片，以及关键帧能映射回原始样本的三维场景。
+每个示例分别记录采集方法、已检查的量与运行要求。接入新的仿真器或策略，
+需要提供相应录制器，并用原始样本验证导出结果。
+
+## 研究示例
+
+[实景编辑](https://noteflowai.github.io/robot-reel/scene-lab/)、
+[限定范围的 LIBERO-Plus 实验](https://noteflowai.github.io/robot-reel/libero-plus/)
+和 [27 次 GPU 技能交付试验](https://noteflowai.github.io/evalarc/skill-impact/index.html)
+探索如何结合原始记录、技能交付与独立评分。全部尝试均保留，
+[研究说明](docs/research-pilots.md)分别列明方法与结果；这些记录不足以确立普遍的
+技能准确率收益、完整基准成绩或真机性能。
 
 ## 构建你自己的场景
 

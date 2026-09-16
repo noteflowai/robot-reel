@@ -72,9 +72,10 @@ apart.
 
 ## Reproducibility of the paired comparison
 
-The paired groups attribute an outcome flip to a condition. That only holds if
-the same seed and condition give the same answer twice, which is a fact about a
-machine and a stack rather than something the plan can assert about itself.
+The paired groups describe outcome differences under the recorded conditions.
+Repeating the plan checks the stability of those observations on the same
+machine and software stack. A matching repeat alone does not establish causal
+attribution or account for variation outside this experiment.
 
 The full plan was re-run once on the same NVIDIA L40S, with the pinned policy,
 assets and simulator versions, and compared at every level:
@@ -92,19 +93,18 @@ python3 -m robot_reel.cli stress docs/stress --repeat artifacts/repro-gpu-30
 | Identical renders on frames a policy call consumed | 360 / 360 frames |
 | Identical renders on frames recorded only | 3194 / 3195 frames |
 
-The two render levels are separated because only the first can change an
-outcome. The policy is called once every ten steps, so most recorded frames never
-reach it. The single differing frame is the wrist view at frame 3 of
+The two render levels separate policy inputs from images saved only for review.
+The policy is called once every ten steps, so most recorded frames never reach
+it. The single differing frame is the wrist view at frame 3 of
 `seed-05-camera`, which no policy call consumed; the recorded robot states and actions
 of that trial compare numerically equal throughout. This compares the saved
 `state` and `action` arrays, not every internal MuJoCo variable or floating-point
 bit pattern (for example, numeric equality treats signed zeros as equal).
 
-That difference is worth stating rather than rounding away. It shows the renderer
-is not bitwise deterministic across runs even on identical hardware, and it did
-not propagate here only because of where it landed. Had the same deviation
-occurred on a call boundary it would have reached the policy, and a changed
-action could have changed the outcome the paired groups attribute to a condition.
+The differing image is retained as an observed rendering discrepancy. It was
+not a policy input, and the recorded state/action comparison found no numerical
+change in that trial. These records do not measure the effect that a different
+image at an inference step would have on the policy or task outcome.
 
 The failure taxonomy is committed inside the pack as `reliability.json`, and
 verification recomputes it from the traces rather than only checking its hash.
