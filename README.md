@@ -10,7 +10,7 @@
 <h1 align="center">Give Physical AI a replay button.</h1>
 
 <p align="center">
-  Real policy rollouts. Films you can inspect. 3D scenes you can edit.<br>
+  Recorded policy runs in simulation. Films you can inspect. 3D scenes you can edit.<br>
   Watch the behavior, step through the evidence, and take the scene with you.
 </p>
 
@@ -376,7 +376,7 @@ Choose the workflow you want to build:
 | Inspect paired trials in Rerun | [Portable video, 3D paths and native readback](docs/telemetry.md#native-rerun-workspace) |
 | Run SmolVLA locally | [Isolated CPU environment + pinned models](docs/vla.md) |
 | Let an agent direct a film | [MCP setup + Blender build/render](docs/director.md) |
-| Export real physics to a DCC | [Newton → OpenUSD → Blender](docs/newton.md) |
+| Export recorded simulations to a DCC | [Newton → OpenUSD → Blender](docs/newton.md) |
 | Explore a physics parameter sweep | [Butterfly Lab → twelve isolated worlds](docs/chaos.md) |
 | Record Microduck, braking or the arm | [Recording packs + runtime setup](docs/recording.md) |
 | Compare two captured runs | [Comparison contract + CLI](docs/comparison.md) |
