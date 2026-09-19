@@ -85,6 +85,20 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 在线回放可直接在浏览器中打开，无需在本机安装仿真环境。
 
 
+## 同一帧，回到三维现场。
+
+**[Scene Lab](https://noteflowai.github.io/robot-reel/scene-lab/) — Microduck × 实景资产 × Blender。**
+逐帧检查机器人在原始与编辑后海岸场景中的运动，查看轨迹和接触点，保持原始相机视角，
+或环绕完整机器人模型。对照同一帧的 MuJoCo 与 Blender 视频，再下载带动画的原生工程，
+或导出可与原始记录核对的单帧 JSON。
+
+[![使用录制相机在 Blender 中渲染的 Microduck 海岸场景](docs/scene-lab/motion/baseline/poster.png)](https://noteflowai.github.io/robot-reel/scene-lab/)
+
+两组六秒仿真全部保留，包括跌倒与滑移；共 **362 帧**完成原生变换与虚拟相机投影核对。
+完整模型、简化包围盒／碰撞代理和视频回放三种模式支持不同渲染条件。
+[复现步骤与实测性能](examples/scene-motion/README.md) ·
+[下载 Blender 动画工程](https://github.com/noteflowai/robot-reel/releases/download/v0.13.0/scene-motion-native.zip)。
+
 ## 同一抛体，步长有多大影响？
 
 **Solver Lab — Genesis × Newton。** 在 **L40S / CUDA** 上独立录制六次

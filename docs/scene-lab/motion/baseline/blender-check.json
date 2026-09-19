@@ -1,0 +1,29 @@
+{
+  "schema": "robot-reel.scene-motion-blender-check.v1",
+  "passed": true,
+  "blender": "4.5.13 LTS",
+  "project": {
+    "sha256": "94f2673bcabf8bb0543b203439543a581e86e36c8ae9a9790a97f3e79429df0c",
+    "bytes": 23686686
+  },
+  "source_trace": {
+    "sha256": "de42072b650fb69a5e03c3486adfc9cb2e177c20aa48e4a9b7ee842031ea0e4c",
+    "bytes": 2130519
+  },
+  "usd": {
+    "sha256": "3ff51835371fbc3ef3fc78474cbd14d72e52b0525476f88114b8aad344e92dfc",
+    "bytes": 5743388
+  },
+  "frames": 181,
+  "body_transforms": 2715,
+  "visual_geometry_transforms": 12670,
+  "checked_local_vertices": 397152,
+  "max_world_matrix_error": 5.960356252998622e-08,
+  "camera_projections": 2715,
+  "max_body_position_error_m": 5.960356252998622e-08,
+  "virtual_camera_lens_mm": 50.0,
+  "checked_render_files": 181,
+  "projections_outside_image": 0,
+  "max_projection_error_px": 0.00013738461393586476,
+  "scope": "Every native body/visual transform and virtual-camera projection; no physical survey or real-camera calibration."
+}

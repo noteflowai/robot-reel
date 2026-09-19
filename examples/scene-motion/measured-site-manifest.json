@@ -1,0 +1,213 @@
+{
+  "schema": "robot-reel.scene-site.v2",
+  "files": {
+    "METHODS.md": {
+      "sha256": "2c6b93e8dfaa4aa5ffc139ae4a9e62ad518c3eb03755821f3baa3266dc2255d7",
+      "bytes": 9027
+    },
+    "baseline/collision-heightfield.json": {
+      "sha256": "1b54217fb312e49d434f943de729448a6a1d0270fc1e8f17beac75b584ea005b",
+      "bytes": 74202
+    },
+    "baseline/edit.json": {
+      "sha256": "b1e8e20d5571e07482d247e92499db36a416959bbc3bc8275861409d5069cf27",
+      "bytes": 122
+    },
+    "baseline/native-check.json": {
+      "sha256": "2563a64d3f561e738c9d72fdcd93285723464f3f3d9d07f14b7b2e9f3271c02b",
+      "bytes": 911
+    },
+    "baseline/preview.png": {
+      "sha256": "da3d08eef3429c25722d5f766d35b96f9e26fa01a42b839ae650be6cba8b1130",
+      "bytes": 959091
+    },
+    "baseline/scene.glb": {
+      "sha256": "3ed37b4a5984dc7f345fd893226bf43f747f84c6380ad665ea2a5a8c8dcb296d",
+      "bytes": 6690360
+    },
+    "baseline/scene.json": {
+      "sha256": "1eb2abe3e03afe7968a55b3f6ef9ed0f5e2696f3c104141d5d24fb29aa754d52",
+      "bytes": 4316
+    },
+    "baseline/terrain.splat": {
+      "sha256": "679567e417c681c99332a6053d0d1ba376358997d035219a0103d3a48325d5fb",
+      "bytes": 800000
+    },
+    "edited/collision-heightfield.json": {
+      "sha256": "62e5211778afbe3ef762338a72e026ed88adaf010d015ee63b28279be7940f80",
+      "bytes": 74003
+    },
+    "edited/edit.json": {
+      "sha256": "29c23c06e1ba7b94c63ee3541bb08b56e30a356d377ac5baadf5900773487784",
+      "bytes": 122
+    },
+    "edited/native-check.json": {
+      "sha256": "67da0e98cf54f4a9ad5834a8659c5052dc4dee2d3f1b74372865213dd2eb5af4",
+      "bytes": 912
+    },
+    "edited/preview.png": {
+      "sha256": "1436f9875007ead9589438984b6974cf716aab2ddfaaabded9b9b9e851ce2b87",
+      "bytes": 982934
+    },
+    "edited/scene.glb": {
+      "sha256": "49562d670c31cb297d3bf4b1915876087356d36dc8fe28b6c0bdb4948740bcfb",
+      "bytes": 6690388
+    },
+    "edited/scene.json": {
+      "sha256": "2916f0c392a09df742f008ddaf7db18d8db3392034154e4508dfb36c90343eb9",
+      "bytes": 4317
+    },
+    "edited/terrain.splat": {
+      "sha256": "457844f9f1a3e454bceb423e31c38d126eceb05b96b91c1d36d14f1c33f1325d",
+      "bytes": 800000
+    },
+    "index.html": {
+      "sha256": "afcad7371a3d2744fb7fc8ddcf923171e74b357662208dbd2ff92acff9e5687a",
+      "bytes": 17722
+    },
+    "motion/NOTICE.txt": {
+      "sha256": "51dfce35b9e8b92d65729cf759aff4471c64a8d094018580d643a3ab011678cf",
+      "bytes": 733
+    },
+    "motion/baseline/blender-check.json": {
+      "sha256": "deb35c0144505c92a18560087d0a8e9720a41c03a268649683e2f106ea2e20f1",
+      "bytes": 1008
+    },
+    "motion/baseline/blender.mp4": {
+      "sha256": "13cc061c262e5e5c9f4722a79f4ac25813485747057b6eefb75919244e07886a",
+      "bytes": 452675
+    },
+    "motion/baseline/export-check.json": {
+      "sha256": "398bfe08c82d3d75671636500f40a5268324aa6fa9940fe254e69f19598aa932",
+      "bytes": 1087
+    },
+    "motion/baseline/motion.usdc": {
+      "sha256": "3ff51835371fbc3ef3fc78474cbd14d72e52b0525476f88114b8aad344e92dfc",
+      "bytes": 5743388
+    },
+    "motion/baseline/native-check.json": {
+      "sha256": "5e73a97c969ab11c5435fdb18081ea565172d3501e21492a679c642b33372a7e",
+      "bytes": 591
+    },
+    "motion/baseline/poster.png": {
+      "sha256": "f58047f9116edfb25e28d0d043c092d3178985c10c0fdea500a1ca08abdb84b5",
+      "bytes": 661593
+    },
+    "motion/baseline/project.json": {
+      "sha256": "64e26ed3551fc9225f6f1288260d3b1f7cc38f96ab9a82834f230f374399fa80",
+      "bytes": 29273
+    },
+    "motion/baseline/simulation.mp4": {
+      "sha256": "a5a27a4303aade01ae08ec1c1619ad20e527eba9d7d7083e5de7914aee523e97",
+      "bytes": 294387
+    },
+    "motion/baseline/trace.json": {
+      "sha256": "de42072b650fb69a5e03c3486adfc9cb2e177c20aa48e4a9b7ee842031ea0e4c",
+      "bytes": 2130519
+    },
+    "motion/baseline/video-check.json": {
+      "sha256": "b0e45d2b38da004d85b6464a7e3e68d16b5e78847d0df4e80b61549ee9126976",
+      "bytes": 2461
+    },
+    "motion/body-bounds.json": {
+      "sha256": "ea9c8b7abcaf8f69a9252b31e9b9db69e4000a6dffdff4c563fcf22de5e3b8bd",
+      "bytes": 4532
+    },
+    "motion/edited/blender-check.json": {
+      "sha256": "3cdf326803a385e77b06869e457e89dd3e91b89547a490fbc55798194f42516d",
+      "bytes": 1010
+    },
+    "motion/edited/blender.mp4": {
+      "sha256": "43d5ecd0130d8b4f7efc9abda096696d7fa37d2ef5ead94ae23d114ad406e638",
+      "bytes": 437668
+    },
+    "motion/edited/export-check.json": {
+      "sha256": "50894cc4cb2da05f5aebc050d88437bb0bf73545dc6a581c5e85ca72e1cd7e2b",
+      "bytes": 1086
+    },
+    "motion/edited/motion.usdc": {
+      "sha256": "16fea2b28b709a1d4631817e3193f82d689e76c05d12db3fbf9e58134a6796aa",
+      "bytes": 5743388
+    },
+    "motion/edited/native-check.json": {
+      "sha256": "fca679bf8748c7004ad6883e593be3fdccc4f312d897a39e210e36c9c2ded838",
+      "bytes": 591
+    },
+    "motion/edited/poster.png": {
+      "sha256": "e69c83f0bee98925caf7fc155b2af02f1c9a942715de895193886823c73faa53",
+      "bytes": 696270
+    },
+    "motion/edited/project.json": {
+      "sha256": "ffaa41e41b306fc4c1aec435b1c6c15a8cbc7155e88afae27646855dfd1e8382",
+      "bytes": 29273
+    },
+    "motion/edited/simulation.mp4": {
+      "sha256": "51a46f57a5953fc21d34dcb0502b90d18e70f5ada950edefa8d74d81657204ce",
+      "bytes": 292237
+    },
+    "motion/edited/trace.json": {
+      "sha256": "eb98e65a02afe7c15d1a7938908c1a7537e6a299733f257ec47db2c6603c2923",
+      "bytes": 2051614
+    },
+    "motion/edited/video-check.json": {
+      "sha256": "89e69658a315c182a99bdf26b548d5478567180c530df8a4e627399977288798",
+      "bytes": 2459
+    },
+    "motion/motion.json": {
+      "sha256": "d8fd4d5b194c24ef348a9f7b13926d2ea05086baca3e535e4deae7fc09d2f5e2",
+      "bytes": 8665
+    },
+    "motion/robot.glb": {
+      "sha256": "5487bdf24ac0eda1ce3827051b9c416d20d714b74420fd0acc8efecfca53d3cd",
+      "bytes": 7817716
+    },
+    "scene_lab.js": {
+      "sha256": "0c8ede1fe4920c9af4d9b1c06f0dc491f8ecde438f374d1b3b11dd7016d1d4c7",
+      "bytes": 10011
+    },
+    "scene_motion_view.js": {
+      "sha256": "fa9812904799506cb1e1a9618c9ea4af792003c23a9e6983cd9f4b6aca663c53",
+      "bytes": 24080
+    },
+    "vendor/SPARK-LICENSE": {
+      "sha256": "51829693e5dccd9ca1daa093991faac3aaa93238eb8fd5f5cb4130af85791d64",
+      "bytes": 1088
+    },
+    "vendor/THREE-LICENSE": {
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+      "bytes": 1081
+    },
+    "vendor/addons/controls/OrbitControls.js": {
+      "sha256": "b97879c748170baadeb3fb84cea1ffdf4674e283dc06042f34e2acb95a76042c",
+      "bytes": 38703
+    },
+    "vendor/addons/loaders/GLTFLoader.js": {
+      "sha256": "67ac5551fdafa6e349bd80c8f8e5e39c136d6b2fb1ad647db9abb21dc86f9e4a",
+      "bytes": 114739
+    },
+    "vendor/addons/postprocessing/Pass.js": {
+      "sha256": "444b409c235ead986893c472e720da1b779a56985c7d10b279c7944b52bd61c5",
+      "bytes": 4218
+    },
+    "vendor/addons/utils/BufferGeometryUtils.js": {
+      "sha256": "fda7e946b8e0b5ab39b779206589e7a1079a22eb24efb89d7223e03fdfb1f751",
+      "bytes": 35539
+    },
+    "vendor/spark.module.min.js": {
+      "sha256": "96869fab4f2164d5d267b1df1e1b636c05e6499973cb8dddec23387919b38526",
+      "bytes": 2726433
+    },
+    "vendor/three.core.min.js": {
+      "sha256": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de",
+      "bytes": 381124
+    },
+    "vendor/three.module.min.js": {
+      "sha256": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6",
+      "bytes": 338908
+    },
+    "vendor/vendor.json": {
+      "sha256": "b3c63024a274f21a4424a146983ab6feebdf82a3f04ccbcc25edd0e36992d105",
+      "bytes": 2136
+    }
+  }
+}

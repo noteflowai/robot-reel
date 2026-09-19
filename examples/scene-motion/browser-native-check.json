@@ -1,0 +1,51 @@
+{
+  "schema": "robot-reel.scene-browser-native-check.v1",
+  "passed": true,
+  "mujoco": "3.13.0",
+  "browser_readback": {
+    "sha256": "7a63d28e1ea564a395da48a9e82d3ab216e3a4313b373be34ff85b7c2752ef6a",
+    "bytes": 8075952
+  },
+  "browser": {
+    "version": "153.0.8010.12",
+    "args": [
+      "--use-gl=angle",
+      "--use-angle=swiftshader",
+      "--enable-unsafe-swiftshader"
+    ],
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+  },
+  "cases": {
+    "baseline": {
+      "frames": 181,
+      "body_transforms": 2715,
+      "visual_transforms": 12670,
+      "camera_projections": 2715,
+      "checked_visual_vertices": 397152,
+      "checked_contacts": 448,
+      "max_world_matrix_error": 6.661338147750939e-15,
+      "max_projection_error_px": 3.979039320256561e-13,
+      "max_contact_position_error_m": 5.945514347516223e-08,
+      "source_trace": {
+        "sha256": "de42072b650fb69a5e03c3486adfc9cb2e177c20aa48e4a9b7ee842031ea0e4c",
+        "bytes": 2130519
+      }
+    },
+    "edited": {
+      "frames": 181,
+      "body_transforms": 2715,
+      "visual_transforms": 12670,
+      "camera_projections": 2715,
+      "checked_visual_vertices": 397152,
+      "checked_contacts": 349,
+      "max_world_matrix_error": 7.549516567451064e-15,
+      "max_projection_error_px": 4.547473508864641e-13,
+      "max_contact_position_error_m": 1.1524189247325012e-07,
+      "source_trace": {
+        "sha256": "eb98e65a02afe7c15d1a7938908c1a7537e6a299733f257ec47db2c6603c2923",
+        "bytes": 2051614
+      }
+    }
+  },
+  "scope": "Native MuJoCo transforms and camera versus browser scene matrices and projections; original visual buffers and recorded contacts. This is not raster pixel equality or a physical-camera calibration."
+}

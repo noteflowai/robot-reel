@@ -14,6 +14,26 @@ Initial pilots recorded on 2026-09-14; separately identified follow-ups on 2026-
 
 ## Inspect the experiments
 
+### Captured-scene robot registration: 2026-09-19
+
+[Scene Lab](https://noteflowai.github.io/robot-reel/scene-lab/) includes two new
+six-second Microduck simulations on the original and edited captured terrain.
+All 362 frames retain the floating-root pose, body transforms, original camera
+and terrain contacts. Both falls/slides are retained. Initial placement follows
+each terrain's height, so these are not equal-world-state robustness trials.
+
+Independent checks cover saved-control replay, all native USD/Blender frames,
+every browser body and visual transform, and camera projection. The portable
+Blender projects were extracted elsewhere and reopened without path edits.
+Videos are decoded in full and compared to the corresponding source PNGs.
+These establish recorded virtual-scene agreement, not physical calibration.
+
+[Reproduction and measured browser performance](../examples/scene-motion/README.md)
+include L40S Vulkan and SwiftShader runs, 1440px/390px viewports, transfer bytes,
+render FPS, process memory and the exact measured-file inventory. A narrow
+server viewport is not a physical phone measurement. The viewer offers full
+geometry, body bounds/proxy and video fallback; it performs no new inference.
+
 ### Agent-requested Funes MCP handoff: 2026-09-19
 
 [Six actual continuations](https://noteflowai.github.io/evalarc/funes-handoff/index.html)
@@ -98,3 +118,9 @@ A wheel-packaging issue found while installing LIBERO-Plus already had an upstre
 ## Versioned public data
 
 [Noteflow Research Pilots on Hugging Face](https://huggingface.co/datasets/glayguo/noteflow-research-pilots/tree/v2026-09-14) publishes all 45 agent trials, native Blender downloads, OpenEnv controls and the three Plus recordings. Publication revision `d42ad1d0e1073029254e9e5c3980541a3b166c92`: all 184 file identities were checked through the anonymous Hub API.
+
+Scene Motion follow-up: dataset tag `v2026-09-19-scene-motion`, immutable revision
+`edccf9ab6edac5c7c89b3633fe32dbd2781c8c7c`. The native archive and full producer archive
+retain two recorded cases, all native PNGs and source state, relocated-project
+checks, and measured browser inputs. This is a separate robot-registration
+experiment; it adds no LLM task-efficacy trials.

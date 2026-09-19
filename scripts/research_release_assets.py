@@ -16,7 +16,8 @@ def fetch_assets(source, output, *, opener=urllib.request.urlopen):
             or not re.fullmatch(r"[0-9a-f]{40}", document.get("revision", ""))):
         raise ValueError("expected the reviewed immutable public dataset")
     files = document["files"]
-    if set(files) != {"scene-lab-native.zip", "research-records.zip"}:
+    required = {"scene-lab-native.zip", "research-records.zip"}
+    if set(files) not in (required, required | {"scene-motion-native.zip"}):
         raise ValueError("unexpected research release inventory")
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
@@ -57,4 +58,24 @@ def fetch_assets(source, output, *, opener=urllib.request.urlopen):
                     if (scene["files"]["scene.blend"] != {"sha256": checksum, "bytes": len(native)}
                             or check["scene_sha256"] != checksum or check["passed"] is not True):
                         raise ValueError("native scene differs from recorded independent check")
+            elif name == "scene-motion-native.zip":
+                expected_names = {"README.md", "LICENSE", "check_scene_motion_blender.py"}
+                for variant in ("baseline", "edited"):
+                    project = json.loads(archive.read(f"{variant}/project.json"))
+                    check = json.loads(archive.read(f"{variant}/producer-native-check.json"))
+                    if (project.get("schema") != "robot-reel.scene-motion-blender.v1"
+                            or check.get("passed") is not True
+                            or check["project"] != project["files"]["scene-motion.blend"]
+                            or check["source_trace"] != project["source_trace"]
+                            or check["frames"] != len(project["rendered_source_frames"])):
+                        raise ValueError("motion archive differs from its native check")
+                    expected_names.update({f"{variant}/project.json", f"{variant}/producer-native-check.json"})
+                    for member, identity in project["files"].items():
+                        filename = f"{variant}/{member}"
+                        content = archive.read(filename)
+                        if identity != {"sha256": hashlib.sha256(content).hexdigest(), "bytes": len(content)}:
+                            raise ValueError("motion project input differs")
+                        expected_names.add(filename)
+                if set(archive.namelist()) != expected_names:
+                    raise ValueError("motion archive inventory differs")
     return [output / name for name in sorted(files)]

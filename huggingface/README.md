@@ -52,7 +52,7 @@ model-service account is needed to explore.
 
 | Experiment | Try this | Evidence you can take away |
 | --- | --- | --- |
-| **Scene Lab** | Compare a photogrammetry mesh, 25,000 mesh-sampled surface Gaussians and a heightfield collision proxy. | Baseline and edited Blender scenes, GPU renders, GLB/SPLAT and numeric recipes. |
+| **Scene Lab** | Replay Microduck on captured terrain; step through the source camera, body poses and contacts, then compare the Blender frame. | All 362 source frames, both original and edited scenes, checked videos, animated USD/Blender projects, GLB/SPLAT and edit recipes. |
 | **LIBERO-Plus** | Compare three runs of one task from one paired initial state: baseline, camera and lighting conditions. | Official perturbation IDs, source clips, applied controls and native scene parameters. |
 | **Solver Lab** | Compare six Genesis and Newton runs at three timesteps against the analytic flight. | 366 recorded positions/velocities, native Genesis trajectories, OpenUSD, CSV and an offline ZIP. |
 | **SmolVLA Stress Lab** | Compare 30 simulation trials on one task: 10 initial states × 3 conditions. Open each paired success or failure. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
@@ -105,7 +105,13 @@ records the selected official perturbations and the shared initial state.
 Scene Lab's Gaussians are sampled from the captured mesh; no multi-view 3DGS
 training is performed. The heightfield is a geometric collision approximation.
 [Its method](https://github.com/noteflowai/robot-reel/blob/main/docs/scene-lab/METHODS.md)
-documents the conversion, Blender edits and file checks.
+documents the conversion, Blender edits and file checks. The two new motion
+recordings include full floating-root poses; both robots fall and slide. Each
+uses the same placement rule relative to its terrain, so initial world heights
+differ. Browser/native checks establish virtual-camera registration. Full
+meshes, body bounds/proxy and recorded-video modes provide explicit fallback.
+[L40S and SwiftShader measurements](https://github.com/noteflowai/robot-reel/tree/main/examples/scene-motion)
+report render FPS, transfer bytes and sampled memory for the measured build.
 
 Cloth coefficients are solver settings, not calibrated fabric properties; no
 collisions or self-contact are modeled. Butterfly sculpture depth represents
@@ -115,7 +121,7 @@ Solver Lab measures integration error in a no-contact, constant-gravity flight.
 Its two engines match under these recorded conditions; the experiment is a
 timestep diagnostic rather than an engine ranking.
 
-Microduck's 0.3 / 0.5 m/s labels are speed commands, not achieved speeds.
+The separate Microduck Motion Lab's 0.3 / 0.5 m/s labels are speed commands, not achieved speeds.
 Its schematic fixes the floating root because the original recording did not
 save root orientation. Targets are geometric overlays, not independent physics
 outcomes. The recordings use the XML PD-actuator fallback, not BAM or hardware.
