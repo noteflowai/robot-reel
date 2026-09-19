@@ -1,0 +1,284 @@
+{
+  "schema": "robot-reel.scene-motion-site.v1",
+  "plan": {
+    "schema": "robot-reel.scene-motion-plan.v1",
+    "seconds": 6,
+    "physics_timestep": 0.005,
+    "sample_hz": 30,
+    "forward_command_mps": 0.3,
+    "base_clearance_m": 0.125,
+    "command_schedule": "stand 0..1s; forward 0.3m/s 1..5s; stand 5..6s; all 13 command fields except forward remain zero",
+    "spawn_rule": "XY at central heightfield grid vertex; sample the centre, edge centres and corners of a 24 cm square; base Z is the maximum interpolated proxy height plus 0.125 m. No initial terrain penetration allowed.",
+    "camera": {
+      "width": 960,
+      "height": 540,
+      "vertical_fov_degrees": 45,
+      "offset_m": [
+        1.2,
+        -1.5,
+        0.9
+      ],
+      "target_offset_m": [
+        0.2,
+        0,
+        0.1
+      ]
+    },
+    "cases": {
+      "baseline": {
+        "files": {
+          "scene.json": {
+            "sha256": "1eb2abe3e03afe7968a55b3f6ef9ed0f5e2696f3c104141d5d24fb29aa754d52",
+            "bytes": 4316
+          },
+          "collision-heightfield.json": {
+            "sha256": "1b54217fb312e49d434f943de729448a6a1d0270fc1e8f17beac75b584ea005b",
+            "bytes": 74202
+          },
+          "edit.json": {
+            "sha256": "b1e8e20d5571e07482d247e92499db36a416959bbc3bc8275861409d5069cf27",
+            "bytes": 122
+          }
+        }
+      },
+      "edited": {
+        "files": {
+          "scene.json": {
+            "sha256": "2916f0c392a09df742f008ddaf7db18d8db3392034154e4508dfb36c90343eb9",
+            "bytes": 4317
+          },
+          "collision-heightfield.json": {
+            "sha256": "62e5211778afbe3ef762338a72e026ed88adaf010d015ee63b28279be7940f80",
+            "bytes": 74003
+          },
+          "edit.json": {
+            "sha256": "29c23c06e1ba7b94c63ee3541bb08b56e30a356d377ac5baadf5900773487784",
+            "bytes": 122
+          }
+        }
+      }
+    },
+    "source_check": {
+      "sha256": "f14f3ff15c3244c555c000bb25de9580bf2abd0d529bfc3840fca5ba0b1a5d50",
+      "bytes": 17182
+    },
+    "scope": "Engineering registration experiment using the official policy with XML PD actuators on a captured top-surface approximation. Both recorded outcomes are retained; no robot robustness score is defined."
+  },
+  "policy": {
+    "revision": "088524a64e2557dc453256b6071dbb9d23888802",
+    "sha256": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c",
+    "model_commit": "53b8971b61baf5b7f3c16d135dd7cac37623de4b",
+    "providers": [
+      "CPUExecutionProvider"
+    ],
+    "actuators": "XML position-actuator fallback; not BAM"
+  },
+  "cases": {
+    "baseline": {
+      "trace": {
+        "sha256": "de42072b650fb69a5e03c3486adfc9cb2e177c20aa48e4a9b7ee842031ea0e4c",
+        "bytes": 2130519
+      },
+      "frames": 181,
+      "policy_calls": 300,
+      "camera": {
+        "name": "RecordedCamera",
+        "width": 960,
+        "height": 540,
+        "position_m": [
+          1.2,
+          -1.4999990463256836,
+          2.6809725401862594
+        ],
+        "axes_world": [
+          [
+            0.8320502943378437,
+            0.5547001962252291,
+            -5.551115123125783e-17
+          ],
+          [
+            -0.2249953309558841,
+            0.3374929964338263,
+            0.9140435320082789
+          ],
+          [
+            0.5070201265633938,
+            -0.7605301898450907,
+            0.4056161012507153
+          ]
+        ],
+        "focal_px": [
+          651.8376618407357,
+          651.8376618407357
+        ],
+        "principal_px": [
+          480.0,
+          270.0
+        ],
+        "vertical_fov_degrees": 45.0,
+        "convention": "camera right +X, up +Y, forward -Z; pixel origin top-left"
+      },
+      "initial_root_m": [
+        0.0,
+        9.5367431640625e-07,
+        1.7809725401862593
+      ],
+      "final_root_m": [
+        -0.6632850734562711,
+        -0.9271733001623415,
+        1.3096310036302339
+      ],
+      "frames_with_terrain_contacts": 164
+    },
+    "edited": {
+      "trace": {
+        "sha256": "eb98e65a02afe7c15d1a7938908c1a7537e6a299733f257ec47db2c6603c2923",
+        "bytes": 2051614
+      },
+      "frames": 181,
+      "policy_calls": 300,
+      "camera": {
+        "name": "RecordedCamera",
+        "width": 960,
+        "height": 540,
+        "position_m": [
+          1.2,
+          -1.4999990463256836,
+          3.343362064725856
+        ],
+        "axes_world": [
+          [
+            0.8320502943378437,
+            0.5547001962252291,
+            -1.1102230246251565e-16
+          ],
+          [
+            -0.22499533095588403,
+            0.3374929964338263,
+            0.9140435320082789
+          ],
+          [
+            0.5070201265633938,
+            -0.7605301898450907,
+            0.4056161012507153
+          ]
+        ],
+        "focal_px": [
+          651.8376618407357,
+          651.8376618407357
+        ],
+        "principal_px": [
+          480.0,
+          270.0
+        ],
+        "vertical_fov_degrees": 45.0,
+        "convention": "camera right +X, up +Y, forward -Z; pixel origin top-left"
+      },
+      "initial_root_m": [
+        0.0,
+        9.5367431640625e-07,
+        2.4433620647258563
+      ],
+      "final_root_m": [
+        -1.1393474534363548,
+        -0.3847353360178633,
+        1.7652180764725354
+      ],
+      "frames_with_terrain_contacts": 159
+    }
+  },
+  "files": {
+    "NOTICE.txt": {
+      "sha256": "51dfce35b9e8b92d65729cf759aff4471c64a8d094018580d643a3ab011678cf",
+      "bytes": 733
+    },
+    "baseline/blender-check.json": {
+      "sha256": "deb35c0144505c92a18560087d0a8e9720a41c03a268649683e2f106ea2e20f1",
+      "bytes": 1008
+    },
+    "baseline/blender.mp4": {
+      "sha256": "13cc061c262e5e5c9f4722a79f4ac25813485747057b6eefb75919244e07886a",
+      "bytes": 452675
+    },
+    "baseline/export-check.json": {
+      "sha256": "398bfe08c82d3d75671636500f40a5268324aa6fa9940fe254e69f19598aa932",
+      "bytes": 1087
+    },
+    "baseline/motion.usdc": {
+      "sha256": "3ff51835371fbc3ef3fc78474cbd14d72e52b0525476f88114b8aad344e92dfc",
+      "bytes": 5743388
+    },
+    "baseline/native-check.json": {
+      "sha256": "5e73a97c969ab11c5435fdb18081ea565172d3501e21492a679c642b33372a7e",
+      "bytes": 591
+    },
+    "baseline/poster.png": {
+      "sha256": "f58047f9116edfb25e28d0d043c092d3178985c10c0fdea500a1ca08abdb84b5",
+      "bytes": 661593
+    },
+    "baseline/project.json": {
+      "sha256": "64e26ed3551fc9225f6f1288260d3b1f7cc38f96ab9a82834f230f374399fa80",
+      "bytes": 29273
+    },
+    "baseline/simulation.mp4": {
+      "sha256": "a5a27a4303aade01ae08ec1c1619ad20e527eba9d7d7083e5de7914aee523e97",
+      "bytes": 294387
+    },
+    "baseline/trace.json": {
+      "sha256": "de42072b650fb69a5e03c3486adfc9cb2e177c20aa48e4a9b7ee842031ea0e4c",
+      "bytes": 2130519
+    },
+    "baseline/video-check.json": {
+      "sha256": "b0e45d2b38da004d85b6464a7e3e68d16b5e78847d0df4e80b61549ee9126976",
+      "bytes": 2461
+    },
+    "body-bounds.json": {
+      "sha256": "ea9c8b7abcaf8f69a9252b31e9b9db69e4000a6dffdff4c563fcf22de5e3b8bd",
+      "bytes": 4532
+    },
+    "edited/blender-check.json": {
+      "sha256": "3cdf326803a385e77b06869e457e89dd3e91b89547a490fbc55798194f42516d",
+      "bytes": 1010
+    },
+    "edited/blender.mp4": {
+      "sha256": "43d5ecd0130d8b4f7efc9abda096696d7fa37d2ef5ead94ae23d114ad406e638",
+      "bytes": 437668
+    },
+    "edited/export-check.json": {
+      "sha256": "50894cc4cb2da05f5aebc050d88437bb0bf73545dc6a581c5e85ca72e1cd7e2b",
+      "bytes": 1086
+    },
+    "edited/motion.usdc": {
+      "sha256": "16fea2b28b709a1d4631817e3193f82d689e76c05d12db3fbf9e58134a6796aa",
+      "bytes": 5743388
+    },
+    "edited/native-check.json": {
+      "sha256": "fca679bf8748c7004ad6883e593be3fdccc4f312d897a39e210e36c9c2ded838",
+      "bytes": 591
+    },
+    "edited/poster.png": {
+      "sha256": "e69c83f0bee98925caf7fc155b2af02f1c9a942715de895193886823c73faa53",
+      "bytes": 696270
+    },
+    "edited/project.json": {
+      "sha256": "ffaa41e41b306fc4c1aec435b1c6c15a8cbc7155e88afae27646855dfd1e8382",
+      "bytes": 29273
+    },
+    "edited/simulation.mp4": {
+      "sha256": "51a46f57a5953fc21d34dcb0502b90d18e70f5ada950edefa8d74d81657204ce",
+      "bytes": 292237
+    },
+    "edited/trace.json": {
+      "sha256": "eb98e65a02afe7c15d1a7938908c1a7537e6a299733f257ec47db2c6603c2923",
+      "bytes": 2051614
+    },
+    "edited/video-check.json": {
+      "sha256": "89e69658a315c182a99bdf26b548d5478567180c530df8a4e627399977288798",
+      "bytes": 2459
+    },
+    "robot.glb": {
+      "sha256": "5487bdf24ac0eda1ce3827051b9c416d20d714b74420fd0acc8efecfca53d3cd",
+      "bytes": 7817716
+    }
+  }
+}

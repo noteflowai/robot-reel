@@ -1,0 +1,19 @@
+{
+  "valid": true,
+  "frames": 181,
+  "policy_calls": 300,
+  "body_transforms": 2715,
+  "schema": "robot-reel.scene-motion-native-check.v1",
+  "trace": {
+    "sha256": "de42072b650fb69a5e03c3486adfc9cb2e177c20aa48e4a9b7ee842031ea0e4c",
+    "bytes": 2130519
+  },
+  "mujoco": "3.13.0",
+  "max_body_pose_error": 0.0,
+  "max_camera_transform_error": 0.0,
+  "max_replayed_state_error": 0.0,
+  "max_policy_observation_error": 0.0,
+  "checked_terrain_contacts": 448,
+  "max_replayed_contact_error": 0.0,
+  "scope": "Native FK and saved-control dynamics replay; policy inference is not repeated."
+}

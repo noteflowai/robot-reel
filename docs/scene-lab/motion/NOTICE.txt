@@ -1,0 +1,14 @@
+Scene motion media and geometry
+
+Terrain: Poly Haven Coast Rocks 02, CC0-1.0. Photography and processing:
+Rob Tuytel; cleanup: Rico Cilliers. Source identities remain in scene.json.
+
+Robot: Pollen Robotics Microduck, source revision
+53b8971b61baf5b7f3c16d135dd7cac37623de4b. Model-derived geometry and footage
+retain upstream Creative Commons BY-SA-NC terms; the upstream README does
+not specify a license version. The Robot Reel code license and terrain CC0
+license do not relicense the robot or the combined robot footage.
+
+These are simulations using XML position-actuator fallback on a captured
+top-surface heightfield. They are not hardware trials. Both registered
+outcomes are retained. Recorded camera calibration is virtual.

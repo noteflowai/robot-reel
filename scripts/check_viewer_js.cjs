@@ -78,6 +78,14 @@ function main() {
       fs.writeFileSync(path.join(workspace, script), source);
       offsets.set(script, { offset, name: sourceName });
     }
+    // The scene viewer's lazy local module is checked as real source alongside
+    // its caller. Keep the relative import resolvable in the extracted workspace.
+    for (const name of ["robot_reel/scene_motion_view.js"]) {
+      const filename = path.basename(name);
+      assert.ok(!offsets.has(filename), `duplicate extracted module: ${filename}`);
+      fs.copyFileSync(path.join(root, name), path.join(workspace, filename));
+      offsets.set(filename, { offset: 0, name });
+    }
     fs.copyFileSync(environment, path.join(workspace, "viewer-env.d.ts"));
     fs.writeFileSync(path.join(workspace, "tsconfig.json"), JSON.stringify(CONFIG, null, 2));
 

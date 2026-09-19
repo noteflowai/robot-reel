@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 0.13.0 — 2026-09-19
+
+- Scene Lab replays two recorded Microduck simulations on the captured original
+  and edited terrain: full floating-root poses, recorded camera, trajectory,
+  measured contacts, 362 source frames and synchronized source/Blender videos.
+- Export a selected frame and independently verify its source identity, original
+  physics clock, camera and Blender frame using the dependency-free scene CLI.
+- Native motion OpenUSD and portable Blender projects retain every body and
+  visual transform. Full native/browser readback and relocated-project checks
+  cover all frames; both falls/slides remain in the published record.
+- Add lazy full geometry, body-bounds/proxy and video modes, with measured
+  fallback and WebGL failure handling. Publish separate L40S/SwiftShader
+  measurements, including load bytes, render FPS and sampled process memory.
+
 ## 0.12.1 — 2026-09-15
 
 - Bind Microduck view links to the recorded trace fingerprint and model revision. Restore in-page navigation; reject mismatched or ambiguous links without changing the current view. Label legacy links explicitly. Source-file verification remains available through the offline CLI.

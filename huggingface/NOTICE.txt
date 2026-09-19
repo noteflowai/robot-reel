@@ -1,4 +1,4 @@
-Robot Reel / four recorded Physical AI labs
+Robot Reel / recorded Physical AI labs
 
 The implementation is Apache-2.0. This does not relicense third-party robot
 models, model-derived geometry or depicted assets.
@@ -17,3 +17,8 @@ Procedural cloth and pendulum scenes are Apache-2.0; see each lab's NOTICE.txt.
 Microduck interaction inspiration: mishig/microduck-anatomy on Hugging Face.
 No code or assets were copied from that Space. The lab is an independent
 implementation and implies no endorsement by any upstream project.
+
+Scene Lab motion uses Pollen Robotics Microduck model-derived geometry and
+combined footage, also under the upstream BY-SA-NC terms (version unspecified).
+Keep scene-lab/motion/NOTICE.txt with those assets. Its Poly Haven Coast Rocks 02
+terrain remains CC0; see scene-lab/baseline/scene.json for attribution.

@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "source_cases": 2,
+  "source_frames": 362,
+  "shared": "http://127.0.0.1:40785/#variant=edited&frame=44&view=orbit&representation=mesh&trace=eb98e65a02afe7c15d1a7938908c1a7537e6a299733f257ec47db2c6603c2923",
+  "viewport_widths": [
+    1440,
+    390,
+    320
+  ],
+  "actual_video_frames_checked": [
+    1,
+    90
+  ],
+  "keyboard_frames": true,
+  "independent_video_playback": true,
+  "scripted_slow_frame_load_ms": 120,
+  "adaptations": [
+    {
+      "from": "full",
+      "to": "bounds",
+      "fps": 4.067934506254447,
+      "sample_frames": 12,
+      "elapsed_ms": 2949.9000000000015
+    },
+    {
+      "from": "bounds",
+      "to": "video",
+      "fps": 2.8917056243674373,
+      "sample_frames": 12,
+      "elapsed_ms": 4149.800000000003
+    }
+  ],
+  "context_loss_fallback": true,
+  "initial_graphics_failure_fallback": true,
+  "initial_mobile_details_collapsed": true,
+  "video_case_switch_and_return_to_3d": true,
+  "errors": []
+}

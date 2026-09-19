@@ -1,0 +1,361 @@
+{
+  "schema": "robot-reel.scene-performance.v1",
+  "started_at": "2026-09-19T08:16:29.337Z",
+  "host": {
+    "platform": "linux",
+    "release": "6.17.0-1020-aws",
+    "cpu": "AMD EPYC 7R13 Processor",
+    "logical_cpus": 4,
+    "ram_bytes": 33174265856
+  },
+  "gpu_before": "NVIDIA L40S, 595.91.07, 46068 MiB, 631 MiB, 0 %",
+  "measured_site_manifest": {
+    "sha256": "f6801f9bd2cd2c1d3162115eb0995c3002d88f5d826ff666355826a6c19d6d6b",
+    "bytes": 7690
+  },
+  "protocol": {
+    "case": "baseline",
+    "source_replay_hz": 30,
+    "warmup_seconds": 3,
+    "measurement_seconds": 10,
+    "device_scale_factor": 1,
+    "render_camera": "recorded",
+    "automatic_adaptation": false,
+    "network": "localhost HTTP, browser cache disabled",
+    "memory": "Sum of RSS in the owned Chromium process subtree; shared pages may count more than once. JS heap is sampled separately. Neither is GPU VRAM.",
+    "viewport": "390 px is a narrow viewport on this server, not a physical phone.",
+    "scope": "Browser replay only, with no inference or physics. No injected CPU delay. Desktop display services remain active."
+  },
+  "configurations": [
+    {
+      "backend_requested": "vulkan",
+      "args": [
+        "--use-angle=vulkan",
+        "--enable-features=Vulkan",
+        "--disable-vulkan-surface"
+      ],
+      "browser": "153.0.8010.12",
+      "viewport": {
+        "width": 1440,
+        "height": 1100,
+        "device_scale_factor": 1
+      },
+      "initial_http_bytes": 1690194,
+      "http_bytes_through_3d_ready": 19991534,
+      "click_to_ui_ready_ms": 478.69999998807907,
+      "graphics": {
+        "renderer": "ANGLE (NVIDIA, Vulkan 1.4.329 (NVIDIA NVIDIA L40S (0x000026B9)), NVIDIA)",
+        "vendor": "Google Inc. (NVIDIA)",
+        "stage_css": {
+          "width": 1234,
+          "height": 540
+        },
+        "recorded_viewport": {
+          "x": 137,
+          "y": 0,
+          "width": 960,
+          "height": 540
+        }
+      },
+      "measurements": [
+        {
+          "quality": "full",
+          "observed_ms": 10014.800000011921,
+          "rendered_frames": 601,
+          "render_frames_per_second": 60.011183448424795,
+          "median_frame_interval_ms": 16.69999999999891,
+          "p95_frame_interval_ms": 16.700000000000728,
+          "renderer_memory_counts": {
+            "geometries": 59,
+            "textures": 3
+          },
+          "draw": {
+            "frame": 802,
+            "calls": 75,
+            "triangles": 916843,
+            "points": 1,
+            "lines": 207
+          },
+          "pixel_ratio": 1,
+          "final_source_frame": 28,
+          "peak_sampled_chromium_tree_rss_bytes": 775442432,
+          "peak_sampled_process_count": 5,
+          "peak_sampled_js_heap_used_bytes": 10196632,
+          "memory_samples": 21
+        },
+        {
+          "quality": "bounds",
+          "observed_ms": 10010.800000011921,
+          "rendered_frames": 601,
+          "render_frames_per_second": 60.0351620249415,
+          "median_frame_interval_ms": 16.69999999999709,
+          "p95_frame_interval_ms": 16.799999999999272,
+          "renderer_memory_counts": {
+            "geometries": 60,
+            "textures": 3
+          },
+          "draw": {
+            "frame": 1586,
+            "calls": 20,
+            "triangles": 0,
+            "points": 1,
+            "lines": 25323
+          },
+          "pixel_ratio": 1,
+          "final_source_frame": 28,
+          "peak_sampled_chromium_tree_rss_bytes": 775843840,
+          "peak_sampled_process_count": 5,
+          "peak_sampled_js_heap_used_bytes": 8492100,
+          "memory_samples": 20
+        }
+      ],
+      "errors": []
+    },
+    {
+      "backend_requested": "vulkan",
+      "args": [
+        "--use-angle=vulkan",
+        "--enable-features=Vulkan",
+        "--disable-vulkan-surface"
+      ],
+      "browser": "153.0.8010.12",
+      "viewport": {
+        "width": 390,
+        "height": 1100,
+        "device_scale_factor": 1
+      },
+      "initial_http_bytes": 1690194,
+      "http_bytes_through_3d_ready": 19991534,
+      "click_to_ui_ready_ms": 474.4000000357628,
+      "graphics": {
+        "renderer": "ANGLE (NVIDIA, Vulkan 1.4.329 (NVIDIA NVIDIA L40S (0x000026B9)), NVIDIA)",
+        "vendor": "Google Inc. (NVIDIA)",
+        "stage_css": {
+          "width": 356,
+          "height": 320
+        },
+        "recorded_viewport": {
+          "x": 0,
+          "y": 59.875,
+          "width": 356,
+          "height": 200.25
+        }
+      },
+      "measurements": [
+        {
+          "quality": "full",
+          "observed_ms": 10016.199999988079,
+          "rendered_frames": 601,
+          "render_frames_per_second": 60.00279547140785,
+          "median_frame_interval_ms": 16.69999999999891,
+          "p95_frame_interval_ms": 16.799999999999272,
+          "renderer_memory_counts": {
+            "geometries": 59,
+            "textures": 3
+          },
+          "draw": {
+            "frame": 801,
+            "calls": 75,
+            "triangles": 916843,
+            "points": 1,
+            "lines": 207
+          },
+          "pixel_ratio": 1,
+          "final_source_frame": 28,
+          "peak_sampled_chromium_tree_rss_bytes": 797306880,
+          "peak_sampled_process_count": 5,
+          "peak_sampled_js_heap_used_bytes": 10797424,
+          "memory_samples": 21
+        },
+        {
+          "quality": "bounds",
+          "observed_ms": 10012.199999988079,
+          "rendered_frames": 601,
+          "render_frames_per_second": 60.026767343911985,
+          "median_frame_interval_ms": 16.700000000000728,
+          "p95_frame_interval_ms": 16.799999999999272,
+          "renderer_memory_counts": {
+            "geometries": 60,
+            "textures": 3
+          },
+          "draw": {
+            "frame": 1586,
+            "calls": 20,
+            "triangles": 0,
+            "points": 1,
+            "lines": 25323
+          },
+          "pixel_ratio": 1,
+          "final_source_frame": 28,
+          "peak_sampled_chromium_tree_rss_bytes": 770949120,
+          "peak_sampled_process_count": 5,
+          "peak_sampled_js_heap_used_bytes": 8861856,
+          "memory_samples": 21
+        }
+      ],
+      "errors": []
+    },
+    {
+      "backend_requested": "default",
+      "args": [],
+      "browser": "153.0.8010.12",
+      "viewport": {
+        "width": 1440,
+        "height": 1100,
+        "device_scale_factor": 1
+      },
+      "initial_http_bytes": 1690194,
+      "http_bytes_through_3d_ready": 19991534,
+      "click_to_ui_ready_ms": 987.1999999880791,
+      "graphics": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)",
+        "stage_css": {
+          "width": 1234,
+          "height": 540
+        },
+        "recorded_viewport": {
+          "x": 137,
+          "y": 0,
+          "width": 960,
+          "height": 540
+        }
+      },
+      "measurements": [
+        {
+          "quality": "full",
+          "observed_ms": 10563.200000047684,
+          "rendered_frames": 41,
+          "render_frames_per_second": 3.8813995758685738,
+          "median_frame_interval_ms": 233.40000000000146,
+          "p95_frame_interval_ms": 316.7000000000007,
+          "renderer_memory_counts": {
+            "geometries": 59,
+            "textures": 3
+          },
+          "draw": {
+            "frame": 88,
+            "calls": 75,
+            "triangles": 916843,
+            "points": 3,
+            "lines": 207
+          },
+          "pixel_ratio": 1,
+          "final_source_frame": 44,
+          "peak_sampled_chromium_tree_rss_bytes": 751124480,
+          "peak_sampled_process_count": 5,
+          "peak_sampled_js_heap_used_bytes": 10438584,
+          "memory_samples": 22
+        },
+        {
+          "quality": "bounds",
+          "observed_ms": 10054.899999976158,
+          "rendered_frames": 542,
+          "render_frames_per_second": 53.90406667408777,
+          "median_frame_interval_ms": 16.700000000000728,
+          "p95_frame_interval_ms": 33.30000000000291,
+          "renderer_memory_counts": {
+            "geometries": 60,
+            "textures": 3
+          },
+          "draw": {
+            "frame": 808,
+            "calls": 19,
+            "triangles": 0,
+            "points": 0,
+            "lines": 25323
+          },
+          "pixel_ratio": 1,
+          "final_source_frame": 29,
+          "peak_sampled_chromium_tree_rss_bytes": 729092096,
+          "peak_sampled_process_count": 5,
+          "peak_sampled_js_heap_used_bytes": 7920832,
+          "memory_samples": 21
+        }
+      ],
+      "errors": []
+    },
+    {
+      "backend_requested": "default",
+      "args": [],
+      "browser": "153.0.8010.12",
+      "viewport": {
+        "width": 390,
+        "height": 1100,
+        "device_scale_factor": 1
+      },
+      "initial_http_bytes": 1690194,
+      "http_bytes_through_3d_ready": 19991534,
+      "click_to_ui_ready_ms": 853.5999999642372,
+      "graphics": {
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)",
+        "stage_css": {
+          "width": 356,
+          "height": 320
+        },
+        "recorded_viewport": {
+          "x": 0,
+          "y": 59.875,
+          "width": 356,
+          "height": 200.25
+        }
+      },
+      "measurements": [
+        {
+          "quality": "full",
+          "observed_ms": 10246.600000023842,
+          "rendered_frames": 65,
+          "render_frames_per_second": 6.343567622416095,
+          "median_frame_interval_ms": 133.39999999999964,
+          "p95_frame_interval_ms": 233.3000000000011,
+          "renderer_memory_counts": {
+            "geometries": 59,
+            "textures": 3
+          },
+          "draw": {
+            "frame": 120,
+            "calls": 74,
+            "triangles": 916843,
+            "points": 0,
+            "lines": 207
+          },
+          "pixel_ratio": 1,
+          "final_source_frame": 33,
+          "peak_sampled_chromium_tree_rss_bytes": 687067136,
+          "peak_sampled_process_count": 5,
+          "peak_sampled_js_heap_used_bytes": 9973880,
+          "memory_samples": 21
+        },
+        {
+          "quality": "bounds",
+          "observed_ms": 10043.199999988079,
+          "rendered_frames": 597,
+          "render_frames_per_second": 59.44320535294614,
+          "median_frame_interval_ms": 16.700000000000728,
+          "p95_frame_interval_ms": 16.799999999999272,
+          "renderer_memory_counts": {
+            "geometries": 60,
+            "textures": 3
+          },
+          "draw": {
+            "frame": 907,
+            "calls": 19,
+            "triangles": 0,
+            "points": 0,
+            "lines": 25323
+          },
+          "pixel_ratio": 1,
+          "final_source_frame": 28,
+          "peak_sampled_chromium_tree_rss_bytes": 667078656,
+          "peak_sampled_process_count": 5,
+          "peak_sampled_js_heap_used_bytes": 7784760,
+          "memory_samples": 21
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "finished_at": "2026-09-19T08:18:27.891Z",
+  "gpu_after": "NVIDIA L40S, 595.91.07, 46068 MiB, 631 MiB, 8 %"
+}

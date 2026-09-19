@@ -88,6 +88,22 @@ Recording new runs needs the [full runtime](docs/recording.md).
 The hosted replays open in a browser without a local simulation environment.
 
 
+## One frame. Back in the scene.
+
+**[Scene Lab](https://noteflowai.github.io/robot-reel/scene-lab/) — Microduck × captured terrain × Blender.**
+Step through a recorded robot on the original and edited coastal scene. Follow
+its trajectory and contacts, keep its source camera, or orbit the full robot.
+Compare the matching MuJoCo and Blender video frames, then download the animated
+native project or export a source-checked frame JSON.
+
+[![Microduck in a captured coastal scene, rendered with its recorded camera](docs/scene-lab/motion/baseline/poster.png)](https://noteflowai.github.io/robot-reel/scene-lab/)
+
+Both six-second runs are retained, including the falls and slides. All **362
+source frames** have native transform and virtual-camera checks. Full geometry,
+body bounds/proxy and recorded-video modes support different rendering limits.
+[Reproduction and measured performance](examples/scene-motion/README.md) ·
+[Portable Blender projects](https://github.com/noteflowai/robot-reel/releases/download/v0.13.0/scene-motion-native.zip).
+
 ## One launch. Mind the timestep.
 
 **Solver Lab — Genesis × Newton.** Six independent **L40S / CUDA** flights

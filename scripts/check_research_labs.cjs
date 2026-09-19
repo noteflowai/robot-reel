@@ -52,6 +52,13 @@ async function main(){
   page.on('request',request=>requests.push(request.url()));
   await page.goto(`${base}/scene-lab/`);
   assert.equal(requests.some(url=>url.endsWith('.glb')||url.includes('/vendor/')),false);
+  // This check inspects each explicitly selected representation. Automatic
+  // fallback has its own measured-delay test in check_scene_motion_browser.cjs.
+  await page.evaluate(async()=>{
+   await motionReady;
+   const adaptation=document.getElementById('automatic-detail');
+   if(adaptation)adaptation.checked=false;
+  });
   await page.locator('#load').click();
   await page.waitForFunction(()=>document.getElementById('status').textContent.startsWith('Showing'),null,{timeout:60000});
   await page.screenshot({path:path.join(output,'scene-mesh.png'),fullPage:true});

@@ -46,9 +46,13 @@ def prepare(source, distributions, offline, output):
     return notes + """
 
 Scene Lab adds `scene-lab-native.zip`: both packed Blender scenes and their
-independent native checks. `research-records.zip` contains all 45 agent trials
+independent native checks. Release 0.13.0 also includes `scene-motion-native.zip`:
+both animated Microduck projects, relative USD caches and a standalone checker.
+The full producer PNGs and simulation inputs are a separate versioned dataset
+download documented in `examples/scene-motion/README.md`.
+`research-records.zip` contains the original 45 agent trials
 (27 skill delivery, 12 composition, 6 handoff), including failures and Harbor
-interop receipts. Both files are fetched from a pinned immutable public dataset
+interop receipts. Research assets are fetched from a pinned immutable public dataset
 revision, verified against committed sizes/SHA-256, and included in SHA256SUMS.
 OpenEnv's actual recipe controls are documented with raw evidence in the repository.
 

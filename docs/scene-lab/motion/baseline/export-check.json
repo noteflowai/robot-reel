@@ -1,0 +1,38 @@
+{
+  "schema": "robot-reel.scene-motion-export.v1",
+  "source_trace": {
+    "sha256": "de42072b650fb69a5e03c3486adfc9cb2e177c20aa48e4a9b7ee842031ea0e4c",
+    "bytes": 2130519
+  },
+  "usd_check": {
+    "frames": 181,
+    "body_transforms": 2715,
+    "max_body_transform_error": 9.297510678019094e-14,
+    "visual_geometries": 70,
+    "max_local_geometry_transform_error": 0.0,
+    "max_camera_focal_error_px": 1.4673544001198024e-05,
+    "checked_local_vertices": 397152,
+    "usd": {
+      "sha256": "3ff51835371fbc3ef3fc78474cbd14d72e52b0525476f88114b8aad344e92dfc",
+      "bytes": 5743388
+    }
+  },
+  "glb": {
+    "visual_geometries": 70,
+    "unique_meshes": 38,
+    "body_nodes": 15,
+    "file": {
+      "sha256": "5487bdf24ac0eda1ce3827051b9c416d20d714b74420fd0acc8efecfca53d3cd",
+      "bytes": 7817716
+    }
+  },
+  "geometry": {
+    "sha256": "48526c2b48432e86d85a35cb0b196ea989cfc282a3408777d1773e1443b2018c",
+    "bytes": 61976
+  },
+  "exporter": {
+    "sha256": "bd0e83d0997593bb838e9ebd5a8affe4031355ddc9b2a3446ea391c69d5269c9",
+    "bytes": 16094
+  },
+  "usd_core": "26.3"
+}

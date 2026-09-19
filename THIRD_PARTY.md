@@ -66,3 +66,12 @@ checkpoint hash and runtime versions are in the episode's `trace.json`.
 Pillow draws typography and overlays. FFmpeg, supplied through imageio-ffmpeg,
 encodes video; its binary distribution has its own license conditions.
 No third-party music, stock footage, or generated robot footage is used.
+
+## Captured-scene Microduck motion
+
+`docs/scene-lab/motion` and the scene-motion native/producer archives contain
+new Microduck recordings and model-derived geometry. These retain Pollen
+Robotics BY-SA-NC terms, version unspecified upstream. The terrain remains
+Poly Haven Coast Rocks 02 CC0, attributed to Rob Tuytel and Rico Cilliers.
+See `docs/scene-lab/motion/NOTICE.txt` and the pinned source identities in each
+trace. Neither the code license nor the terrain license relicenses the robot.
