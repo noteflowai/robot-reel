@@ -1,0 +1,64 @@
+{
+  "schema": "robot-reel.scene-motion-plan.v1",
+  "seconds": 6,
+  "physics_timestep": 0.005,
+  "sample_hz": 30,
+  "forward_command_mps": 0.3,
+  "base_clearance_m": 0.125,
+  "command_schedule": "stand 0..1s; forward 0.3m/s 1..5s; stand 5..6s; all 13 command fields except forward remain zero",
+  "spawn_rule": "XY at central heightfield grid vertex; sample the centre, edge centres and corners of a 24 cm square; base Z is the maximum interpolated proxy height plus 0.125 m. No initial terrain penetration allowed.",
+  "camera": {
+    "width": 960,
+    "height": 540,
+    "vertical_fov_degrees": 45,
+    "offset_m": [
+      1.2,
+      -1.5,
+      0.9
+    ],
+    "target_offset_m": [
+      0.2,
+      0,
+      0.1
+    ]
+  },
+  "cases": {
+    "baseline": {
+      "files": {
+        "scene.json": {
+          "sha256": "1eb2abe3e03afe7968a55b3f6ef9ed0f5e2696f3c104141d5d24fb29aa754d52",
+          "bytes": 4316
+        },
+        "collision-heightfield.json": {
+          "sha256": "1b54217fb312e49d434f943de729448a6a1d0270fc1e8f17beac75b584ea005b",
+          "bytes": 74202
+        },
+        "edit.json": {
+          "sha256": "b1e8e20d5571e07482d247e92499db36a416959bbc3bc8275861409d5069cf27",
+          "bytes": 122
+        }
+      }
+    },
+    "edited": {
+      "files": {
+        "scene.json": {
+          "sha256": "2916f0c392a09df742f008ddaf7db18d8db3392034154e4508dfb36c90343eb9",
+          "bytes": 4317
+        },
+        "collision-heightfield.json": {
+          "sha256": "62e5211778afbe3ef762338a72e026ed88adaf010d015ee63b28279be7940f80",
+          "bytes": 74003
+        },
+        "edit.json": {
+          "sha256": "29c23c06e1ba7b94c63ee3541bb08b56e30a356d377ac5baadf5900773487784",
+          "bytes": 122
+        }
+      }
+    }
+  },
+  "source_check": {
+    "sha256": "f14f3ff15c3244c555c000bb25de9580bf2abd0d529bfc3840fca5ba0b1a5d50",
+    "bytes": 17182
+  },
+  "scope": "Engineering registration experiment using the official policy with XML PD actuators on a captured top-surface approximation. Both recorded outcomes are retained; no robot robustness score is defined."
+}
