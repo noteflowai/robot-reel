@@ -340,6 +340,10 @@ Blender 原生检查覆盖导演影片中的全部 420 个车辆状态，以及 
 [研究说明](docs/research-pilots.md)分别列明方法与结果；这些记录不足以确立普遍的
 技能准确率收益、完整基准成绩或真机性能。
 
+[Funes MCP 跨模型复核](https://noteflowai.github.io/evalarc/funes-handoff/index.html)
+把这些机器人记录用于接续任务，保留六次 Qwen3-4B 运行的检索原文、命令和独立坐标检查。
+检索成功后程序仍未修改，没有任务完全通过验收。
+
 ## 构建你自己的场景
 
 选择你想实际构建的流程：
