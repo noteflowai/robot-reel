@@ -367,6 +367,11 @@ All attempts are retained. The [research guide](docs/research-pilots.md)
 separates each pilot's methods and findings; the records do not establish a
 general skill-accuracy gain, a full benchmark score or real-hardware performance.
 
+[Cross-model review with Funes MCP](https://noteflowai.github.io/evalarc/funes-handoff/index.html)
+uses these robot recordings in a continuation task. Six Qwen3-4B attempts retain
+the retrieved history, commands and independent coordinate checks; successful
+retrievals leave the programs unchanged and no task fully resolved.
+
 ## Build your own scene
 
 Choose the workflow you want to build:
