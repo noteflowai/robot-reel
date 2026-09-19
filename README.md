@@ -120,7 +120,7 @@ this pilot's maximum position error from **32.70 cm to 2.05 cm**.
 
 All **366 recorded position/velocity states** remain downloadable as JSON/CSV.
 Genesis native trajectories were reopened and checked; the editable OpenUSD
-retains every sample. The 0.10.0 installed CLI verifies and exports the lab
+retains every sample. The installed CLI verifies and exports the lab
 without a GPU. Both engines produce matching values in this simple no-contact,
 no-drag flight; it is an integration diagnostic, not a ranking of simulators.
 
@@ -374,27 +374,21 @@ with inference waiting time omitted; new director briefs use your connected
 agent and a new render. Microduck uses the XML PD-actuator fallback.
 [Scope, provenance and asset terms](THIRD_PARTY.md).
 
-## Recorded research examples
+## Agent workflow experiments
 
-- [Captured-scene editing](https://noteflowai.github.io/robot-reel/scene-lab/):
-  compare a photogrammetry mesh, 25,000 mesh-sampled surface Gaussians and a
-  heightfield collision proxy, then inspect the Blender edit.
-- [LIBERO-Plus scene conditions](https://noteflowai.github.io/robot-reel/libero-plus/):
-  three runs of one task from one paired initial state, using the baseline
-  and official camera and lighting perturbations.
-- [27 GPU skill-delivery trials](https://noteflowai.github.io/evalarc/skill-impact/index.html):
-  inspect model attempts, delivered instructions and separately computed task results.
+Robot Reel recordings also provide source data for testing agent workflows.
+Skills Anywhere delivers instructions; EvalArc checks the resulting programs
+against the original coordinates and clocks.
 
-All attempts are retained. The [research guide](docs/research-pilots.md)
-documents each pilot's methods and findings. General skill efficacy, full
-benchmark results and real-hardware performance require separate evaluation.
+| Experiment | Recorded result | Inspect the evidence |
+| --- | --- | --- |
+| Skill delivery: 27 Qwen3-8B attempts across three engineering profiles | No direct-delivery or MCP attempt fully resolves the task. The no-skill condition resolves 2/3 attempts in the final profile. | [Instructions, candidate files and task checks](https://noteflowai.github.io/evalarc/skill-impact/) |
+| Session handoff: six Qwen3-4B continuations, three per condition | All six retrieval calls succeed. All six programs remain unchanged; each condition resolves 0/3 tasks. | [Retrieved history, commands and coordinate checks](https://noteflowai.github.io/evalarc/funes-handoff/) |
 
-[Cross-model review with Funes MCP](https://noteflowai.github.io/evalarc/funes-handoff/index.html)
-uses these robot recordings in six Qwen3-4B continuation attempts: three without
-memory and three with access to one reviewed public session. All six retrieval
-calls in the memory group succeed; all six programs remain unchanged, and
-0/3 attempts meet full acceptance in either group. Inspect the retrieved history,
-commands and independent coordinate checks in the report.
+These are small public development experiments. Each profile and cohort retains
+its own results, including failures; they do not establish general skill or
+memory benefits. The [research guide](docs/research-pilots.md) documents the
+methods, source versions and related scene-editing experiments.
 
 ## Build your own scene
 
