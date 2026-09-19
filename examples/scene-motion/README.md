@@ -42,5 +42,39 @@ upstream Creative Commons BY-SA-NC terms (version unspecified); the recorder
 code is Apache-2.0. The captured coast asset is CC0-1.0. See the main repository's
 third-party notices.
 
-This directory provides the recording and native-checking workflow. Browser,
-USD and Blender delivery will include their own readback and performance records.
+## USD and Blender
+
+Export the recorded motion, robot geometry, source camera and collision proxy:
+
+```sh
+python scripts/export_scene_motion.py runs/scene-motion/baseline \
+  --output runs/scene-motion/baseline-export
+blender --background --factory-startup --disable-autoexec --python-exit-code 1 \
+  --python scripts/build_scene_motion_blender.py -- \
+  --scene /path/to/checked/scene-lab-baseline \
+  --recording runs/scene-motion/baseline \
+  --export runs/scene-motion/baseline-export \
+  --output runs/scene-motion/baseline-blender --render-animation
+blender --background --factory-startup --disable-autoexec --python-exit-code 1 \
+  --python scripts/check_scene_motion_blender.py -- \
+  --project runs/scene-motion/baseline-blender \
+  --output runs/scene-motion/baseline-blender-check.json --check-renders
+```
+
+The USD workflow uses `usd-core==26.3`; the Blender workflow uses 4.5.13 LTS with
+Cycles/OptiX. USD and Blender frames are the recorded source index plus one.
+Original physics timestamps remain in `trace.json`; interpolation between
+recorded frames is presentation, not additional simulation.
+
+Fixed visual attachments are baked into body-local USD vertices to avoid static
+Euler decomposition during import. Recorded body poses remain unchanged. glTF
+retains shared meshes and quaternion attachments for browser inspection.
+Camera filmback and lens units are authored for a metre stage, then checked
+against the recorded pixel projection. This is virtual-camera registration;
+the captured asset has no independently surveyed scale or real-camera calibration.
+
+Keep `motion.usdc` next to `scene-motion.blend`; its animation cache uses a
+relative path. `project.json` separates portable project inputs from the
+producer's full PNG inventory. Native geometry/frame checks need the project
+inputs; `--check-renders` additionally requires and hashes every listed PNG.
+Browser delivery and device performance records are prepared separately.
