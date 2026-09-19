@@ -90,44 +90,32 @@ distributed file. Source traces, videos, vertex arrays and native readback
 reports retain their original bytes. Navigation is adapted for this Space;
 its page manifests and copied offline archives are refreshed accordingly.
 
-## Scope and attribution
+## Methods and reuse
 
-The Stress Lab is **one LIBERO Spatial task, ten paired initial states and three
-conditions**, with a 160-action limit per trial. Every trial is retained,
-including failures. The results describe this simulation experiment; full
-benchmark evaluation and real-robot testing require separate runs.
+Each lab answers a specific question using a recorded experiment. Results apply
+to its stated task, conditions and simulator configuration. All recorded trials,
+including failures, remain available for inspection.
 
-LIBERO-Plus uses a separate three-run plan with a 220-action limit per run.
-The baseline and lighting runs succeed; the camera run reaches the limit.
-[Its method](https://github.com/noteflowai/robot-reel/blob/main/docs/libero-plus/METHODS.md)
-records the selected official perturbations and the shared initial state.
+<details>
+<summary>Recording methods and experiment boundaries</summary>
 
-Scene Lab's Gaussians are sampled from the captured mesh; no multi-view 3DGS
-training is performed. The heightfield is a geometric collision approximation.
-[Its method](https://github.com/noteflowai/robot-reel/blob/main/docs/scene-lab/METHODS.md)
-documents the conversion, Blender edits and file checks. The two new motion
-recordings include full floating-root poses; both robots fall and slide. Each
-uses the same placement rule relative to its terrain, so initial world heights
-differ. Browser/native checks establish virtual-camera registration. Full
-meshes, body bounds/proxy and recorded-video modes provide explicit fallback.
-[L40S and SwiftShader measurements](https://github.com/noteflowai/robot-reel/tree/main/examples/scene-motion)
-report render FPS, transfer bytes and sampled memory for the measured build.
+| Experiment | How to interpret the result | Method |
+| --- | --- | --- |
+| Stress Lab | One LIBERO Spatial task, ten paired initial states, three conditions; at most 160 actions per trial. Full-benchmark and real-robot evaluation require separate runs. | [Protocol and results](https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md) |
+| LIBERO-Plus | A separate three-run plan with a 220-action limit. Baseline and lighting succeed; the camera run reaches the limit. Official perturbation IDs and the shared initial state are recorded. | [Selected perturbations](https://github.com/noteflowai/robot-reel/blob/main/docs/libero-plus/METHODS.md) |
+| Scene Lab | Gaussians are sampled from a captured mesh, without multi-view 3DGS training. The collision heightfield approximates its geometry. Both floating-root motion recordings retain falls and slides. The shared terrain-relative placement rule gives different initial world heights. | [Asset conversion](https://github.com/noteflowai/robot-reel/blob/main/docs/scene-lab/METHODS.md) · [Virtual-camera checks, rendering modes and measured performance](https://github.com/noteflowai/robot-reel/tree/main/examples/scene-motion) |
+| Cloth Lab | Bending coefficients are solver settings; fabric properties are uncalibrated. Collisions and self-contact are disabled. | [Recording and native checks](https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md) |
+| Butterfly Lab | Sculpture depth encodes time. Recorded poses supply the physical displacement. | [Release sweep](https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md) |
+| Solver Lab | Timestep diagnostics for no-contact, constant-gravity flight. Both engines match in these conditions; this experiment does not rank simulators. | [Equations and error measurements](https://github.com/noteflowai/robot-reel/blob/main/docs/solver-lab.md) |
+| Microduck Motion Lab | The 0.3 / 0.5 m/s labels are commands. The schematic fixes the root because its recording lacks root orientation. Targets are geometric overlays. Runs use the XML PD-actuator fallback, without BAM or hardware validation. | [Model and numerical checks](https://github.com/noteflowai/robot-reel/blob/main/docs/microduck-lab.md) |
 
-Cloth coefficients are solver settings, not calibrated fabric properties; no
-collisions or self-contact are modeled. Butterfly sculpture depth represents
-time, not physical displacement.
+</details>
 
-Solver Lab measures integration error in a no-contact, constant-gravity flight.
-Its two engines match under these recorded conditions; the experiment is a
-timestep diagnostic rather than an engine ranking.
+### Attribution and asset licenses
 
-The separate Microduck Motion Lab's 0.3 / 0.5 m/s labels are speed commands, not achieved speeds.
-Its schematic fixes the floating root because the original recording did not
-save root orientation. Targets are geometric overlays, not independent physics
-outcomes. The recordings use the XML PD-actuator fallback, not BAM or hardware.
-The original implementation was inspired by
-[mishig's Microduck Anatomy](https://huggingface.co/spaces/mishig/microduck-anatomy);
-no code, trajectory or assets were copied from that Space.
+Microduck Motion Lab's interaction design was inspired by
+[mishig's Microduck Anatomy](https://huggingface.co/spaces/mishig/microduck-anatomy).
+Its code, trajectories and assets were developed or sourced separately.
 
 Robot Reel code and procedural scenes are Apache-2.0. SmolVLA was recorded with
 `HuggingFaceVLA/smolvla_libero` revision

@@ -3,6 +3,12 @@
 Keep the distinction between physics rollouts, kinematic animation, and agent
 decisions explicit in code, telemetry, and video labels.
 
+Public introductions should start with a user workflow and the files it produces.
+Keep experiment counts and outcomes next to their scope; put detailed methods in
+linked guides or named disclosure panels. Keep asset licenses visible. Naming
+history and industry research belong in their own documents. Check the English
+and Chinese READMEs, website and Hugging Face card together when changing claims.
+
 Run `python3 -m unittest discover -s tests -v` directly from the checkout; these
 tests require only the standard library. CI also runs them with `python -S`.
 For capture/rendering development, follow the README virtual-environment setup
