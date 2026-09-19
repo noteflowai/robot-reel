@@ -97,7 +97,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 两组六秒仿真全部保留，包括跌倒与滑移；共 **362 帧**完成原生变换与虚拟相机投影核对。
 完整模型、简化包围盒／碰撞代理和视频回放三种模式支持不同渲染条件。
 [复现步骤与实测性能](examples/scene-motion/README.md) ·
-[下载 Blender 动画工程](https://github.com/noteflowai/robot-reel/releases/download/v0.13.0/scene-motion-native.zip)。
+[下载 Blender 动画工程](https://github.com/noteflowai/robot-reel/releases/latest/download/scene-motion-native.zip)。
 
 ## 同一抛体，步长有多大影响？
 
@@ -163,8 +163,8 @@ Genesis 原生回放与可编辑 OpenUSD。安装包中的 CLI 可直接校验�
 </a>
 
 **[释放三张布，开始体验 ↗](https://noteflowai.github.io/robot-reel/cloth/)** ·
-[完整离线实验](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-experiment.zip) ·
-[可编辑 OpenUSD](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-scene.usdc) ·
+[完整离线实验](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-cloth-experiment.zip) ·
+[可编辑 OpenUSD](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-cloth-scene.usdc) ·
 [方法、边界与复现](docs/cloth.md)
 
 弯曲系数是求解器设置，不代表经过标定的真实织物属性；颜色用于区分实验。
@@ -189,7 +189,7 @@ Genesis 原生回放与可编辑 OpenUSD。安装包中的 CLI 可直接校验�
 </a>
 
 **[对照策略运行 ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-stress-experiment.zip) ·
+[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-stress-experiment.zip) ·
 [MCAP 遥测数据 ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [在 Foxglove 中打开](docs/telemetry.md) ·
 [复现与检查](docs/stress.md)
@@ -226,7 +226,7 @@ Markdown，重新导入可恢复原始样本位置，也可用命令行与完整
 <a href="https://noteflowai.github.io/robot-reel/stress/#outcomes"><img src="docs/paired-outcomes.png" width="100%" alt="全部十个配对起点：四组均成功，一组失去成功，三组获得成功，两组均未完成；点击分组可检查原录像。"></a>
 
 **0.8.0 离线实验包**已包含这些复盘工具。下载 ZIP 和
-[示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-seed-09-review.json)，
+[示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-seed-09-review.json)，
 按[快速上手说明](docs/offline-lab.md)解压打开即可回放，无需安装；使用同版本
 wheel 还可独立执行命令行核验。
 

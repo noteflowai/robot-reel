@@ -102,7 +102,7 @@ Both six-second runs are retained, including the falls and slides. All **362
 source frames** have native transform and virtual-camera checks. Full geometry,
 body bounds/proxy and recorded-video modes support different rendering limits.
 [Reproduction and measured performance](examples/scene-motion/README.md) ·
-[Portable Blender projects](https://github.com/noteflowai/robot-reel/releases/download/v0.13.0/scene-motion-native.zip).
+[Portable Blender projects](https://github.com/noteflowai/robot-reel/releases/latest/download/scene-motion-native.zip).
 
 ## One launch. Mind the timestep.
 
@@ -175,8 +175,8 @@ or verify it independently against the source vertices with the current CLI.
 </a>
 
 **[Release the sheets ↗](https://noteflowai.github.io/robot-reel/cloth/)** ·
-[Offline experiment](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-experiment.zip) ·
-[Editable OpenUSD](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-scene.usdc) ·
+[Offline experiment](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-cloth-experiment.zip) ·
+[Editable OpenUSD](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-cloth-scene.usdc) ·
 [Method, limits & reproduction](docs/cloth.md)
 
 The coefficients are solver settings, not calibrated fabric properties. Colors
@@ -203,7 +203,7 @@ cameras, and jump to the largest measured trajectory difference. Recorded with
 </a>
 
 **[Compare the policy runs ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[Complete offline lab ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-stress-experiment.zip) ·
+[Complete offline lab ↓](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-stress-experiment.zip) ·
 [MCAP telemetry ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [Open it in Foxglove](docs/telemetry.md) ·
 [Reproduce & inspect](docs/stress.md)
@@ -246,7 +246,7 @@ This is the recorded pilot's tabular evidence, not a training dataset or officia
 <a href="https://noteflowai.github.io/robot-reel/stress/#outcomes"><img src="docs/paired-outcomes.png" width="100%" alt="All ten paired camera-condition outcomes: four both succeed, one loses success, three gain success, and two remain incomplete. Select a group to inspect its recordings."></a>
 
 The **0.8.0 offline lab** includes these review tools. Download the ZIP and the
-[sample review JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-seed-09-review.json),
+[sample review JSON](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-seed-09-review.json),
 then follow the [quick start guide](docs/offline-lab.md). No installation is needed
 to replay; the matching release wheel enables independent CLI checks.
 
