@@ -34,10 +34,21 @@
 
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
 
-**Share a verifiable Microduck frame.** Frame links identify the trace and model
-revision. Download the matching experiment and frame JSON, then check them with
-`robot-reel microduck-review`. The installed verifier needs no source checkout
-or GPU. [Offline workflow](docs/offline-lab.md).
+## Choose your workflow
+
+Robot Reel packages policy simulations and 3D scene edits into replayable
+recordings, source data and editable files. Explore an existing experiment,
+then use its guide to record or edit your own scene.
+
+| What you need to do | Start here | What you can deliver |
+| --- | --- | --- |
+| Review a policy under changed conditions | [SmolVLA Stress Lab](https://noteflowai.github.io/robot-reel/stress/) | Paired outcomes, camera views, action traces and an offline experiment |
+| Inspect simulation parameters and numerical error | [Genesis × Newton Solver Lab](https://noteflowai.github.io/robot-reel/solver-lab/) | Error curves, original samples and editable OpenUSD |
+| Edit captured assets and review the change | [Blender Scene Lab](https://noteflowai.github.io/robot-reel/scene-lab/) | Baseline and edited projects, renders and edit parameters |
+
+Each experiment documents its method, checked quantities and runtime requirements.
+For your own policy or simulator, start with the [recording guide](docs/recording.md)
+and validate exports against the original samples.
 
 ## Quick start
 
@@ -96,6 +107,11 @@ without a GPU. Both engines produce matching values in this simple no-contact,
 no-drag flight; it is an integration diagnostic, not a ranking of simulators.
 
 ## Inside a learned Microduck walk.
+
+**Share a verifiable Microduck frame.** Frame links identify the trace and model
+revision. Download the matching experiment and frame JSON, then check them with
+`robot-reel microduck-review`. The installed verifier needs no source checkout
+or GPU. [Offline workflow](docs/offline-lab.md).
 
 **Microduck Motion Lab.** Tap a 3D joint to inspect it, drag to orbit, overlay policy targets,
 click a 14-joint residual heatmap, and follow the original video. Switch between
@@ -338,23 +354,6 @@ The browser plays recorded simulations. The VLA example is one seeded rollout,
 with inference waiting time omitted; new director briefs use your connected
 agent and a new render. Microduck uses the XML PD-actuator fallback.
 [Scope, provenance and asset terms](THIRD_PARTY.md).
-
-## Project role and supported workflows
-
-Robot Reel connects policy and simulator recordings to review and scene-creation
-workflows. It preserves applied actions, measured state and source identities
-through synchronized replay, paired comparison and editable export.
-
-| Workflow | Recorded integration | Evidence and guide |
-| --- | --- | --- |
-| Policy review | SmolVLA through LeRobot, recorded in LIBERO/MuJoCo | [Camera views, actions and timing](docs/stress.md) |
-| Physics inspection | Newton CPU/CUDA recordings and Genesis CUDA flights | [Newton export](docs/newton.md), [cloth](docs/cloth.md), [timestep comparison](docs/solver-lab.md) |
-| Scene creation | Blender and OpenUSD | [Recorded samples mapped into editable scenes](docs/director.md) |
-| Telemetry review | Rerun and Foxglove | [Native Rerun workspace and MCAP export](docs/telemetry.md) |
-
-Each example documents its recording method, checked quantities and execution
-requirements. New simulator or policy integrations need their own recorder and
-validation against the original samples.
 
 ## Recorded research examples
 
