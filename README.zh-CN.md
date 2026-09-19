@@ -34,9 +34,19 @@
 
 <p align="center"><sub>观看无需安装，无需账号。封面各面板展示独立录制的运行。</sub></p>
 
-**分享可复核的 Microduck 帧。** 帧链接关联轨迹指纹和模型版本。下载对应实验与帧 JSON，
-使用 `robot-reel microduck-review` 核对原始记录和帧事实。安装包中的校验器
-无需克隆源码或 GPU。[离线操作说明](docs/offline-lab.md)。
+## 选择你的工作场景
+
+Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回放、数据与工程文件。
+可以先浏览已有实验，再按相应指南录制或编辑自己的场景。
+
+| 需要完成的工作 | 从这里开始 | 可交付的材料 |
+| --- | --- | --- |
+| 复核策略在不同条件下的表现 | [SmolVLA 压力实验室](https://noteflowai.github.io/robot-reel/stress/) | 配对结果、相机画面、动作轨迹与离线实验包 |
+| 检查仿真参数与数值误差 | [Genesis × Newton 步长对照](https://noteflowai.github.io/robot-reel/solver-lab/) | 误差曲线、原始样本与可编辑 OpenUSD |
+| 编辑实景资产并复核修改 | [Blender 场景实验室](https://noteflowai.github.io/robot-reel/scene-lab/) | 修改前后工程、渲染图与编辑参数 |
+
+各实验分别记录采集方法、已检查的量与运行要求。接入自己的策略或仿真器，
+请从[录制指南](docs/recording.zh-CN.md)开始，并用原始样本验证导出结果。
 
 ## 快速开始
 
@@ -93,6 +103,10 @@ Genesis 原生回放与可编辑 OpenUSD。0.10.0 安装包可直接校验和导
 不代表仿真器排名或真实机器人准确率。
 
 ## 看懂 Microduck 的每一步
+
+**分享可复核的 Microduck 帧。** 帧链接关联轨迹指纹和模型版本。下载对应实验与帧 JSON，
+使用 `robot-reel microduck-review` 核对原始记录和帧事实。安装包中的校验器
+无需克隆源码或 GPU。[离线操作说明](docs/offline-lab.md)。
 
 **Microduck 动作实验室。** 直接点选三维关节，拖动旋转查看结构，叠加策略目标姿态，点击
 14 关节误差热图，与原始录像同步检查。切换 **0.3 / 0.5 m/s 速度命令**，
@@ -315,21 +329,6 @@ Blender 原生检查覆盖导演影片中的全部 420 个车辆状态，以及 
 浏览器展示已录制的仿真。VLA 示例是一次固定种子的运行，播放时省略推理等待；
 新的导演需求由你连接的 Agent 解读，并重新渲染。Microduck 使用 XML PD 执行器回退方案。
 [适用范围、来源与资产条款](THIRD_PARTY.md)。
-
-## 项目定位与已验证工作流
-
-Robot Reel 将策略和仿真运行记录连接到复核与三维创作流程，在同步回放、配对对照
-和可编辑导出中保留执行动作、实测状态与来源标识。
-
-| 工作流 | 已录制集成 | 证据与指南 |
-| --- | --- | --- |
-| 策略复核 | 通过 LeRobot 运行 SmolVLA，在 LIBERO/MuJoCo 中录制 | [相机视角、动作与耗时](docs/stress.md) |
-| 物理过程检查 | Newton CPU/CUDA 录制与 Genesis CUDA 抛体实验 | [Newton 导出](docs/newton.md)、[布料](docs/cloth.md)、[步长对照](docs/solver-lab.md) |
-| 三维创作 | Blender 与 OpenUSD | [将记录样本映射到可编辑场景](docs/director.md) |
-| 遥测复核 | Rerun 与 Foxglove | [Rerun 原生工作区与 MCAP 导出](docs/telemetry.md) |
-
-每个示例分别记录采集方法、已检查的量与运行要求。接入新的仿真器或策略，
-需要提供相应录制器，并用原始样本验证导出结果。
 
 ## 研究示例
 

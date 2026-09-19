@@ -34,12 +34,21 @@ pinned: true
 
 # Give Physical AI a replay button.
 
-**Seven interactive experiments, with their original recordings hosted in this
-Space.** Review recorded simulations and captured-scene edits. Explore a policy
-failure, rotate a deforming mesh, or turn simulated motion into a
-three-dimensional motion sculpture. Inspect the 14 joints inside a learned
-Microduck walk. No installation or model-service account
-is needed to watch.
+**Review policy behavior, inspect simulation error, and edit captured scenes.**
+Seven interactive experiments include their original recordings, source data
+and downloadable files. Start with a workflow below; no installation or
+model-service account is needed to explore.
+
+## Choose a starting point
+
+- **Policy review:** compare paired outcomes in SmolVLA Stress Lab, then inspect
+  the actions and camera views behind a failure.
+- **Simulation diagnostics:** compare Genesis and Newton timesteps in Solver Lab,
+  then export the measured errors and original samples.
+- **3D creation:** inspect a captured asset in Scene Lab, compare a Blender edit,
+  and download the native projects and edit parameters.
+
+## Explore the experiments
 
 | Experiment | Try this | Evidence you can take away |
 | --- | --- | --- |
@@ -51,8 +60,8 @@ is needed to watch.
 | **Butterfly Lab** | Orbit twelve Newton worlds released 0.05° apart. | Original poses, measured separation, source clocks and an editable OpenUSD scene. |
 | **Microduck Motion Lab** | Tap a joint, orbit its body-fixed schematic, overlay targets and reopen a shared frame JSON after checking its facts. | Two original walks, 8,400 measured joint samples, 18,000 body transforms checked against MuJoCo, JSON/CSV and an offline ZIP. |
 
-The browser replays saved data. **No model inference or simulation runs in this
-Space.** SmolVLA inference, cloth recording and the Solver Lab used an NVIDIA L40S; the
+The browser replays saved data; new inference, simulation and Blender rendering
+use the project's local workflows. SmolVLA inference, cloth recording and the Solver Lab used an NVIDIA L40S; the
 Butterfly Lab and Microduck policy ran on CPU. Share links also work when the viewer is
 embedded and clipboard access is unavailable.
 
@@ -83,8 +92,8 @@ its page manifests and copied offline archives are refreshed accordingly.
 
 The Stress Lab is **one LIBERO Spatial task, ten paired initial states and three
 conditions**, with a 160-action limit per trial. Every trial is retained,
-including failures. It is a controlled diagnostic, not an official LIBERO score
-or a real-robot result.
+including failures. The results describe this simulation experiment; full
+benchmark evaluation and real-robot testing require separate runs.
 
 Cloth coefficients are solver settings, not calibrated fabric properties; no
 collisions or self-contact are modeled. Butterfly sculpture depth represents
