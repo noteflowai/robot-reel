@@ -10,7 +10,7 @@
 <h1 align="center">物理 AI，一键回放。</h1>
 
 <p align="center">
-  真实运行的策略，可逐帧检查的影片，可继续编辑的三维场景。<br>
+  已录制的策略仿真，可逐帧检查的影片，可继续编辑的三维场景。<br>
   看见行为，查看证据，把场景带走。
 </p>
 
@@ -349,7 +349,7 @@ Robot Reel 将策略和仿真运行记录连接到复核与三维创作流程，
 | 用 GPU 运行配对策略压力实验 | [CUDA 环境、固定实验与证据校验](docs/stress.md) |
 | 在本地运行 SmolVLA | [独立 CPU 环境与固定模型版本](docs/vla.md) |
 | 让 Agent 为实验编排成片 | [MCP 配置与 Blender 构建／渲染](docs/director.md) |
-| 把真实物理过程导入三维软件 | [Newton → OpenUSD → Blender](docs/newton.md) |
+| 把仿真运行记录导入三维软件 | [Newton → OpenUSD → Blender](docs/newton.md) |
 | 探索仿真参数扫描 | [蝴蝶效应实验室 → 12 个隔离世界](docs/chaos.md) |
 | 录制 Microduck、制动或机械臂 | [录制场景与运行环境](docs/recording.zh-CN.md) |
 | 对照两次运行的结果 | [比较约定与 CLI](docs/comparison.md) |

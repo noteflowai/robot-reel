@@ -35,14 +35,15 @@ pinned: true
 # Give Physical AI a replay button.
 
 **Seven interactive experiments, with their original recordings hosted in this
-Space.** Explore a failure, rotate a deforming mesh, or turn physics into a
+Space.** Review recorded simulations and captured-scene edits. Explore a policy
+failure, rotate a deforming mesh, or turn simulated motion into a
 three-dimensional motion sculpture. Inspect the 14 joints inside a learned
 Microduck walk. No installation or model-service account
 is needed to watch.
 
 | Experiment | Try this | Evidence you can take away |
 | --- | --- | --- |
-| **Scene Lab** | Compare captured mesh, surface Gaussians and a separate collision proxy. | Two native Blender edits, real GPU renders, GLB/SPLAT and numeric recipes. |
+| **Scene Lab** | Compare captured mesh, surface Gaussians and a separate collision proxy. | Baseline and edited Blender scenes, GPU renders, GLB/SPLAT and numeric recipes. |
 | **LIBERO-Plus** | Seek paired baseline/camera/light recordings at a common source time. | Official condition IDs, source clips, applied controls and native scene parameters. |
 | **Solver Lab** | Compare three timesteps in Genesis and Newton against the analytic flight. | 366 recorded positions/velocities, native Genesis trajectories, OpenUSD, CSV and an offline ZIP. |
 | **SmolVLA Stress Lab** | Group paired successes and failures, open any seed, then inspect all 30 trials. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
