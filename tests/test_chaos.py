@@ -17,6 +17,34 @@ class ChaosTests(unittest.TestCase):
     def setUpClass(cls):
         cls.trace = json.loads((SITE/"trace.json").read_text())
 
+    def test_world_count_and_device_are_read_from_the_trace(self):
+        """A GPU sweep records its own device and width; both are then enforced."""
+        import copy
+        from robot_reel.chaos import ANGLE_STEP_DEG, validate_trace, worlds
+        published = json.loads((SITE/"trace.json").read_text())
+        self.assertIn("body_samples", validate_trace(published))
+        self.assertEqual(published["source"]["device"], "cpu")
+        self.assertEqual(published["source"]["world_count"], len(published["worlds"]))
+
+        # The sweep is parameterised, which is what lets a cuda:0 run widen it.
+        for count in (12, 48, 256):
+            sweep = worlds(count)
+            self.assertEqual(len(sweep), count)
+            self.assertAlmostEqual(sweep[1]["angle_offset_deg"] - sweep[0]["angle_offset_deg"],
+                                   ANGLE_STEP_DEG, places=9)
+
+        # Anything the recorder claims about width or device has to match the trace.
+        for label, mutate in (
+            ("device the recorder cannot produce", lambda d: d["source"].update({"device": "gpu"})),
+            ("world_count disagreeing with the sweep", lambda d: d["source"].update({"world_count": 24})),
+            ("world_count below the range", lambda d: d["source"].update({"world_count": 1})),
+            ("world_count above the range", lambda d: d["source"].update({"world_count": 513})),
+        ):
+            broken = copy.deepcopy(published)
+            mutate(broken)
+            with self.subTest(label), self.assertRaises(ValueError):
+                validate_trace(broken)
+
     def test_published_experiment_and_download_match_all_recorded_samples(self):
         result = verify_showcase(SITE)
         self.assertEqual(result["body_samples"], 14424)

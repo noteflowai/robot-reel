@@ -21,9 +21,9 @@ ANCHOR = [0, 0, 3.8]
 FILES = ("trace.json", "index.html", "scene.usdc")
 
 
-def worlds():
+def worlds(count=WORLD_COUNT):
     result = []
-    for i in range(WORLD_COUNT):
+    for i in range(count):
         rgb = colorsys.hsv_to_rgb(.46 + i * .039, .65, 1)
         result.append({
             "id": i, "angle_offset_deg": i * ANGLE_STEP_DEG,
@@ -39,7 +39,7 @@ def measure(trace):
     initial = []
     for frame in trace["frames"]:
         reference = point(frame["poses"][1], [.8, 0, 0])
-        for w in range(WORLD_COUNT):
+        for w in range(trace["source"]["world_count"]):
             upper, lower = frame["poses"][w*2:w*2+2]
             anchor_error = max(anchor_error, math.dist(point(upper, [-.8, 0, 0]), ANCHOR))
             joint_error = max(joint_error, math.dist(point(upper, [.8, 0, 0]), point(lower, [-.8, 0, 0])))
@@ -49,7 +49,7 @@ def measure(trace):
             if distance > peak["distance_m"]:
                 peak = {"distance_m": distance, "frame": frame["frame"], "world": w}
     return {
-        "body_samples": len(trace["frames"]) * WORLD_COUNT * 2,
+        "body_samples": len(trace["frames"]) * trace["source"]["world_count"] * 2,
         "max_anchor_error_m": anchor_error, "max_joint_error_m": joint_error,
         "initial_tip_distances_m": initial, "peak": peak,
     }
@@ -59,15 +59,22 @@ def validate_trace(trace):
     """Validate provenance, initial conditions, constraints and derived metrics."""
     if not isinstance(trace, dict) or trace.get("schema") != SCHEMA:
         raise ValueError("Unsupported chaos trace")
+    source = trace.get("source") or {}
+    count, device = source.get("world_count"), source.get("device")
+    if type(count) is not int or not 2 <= count <= 512:
+        raise ValueError("Recorded world_count must be an integer in 2-512")
+    if device not in ("cpu", "cuda:0"):
+        raise ValueError("Unsupported recorded device")
     expected = {
         "engine": "newton", "engine_version": "1.6.0", "warp_version": "1.17.0",
-        "solver": "SolverXPBD", "device": "cpu", "world_count": WORLD_COUNT,
+        "solver": "SolverXPBD", "device": device, "world_count": count,
         "substeps": SUBSTEPS, "timestep": 1/(FPS*SUBSTEPS),
         "gravity_m_s2": [0, 0, -9.81], "initial_velocity": "zero",
         "world_isolation": "ModelBuilder.begin_world/end_world",
         "scene": "double_pendulum_release_sweep",
     }
-    if trace.get("source") != expected or trace.get("worlds") != worlds():
+    if {k: v for k, v in source.items() if k != "device_name"} != expected \
+            or trace.get("worlds") != worlds(count):
         raise ValueError("Chaos release provenance mismatch")
     if trace.get("fps") != FPS or trace.get("link_size_m") != SIZE or trace.get("anchor_m") != ANCHOR:
         raise ValueError("Unsupported chaos geometry or clock")
@@ -83,7 +90,7 @@ def validate_trace(trace):
         if type(time) not in (int, float) or not math.isfinite(time) or abs(time-i/FPS) > 1e-9:
             raise ValueError("Chaos timestamp mismatch")
         poses = frame.get("poses")
-        if not isinstance(poses, list) or len(poses) != 2*WORLD_COUNT:
+        if not isinstance(poses, list) or len(poses) != 2*count:
             raise ValueError("Missing chaos poses")
         for pose in poses:
             if not isinstance(pose, list) or len(pose) != 7 or not all(
@@ -148,12 +155,16 @@ def verify(output):
     return result
 
 
-def record(output, seconds=20):
+def record(output, seconds=20, world_count=WORLD_COUNT, device="cpu"):
     if (
         type(seconds) not in (int, float) or not math.isfinite(seconds)
         or not 1/FPS <= seconds <= 20 or abs(seconds*FPS-round(seconds*FPS)) > 1e-8
     ):
         raise ValueError("Duration must contain 1–600 whole 30 Hz intervals")
+    if type(world_count) is not int or not 2 <= world_count <= 512:
+        raise ValueError("Choose 2-512 worlds")
+    if device not in ("cpu", "cuda:0"):
+        raise ValueError("Choose cpu or cuda:0")
     output = Path(output)
     if output.exists() and any(output.iterdir()):
         raise ValueError("Output is not empty; choose a fresh directory")
@@ -165,9 +176,11 @@ def record(output, seconds=20):
     if version("newton") != "1.6.0" or version("warp-lang") != "1.17.0":
         raise ValueError("Use newton==1.6.0 and warp-lang==1.17.0")
     wp.init()
-    with wp.ScopedDevice("cpu"):
+    selected = wp.get_device(device)
+    device_name = str(getattr(selected, "name", selected))
+    with wp.ScopedDevice(selected):
         builder = newton.ModelBuilder(gravity=(0, 0, -9.81))
-        for world in worlds():
+        for world in worlds(world_count):
             builder.begin_world(label=f"world_{world['id']:02}")
             links = [builder.add_link(label=f"w{world['id']:02}_{name}") for name in ("upper", "lower")]
             for link in links:
@@ -190,7 +203,7 @@ def record(output, seconds=20):
             builder.add_articulation(joints, label=f"pendulum_{world['id']:02}")
             builder.end_world()
         model = builder.finalize()
-        if model.world_count != WORLD_COUNT:
+        if model.world_count != world_count:
             raise ValueError("Newton did not create the requested isolated worlds")
         current, next_state = model.state(), model.state()
         control = model.control()
@@ -213,13 +226,14 @@ def record(output, seconds=20):
         "units": {"position": "m", "time": "s", "quaternion": "xyzw", "up_axis": "Z"},
         "source": {
             "engine": "newton", "engine_version": version("newton"), "warp_version": version("warp-lang"),
-            "solver": "SolverXPBD", "device": "cpu", "world_count": WORLD_COUNT,
+            "solver": "SolverXPBD", "device": device, "world_count": world_count,
+            "device_name": device_name,
             "substeps": SUBSTEPS, "timestep": 1/(FPS*SUBSTEPS),
             "gravity_m_s2": [0, 0, -9.81], "initial_velocity": "zero",
             "world_isolation": "ModelBuilder.begin_world/end_world",
             "scene": "double_pendulum_release_sweep",
         },
-        "worlds": worlds(), "frames": frames,
+        "worlds": worlds(world_count), "frames": frames,
     }
     trace["summary"] = measure(trace)
     validate_trace(trace)
@@ -237,13 +251,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=Path("artifacts/chaos"))
     parser.add_argument("--seconds", type=float, default=20)
+    parser.add_argument("--worlds", type=int, default=WORLD_COUNT, help="2-512 isolated worlds")
+    parser.add_argument("--device", default="cpu", choices=("cpu", "cuda:0"))
     parser.add_argument("--verify", action="store_true")
     parser.add_argument("--check-usd", action="store_true")
     args = parser.parse_args()
     if args.check_usd and not args.verify:
         parser.error("--check-usd applies to --verify")
     try:
-        result = verify(args.output) if args.verify else record(args.output, args.seconds)
+        result = (verify(args.output) if args.verify
+                  else record(args.output, args.seconds, args.worlds, args.device))
         if args.check_usd:
             from .chaos_usd import check_usd
             result["usd"] = check_usd(json.loads((args.output/"trace.json").read_text()), args.output/"scene.usdc")
