@@ -53,8 +53,9 @@ and validate exports against the original samples.
 ## Quick start
 
 **[Try Robot Reel on Hugging Face](https://huggingface.co/spaces/glayguo/robot-reel)**:
-compare 30 SmolVLA trials, orbit recorded GPU cloth, and explore twelve Newton
-worlds and both Microduck walks in one Space. No installation or model account needed. The Space hosts
+compare 30 SmolVLA simulation trials on one task (10 initial states × 3 conditions),
+orbit recorded GPU cloth, and explore twelve Newton worlds and both Microduck walks.
+No installation or model account needed. The Space hosts
 the original recordings; [build and publication details](docs/huggingface.md)
 include their source commit and checksums.
 [Model & data collection](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0) · [Feedback & discussion](https://huggingface.co/spaces/glayguo/robot-reel/discussions/1).
@@ -83,7 +84,8 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/noteflowai/robot-reel/blob/main/examples/quickstart.ipynb)
 Or use the [verified installation packages or non-root Docker image](docs/distribution.md).
-Recording new runs needs the [full runtime](docs/recording.md); the browser demos need nothing.
+Recording new runs needs the [full runtime](docs/recording.md).
+The hosted replays open in a browser without a local simulation environment.
 
 
 ## One launch. Mind the timestep.

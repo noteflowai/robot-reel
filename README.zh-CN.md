@@ -7,7 +7,7 @@
   </a>
 </p>
 
-<h1 align="center">物理 AI，一键回放。</h1>
+<h1 align="center">回放物理 AI 的每一步。</h1>
 
 <p align="center">
   已录制的策略仿真，可逐帧检查的影片，可继续编辑的三维场景。<br>
@@ -51,7 +51,7 @@ Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回
 ## 快速开始
 
 **[在 Hugging Face 体验 Robot Reel](https://huggingface.co/spaces/glayguo/robot-reel)**：
-在同一个 Space 对照 30 次 SmolVLA 运行、旋转查看 GPU 布料录制，
+在同一个 Space 对照单个任务的 30 次 SmolVLA 仿真（10 个初始状态 × 3 种条件）、旋转查看 GPU 布料录制，
 探索 12 个 Newton 世界，并逐关节检查 Microduck 的两组步行记录。无需安装或模型账号；Space 自带原始录制，
 [构建与发布说明](docs/huggingface.md)提供对应源码提交和文件校验信息。
 [模型与数据资源合集](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0) · [体验反馈与讨论](https://huggingface.co/spaces/glayguo/robot-reel/discussions/1)。
@@ -81,7 +81,8 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 [![在 Colab 中打开](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/noteflowai/robot-reel/blob/main/examples/quickstart.ipynb)
 也可以使用[经过验证的安装包或普通用户 Docker 镜像](docs/distribution.md)；
 安装包发布在 GitHub Releases，容器支持按宿主机 UID/GID 写出文件。
-录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)；浏览器演示什么都不用装。
+录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)。
+在线回放可直接在浏览器中打开，无需在本机安装仿真环境。
 
 
 ## 同一抛体，步长有多大影响？

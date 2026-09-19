@@ -55,7 +55,7 @@ model-service account is needed to explore.
 | **Scene Lab** | Compare captured mesh, surface Gaussians and a separate collision proxy. | Baseline and edited Blender scenes, GPU renders, GLB/SPLAT and numeric recipes. |
 | **LIBERO-Plus** | Seek paired baseline/camera/light recordings at a common source time. | Official condition IDs, source clips, applied controls and native scene parameters. |
 | **Solver Lab** | Compare three timesteps in Genesis and Newton against the analytic flight. | 366 recorded positions/velocities, native Genesis trajectories, OpenUSD, CSV and an offline ZIP. |
-| **SmolVLA Stress Lab** | Group paired successes and failures, open any seed, then inspect all 30 trials. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
+| **SmolVLA Stress Lab** | Compare 30 simulation trials on one task: 10 initial states × 3 conditions. Open each paired success or failure. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
 | **GPU Cloth Lab** | Release three identical sheets with different bending coefficients. Orbit, overlay, export a figure, and reopen a checked sample JSON. | 42,471 original vertex samples, positions and velocities, OpenUSD, native Blender checks. |
 | **Butterfly Lab** | Orbit twelve Newton worlds released 0.05° apart. | Original poses, measured separation, source clocks and an editable OpenUSD scene. |
 | **Microduck Motion Lab** | Tap a joint, orbit its body-fixed schematic, overlay targets and reopen a shared frame JSON after checking its facts. | Two original walks, 8,400 measured joint samples, 18,000 body transforms checked against MuJoCo, JSON/CSV and an offline ZIP. |
@@ -65,7 +65,7 @@ use the project's local workflows. SmolVLA inference, cloth recording and the So
 Butterfly Lab and Microduck policy ran on CPU. Share links also work when the viewer is
 embedded and clipboard access is unavailable.
 
-**For a closer review:** use the four view buttons with a keyboard, step between
+**In Microduck Motion Lab:** use the four view buttons with a keyboard, step between
 frames beside the schematic, or follow the link to the original video. If a video
 request fails, **Retry video** keeps your selected frame and joint in place.
 Frame JSON and joint CSV remain available from the bundled data.
