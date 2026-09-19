@@ -90,9 +90,10 @@ jobs:
           robot-reel newton --output artifacts/newton-ci --verify --check-usd
       - name: Record twelve isolated worlds and check the complete sweep export
         run: |
-          python -m robot_reel.chaos --seconds 1 --output artifacts/chaos-ci
+          python -m robot_reel.chaos --seconds 1 --worlds 4 --output artifacts/chaos-ci
           python -m robot_reel.chaos --output artifacts/chaos-ci --verify --check-usd
           python -m robot_reel.chaos --output docs/chaos --verify --check-usd
+          python -m unittest discover -s tests -p test_chaos.py -v
       - name: Record CPU cloth and read back every published GPU vertex and velocity
         run: |
           robot-reel cloth --device cpu --seconds 0.1 --output artifacts/cloth-ci

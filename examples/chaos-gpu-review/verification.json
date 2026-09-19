@@ -1,0 +1,82 @@
+{
+  "scope": "Export validation of one 48-world, three-second L40S recording; not a speed comparison or the published twelve-world CPU experiment.",
+  "source": {
+    "engine": "newton",
+    "engine_version": "1.6.0",
+    "warp_version": "1.17.0",
+    "solver": "SolverXPBD",
+    "device": "cuda:0",
+    "world_count": 48,
+    "device_name": "NVIDIA L40S",
+    "substeps": 10,
+    "timestep": 0.0033333333333333335,
+    "gravity_m_s2": [
+      0,
+      0,
+      -9.81
+    ],
+    "initial_velocity": "zero",
+    "world_isolation": "ModelBuilder.begin_world/end_world",
+    "scene": "double_pendulum_release_sweep"
+  },
+  "frames": 91,
+  "body_samples": 8736,
+  "trace_sha256": "38058ef0e72ca66192c16302a3d3e4a589d6b97908560828e550dea3a1b307a5",
+  "usd": {
+    "checked_body_samples": 8736,
+    "maximum_transform_error_m": 9.155133597044475e-16,
+    "usd_sha256": "8a6fca55a2c00dcdf174e47d49ae500a1b275790641b226e73265af64ef67824"
+  },
+  "blender": {
+    "blender_version": "4.5.13 LTS",
+    "checked_body_samples": 8736,
+    "fps": 30,
+    "frame_start": 1,
+    "frame_end": 91,
+    "maximum_transform_error_m": 5.340576176848799e-07,
+    "trace_sha256": "38058ef0e72ca66192c16302a3d3e4a589d6b97908560828e550dea3a1b307a5",
+    "usd_sha256": "8a6fca55a2c00dcdf174e47d49ae500a1b275790641b226e73265af64ef67824"
+  },
+  "browser": {
+    "results": [
+      {
+        "width": 1440,
+        "scrollWidth": 1440,
+        "worldsHeight": 240,
+        "worldsScrollHeight": 363,
+        "errors": [],
+        "selectedWorld": 48,
+        "sample": 90
+      },
+      {
+        "width": 390,
+        "scrollWidth": 390,
+        "worldsHeight": 240,
+        "worldsScrollHeight": 483,
+        "errors": [],
+        "selectedWorld": 48,
+        "sample": 90
+      },
+      {
+        "width": 320,
+        "scrollWidth": 320,
+        "worldsHeight": 240,
+        "worldsScrollHeight": 483,
+        "errors": [],
+        "selectedWorld": 48,
+        "sample": 90
+      }
+    ],
+    "noJavascriptDescription": true
+  },
+  "files": {
+    "experiment.zip": {
+      "sha256": "8a2a7159f119b2f114814ad225eec1704ad41214b07846cc135cc7d4f296b027",
+      "bytes": 1009563
+    },
+    "poster.png": {
+      "sha256": "14d71ec907616a8600278007fbd906f4207d886d9d3fb05d9f866370895544ad",
+      "bytes": 171566
+    }
+  }
+}

@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Twelve Newton physics worlds, released just 0.05 degrees apart. Explore their recorded motion as luminous trails and a 3D time sculpture.">
+<meta name="description" content="__WORLD_COUNT__ Newton physics worlds, released just 0.05 degrees apart. Explore their recorded motion as luminous trails and a 3D time sculpture.">
 <meta property="og:title" content="The Butterfly Lab · Robot Reel">
-<meta property="og:description" content="0.05° apart. Worlds apart. Twelve recorded physics worlds, one interactive motion sculpture.">
+<meta property="og:description" content="0.05° apart. Worlds apart. __WORLD_COUNT__ recorded physics worlds, one interactive motion sculpture.">
 <meta property="og:image" content="https://noteflowai.github.io/robot-reel/chaos/poster.png">
 <title>The Butterfly Lab · Robot Reel</title>
 <style>
@@ -23,6 +23,7 @@ header,main,footer{max-width:1280px;margin:auto;padding:22px 34px}header{display
 @media(max-width:900px){.intro{grid-template-columns:1fr;gap:8px}.intro p{max-width:650px}.workspace{grid-template-columns:1fr}.inspector{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}.metrics{margin:0}.graph-panel{grid-column:1}.world-panel{grid-column:2;grid-row:2/4}.source-note{grid-column:1/-1}.distance{font-size:40px}#scene{height:490px}.below{gap:18px}.below h2{font-size:15px}}
 @media(max-width:540px){header,main,footer{padding:18px}nav{gap:8px 12px;max-width:170px;justify-content:flex-end;font-size:10px}.intro{margin:13px 0 22px}h1{letter-spacing:-1.6px}.intro p{font-size:13px}.lab-header{padding:12px;align-items:flex-start;flex-direction:column;gap:9px}.modes{width:100%}.modes button{flex:1}.stamp{top:15px;left:15px}.stamp strong{font-size:23px}.stamp small{font-size:8px}#scene{height:390px}.axis-note{left:15px;bottom:52px;font-size:8px;max-width:85%}.camera{bottom:12px}.inspector{padding:16px;gap:12px 15px}.distance{font-size:34px}.pair{font-size:10px}.caption{font-size:9px;letter-spacing:.8px}.metrics strong{font-size:14px}.worlds{grid-template-columns:repeat(3,1fr)}.controls{padding:14px}.buttons button{font-size:10px;padding:7px 9px}.timeline-label{font-size:9px}.transport{gap:10px}.below{grid-template-columns:1fr;gap:12px}.below p{margin:7px 0}.lab{border-radius:13px}}
 .share-result{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:11px}.share-result[hidden]{display:none}.share-result input{min-width:0;flex:1 1 200px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:8px}.share-result a{text-decoration:underline}
+.worlds{max-height:240px;overflow-y:auto;padding:4px;scroll-padding:4px}
 </style>
 </head>
 <body>
@@ -30,10 +31,10 @@ header,main,footer{max-width:1280px;margin:auto;padding:22px 34px}header{display
 <main>
 <section class="intro">
 <div><div class="kicker">The Butterfly Lab / Newton 1.6</div><h1>0.05° apart.<br><em>Worlds apart.</em></h1></div>
-<div><p>Twelve double pendulums. Almost the same release. <b>Entirely different paths.</b> Turn a recorded physics experiment into a motion sculpture you can explore.</p><div class="actions"><button class="primary" id="replay">Replay the experiment ↻</button><a class="button" href="scene.usdc" download>Open in Blender ↓</a></div></div>
+<div><p>__WORLD_COUNT__ double pendulums. Almost the same release. <b>Follow their measured separation.</b> Turn a recorded physics experiment into a motion sculpture you can explore.</p><div class="actions"><button class="primary" id="replay">Replay the experiment ↻</button><a class="button" href="scene.usdc" download>Open in Blender ↓</a></div></div>
 </section>
-<section class="lab" aria-label="Twelve recorded Newton worlds">
-<div class="lab-header"><div class="lab-title"><span>●</span> 12 WORLDS / ONE SHARED CLOCK</div><div class="modes" aria-label="Presentation"><button id="sculpture" aria-pressed="true">Time sculpture</button><button id="overlay" aria-pressed="false">Motion overlay</button></div></div>
+<section class="lab" aria-label="__WORLD_COUNT__ recorded Newton worlds">
+<div class="lab-header"><div class="lab-title"><span>●</span> __WORLD_COUNT__ WORLDS / ONE SHARED CLOCK</div><div class="modes" aria-label="Presentation"><button id="sculpture" aria-pressed="true">Time sculpture</button><button id="overlay" aria-pressed="false">Motion overlay</button></div></div>
 <div class="workspace">
 <div class="stage">
 <canvas id="scene" tabindex="0" role="img" aria-label="Recorded pendulum tip trajectories. Drag horizontally or use camera buttons to rotate."></canvas>
@@ -46,7 +47,7 @@ header,main,footer{max-width:1280px;margin:auto;padding:22px 34px}header{display
 <div class="metrics"><div><small>Release difference</small><strong id="angle"></strong></div><div><small>Initial tip distance</small><strong id="initial-distance"></strong></div></div>
 <div class="graph-panel"><div class="caption">Distance from world 01</div><canvas id="graph" role="img" aria-label="Distance from reference versus recorded simulation time"></canvas><div class="graph-label"><span>0 s</span><span id="graph-end"></span></div></div>
 <div class="world-panel"><div class="caption">Choose a world to compare</div><div class="worlds" id="worlds" role="group" aria-label="Recorded world"></div></div>
-<div class="source-note">Adjacent releases differ by 0.05°; the full sweep spans 0.55°. Colors identify isolated worlds. Distances use original 3D poses.</div>
+<div class="source-note">Adjacent releases differ by 0.05°; the full sweep spans __SWEEP_DEG__°. Colors identify isolated worlds. Distances use original 3D poses.</div>
 </aside>
 </div>
 <div class="controls">
@@ -58,9 +59,9 @@ header,main,footer{max-width:1280px;margin:auto;padding:22px 34px}header{display
 </div>
 </section>
 <section class="below">
-<article><span class="index">01 / A SMALL PERTURBATION</span><h2>Same setup. Different release.</h2><p>Newton advances 12 isolated worlds on CPU. Two 1.6 m links per world, identical gravity, zero initial velocity. Only the starting angle changes.</p><p><b id="sample-count"></b> samples per world, including the initial state. No policy or model call.</p></article>
+<article><span class="index">01 / A SMALL PERTURBATION</span><h2>Same setup. Different release.</h2><p>Newton advances __WORLD_COUNT__ isolated worlds on __DEVICE__. Two 1.6 m links per world, identical gravity, zero initial velocity. Only the starting angle changes.</p><p><b id="sample-count"></b> samples per world, including the initial state. No policy or model call.</p></article>
 <article><span class="index">02 / A SCULPTURE OF TIME</span><h2>Walk around the experiment.</h2><p>Motion overlay puts the recorded paths on the same axes. Time sculpture spreads samples along a depth axis: <b>depth represents time</b>, not physical travel. Trails end at the selected sample.</p><p>Drag sideways or use the camera buttons. Step, scrub or share the exact sample and world.</p></article>
-<article><span class="index">03 / AN EDITABLE SCENE</span><h2>Take the motion into Blender.</h2><p>Import <code>scene.usdc</code> and set Blender to <b>30 fps</b>. The 24 animated links retain every source pose. World groups are spaced along Y for viewing.</p><div class="actions"><a class="button" href="trace.json" download>Source poses ↓</a><a class="button" href="https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md">Reproduce ↗</a></div></article>
+<article><span class="index">03 / AN EDITABLE SCENE</span><h2>Take the motion into Blender.</h2><p>Import <code>scene.usdc</code> and set Blender to <b>30 fps</b>. The __BODY_COUNT__ animated links retain every source pose. World groups are spaced along Y for viewing.</p><div class="actions"><a class="button" href="trace.json" download>Source poses ↓</a><a class="button" href="https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md">Reproduce ↗</a></div></article>
 </section>
 </main>
 <footer>Recorded Newton physics; the browser renders source poses and does not run a simulator. Measured separation describes this experiment. <a href="manifest.json" download>Source hashes</a> · <a href="https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md">Method & native checks</a> · Code and procedural scene: Apache-2.0.</footer>

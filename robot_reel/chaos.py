@@ -1,4 +1,4 @@
-"""Record twelve isolated Newton pendulums with slightly different releases."""
+"""Record isolated Newton pendulums with slightly different releases on CPU or GPU."""
 from __future__ import annotations
 
 import argparse
@@ -121,7 +121,19 @@ def export_viewer(trace, destination):
     validate_trace(trace)
     template = Path(__file__).with_name("chaos.html").read_text()
     payload = json.dumps(trace, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
+    values = {
+        "__WORLD_COUNT__": str(trace["source"]["world_count"]),
+        "__BODY_COUNT__": str(2 * trace["source"]["world_count"]),
+        "__DEVICE__": device_label(trace),
+        "__SWEEP_DEG__": f'{trace["worlds"][-1]["angle_offset_deg"]:.2f}',
+    }
+    for marker, value in values.items():
+        template = template.replace(marker, value)
     Path(destination).write_text(template.replace("__TRACE__", payload))
+
+
+def device_label(trace):
+    return "CPU" if trace["source"]["device"] == "cpu" else "GPU (cuda:0)"
 
 
 def digest(path):

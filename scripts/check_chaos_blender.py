@@ -1,4 +1,4 @@
-"""Check all 24 chaos links at every recorded frame after native Blender import.
+"""Check every chaos link at every recorded frame after native Blender import.
 
 blender --background --python scripts/check_chaos_blender.py -- --bundle DIR
 Or run with a Python environment containing bpy.
@@ -47,7 +47,9 @@ def main():
                 for local in ([0, 0, 0], [.5, 0, 0], [0, .5, 0], [0, 0, .5]):
                     actual = list(obj.matrix_world @ Vector(local))
                     expected = point(frame["poses"][i*2+link], [v*s for v, s in zip(local, trace["link_size_m"])])
-                    expected = [v+shift for v, shift in zip(expected, offset(i))]
+                    expected = [
+                        v+shift for v, shift in zip(expected, offset(i, trace["source"]["world_count"]))
+                    ]
                     error = math.dist(actual, expected)
                     if not math.isfinite(error) or error > 1e-5:
                         raise ValueError(f"Blender pose mismatch: world {i}, sample {frame['frame']}: {error}")

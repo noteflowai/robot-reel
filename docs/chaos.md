@@ -81,6 +81,23 @@ worlds together. `--seconds 1` makes a short smoke run; it does not reproduce
 the full public experiment. Platform and numerical differences can change
 later trajectories; verify each newly recorded bundle against its own source.
 
+To record a wider GPU sweep with the same 0.05° spacing:
+
+```bash
+.venv/bin/python -m robot_reel.chaos --output artifacts/chaos-gpu \
+  --device cuda:0 --worlds 48 --seconds 3
+.venv/bin/python -m robot_reel.chaos --output artifacts/chaos-gpu \
+  --verify --check-usd
+```
+
+The recorder supports 2–512 worlds on `cpu` or `cuda:0`. New viewer descriptions,
+USD metadata, centered presentation offsets and preview notices follow that
+recording's world count and device. This command produces a separate experiment;
+the public recording described above remains the original twelve-world CPU run.
+Check each new USD in Blender before building its downloadable showcase.
+The [48-world GPU export check](../examples/chaos-gpu-review/README.md) includes
+a three-second recording, offline viewer and independent native checks.
+
 The complete published bundle also validates with **only the standard library**:
 
 ```bash
