@@ -52,8 +52,8 @@ model-service account is needed to explore.
 
 | Experiment | Try this | Evidence you can take away |
 | --- | --- | --- |
-| **Scene Lab** | Compare captured mesh, surface Gaussians and a separate collision proxy. | Baseline and edited Blender scenes, GPU renders, GLB/SPLAT and numeric recipes. |
-| **LIBERO-Plus** | Seek paired baseline/camera/light recordings at a common source time. | Official condition IDs, source clips, applied controls and native scene parameters. |
+| **Scene Lab** | Compare a photogrammetry mesh, 25,000 mesh-sampled surface Gaussians and a heightfield collision proxy. | Baseline and edited Blender scenes, GPU renders, GLB/SPLAT and numeric recipes. |
+| **LIBERO-Plus** | Compare three runs of one task from one paired initial state: baseline, camera and lighting conditions. | Official perturbation IDs, source clips, applied controls and native scene parameters. |
 | **Solver Lab** | Compare three timesteps in Genesis and Newton against the analytic flight. | 366 recorded positions/velocities, native Genesis trajectories, OpenUSD, CSV and an offline ZIP. |
 | **SmolVLA Stress Lab** | Compare 30 simulation trials on one task: 10 initial states × 3 conditions. Open each paired success or failure. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
 | **GPU Cloth Lab** | Release three identical sheets with different bending coefficients. Orbit, overlay, export a figure, and reopen a checked sample JSON. | 42,471 original vertex samples, positions and velocities, OpenUSD, native Blender checks. |
@@ -94,6 +94,16 @@ The Stress Lab is **one LIBERO Spatial task, ten paired initial states and three
 conditions**, with a 160-action limit per trial. Every trial is retained,
 including failures. The results describe this simulation experiment; full
 benchmark evaluation and real-robot testing require separate runs.
+
+LIBERO-Plus uses a separate three-run plan with a 220-action limit per run.
+The baseline and lighting runs succeed; the camera run reaches the limit.
+[Its method](https://github.com/noteflowai/robot-reel/blob/main/docs/libero-plus/METHODS.md)
+records the selected official perturbations and the shared initial state.
+
+Scene Lab's Gaussians are sampled from the captured mesh; no multi-view 3DGS
+training is performed. The heightfield is a geometric collision approximation.
+[Its method](https://github.com/noteflowai/robot-reel/blob/main/docs/scene-lab/METHODS.md)
+documents the conversion, Blender edits and file checks.
 
 Cloth coefficients are solver settings, not calibrated fabric properties; no
 collisions or self-contact are modeled. Butterfly sculpture depth represents
