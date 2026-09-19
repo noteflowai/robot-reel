@@ -9,7 +9,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from robot_reel.chaos import digest, verify
+from robot_reel.chaos import device_label, digest, verify
 from scripts.build_chaos_site import check_report
 
 BUNDLE_FILES = ("index.html", "trace.json", "scene.usdc", "manifest.json",
@@ -72,7 +72,11 @@ def main():
             image = Image.new("RGB", (900, source.height+110), "#0b0f1b")
             draw = ImageDraw.Draw(image)
             draw.text((24, 16), "THE BUTTERFLY LAB", font=font, fill="#e9eeff")
-            draw.text((24, 48), "12 NEWTON WORLDS / 0.05 DEG BETWEEN ADJACENT RELEASES", font=small, fill="#7cf5d3")
+            draw.text(
+                (24, 48),
+                f'{trace["source"]["world_count"]} NEWTON WORLDS / 0.05 DEG BETWEEN ADJACENT RELEASES',
+                font=small, fill="#7cf5d3",
+            )
             image.paste(source, ((900-source.width)//2, 76))
             stamp = "PREVIEW 3.33x" if motion else f"SOURCE SAMPLE {measured['peak']['frame']}"
             draw.text((24, image.height-25), f"RECORDED POSES / DEPTH = TIME / {stamp} / DRAG TO EXPLORE", font=small, fill="#a5adc8")
@@ -92,7 +96,8 @@ def main():
         "Code, generated scene and recorded data: Apache-2.0.\n"
         "Procedural geometry; no third-party visual assets or AI-generated frames.\n"
         "Simulation: Newton 1.6.0 (Apache-2.0) and Warp 1.17.0 (Apache-2.0).\n"
-        "12 isolated CPU worlds; the browser renders previously recorded poses.\n"
+        f'{trace["source"]["world_count"]} isolated {device_label(trace)} worlds; '
+        "the browser renders previously recorded poses.\n"
         "Time sculpture maps time to presentation depth. USD parents space worlds along Y.\n"
         "Local source poses remain unchanged. Blender import: set the frame rate to 30 fps.\n"
         "Offline: open index.html. Links to other Robot Reel scenes need the full site.\n"

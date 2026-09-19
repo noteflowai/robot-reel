@@ -54,7 +54,10 @@ def main():
     export_viewer(trace, args.destination/"index.html")
     write_manifest(args.destination)
     check_report(args.destination)
-    print(f"Built {args.destination}: {len(trace['frames'])} samples × 24 bodies")
+    print(
+        f"Built {args.destination}: {len(trace['frames'])} samples "
+        f"× {2 * trace['source']['world_count']} bodies"
+    )
 
 
 if __name__ == "__main__":

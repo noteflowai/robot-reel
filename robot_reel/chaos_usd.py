@@ -1,12 +1,19 @@
 """Editable recorded box animation; worlds separated only for presentation."""
 import math
 
-from .chaos import WORLD_COUNT, digest, validate_trace
+from .chaos import WORLD_COUNT, device_label, digest, validate_trace
 from .newton import point
 
 
-def offset(world):
-    return [0, (world-(WORLD_COUNT-1)/2)*.6, 0]
+def offset(world, world_count=WORLD_COUNT):
+    return [0, (world-(world_count-1)/2)*.6, 0]
+
+
+def source_description(trace):
+    return (
+        "Robot Reel / Newton 1.6.0 / XPBD / "
+        f'{trace["source"]["world_count"]} isolated {device_label(trace)} worlds'
+    )
 
 
 def export_usd(trace, path):
@@ -23,14 +30,15 @@ def export_usd(trace, path):
     root = UsdGeom.Xform.Define(stage, "/World")
     stage.SetDefaultPrim(root.GetPrim())
     stage.GetRootLayer().customLayerData = {
-        "source": "Robot Reel / Newton 1.6.0 / XPBD / 12 isolated CPU worlds",
+        "source": source_description(trace),
         "sampling": "Frame 1 = 0 s. 30 Hz recorded poses. No USD physics.",
         "layout": "World parents offset 0.6 m along Y for presentation. Local poses unchanged.",
     }
     for world in trace["worlds"]:
         i = world["id"]
         parent = UsdGeom.Xform.Define(stage, f"/World/world_{i:02}")
-        parent.AddTranslateOp(UsdGeom.XformOp.PrecisionDouble).Set(Gf.Vec3d(*offset(i)))
+        parent.AddTranslateOp(UsdGeom.XformOp.PrecisionDouble).Set(
+            Gf.Vec3d(*offset(i, trace["source"]["world_count"])))
         parent.GetPrim().CreateAttribute("reel:releaseOffsetDegrees", Sdf.ValueTypeNames.Double, custom=True).Set(world["angle_offset_deg"])
         color = world["color"].lstrip("#")
         for link, name in enumerate(("upper", "lower")):
@@ -54,6 +62,8 @@ def check_usd(trace, path):
     layer = Sdf.Layer.FindOrOpen(str(path))
     if layer is None or layer.GetExternalReferences():
         raise ValueError("Expected a self-contained chaos USD")
+    if layer.customLayerData.get("source") != source_description(trace):
+        raise ValueError("Chaos USD source description differs from the recording")
     stage = Usd.Stage.Open(layer)
     if (
         stage.GetStartTimeCode() != 1 or stage.GetEndTimeCode() != len(trace["frames"])
@@ -81,7 +91,9 @@ def check_usd(trace, path):
             for local in ([0, 0, 0], [.5, 0, 0], [0, .5, 0], [0, 0, .5]):
                 actual = list(transform.Transform(Gf.Vec3d(*local)))
                 expected = point(frame["poses"][2*i+link], [v*s for v, s in zip(local, trace["link_size_m"])])
-                expected = [v+shift for v, shift in zip(expected, offset(i))]
+                expected = [
+                    v+shift for v, shift in zip(expected, offset(i, trace["source"]["world_count"]))
+                ]
                 error = math.dist(actual, expected)
                 if not math.isfinite(error) or error > 1e-5:
                     raise ValueError(f"Chaos USD pose differs: world {i}, sample {frame['frame']}")
