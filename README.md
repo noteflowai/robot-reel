@@ -166,7 +166,8 @@ or verify it independently against the source vertices with the current CLI.
 The coefficients are solver settings, not calibrated fabric properties. Colors
 identify cases; the page reports geometric diagnostics and preserves original
 float32 positions and velocities. No collisions or self-contact are modeled.
-The browser needs no GPU. Robot Reel **0.7.0+** includes the cloth CLI and complete
+The browser draws saved meshes with Canvas 2D; no CUDA or Newton installation
+is needed for playback. Robot Reel **0.7.0+** includes the cloth CLI and complete
 offline export in its [installation package](docs/distribution.md).
 Recording new runs uses the optional Newton runtime.
 
