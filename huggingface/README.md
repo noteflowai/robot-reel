@@ -54,7 +54,7 @@ model-service account is needed to explore.
 | --- | --- | --- |
 | **Scene Lab** | Compare a photogrammetry mesh, 25,000 mesh-sampled surface Gaussians and a heightfield collision proxy. | Baseline and edited Blender scenes, GPU renders, GLB/SPLAT and numeric recipes. |
 | **LIBERO-Plus** | Compare three runs of one task from one paired initial state: baseline, camera and lighting conditions. | Official perturbation IDs, source clips, applied controls and native scene parameters. |
-| **Solver Lab** | Compare three timesteps in Genesis and Newton against the analytic flight. | 366 recorded positions/velocities, native Genesis trajectories, OpenUSD, CSV and an offline ZIP. |
+| **Solver Lab** | Compare six Genesis and Newton runs at three timesteps against the analytic flight. | 366 recorded positions/velocities, native Genesis trajectories, OpenUSD, CSV and an offline ZIP. |
 | **SmolVLA Stress Lab** | Compare 30 simulation trials on one task: 10 initial states × 3 conditions. Open each paired success or failure. | Paired-outcome report, two camera views, applied controls, source traces, CSV and MCAP. |
 | **GPU Cloth Lab** | Release three identical sheets with different bending coefficients. Orbit, overlay, export a figure, and reopen a checked sample JSON. | 42,471 original vertex samples, positions and velocities, OpenUSD, native Blender checks. |
 | **Butterfly Lab** | Orbit twelve Newton worlds released 0.05° apart. | Original poses, measured separation, source clocks and an editable OpenUSD scene. |
@@ -79,9 +79,11 @@ Space, then inspect the actual policy and asset snapshots behind its recordings.
 - [Complete project website](https://noteflowai.github.io/robot-reel/)
 - [SmolVLA protocol and limits](https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md)
 - [Cloth data, checked samples and Blender workflow](https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md)
+- [Solver Lab equations, error measurements and reproduction](https://github.com/noteflowai/robot-reel/blob/main/docs/solver-lab.md)
 - [Newton release sweep](https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md)
 - [Review a Microduck frame with an agent and Skills Anywhere](https://github.com/noteflowai/robot-reel/blob/main/docs/agent-review.md)
 - [Microduck methods, source model and numerical checks](https://github.com/noteflowai/robot-reel/blob/main/docs/microduck-lab.md)
+- [Skill Impact Lab: all 27 model trials, including failures](https://noteflowai.github.io/evalarc/skill-impact/) and [research scope](https://github.com/noteflowai/robot-reel/blob/main/docs/research-pilots.md)
 
 `space-manifest.json` identifies the source Git commit and hashes every
 distributed file. Source traces, videos, vertex arrays and native readback
@@ -109,6 +111,10 @@ Cloth coefficients are solver settings, not calibrated fabric properties; no
 collisions or self-contact are modeled. Butterfly sculpture depth represents
 time, not physical displacement.
 
+Solver Lab measures integration error in a no-contact, constant-gravity flight.
+Its two engines match under these recorded conditions; the experiment is a
+timestep diagnostic rather than an engine ranking.
+
 Microduck's 0.3 / 0.5 m/s labels are speed commands, not achieved speeds.
 Its schematic fixes the floating root because the original recording did not
 save root orientation. Targets are geometric overlays, not independent physics
@@ -135,16 +141,3 @@ Blender.
 Feedback is welcome in this Space's Community tab or in the
 [GitHub issues](https://github.com/noteflowai/robot-reel/issues):
 **which recorded policy or simulator output would you want to inspect next?**
-
-
-## Solver Lab: one launch, three timesteps
-
-The lab contains six independent Genesis 1.4.1 / Newton 1.6.0 CUDA flights.
-Compare recorded motion with a constant-gravity analytic solution, inspect all
-366 position/velocity states and energy drift, then download CSV, source JSON,
-native Genesis replays or the editable USD. The complete lab works offline.
-The measured maximum position error drops from about 32.70 cm to 2.05 cm as
-integration frequency rises from 30 to 480 Hz. Both engines match in this
-no-contact flight; this is a timestep diagnostic, not an engine ranking.
-
-[Inspect the cross-project Skill Impact Lab](https://noteflowai.github.io/evalarc/skill-impact/): all 27 model trials, including failures. See [research scope](https://github.com/noteflowai/robot-reel/blob/main/docs/research-pilots.md).
