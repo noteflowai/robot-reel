@@ -97,7 +97,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 两组六秒仿真全部保留，包括跌倒与滑移；共 **362 帧**完成原生变换与虚拟相机投影核对。
 完整模型、简化包围盒／碰撞代理和视频回放三种模式支持不同渲染条件。
 [复现步骤与实测性能](examples/scene-motion/README.md) ·
-[下载 Blender 动画工程](https://github.com/noteflowai/robot-reel/releases/download/v0.13.0/scene-motion-native.zip)。
+[下载 Blender 动画工程](https://github.com/noteflowai/robot-reel/releases/latest/download/scene-motion-native.zip)。
 
 ## 同一抛体，步长有多大影响？
 
@@ -113,7 +113,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 [场景、方程与复现方法](docs/solver-lab.md)
 
 保留全部 **366 个位置与速度状态**，支持 JSON/CSV 导出，并逐帧核对
-Genesis 原生回放与可编辑 OpenUSD。0.10.0 安装包可直接校验和导出离线实验。
+Genesis 原生回放与可编辑 OpenUSD。安装包中的 CLI 可直接校验和导出离线实验。
 两引擎在这个无碰撞、无阻力的简单场景中产生相同数值；这是积分误差诊断，
 不代表仿真器排名或真实机器人准确率。
 
@@ -163,8 +163,8 @@ Genesis 原生回放与可编辑 OpenUSD。0.10.0 安装包可直接校验和导
 </a>
 
 **[释放三张布，开始体验 ↗](https://noteflowai.github.io/robot-reel/cloth/)** ·
-[完整离线实验](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-experiment.zip) ·
-[可编辑 OpenUSD](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-scene.usdc) ·
+[完整离线实验](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-cloth-experiment.zip) ·
+[可编辑 OpenUSD](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-cloth-scene.usdc) ·
 [方法、边界与复现](docs/cloth.md)
 
 弯曲系数是求解器设置，不代表经过标定的真实织物属性；颜色用于区分实验。
@@ -189,7 +189,7 @@ Genesis 原生回放与可编辑 OpenUSD。0.10.0 安装包可直接校验和导
 </a>
 
 **[对照策略运行 ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-stress-experiment.zip) ·
+[完整离线实验包 ↓](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-stress-experiment.zip) ·
 [MCAP 遥测数据 ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [在 Foxglove 中打开](docs/telemetry.md) ·
 [复现与检查](docs/stress.md)
@@ -226,7 +226,7 @@ Markdown，重新导入可恢复原始样本位置，也可用命令行与完整
 <a href="https://noteflowai.github.io/robot-reel/stress/#outcomes"><img src="docs/paired-outcomes.png" width="100%" alt="全部十个配对起点：四组均成功，一组失去成功，三组获得成功，两组均未完成；点击分组可检查原录像。"></a>
 
 **0.8.0 离线实验包**已包含这些复盘工具。下载 ZIP 和
-[示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-seed-09-review.json)，
+[示例复盘 JSON](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-seed-09-review.json)，
 按[快速上手说明](docs/offline-lab.md)解压打开即可回放，无需安装；使用同版本
 wheel 还可独立执行命令行核验。
 
@@ -346,22 +346,19 @@ Blender 原生检查覆盖导演影片中的全部 420 个车辆状态，以及 
 新的导演需求由你连接的 Agent 解读，并重新渲染。Microduck 使用 XML PD 执行器回退方案。
 [适用范围、来源与资产条款](THIRD_PARTY.md)。
 
-## 研究示例
+## Agent 工作流实验
 
-- [实景资产编辑](https://noteflowai.github.io/robot-reel/scene-lab/)：
-  对照摄影测量网格、从网格采样的 25,000 个表面高斯点与高度场碰撞代理，再复核 Blender 编辑。
-- [LIBERO-Plus 场景条件对照](https://noteflowai.github.io/robot-reel/libero-plus/)：
-  一个任务、一个配对初始状态、三次运行，分别采用基线与官方相机、光照扰动。
-- [27 次 GPU 技能交付试验](https://noteflowai.github.io/evalarc/skill-impact/index.html)：
-  检查模型尝试、实际交付的指令与另行计算的任务结果。
+Robot Reel 的录制数据也用于测试 Agent 工作流：Skills Anywhere 交付技能指令，
+EvalArc 根据原始坐标与时钟检查模型交付的程序。
 
-全部尝试均保留，[研究说明](docs/research-pilots.md)分别列明方法与结果。
-普遍的技能效果、完整基准成绩与真机性能需要通过相应实验另行评估。
+| 实验 | 实测结果 | 复核材料 |
+| --- | --- | --- |
+| 技能交付：三组工程配置，共 27 次 Qwen3-8B 尝试 | 直接交付与 MCP 条件均无尝试完全完成任务；最后一组配置中，无技能条件有 2/3 次完全完成。 | [技能指令、候选程序与逐项检查](https://noteflowai.github.io/evalarc/skill-impact/) |
+| 会话交接：六次 Qwen3-4B 接续，每种条件三次 | 六次检索调用全部成功；六份程序均未修改，两种条件各有 0/3 次完全完成任务。 | [检索原文、命令与坐标检查](https://noteflowai.github.io/evalarc/funes-handoff/) |
 
-[Funes MCP 跨模型复核](https://noteflowai.github.io/evalarc/funes-handoff/index.html)
-将这些机器人记录用于六次 Qwen3-4B 接续任务：无记忆组与可访问一份已审核公开会话的记忆组各三次。
-记忆组的六次检索调用全部成功；六份交付程序均未修改，两组各有 0/3 次尝试完全通过验收。
-报告保留检索原文、命令和独立坐标检查。
+这些小规模公开开发实验分别保留各配置与各批次的结果，包括失败记录，
+尚不足以确立普遍的技能或记忆效果收益。
+[研究说明](docs/research-pilots.md)提供实验方法、来源版本与相关场景编辑实验。
 
 ## 构建你自己的场景
 

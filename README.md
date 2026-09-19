@@ -102,7 +102,7 @@ Both six-second runs are retained, including the falls and slides. All **362
 source frames** have native transform and virtual-camera checks. Full geometry,
 body bounds/proxy and recorded-video modes support different rendering limits.
 [Reproduction and measured performance](examples/scene-motion/README.md) ·
-[Portable Blender projects](https://github.com/noteflowai/robot-reel/releases/download/v0.13.0/scene-motion-native.zip).
+[Portable Blender projects](https://github.com/noteflowai/robot-reel/releases/latest/download/scene-motion-native.zip).
 
 ## One launch. Mind the timestep.
 
@@ -120,7 +120,7 @@ this pilot's maximum position error from **32.70 cm to 2.05 cm**.
 
 All **366 recorded position/velocity states** remain downloadable as JSON/CSV.
 Genesis native trajectories were reopened and checked; the editable OpenUSD
-retains every sample. The 0.10.0 installed CLI verifies and exports the lab
+retains every sample. The installed CLI verifies and exports the lab
 without a GPU. Both engines produce matching values in this simple no-contact,
 no-drag flight; it is an integration diagnostic, not a ranking of simulators.
 
@@ -175,8 +175,8 @@ or verify it independently against the source vertices with the current CLI.
 </a>
 
 **[Release the sheets ↗](https://noteflowai.github.io/robot-reel/cloth/)** ·
-[Offline experiment](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-experiment.zip) ·
-[Editable OpenUSD](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-cloth-scene.usdc) ·
+[Offline experiment](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-cloth-experiment.zip) ·
+[Editable OpenUSD](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-cloth-scene.usdc) ·
 [Method, limits & reproduction](docs/cloth.md)
 
 The coefficients are solver settings, not calibrated fabric properties. Colors
@@ -203,7 +203,7 @@ cameras, and jump to the largest measured trajectory difference. Recorded with
 </a>
 
 **[Compare the policy runs ↗](https://noteflowai.github.io/robot-reel/stress/)** ·
-[Complete offline lab ↓](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-stress-experiment.zip) ·
+[Complete offline lab ↓](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-stress-experiment.zip) ·
 [MCAP telemetry ↓](https://noteflowai.github.io/robot-reel/stress/telemetry.mcap) ·
 [Open it in Foxglove](docs/telemetry.md) ·
 [Reproduce & inspect](docs/stress.md)
@@ -246,7 +246,7 @@ This is the recorded pilot's tabular evidence, not a training dataset or officia
 <a href="https://noteflowai.github.io/robot-reel/stress/#outcomes"><img src="docs/paired-outcomes.png" width="100%" alt="All ten paired camera-condition outcomes: four both succeed, one loses success, three gain success, and two remain incomplete. Select a group to inspect its recordings."></a>
 
 The **0.8.0 offline lab** includes these review tools. Download the ZIP and the
-[sample review JSON](https://github.com/noteflowai/robot-reel/releases/download/v0.8.0/robot-reel-seed-09-review.json),
+[sample review JSON](https://github.com/noteflowai/robot-reel/releases/latest/download/robot-reel-seed-09-review.json),
 then follow the [quick start guide](docs/offline-lab.md). No installation is needed
 to replay; the matching release wheel enables independent CLI checks.
 
@@ -374,27 +374,21 @@ with inference waiting time omitted; new director briefs use your connected
 agent and a new render. Microduck uses the XML PD-actuator fallback.
 [Scope, provenance and asset terms](THIRD_PARTY.md).
 
-## Recorded research examples
+## Agent workflow experiments
 
-- [Captured-scene editing](https://noteflowai.github.io/robot-reel/scene-lab/):
-  compare a photogrammetry mesh, 25,000 mesh-sampled surface Gaussians and a
-  heightfield collision proxy, then inspect the Blender edit.
-- [LIBERO-Plus scene conditions](https://noteflowai.github.io/robot-reel/libero-plus/):
-  three runs of one task from one paired initial state, using the baseline
-  and official camera and lighting perturbations.
-- [27 GPU skill-delivery trials](https://noteflowai.github.io/evalarc/skill-impact/index.html):
-  inspect model attempts, delivered instructions and separately computed task results.
+Robot Reel recordings also provide source data for testing agent workflows.
+Skills Anywhere delivers instructions; EvalArc checks the resulting programs
+against the original coordinates and clocks.
 
-All attempts are retained. The [research guide](docs/research-pilots.md)
-documents each pilot's methods and findings. General skill efficacy, full
-benchmark results and real-hardware performance require separate evaluation.
+| Experiment | Recorded result | Inspect the evidence |
+| --- | --- | --- |
+| Skill delivery: 27 Qwen3-8B attempts across three engineering profiles | No direct-delivery or MCP attempt fully resolves the task. The no-skill condition resolves 2/3 attempts in the final profile. | [Instructions, candidate files and task checks](https://noteflowai.github.io/evalarc/skill-impact/) |
+| Session handoff: six Qwen3-4B continuations, three per condition | All six retrieval calls succeed. All six programs remain unchanged; each condition resolves 0/3 tasks. | [Retrieved history, commands and coordinate checks](https://noteflowai.github.io/evalarc/funes-handoff/) |
 
-[Cross-model review with Funes MCP](https://noteflowai.github.io/evalarc/funes-handoff/index.html)
-uses these robot recordings in six Qwen3-4B continuation attempts: three without
-memory and three with access to one reviewed public session. All six retrieval
-calls in the memory group succeed; all six programs remain unchanged, and
-0/3 attempts meet full acceptance in either group. Inspect the retrieved history,
-commands and independent coordinate checks in the report.
+These are small public development experiments. Each profile and cohort retains
+its own results, including failures; they do not establish general skill or
+memory benefits. The [research guide](docs/research-pilots.md) documents the
+methods, source versions and related scene-editing experiments.
 
 ## Build your own scene
 
