@@ -385,6 +385,12 @@ against the original coordinates and clocks.
 | Skill delivery: 27 Qwen3-8B attempts across three engineering profiles | No direct-delivery or MCP attempt fully resolves the task. The no-skill condition resolves 2/3 attempts in the final profile. | [Instructions, candidate files and task checks](https://noteflowai.github.io/evalarc/skill-impact/) |
 | Session handoff: six Qwen3-4B continuations, three per condition | All six retrieval calls succeed. All six programs remain unchanged; each condition resolves 0/3 tasks. | [Retrieved history, commands and coordinate checks](https://noteflowai.github.io/evalarc/funes-handoff/) |
 
+[Carry the reviewed skill into a new session](https://noteflowai.github.io/evalarc/skill-handoff/):
+a separate six-attempt cohort reuses the predecessor's exact skill bytes through
+workflow MCP preloads. All six preloads succeed; the memory group retrieves six
+results. All six programs remain unchanged and no task passes full acceptance.
+The report connects original pins, delivery receipts, retrieved history and task checks.
+
 These are small public development experiments. Each profile and cohort retains
 its own results, including failures; they do not establish general skill or
 memory benefits. The [research guide](docs/research-pilots.md) documents the
