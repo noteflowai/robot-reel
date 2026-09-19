@@ -333,16 +333,20 @@ Blender 原生检查覆盖导演影片中的全部 420 个车辆状态，以及 
 
 ## 研究示例
 
-[实景编辑](https://noteflowai.github.io/robot-reel/scene-lab/)、
-[限定范围的 LIBERO-Plus 实验](https://noteflowai.github.io/robot-reel/libero-plus/)
-和 [27 次 GPU 技能交付试验](https://noteflowai.github.io/evalarc/skill-impact/index.html)
-探索如何结合原始记录、技能交付与独立评分。全部尝试均保留，
-[研究说明](docs/research-pilots.md)分别列明方法与结果；这些记录不足以确立普遍的
-技能准确率收益、完整基准成绩或真机性能。
+- [实景资产编辑](https://noteflowai.github.io/robot-reel/scene-lab/)：
+  对照摄影测量网格、从网格采样的 25,000 个表面高斯点与高度场碰撞代理，再复核 Blender 编辑。
+- [LIBERO-Plus 场景条件对照](https://noteflowai.github.io/robot-reel/libero-plus/)：
+  一个任务、一个配对初始状态、三次运行，分别采用基线与官方相机、光照扰动。
+- [27 次 GPU 技能交付试验](https://noteflowai.github.io/evalarc/skill-impact/index.html)：
+  检查模型尝试、实际交付的指令与另行计算的任务结果。
+
+全部尝试均保留，[研究说明](docs/research-pilots.md)分别列明方法与结果。
+普遍的技能效果、完整基准成绩与真机性能需要通过相应实验另行评估。
 
 [Funes MCP 跨模型复核](https://noteflowai.github.io/evalarc/funes-handoff/index.html)
-把这些机器人记录用于接续任务，保留六次 Qwen3-4B 运行的检索原文、命令和独立坐标检查。
-检索成功后程序仍未修改，没有任务完全通过验收。
+将这些机器人记录用于六次 Qwen3-4B 接续任务：无记忆组与可访问一份已审核公开会话的记忆组各三次。
+记忆组的六次检索调用全部成功；六份交付程序均未修改，两组各有 0/3 次尝试完全通过验收。
+报告保留检索原文、命令和独立坐标检查。
 
 ## 构建你自己的场景
 

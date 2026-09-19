@@ -359,18 +359,25 @@ agent and a new render. Microduck uses the XML PD-actuator fallback.
 
 ## Recorded research examples
 
-[Captured-scene editing](https://noteflowai.github.io/robot-reel/scene-lab/),
-a [limited LIBERO-Plus experiment](https://noteflowai.github.io/robot-reel/libero-plus/)
-and [27 GPU skill-delivery trials](https://noteflowai.github.io/evalarc/skill-impact/index.html)
-explore how recordings, skill delivery and independent grading work together.
+- [Captured-scene editing](https://noteflowai.github.io/robot-reel/scene-lab/):
+  compare a photogrammetry mesh, 25,000 mesh-sampled surface Gaussians and a
+  heightfield collision proxy, then inspect the Blender edit.
+- [LIBERO-Plus scene conditions](https://noteflowai.github.io/robot-reel/libero-plus/):
+  three runs of one task from one paired initial state, using the baseline
+  and official camera and lighting perturbations.
+- [27 GPU skill-delivery trials](https://noteflowai.github.io/evalarc/skill-impact/index.html):
+  inspect model attempts, delivered instructions and separately computed task results.
+
 All attempts are retained. The [research guide](docs/research-pilots.md)
-separates each pilot's methods and findings; the records do not establish a
-general skill-accuracy gain, a full benchmark score or real-hardware performance.
+documents each pilot's methods and findings. General skill efficacy, full
+benchmark results and real-hardware performance require separate evaluation.
 
 [Cross-model review with Funes MCP](https://noteflowai.github.io/evalarc/funes-handoff/index.html)
-uses these robot recordings in a continuation task. Six Qwen3-4B attempts retain
-the retrieved history, commands and independent coordinate checks; successful
-retrievals leave the programs unchanged and no task fully resolved.
+uses these robot recordings in six Qwen3-4B continuation attempts: three without
+memory and three with access to one reviewed public session. All six retrieval
+calls in the memory group succeed; all six programs remain unchanged, and
+0/3 attempts meet full acceptance in either group. Inspect the retrieved history,
+commands and independent coordinate checks in the report.
 
 ## Build your own scene
 
