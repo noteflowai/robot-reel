@@ -356,12 +356,19 @@ EvalArc 根据原始坐标与时钟检查模型交付的程序。
 | 技能交付：三组工程配置，共 27 次 Qwen3-8B 尝试 | 直接交付与 MCP 条件均无尝试完全完成任务；最后一组配置中，无技能条件有 2/3 次完全完成。 | [技能指令、候选程序与逐项检查](https://noteflowai.github.io/evalarc/skill-impact/) |
 | 会话交接：六次 Qwen3-4B 接续，每种条件三次 | 六次检索调用全部成功；六份程序均未修改，两种条件各有 0/3 次完全完成任务。 | [检索原文、命令与坐标检查](https://noteflowai.github.io/evalarc/funes-handoff/) |
 
+[复核独立来源 SWE 任务](https://noteflowai.github.io/evalarc/independent-swe/index.html)：
+另一组固定实验在 Astropy、pytest、SymPy 三个公开任务上保留四条件共 36 次尝试。
+直接加载与 MCP 预加载交付相同指令，无关内容组也匹配初始提示长度。
+没有尝试获得原生验收：31 次有可判读报告，5 次因上游基础设施标记而保留为不确定；
+8 次产生非空补丁。[中文方法与离线记录](https://github.com/noteflowai/evalarc/blob/main/examples/independent-swe/README.zh-CN.md)
+分别呈现工具失败、原始评分标签和不完整用量。
+
 [携带前序会话的固定技能版本继续工作](https://noteflowai.github.io/evalarc/skill-handoff/)：
 另一组独立保存的六次尝试均由工作流通过 MCP 预加载相同的历史技能。
 六次加载均成功，记忆组合计成功检索六次；六份程序均未修改，完整任务验收为 0/6。
 报告将原始版本指纹、交付回执、检索内容与任务检查逐项关联。
 
-这些小规模公开开发实验分别保留各配置与各批次的结果，包括失败记录，
+这些小规模公开任务研究分别保留各配置与各批次的结果，包括失败记录，
 尚不足以确立普遍的技能或记忆效果收益。
 [研究说明](docs/research-pilots.md)提供实验方法、来源版本与相关场景编辑实验。
 

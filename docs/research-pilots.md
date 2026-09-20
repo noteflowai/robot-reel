@@ -151,3 +151,30 @@ Scene Motion follow-up: dataset tag `v2026-09-19-scene-motion`, immutable revisi
 retain two recorded cases, all native PNGs and source state, relocated-project
 checks, and measured browser inputs. This is a separate robot-registration
 experiment; it adds no LLM task-efficacy trials.
+
+## Independent-source SWE workflow review
+
+[Review independent-source SWE tasks](https://noteflowai.github.io/evalarc/independent-swe/index.html):
+a separate fixed cohort records 36 attempts on Astropy, pytest and SymPy across
+four workflow conditions. Direct and MCP preloads deliver identical guidance;
+an unrelated MCP control matches the prompt length. No attempt obtains native
+acceptance: 31 have assessable reports and five remain uncertain after upstream
+infrastructure flags. Eight attempts produce nonempty patches.
+[Methods and offline records](https://github.com/noteflowai/evalarc/tree/main/examples/independent-swe)
+keep tool failures, native labels and incomplete usage visible.
+
+The cohort uses three public source tasks, not robot trajectories. Its generic
+skill was frozen before task selection; a separate development case was excluded.
+The four conditions share the model, tool API, source images and interaction budget.
+Workflow preloading is not autonomous skill discovery, and repeated seeds do not
+create additional independent tasks. The results do not establish a skill benefit.
+
+The offline ZIP includes exact requests, model responses, native reports, source
+and model identities, patches and six upstream controls. Its `review/index.html`
+works without a server. Five pytest reports contain both offline build-dependency
+installation failures and candidate errors; retain the original label without
+assigning a sole cause. The 95% aggregate-rule comparison is separate from native
+acceptance and preserves unknown evidence.
+
+[Structured dataset](https://huggingface.co/datasets/glayguo/evalarc-independent-swe)
+retains all 36 rows, including unavailable outcomes and incomplete usage.
