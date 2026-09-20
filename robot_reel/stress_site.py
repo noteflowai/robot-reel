@@ -20,7 +20,7 @@ MARKER = '<script id="stress-data" type="application/json">'
 # Only the published experiment uses this release asset. Custom builds link to
 # their own local archive unless the caller explicitly supplies another location.
 PUBLISHED_ARCHIVE_HREF = ("https://github.com/noteflowai/robot-reel/releases/download/"
-                          "stress-evidence-20260920/robot-reel-stress-experiment.zip")
+                          "stress-evidence-20260920-q8/robot-reel-stress-experiment.zip")
 
 
 def page(data, archive_href="experiment.zip"):
