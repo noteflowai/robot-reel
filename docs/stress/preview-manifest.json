@@ -395,16 +395,16 @@
     50
   ],
   "sources": {
-    "runs/seed-09-camera/attempt-001/main.mp4": "10e7be5de51f699c17805dc970e6c8bf00da3198c5807a752e859315f2366871",
+    "runs/seed-09-camera/attempt-001/main.mp4": "1fdaa6de0f2e62fb8c334d9afc499645728a3b59f8d73029fbe7049f08dc0b91",
     "runs/seed-09-camera/attempt-001/trace.json": "0136050c891ab7488e13c5bad83994f477643ff55827d31d558ce5b449c257f0",
-    "runs/seed-09-dim/attempt-001/main.mp4": "45b0f5f7db5f034bb76924d948d705ffa7acd7af574df53bda034c367630d1d3",
+    "runs/seed-09-dim/attempt-001/main.mp4": "184b7309bd7774dbbedde700dfead510963c9e99fdd83b82c73e40186ac7f953",
     "runs/seed-09-dim/attempt-001/trace.json": "0cbf0b757761b6cfaca22465055c834c2e720f972b3f8da8924b7850c341182d",
-    "runs/seed-09-reference/attempt-001/main.mp4": "031e1b92df8d8b6eea46d6491141a232d977ec65c3f61a8400b589adaebb628e",
+    "runs/seed-09-reference/attempt-001/main.mp4": "1cfeba287c96b10902f4dede55dd8410303c3a79851bcb38fbd0e54f8a0903e9",
     "runs/seed-09-reference/attempt-001/trace.json": "368c1b8389568c4174bc11b2f745e23ddc41932480a5decc782c1d65e5ef9f91",
     "summary.json": "8eb2619fe9104432af86429b30320edf6312518224f1cd058103a8fc629d4da8"
   },
   "files": {
-    "preview.gif": "cb1328e911e0fca0ae011d04f6a23467134e50668263fad91eb8911a5619ecc8",
-    "poster.png": "f39553eee0cb0b068ccc078820ac65a122d68d399c08ad592c83a29fdfcc1341"
+    "preview.gif": "cfd90006c7ca2998f501a4cdf08d30355cfa688f575eae81c247457c0a585c90",
+    "poster.png": "9771be47f7f8f097a830cd6ff6f5ebf135fc14f28c524b656e72d0c71eeed725"
   }
 }

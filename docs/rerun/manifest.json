@@ -43,8 +43,8 @@
   "observations_checked": 405,
   "controls_checked": 2814,
   "inference_calls_checked": 41,
-  "rrd_sha256": "f322c0d612ab3c9a7a6f6c27474edd1600214a0c2874a9db63053bacb10d2bbe",
-  "rrd_bytes": 6605979,
+  "rrd_sha256": "ccbb1102027e4a719a73ab531061989f584d3cb32a600a7528cf6bedf316efe8",
+  "rrd_bytes": 4478319,
   "preview": {
     "kind": "actual Rerun web viewer screenshot",
     "source_sample": 0,
@@ -56,17 +56,17 @@
     "stress/NOTICE.txt": "ea626872970c7acaf4faafb6fa4a904d2f7b885e376c9cf6ba249b71c3e5ad3e",
     "stress/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
     "stress/runs/seed-09-reference/attempt-001/trace.json": "368c1b8389568c4174bc11b2f745e23ddc41932480a5decc782c1d65e5ef9f91",
-    "stress/runs/seed-09-reference/attempt-001/main.mp4": "031e1b92df8d8b6eea46d6491141a232d977ec65c3f61a8400b589adaebb628e",
-    "stress/runs/seed-09-reference/attempt-001/wrist.mp4": "5606b347e6578ab603b25671aafbc7f2d2b8205a618cefc8e20f1c11f478ee2d",
+    "stress/runs/seed-09-reference/attempt-001/main.mp4": "1cfeba287c96b10902f4dede55dd8410303c3a79851bcb38fbd0e54f8a0903e9",
+    "stress/runs/seed-09-reference/attempt-001/wrist.mp4": "7c635c6461a1544ecf836737508f5f7c61c706844ef78f24630597aaad9ac542",
     "stress/runs/seed-09-dim/attempt-001/trace.json": "0cbf0b757761b6cfaca22465055c834c2e720f972b3f8da8924b7850c341182d",
-    "stress/runs/seed-09-dim/attempt-001/main.mp4": "45b0f5f7db5f034bb76924d948d705ffa7acd7af574df53bda034c367630d1d3",
-    "stress/runs/seed-09-dim/attempt-001/wrist.mp4": "71d8aa30c8e9829a0724906b412744de21e5a97817fad1b0610703844e0c19c0",
+    "stress/runs/seed-09-dim/attempt-001/main.mp4": "184b7309bd7774dbbedde700dfead510963c9e99fdd83b82c73e40186ac7f953",
+    "stress/runs/seed-09-dim/attempt-001/wrist.mp4": "d04407c12d7ebeb66a8d60a23e7c1683f17335fa6708be28c3dac6a9f417fb24",
     "stress/runs/seed-09-camera/attempt-001/trace.json": "0136050c891ab7488e13c5bad83994f477643ff55827d31d558ce5b449c257f0",
-    "stress/runs/seed-09-camera/attempt-001/main.mp4": "10e7be5de51f699c17805dc970e6c8bf00da3198c5807a752e859315f2366871",
-    "stress/runs/seed-09-camera/attempt-001/wrist.mp4": "1b5da0bc95c473031c7d4392fcea7a57580f511072324a0ab03e91a68f51e6b0"
+    "stress/runs/seed-09-camera/attempt-001/main.mp4": "1fdaa6de0f2e62fb8c334d9afc499645728a3b59f8d73029fbe7049f08dc0b91",
+    "stress/runs/seed-09-camera/attempt-001/wrist.mp4": "657536361a9a88fa025558e802edde7431ebb1ae193fcfd72d4480f22c3d781d"
   },
   "sha256": {
-    "seed-09.rrd": "f322c0d612ab3c9a7a6f6c27474edd1600214a0c2874a9db63053bacb10d2bbe",
+    "seed-09.rrd": "ccbb1102027e4a719a73ab531061989f584d3cb32a600a7528cf6bedf316efe8",
     "preview.png": "56ba45b5ce08d74183cf8711cb04ba9c52e5c05261eaaa254cae5dd8cf890f9c"
   }
 }
