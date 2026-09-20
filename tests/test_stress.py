@@ -51,6 +51,14 @@ class StressTests(unittest.TestCase):
     def setUpClass(cls):
         cls.plan, cls.attempts, cls.traces = load_collection(SITE)
 
+    def test_published_methods_copy_matches_its_source(self) -> None:
+        # stress_site.build copies docs/stress.md into the bundle as METHODS.md, so the
+        # two drift apart whenever the source is edited without a rebuild -- which is
+        # exactly what happened across two pull requests before this test existed.
+        source = (SITE.parents[1]/"docs"/"stress.md").read_text(encoding="utf-8")
+        published = (SITE/"METHODS.md").read_text(encoding="utf-8")
+        self.assertEqual(published, source, "docs/stress/METHODS.md is a stale copy of docs/stress.md")
+
     def test_packaged_notices_and_methods_match_the_maintained_sources(self):
         root = SITE.parents[1]
         resources = files("robot_reel").joinpath("resources", "stress")
