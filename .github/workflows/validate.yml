@@ -22,6 +22,9 @@ jobs:
       - name: Verify all stress trials and round-trip every MCAP message
         run: |
           robot-reel stress docs/stress --check-media --check-mcap
+      - name: Require the actual Stress Lab download to match before deploying main
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: python scripts/check_stress_download.py
       - run: python -m compileall -q robot_reel
   browser:
     needs: package
