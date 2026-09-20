@@ -50,6 +50,32 @@ For the Newton adapter, install `.[newton]`, record a fresh CPU run and use
 `--verify --check-usd`. The native Blender USD import check and page rebuild
 commands are in [docs/newton.md](docs/newton.md).
 
+## Re-encoding published media
+
+The trial videos under `docs/stress/runs/` have four downstream consumers, and a
+re-encode that stops after the first two leaves the repository claiming things that
+are no longer true. In order:
+
+1. **`run-manifest.json` per attempt** — records each MP4's hash.
+2. **`media-checks.json` and `manifest.json`** — regenerate with `check_media()` and
+   `file_hash()` over `required_files()`, then confirm with `stress_site.verify_site()`.
+3. **The preview** — `docs/stress/preview-manifest.json` lists the seed-09 videos it
+   was built from in `sources`; rebuild the GIF and poster with
+   `scripts/build_stress_showcase.py`, do not just refresh the hashes.
+4. **The Rerun workspace** — `docs/rerun/seed-09.rrd` *embeds* six of these videos and
+   `docs/rerun/manifest.json` records their hashes. Updating those hashes without
+   rebuilding the recording would make it claim it embedded videos it does not
+   contain. Rebuild the `.rrd`.
+
+Then the offline archive and the release asset, which is a publishing decision rather
+than a build step.
+
+Measured, so the trade is not guesswork: re-encoding all sixty videos at the
+repository's standard `quality=8` takes about 30 seconds and moves them from 46.7 MB
+to 28.7 MB, at PSNR 47.8 dB and SSIM 0.998 against the current files. `quality=6`
+would reach roughly 13 MB, but it sits below the value every other writer here uses,
+and the flagship demo is the wrong place to make that exception.
+
 Please include a short reproducible command and the observed result with fixes.
 CI runs on pull requests and on pushes to `main`, so open a pull request to have
 a branch checked. Pages and tagged releases wait for the same six validation
