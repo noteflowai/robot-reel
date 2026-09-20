@@ -361,8 +361,14 @@ For the published 30-trial experiment, use:
 
 ```bash
 python -m robot_reel.stress_site artifacts/stress-gpu-30 artifacts/stress-published \
-  --archive-href https://github.com/noteflowai/robot-reel/releases/download/v0.6.0/robot-reel-stress-experiment.zip
+  --archive-href https://github.com/noteflowai/robot-reel/releases/download/stress-evidence-20260920/robot-reel-stress-experiment.zip
 ```
+
+The `stress-evidence-20260920` snapshot synchronizes the viewer and methodology
+with the published folder. Its underlying 30 trials, camera recordings, telemetry
+and results are unchanged from the v0.12.0 archive. It is an evidence snapshot,
+not a new software version or a new experiment. Historical release assets retain
+their original bytes.
 
 That release link identifies the published experiment; keep the default for a
 different collection. Page synchronization updates local ZIPs only. To distribute
