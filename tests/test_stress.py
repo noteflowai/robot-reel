@@ -55,7 +55,7 @@ class StressTests(unittest.TestCase):
         # stress_site.build copies docs/stress.md into the bundle as METHODS.md, so the
         # two drift apart whenever the source is edited without a rebuild -- which is
         # exactly what happened across two pull requests before this test existed.
-        source = (ROOT/"docs"/"stress.md").read_text(encoding="utf-8")
+        source = (SITE.parents[1]/"docs"/"stress.md").read_text(encoding="utf-8")
         published = (SITE/"METHODS.md").read_text(encoding="utf-8")
         self.assertEqual(published, source, "docs/stress/METHODS.md is a stale copy of docs/stress.md")
 
