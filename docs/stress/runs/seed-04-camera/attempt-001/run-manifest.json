@@ -2,8 +2,8 @@
   "schema": "robot-reel-stress-1",
   "files": {
     "trace.json": "673a125b6e587978d5cd68d65ecb315b7954d9923cf489f2c454609657eedd44",
-    "main.mp4": "ebc6d9d4574738c9dc3e642c4240d3d1ac312912ea152902b1018c5a1afe52c9",
-    "wrist.mp4": "fe529be897cd7e98ea9db1ba9ae2e3bb626d0d7de7ca59d3115e02c407037658",
+    "main.mp4": "dc54e886948c0295c3b6e5b5e882a0573c4aa70ec51122c84df3995b28b75d6c",
+    "wrist.mp4": "b0b1e53a78c8c89c2f7f62e449db6a2acabcfcd123d62f27c15c973af383981e",
     "main-poster.png": "7592e62d24c5a4aa84fd25b12bce7ae734fef2409b70e136448d768920f7dd5f",
     "wrist-poster.png": "3e87a1572d6f06f6334b0a597edec7352adb291cb3375f00b6671c9526641cee"
   }
