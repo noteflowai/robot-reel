@@ -87,6 +87,8 @@ evidence tag. Keep historical release assets unchanged. Before merging, run
 `python scripts/check_stress_download.py --archive /path/to/experiment.zip`,
 then run the same command without `--archive` to verify the actual public download.
 The main-branch deployment requires that public download to match the source.
+Check visible download sizes too: the homepage and telemetry guide label the
+portable Rerun recording in MiB.
 
 The September 2026 re-encode at `quality=8` reduces the sixty MP4s from 46.7 MiB to
 28.7 MiB and the portable Rerun recording from 6.61 MB to 4.48 MB. The MP4s are lossy

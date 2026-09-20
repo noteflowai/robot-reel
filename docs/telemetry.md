@@ -89,7 +89,7 @@ ready-to-use layout with videos, spatial data and plots.
 ### Native Rerun workspace
 
 [Open the recorded workspace in Rerun 0.37.2](https://app.rerun.io/version/0.37.2/?url=https%3A%2F%2Fnoteflowai.github.io%2Frobot-reel%2Frerun%2Fseed-09.rrd)
-or [download its portable recording](rerun/seed-09.rrd) (6.3 MiB).
+or [download its portable recording](rerun/seed-09.rrd) (4.3 MiB).
 The online viewer loads on demand; a desktop browser with WebGL/WebGPU support
 works best. The downloaded `.rrd` opens in the native Rerun application without
 a video server.
