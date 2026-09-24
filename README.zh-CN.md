@@ -41,6 +41,7 @@ Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回
 
 | 需要完成的工作 | 从这里开始 | 可交付的材料 |
 | --- | --- | --- |
+| 回放自己的 LeRobot 数据集 | [`robot-reel lerobot`](docs/lerobot.md) · [SO-101 示例](https://noteflowai.github.io/robot-reel/lerobot/) | 可离线打开的页面：全部相机、各关节指令与实测对照、带校验的源文件指纹 |
 | 复核策略在不同条件下的表现 | [SmolVLA 压力实验室](https://noteflowai.github.io/robot-reel/stress/) | 配对结果、相机画面、动作轨迹与离线实验包 |
 | 检查仿真参数与数值误差 | [Genesis × Newton 步长对照](https://noteflowai.github.io/robot-reel/solver-lab/) | 误差曲线、原始样本与可编辑 OpenUSD |
 | 编辑实景资产并复核修改 | [Blender 场景实验室](https://noteflowai.github.io/robot-reel/scene-lab/) | 修改前后工程、渲染图与编辑参数 |
@@ -84,6 +85,24 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)。
 在线回放可直接在浏览器中打开，无需在本机安装仿真环境。
 
+
+## 你的 LeRobot 数据集，一条命令回放
+
+把任意 [LeRobotDataset](https://huggingface.co/docs/lerobot/lerobot-dataset-v3) 的一个 episode
+（Hugging Face Hub 上的或本地的）导出为可离线打开的文件夹：所有相机共用一条时间轴，显示语言任务，
+每个关节的指令与实测曲线并排，并可一键跳到差值最大的帧。导出会锁定 Hub 提交并记录每个源文件的
+SHA-256；`--check-source` 会重新读取数据集逐值比对。支持 v3.0 与 v2.x，无需安装 LeRobot。
+
+```bash
+pip install -e '.[lerobot]'
+robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
+robot-reel lerobot artifacts/so101 --verify --check-media --check-source
+```
+
+**[打开 SO-101 示例 ↗](https://noteflowai.github.io/robot-reel/lerobot/)** ·
+[使用说明、校验与限制](docs/lerobot.md) ·
+数据来源：[`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace)
+第 0 个 episode（Apache-2.0），即 SmolVLA 微调所用的真实 SO-101 数据。
 
 ## 同一帧，回到三维现场。
 

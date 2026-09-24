@@ -42,6 +42,7 @@ then use its guide to record or edit your own scene.
 
 | What you need to do | Start here | What you can deliver |
 | --- | --- | --- |
+| Replay your own LeRobot dataset episode | [`robot-reel lerobot`](docs/lerobot.md) · [SO-101 example](https://noteflowai.github.io/robot-reel/lerobot/) | An offline page with every camera, commanded vs. measured joints and fingerprinted source files |
 | Review a policy under changed conditions | [SmolVLA Stress Lab](https://noteflowai.github.io/robot-reel/stress/) | Paired outcomes, camera views, action traces and an offline experiment |
 | Inspect simulation parameters and numerical error | [Genesis × Newton Solver Lab](https://noteflowai.github.io/robot-reel/solver-lab/) | Error curves, original samples and editable OpenUSD |
 | Edit captured assets and review the change | [Blender Scene Lab](https://noteflowai.github.io/robot-reel/scene-lab/) | Baseline and edited projects, renders and edit parameters |
@@ -87,6 +88,29 @@ Or use the [verified installation packages or non-root Docker image](docs/distri
 Recording new runs needs the [full runtime](docs/recording.md).
 The hosted replays open in a browser without a local simulation environment.
 
+
+## Your LeRobot dataset. One command.
+
+Point Robot Reel at any [LeRobotDataset](https://huggingface.co/docs/lerobot/lerobot-dataset-v3)
+episode, on the Hugging Face Hub or on disk, and get a folder that opens
+offline: every camera on one clock, the language task, and each joint's command
+beside its measurement with a jump to the largest difference. The export pins
+the Hub commit and the SHA-256 of every source file; `--check-source` re-reads
+the dataset and compares every value. Supports v3.0 and v2.x; LeRobot itself
+is not required.
+
+```bash
+pip install -e '.[lerobot]'
+robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
+robot-reel lerobot artifacts/so101 --verify --check-media --check-source
+```
+
+[![A real SO-101 LeRobot episode: two camera views on one clock above commanded versus measured joint curves.](docs/lerobot/poster.png)](https://noteflowai.github.io/robot-reel/lerobot/)
+
+**[Open the SO-101 example ↗](https://noteflowai.github.io/robot-reel/lerobot/)** ·
+[Guide, checks and limits](docs/lerobot.md) ·
+Source: episode 0 of [`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace)
+(Apache-2.0), the real SO-101 data SmolVLA was fine-tuned on.
 
 ## One frame. Back in the scene.
 
@@ -419,6 +443,7 @@ Choose the workflow you want to build:
 | Explore a physics parameter sweep | [Butterfly Lab → twelve isolated worlds](docs/chaos.md) |
 | Record Microduck, braking or the arm | [Recording packs + runtime setup](docs/recording.md) |
 | Compare two captured runs | [Comparison contract + CLI](docs/comparison.md) |
+| Replay a LeRobot dataset episode | [Hub or local dataset → offline replay](docs/lerobot.md) |
 
 ## Make the next scene
 

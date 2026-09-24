@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+- Replay any LeRobotDataset episode offline with `robot-reel lerobot REPO_OR_PATH
+  --episode N`: v3.0 and v2.x, Hub or local, without importing LeRobot. Each
+  camera is cut at the episode's recorded offset into an H.264 clip of exactly
+  its frames; `action` and `observation.state` channels that share names are
+  paired per joint with a jump to their largest difference. The export pins the
+  Hub commit and every source file's SHA-256. `--verify`, `--check-media` and
+  `--check-source` check the folder, count every decoded frame and re-read the
+  dataset value by value. New optional extra: `lerobot` (pyarrow,
+  huggingface_hub).
+- Publish episode 0 of `lerobot/svla_so101_pickplace` (real SO-101, Apache-2.0)
+  as the example replay at `docs/lerobot/`, linked from the homepage and READMEs.
+
 ## 0.14.0 — 2026-09-25
 
 - Record Butterfly Lab sweeps of 2–512 isolated Newton worlds on `cpu` or

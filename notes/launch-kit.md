@@ -6,6 +6,39 @@ the [outreach directory](outreach/) retains their exact bodies. Hugging Face's
 record is in [huggingface-launch.md](huggingface-launch.md).
 Text below is not a claim that a platform post was published.
 
+## LeRobot dataset replay — September 2026
+
+Facts for the owner's own posts (not a Show HN draft; see promotion-channels.md):
+
+- Command: `robot-reel lerobot lerobot/svla_so101_pickplace --episode 0`; any
+  public or local LeRobotDataset v3.0 / v2.x, without installing LeRobot.
+- Output: one folder that opens from disk. Every camera on one clock, the
+  language task, per-joint commanded (`action`) vs. measured
+  (`observation.state`) curves with a jump to the largest difference.
+- Checks: Hub commit pinned, SHA-256 for each source file, `--check-source`
+  re-reads the dataset and compares every value (3,939 values and 606 decoded
+  frames for the example episode).
+- Example: https://noteflowai.github.io/robot-reel/lerobot/ (SO-101,
+  Apache-2.0 data from `lerobot/svla_so101_pickplace`, episode 0: 303 frames at
+  30 fps; largest shoulder_lift command/measurement gap 23.5 at frame 102, in
+  the dataset's units).
+- Not claimed: success labels, unit calibration, contact inference, or a
+  replacement for Rerun's native LeRobot reader or the Hub visualizer.
+
+Reddit (r/robotics, r/LeRobot if active) angle: "I wanted to attach one
+teleop episode to a bug report without a server" — show the poster image and
+the follower-lag panel. Disclose it is your project.
+
+掘金 / 知乎 标题候选：
+
+- 一条命令把 LeRobot 数据集的一个 episode 变成可离线打开的回放页
+- SO-101 跟随臂到底跟得多紧？逐关节对照指令与实测
+
+> `robot-reel lerobot 仓库名 --episode N`：支持 Hub 或本地的 LeRobotDataset v3.0 / v2.x，
+> 不需要安装 LeRobot。所有相机共用一条时间轴，逐关节对照 action 与 observation.state，
+> 一键跳到差值最大的帧。导出锁定 Hub 提交并记录源文件 SHA-256，`--check-source` 逐值复核。
+> 示例：https://noteflowai.github.io/robot-reel/lerobot/
+
 ## Hugging Face — four native replay labs
 
 Start here: https://huggingface.co/spaces/glayguo/robot-reel
