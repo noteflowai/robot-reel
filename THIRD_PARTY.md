@@ -18,6 +18,7 @@ Strands, Google DeepMind, Hugging Face, or Unitree.
 | SmolVLA LIBERO policy | https://huggingface.co/HuggingFaceVLA/smolvla_libero | Apache-2.0; separately downloaded, pinned checkpoint |
 | SmolVLM2 backbone | https://huggingface.co/HuggingFaceTB/SmolVLM2-500M-Instruct | Apache-2.0; tokenizer/config, with weights inside the full policy checkpoint |
 | LeRobot | https://github.com/huggingface/lerobot | Apache-2.0; VLA inference and observation/action processors |
+| SO-101 pick-and-place dataset | https://huggingface.co/datasets/lerobot/svla_so101_pickplace | Apache-2.0 (dataset card); episode 0 clips and values in `docs/lerobot/`, pinned commit and source SHA-256 in `episode.json`, see its NOTICE.txt |
 | LIBERO | https://github.com/Lifelong-Robot-Learning/LIBERO | MIT; manipulation tasks and task predicates |
 | LIBERO asset snapshot | https://huggingface.co/datasets/lerobot/libero-assets | Pinned, downloaded separately; retain upstream asset terms and attribution |
 | MCP Python SDK | https://github.com/modelcontextprotocol/python-sdk | MIT; optional local director tool server |

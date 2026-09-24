@@ -1,0 +1,9 @@
+{
+  "schema": "robot-reel-lerobot-1",
+  "sha256": {
+    "cameras/side.mp4": "f11e26e49b295960b1e403ecde10b4c2dc4977e530a678b7ed2a9c6a6ac3a100",
+    "cameras/up.mp4": "a4483700037a9b74851311e4e4625f46ec0acc21dea9cba36e1160d672fd1284",
+    "episode.json": "011e5e72b873b6f524d2fbcc176238a7d1530e3bfc980fd6ad70b546445a574f",
+    "index.html": "52941ea83f421a12aa8107355bbd097ecf66db32e94d38303b07f4f92a7fea43"
+  }
+}

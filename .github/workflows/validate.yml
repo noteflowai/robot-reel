@@ -13,12 +13,18 @@ jobs:
           python-version: "3.12"
       - name: Verify traces and plans without rendering dependencies
         run: python -S -m unittest discover -s tests -v
-      - run: pip install -e '.[director,inspect]'
+      - run: pip install -e '.[director,inspect,lerobot]'
       - run: python -m unittest discover -s tests -v
       - name: Check actual MCP stdio tools and workspace boundaries
         run: python scripts/check_director_mcp.py
       - name: Check recorded VLA camera lengths against the action trace
         run: robot-reel vla docs/vla --check-media
+      - name: Re-read the published LeRobot replay and a fresh Hub export against the pinned dataset
+        run: |
+          robot-reel lerobot docs/lerobot --verify --check-media --check-source
+          robot-reel lerobot lerobot/svla_so101_pickplace --revision f641879e22172be7e8161d5e6c1503c2d2feb657 \
+            --episode 1 --output artifacts/lerobot-ci
+          robot-reel lerobot artifacts/lerobot-ci --verify --check-media --check-source
       - name: Verify all stress trials and round-trip every MCAP message
         run: |
           robot-reel stress docs/stress --check-media --check-mcap
