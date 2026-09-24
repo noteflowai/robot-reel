@@ -37,7 +37,7 @@ Private or gated Hub datasets use your existing `hf auth login` token.
   file at the episode's recorded offset (`from_timestamp` in v3.0 files that
   hold many episodes) and re-encoded to H.264, so the clip holds exactly the
   episode's frames and plays in any browser. `image` features stored inside the
-  parquet file are encoded the same way.
+  parquet file (PNG or JPEG) are encoded the same way.
 - **Commanded versus measured.** When `action` and `observation.state` share
   channel names, as LeRobot follower arms do, each joint gets its own panel with
   both curves and a link to the frame with the largest recorded difference.

@@ -150,12 +150,11 @@ class SyntheticDatasetTest(unittest.TestCase):
 
     def decoded_levels(self, path):
         import imageio_ffmpeg
-        reader = imageio_ffmpeg.read_frames(str(path))
-        try:
-            next(reader)
-            return [sum(frame)/len(frame) for frame in reader]
-        finally:
-            reader.close()
+        size = 64*48*3
+        raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-v", "error", "-i", str(path), "-f", "rawvideo",
+                              "-pix_fmt", "rgb24", "-"], capture_output=True, check=True).stdout
+        self.assertEqual(len(raw) % size, 0)
+        return [sum(raw[i:i+size])/size for i in range(0, len(raw), size)]
 
     def test_second_episode_is_cut_at_its_recorded_offset_and_checks_against_its_source(self):
         for layout in (self.v3, self.v21):
@@ -195,6 +194,36 @@ class SyntheticDatasetTest(unittest.TestCase):
                 with redirect_stderr(stderr), self.assertRaises(SystemExit):
                     main([str(output), "--verify", "--check-source", "--dataset", str(root)])
                 self.assertIn("disagrees with the export: series", stderr.getvalue())
+
+    def test_images_stored_in_parquet_become_a_clip_in_frame_order(self):
+        import imageio_ffmpeg
+        import pyarrow as pa
+        import pyarrow.parquet as pq
+        with tempfile.TemporaryDirectory() as temporary:
+            root, output = Path(temporary)/"dataset", Path(temporary)/"replay"
+            self.v21(root)
+            info = json.loads((root/"meta/info.json").read_text())
+            info["features"]["observation.images.wrist"] = {"dtype": "image", "shape": [48, 64, 3]}
+            (root/"meta/info.json").write_text(json.dumps(info))
+            name = root/"data/chunk-000/episode_000001.parquet"
+            table = pq.read_table(name)
+            images = [{"bytes": subprocess.run(
+                [imageio_ffmpeg.get_ffmpeg_exe(), "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", "64x48",
+                 "-i", "-", "-f", "image2pipe", "-c:v", "png", "-"],
+                input=bytes([level(LENGTHS[0]+i)])*(64*48*3), capture_output=True, check=True).stdout, "path": None}
+                for i in range(LENGTHS[1])]
+            pq.write_table(table.append_column("observation.images.wrist", pa.array(
+                images, pa.struct([("bytes", pa.binary()), ("path", pa.string())]))), name)
+            with redirect_stderr(io.StringIO()), redirect_stdout(io.StringIO()):
+                main([str(root), "--episode", "1", "--output", str(output), "--crf", "18"])
+                main([str(output), "--verify", "--check-media", "--check-source", "--dataset", str(root)])
+            trace = json.loads((output/"episode.json").read_text())
+            wrist = next(c for c in trace["cameras"] if c["kind"] == "image")
+            self.assertEqual((wrist["file"], wrist["source"]), ("cameras/wrist.mp4", "data/chunk-000/episode_000001.parquet"))
+            levels = self.decoded_levels(output/wrist["file"])
+            self.assertEqual(len(levels), LENGTHS[1])
+            for i, value in enumerate(levels):
+                self.assertLess(abs(value-level(LENGTHS[0]+i)), 4, f"image frame {i}")
 
     def test_missing_episode_and_unsupported_version_fail_clearly(self):
         with tempfile.TemporaryDirectory() as temporary:

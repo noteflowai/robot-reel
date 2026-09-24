@@ -16,7 +16,6 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
-import tempfile
 
 from .compare import digest
 
@@ -235,21 +234,31 @@ def encode_images(source, camera, length, fps, output, crf, episode):
     import pyarrow.parquet as pq
     frames = pq.read_table(source.file(camera["source"]), columns=[camera["key"], "frame_index"],
                            filters=[("episode_index", "=", episode)]).sort_by("frame_index").column(camera["key"]).to_pylist()
-    with tempfile.TemporaryDirectory() as temporary:
-        for i, image in enumerate(frames):
-            payload = image.get("bytes") if isinstance(image, dict) else None
-            if not payload:
-                raise ValueError(f"{camera['key']}: frame {i} has no embedded image bytes")
-            Path(temporary, f"{i:06d}.img").write_bytes(payload)
-        run([ffmpeg(), "-v", "error", "-y", "-framerate", repr(fps), "-i", str(Path(temporary, "%06d.img")),
-             "-frames:v", str(length), "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2", "-c:v", "libx264",
-             "-preset", "medium", "-crf", str(crf), "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(output)])
+    payloads, decoder = [], None
+    for i, image in enumerate(frames):
+        payload = image.get("bytes") if isinstance(image, dict) else None
+        if not payload:
+            raise ValueError(f"{camera['key']}: frame {i} has no embedded image bytes")
+        # ffmpeg cannot reliably guess small images from a pipe, so name the decoder.
+        kind = next((codec for magic, codec in IMAGE_MAGIC if payload.startswith(magic)), None)
+        if kind is None or decoder not in (None, kind):
+            raise ValueError(f"{camera['key']}: frame {i} is not a PNG or JPEG like the other frames")
+        payloads.append(payload)
+        decoder = kind
+    run([ffmpeg(), "-v", "error", "-y", "-f", "image2pipe", "-framerate", repr(fps), "-c:v", decoder, "-i", "-",
+         "-frames:v", str(length), "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2", "-c:v", "libx264",
+         "-preset", "medium", "-crf", str(crf), "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(output)],
+        b"".join(payloads))
 
 
-def run(command):
-    result = subprocess.run(command, capture_output=True, text=True)
+IMAGE_MAGIC = ((b"\x89PNG\r\n\x1a\n", "png"), (b"\xff\xd8\xff", "mjpeg"))
+
+
+def run(command, stdin=None):
+    result = subprocess.run(command, input=stdin, capture_output=True)
     if result.returncode:
-        raise ValueError("ffmpeg failed: "+(result.stderr.strip().splitlines() or ["no output"])[-1])
+        lines = result.stderr.decode(errors="replace").strip().splitlines()
+        raise ValueError("ffmpeg failed: "+(lines or ["no output"])[-1])
 
 
 def export_viewer(trace, path):
