@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+## 0.14.0 — 2026-09-25
+
+- Record Butterfly Lab sweeps of 2–512 isolated Newton worlds on `cpu` or
+  `cuda:0` with `python -m robot_reel.chaos --worlds N --device cuda:0`. The
+  trace records its width, device and device name; verification enforces both.
+  Viewer text, USD metadata, preview notices and centered presentation offsets
+  follow the recording. A 48-world L40S export check includes an offline viewer
+  and OpenUSD/Blender readback. The published twelve-world CPU run is unchanged.
+- Re-encode the sixty Stress Lab camera MP4s at `quality=8`: 46.7 MiB to
+  28.7 MiB with all 7,110 frames. Traces, policy-input hashes, controls,
+  telemetry, outcomes and trial posters keep their bytes; the videos are lossy
+  viewing derivatives. The preview, Space thumbnail and six-video Rerun
+  recording (6.61 MB to 4.48 MB) were rebuilt from the new media.
+- This release's `robot-reel-stress-experiment.zip` carries the re-encoded
+  media and current methodology. The hosted Stress Lab links to the matching
+  `stress-evidence-20260920-q8` snapshot; deploying main now requires that
+  public download to match the source, and a test keeps the bundled METHODS
+  copy identical to `docs/stress.md`.
+- Homepage and README downloads follow the latest release, including Solver Lab.
+  Document the five consumers of published trial videos for future re-encodes.
+- Link a 36-attempt independent-source SWE workflow review and a six-attempt
+  pinned-skill handoff, with uncertain and failed outcomes retained. Organize
+  the Hugging Face Space methods and reuse terms into a readable panel.
+
 ## 0.13.0 — 2026-09-19
 
 - Scene Lab replays two recorded Microduck simulations on the captured original

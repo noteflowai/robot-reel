@@ -45,9 +45,9 @@ def prepare(source, distributions, offline, output):
     ))
     return notes + """
 
-Scene Lab adds `scene-lab-native.zip`: both packed Blender scenes and their
-independent native checks. Release 0.13.0 also includes `scene-motion-native.zip`:
-both animated Microduck projects, relative USD caches and a standalone checker.
+Scene Lab includes `scene-lab-native.zip`: both packed Blender scenes and their
+independent native checks. `scene-motion-native.zip` contains both animated
+Microduck projects, relative USD caches and a standalone checker.
 The full producer PNGs and simulation inputs are a separate versioned dataset
 download documented in `examples/scene-motion/README.md`.
 `research-records.zip` contains the original 45 agent trials
@@ -56,7 +56,7 @@ interop receipts. Research assets are fetched from a pinned immutable public dat
 revision, verified against committed sizes/SHA-256, and included in SHA256SUMS.
 OpenEnv's actual recipe controls are documented with raw evidence in the repository.
 
-Solver Lab includes six new CUDA recordings from Genesis 1.4.1 and Newton 1.6.0,
+Solver Lab includes six CUDA recordings from Genesis 1.4.1 and Newton 1.6.0,
 the analytic-reference diagnostics, native Genesis replays and editable USD.
 The installed wheel exports its offline ZIP and verifies all 366 source samples.
 Run `robot-reel solver-lab --output solver-lab --verify` after extraction.
@@ -84,8 +84,8 @@ portable JSON and 1080p figure export.
 
 The wheel, source distribution and Rerun recording passed the same six validation
 jobs. Open `robot-reel-seed-09.rrd` in Rerun 0.37.2. `SHA256SUMS` covers every asset.
-The existing policy and cloth recordings are unchanged. Solver Lab contains new
-ballistic-flight recordings. PyPI publishing is configured separately.
+Recorded experiments are described in the changelog above; opening a download
+does not rerun a simulation or policy. PyPI publishing is configured separately.
 """
 
 

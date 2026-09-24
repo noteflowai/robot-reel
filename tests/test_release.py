@@ -1,5 +1,6 @@
 import hashlib
 from pathlib import Path
+import re
 import tempfile
 import tomllib
 import unittest
@@ -68,6 +69,18 @@ class ReleaseTests(unittest.TestCase):
         self.assertIn(f"version: {version}", citation)
         self.assertTrue(any(line.startswith(f"## {version} — ")
                             for line in (root/"CHANGELOG.md").read_text().splitlines()))
+
+    def test_shipped_install_guides_name_the_current_wheel(self):
+        # START-HERE.md is published with every release; a stale wheel name makes
+        # its copy-paste install command fail against that release's files.
+        root = Path(__file__).resolve().parents[1]
+        version = tomllib.loads((root/"pyproject.toml").read_text())["project"]["version"]
+        for guide in ("docs/offline-lab.md", "docs/distribution.md"):
+            text = (root/guide).read_text()
+            wheels = set(re.findall(r"robot_reel-([0-9][^-/\\ ]*)-py3-none-any\.whl", text))
+            with self.subTest(guide=guide):
+                self.assertEqual(wheels, {version})
+        self.assertTrue((root/"docs/offline-lab.md").read_text().startswith(f"# Robot Reel {version} — "))
 
 
 if __name__ == "__main__":
