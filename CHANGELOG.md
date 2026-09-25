@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.15.0 — 2026-09-25
+
 - Replay any LeRobotDataset episode offline with `robot-reel lerobot REPO_OR_PATH
   --episode N`: v3.0 and v2.x, Hub or local, without importing LeRobot. Each
   camera is cut at the episode's recorded offset into an H.264 clip of exactly
