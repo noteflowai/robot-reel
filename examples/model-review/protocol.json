@@ -1,0 +1,60 @@
+{
+  "schema": "robot-reel-model-review-protocol-1",
+  "frozen_on": "2026-09-25",
+  "policy": "Review a recorded robot episode using the supplied contact sheet. Return ONLY one JSON object with outcome (\"success\", \"step_limit\", or \"unknown\"), action_count (integer or null), cited_frames (an array of integer frame labels from this sheet), and explanation (at most 90 words). Explain observed behavior and uncertainty. Do not claim that images alone establish the simulator's success criterion or a causal failure mechanism. If a machine-readable record is supplied, distinguish its facts from your visual interpretation. Never invent a measurement.",
+  "seeds": [
+    17
+  ],
+  "generation": {
+    "max_new_tokens": 512,
+    "temperature": 0.6,
+    "top_p": 0.9,
+    "top_k": 20,
+    "enable_thinking": false
+  },
+  "cases": [
+    {
+      "id": "episode-a-images-only",
+      "images": [
+        "episode-a.png"
+      ],
+      "prompt": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. No outcome record is supplied. Use unknown/null when not established."
+    },
+    {
+      "id": "episode-a-with-record",
+      "images": [
+        "episode-a.png"
+      ],
+      "prompt": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. Recorded facts: {\"outcome\": \"success\", \"actions\": 82, \"simulation_seconds\": 4.1, \"max_steps\": 160, \"condition\": \"reference\", \"physics_unchanged_by_condition\": true}. These record fields are authoritative for the checks; explain what the images additionally suggest."
+    },
+    {
+      "id": "episode-b-images-only",
+      "images": [
+        "episode-b.png"
+      ],
+      "prompt": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. No outcome record is supplied. Use unknown/null when not established."
+    },
+    {
+      "id": "episode-b-with-record",
+      "images": [
+        "episode-b.png"
+      ],
+      "prompt": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. Recorded facts: {\"outcome\": \"step_limit\", \"actions\": 160, \"simulation_seconds\": 8.0, \"max_steps\": 160, \"condition\": \"dim\", \"physics_unchanged_by_condition\": true}. These record fields are authoritative for the checks; explain what the images additionally suggest."
+    },
+    {
+      "id": "episode-c-images-only",
+      "images": [
+        "episode-c.png"
+      ],
+      "prompt": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. No outcome record is supplied. Use unknown/null when not established."
+    },
+    {
+      "id": "episode-c-with-record",
+      "images": [
+        "episode-c.png"
+      ],
+      "prompt": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. Recorded facts: {\"outcome\": \"step_limit\", \"actions\": 160, \"simulation_seconds\": 8.0, \"max_steps\": 160, \"condition\": \"camera\", \"physics_unchanged_by_condition\": true}. These record fields are authoritative for the checks; explain what the images additionally suggest."
+    }
+  ],
+  "scope": "One model generation per mode per episode; selected seed-09 episodes previously used by the public stress demo, not a representative benchmark. Images are decoded lossy video derivatives. No new policy rollout, intervention or physical success test. Explanations remain unverified interpretations."
+}
