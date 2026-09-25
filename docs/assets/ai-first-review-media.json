@@ -1,0 +1,66 @@
+{
+  "kind": "Four annotated screenshots of actual UI states",
+  "duration_seconds": 30,
+  "source_files": {
+    "model-review/review.json": "58ef136b49cdb09c949ebc411d306f87de4be6fbd4440679f332771e2269f19e",
+    "model-review/protocol.json": "87719738bef8021cb646de399be4987185d1eddc78de1eb35e1c8f44183e3d04",
+    "model-review/media/episode-b/trace.json": "0cbf0b757761b6cfaca22465055c834c2e720f972b3f8da8924b7850c341182d",
+    "model-review/media/episode-b/main.mp4": "184b7309bd7774dbbedde700dfead510963c9e99fdd83b82c73e40186ac7f953",
+    "model-review/media/episode-b/wrist.mp4": "d04407c12d7ebeb66a8d60a23e7c1683f17335fa6708be28c3dac6a9f417fb24",
+    "model-review/recorded/episode-b-images-only-17.json": "0a868904cbc62cb0b68a0affee0c3d76d5657e3997b3379cfa4c4305eeb1155a",
+    "model-review/recorded/episode-b-with-record-17.json": "6bdd4b5abd4d621358de256e011b5d52cf97f3facfbc5daad86455b0005ca556",
+    "model-review/index.html": "02f32c86f387bb5c94d86b99ccb804fab02bee88569b1b7ce6a717aac742473f"
+  },
+  "frames": [
+    {
+      "title": "Start with the recorded outcome.",
+      "detail": "The dim episode reached its 160-action limit. This is an existing SmolVLA recording.",
+      "selectors": [
+        "#episodes",
+        ".facts"
+      ]
+    },
+    {
+      "title": "Look at both original camera views.",
+      "detail": "The model received five samples per camera. The viewer retains the full recorded clips.",
+      "selectors": [
+        ".panel:first-child"
+      ]
+    },
+    {
+      "title": "Keep the model's real format failure.",
+      "detail": "The images-only answer wraps JSON in Markdown. Display extraction does not make it pass.",
+      "selectors": [
+        "#modes",
+        "#checks"
+      ]
+    },
+    {
+      "title": "Match facts. Leave the explanation unassessed.",
+      "detail": "With the record supplied, facts match. Frame existence does not prove visual support or causality.",
+      "selectors": [
+        "#modes",
+        "#checks"
+      ]
+    }
+  ],
+  "files": {
+    "ai-first-review.png": {
+      "bytes": 55864,
+      "sha256": "2ee316b85e0057dad2b6494aa046ad6125e5a0e0e42d2d4d41c92f1031b2611d"
+    },
+    "ai-first-review.gif": {
+      "bytes": 282893,
+      "sha256": "19a0ea0e45e5e087137fd9198418bd674a253a0c26264f8ef63b2e33a82893c6"
+    },
+    "ai-first-review.mp4": {
+      "bytes": 214944,
+      "sha256": "2ade0e6c6431015ad0f02b5bcc494b4f065deba30ddc4355d92a1d65522f2daa"
+    },
+    "ai-first-review.vtt": {
+      "bytes": 646,
+      "sha256": "dbd4cf44409c9d4496102cea1256409aa9983a0f15a15acccac9635701bc9a18"
+    }
+  },
+  "scope": "Three selected recorded episodes with one answer per mode. Claims are checked against supplied records; explanations and physical causes are not assessed. No new rollout or inference."
+}

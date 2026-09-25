@@ -47,6 +47,13 @@ robot-reel review-claims trace.json claims.json --output review.json
 Check outcomes, action counts and cited frame labels offline. Explanations remain
 unverified interpretations. [Method, complete records and tutorial](docs/model-review.md).
 
+**[First review, no clone required](docs/first-claim-review.md)** — Install the released CLI and check one original model response against its recorded robot trace.
+
+<a href="docs/first-claim-review.md"><picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/ai-first-review.png">
+  <img src="docs/assets/ai-first-review.gif" width="960" alt="Install the released CLI and check one original model response against its recorded robot trace.">
+</picture></a>
+
 ## Choose your workflow
 
 Robot Reel packages policy simulations and 3D scene edits into replayable

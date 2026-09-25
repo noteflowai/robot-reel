@@ -47,6 +47,13 @@ robot-reel review-claims trace.json claims.json --output review.json
 独立核对结果、动作数量和引用帧。模型解释仍是未验证的推断。
 [方法、原始记录与教程](docs/model-review.md)。
 
+**[首次复核，无需克隆仓库](docs/first-claim-review.md)** — 安装已发布的 CLI，对照机器人原始轨迹，复核一份真实模型输出。
+
+<a href="docs/first-claim-review.md"><picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/ai-first-review.png">
+  <img src="docs/assets/ai-first-review.gif" width="960" alt="安装已发布的 CLI，对照机器人原始轨迹，复核一份真实模型输出。">
+</picture></a>
+
 ## 选择你的工作场景
 
 Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回放、数据与工程文件。
