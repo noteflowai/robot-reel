@@ -47,12 +47,14 @@ PAGES = {
     "docs/lerobot/index.html": "robot_reel/lerobot.html",
     "docs/blender/index.html": "scripts/blender_demo.html",
     "docs/remix/index.html": "scripts/remix_demo.html",
+    "docs/model-review/index.html": "scripts/model_review.html",
 }
 OPEN, CLOSE = "<script>\n", "</script>"
 STATIC_PAGES = {"docs/index.html", "docs/scene-lab/index.html", "docs/libero-plus/index.html"}
 PAYLOAD_PAGES = {
     "docs/solver-lab/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
     "docs/microduck-lab/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
+    "docs/model-review/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
 }
 
 

@@ -34,7 +34,7 @@ async function check(directory){
    await page.goto(`http://localhost:${server.address().port}/embed`);
    const frame=page.frameLocator('iframe');
    await frame.locator('#lab-cloth').waitFor();
-   assert.equal(await frame.locator('.card').count(),7);
+   assert.equal(await frame.locator('.card').count(),8);
    const homeText=await frame.locator('body').innerText();
    assert.ok(homeText.includes('0.05° apart.'));
    assert.ok(homeText.includes('中文'));

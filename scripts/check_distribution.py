@@ -37,6 +37,24 @@ def check(source, release_assets=None):
     if version("robot-reel") != expected:
         raise ValueError("Installed distribution version differs from pyproject.toml")
     with tempfile.TemporaryDirectory(prefix="robot-reel-installed-") as temporary:
+        trace_path = source/"docs/stress/runs/seed-09-dim/attempt-001/trace.json"
+        trace = json.loads(trace_path.read_text())
+        claims_path = Path(temporary)/"authored-claims-control.json"
+        claims = {"outcome": trace["result"]["outcome"], "action_count": trace["result"]["actions"],
+                  "cited_frames": [trace["frames"][0]["frame"]],
+                  "explanation": "Authored installed-package control; not a model answer."}
+        claims_path.write_text(json.dumps(claims))
+        claims_command = [str(Path(sys.executable).with_name("robot-reel")), "review-claims",
+                          str(trace_path), str(claims_path)]
+        claims_checked = subprocess.run(claims_command, check=True, capture_output=True, text=True)
+        claims_report = json.loads(claims_checked.stdout)
+        if not claims_report["facts_match"] or claims_report["explanation_status"] != "not_assessed":
+            raise ValueError("Installed claim review did not preserve its scope")
+        claims["outcome"] = "success"
+        claims_path.write_text(json.dumps(claims))
+        claims_rejected = subprocess.run(claims_command, capture_output=True, text=True)
+        if claims_rejected.returncode != 1 or json.loads(claims_rejected.stdout)["facts_match"]:
+            raise ValueError("Installed claim reviewer accepted a contradicted outcome")
         microduck_output = Path(temporary)/"microduck"
         with zipfile.ZipFile(source/"docs/microduck-lab/experiment.zip") as archive:
             archive.extractall(microduck_output)
@@ -178,6 +196,7 @@ def check(source, release_assets=None):
             if new_labs[name].get("valid") is not True:
                 raise ValueError(f"Installed {name} verifier failed")
         report = {"version": expected, "module": str(module), "new_labs": new_labs,
+                  "model_claim_control": claims_report,
                   "cloth_vertex_samples": cloth["vertex_samples"],
                   "solver_lab": solver,
                   "microduck": microduck,

@@ -1,0 +1,34 @@
+{
+  "case_id": "episode-b-images-only",
+  "seed": 17,
+  "started_at": "2026-09-25T12:07:00.206709+00:00",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Review a recorded robot episode using the supplied contact sheet. Return ONLY one JSON object with outcome (\"success\", \"step_limit\", or \"unknown\"), action_count (integer or null), cited_frames (an array of integer frame labels from this sheet), and explanation (at most 90 words). Explain observed behavior and uncertainty. Do not claim that images alone establish the simulator's success criterion or a causal failure mechanism. If a machine-readable record is supplied, distinguish its facts from your visual interpretation. Never invent a measurement."
+    },
+    {
+      "role": "user",
+      "content": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. No outcome record is supplied. Use unknown/null when not established."
+    }
+  ],
+  "images": [
+    "episode-b.png"
+  ],
+  "rendered_prompt": "<|im_start|>system\nReview a recorded robot episode using the supplied contact sheet. Return ONLY one JSON object with outcome (\"success\", \"step_limit\", or \"unknown\"), action_count (integer or null), cited_frames (an array of integer frame labels from this sheet), and explanation (at most 90 words). Explain observed behavior and uncertainty. Do not claim that images alone establish the simulator's success criterion or a causal failure mechanism. If a machine-readable record is supplied, distinguish its facts from your visual interpretation. Never invent a measurement.<|im_end|>\n<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. No outcome record is supplied. Use unknown/null when not established.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+  "raw_output": "```json\n{\n  \"outcome\": \"unknown\",\n  \"action_count\": null,\n  \"cited_frames\": [\n    0,\n    40,\n    80,\n    120,\n    160\n  ],\n  \"explanation\": \"The robot arm moves from a resting position toward the black bowl. By frame 120, the gripper appears to have grasped the bowl, and by frame 160, the bowl is positioned near the red-rimmed plate. However, the final placement is not clearly confirmed in the last frame, and no success record is provided, leaving the outcome uncertain.\"\n}\n```<|im_end|>",
+  "text": "```json\n{\n  \"outcome\": \"unknown\",\n  \"action_count\": null,\n  \"cited_frames\": [\n    0,\n    40,\n    80,\n    120,\n    160\n  ],\n  \"explanation\": \"The robot arm moves from a resting position toward the black bowl. By frame 120, the gripper appears to have grasped the bowl, and by frame 160, the bowl is positioned near the red-rimmed plate. However, the final placement is not clearly confirmed in the last frame, and no success record is provided, leaving the outcome uncertain.\"\n}\n```",
+  "prompt_tokens": 1231,
+  "completion_tokens": 150,
+  "budget_reached": false,
+  "generation_seconds": 24.140491229016334,
+  "cuda_peak_allocated_bytes": 30951768576,
+  "generation": {
+    "max_new_tokens": 512,
+    "temperature": 0.6,
+    "top_p": 0.9,
+    "top_k": 20,
+    "enable_thinking": false
+  },
+  "protocol_sha256": "87719738bef8021cb646de399be4987185d1eddc78de1eb35e1c8f44183e3d04"
+}

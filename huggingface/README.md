@@ -44,6 +44,14 @@ Install the CLI from [PyPI](https://pypi.org/project/robot-reel/) with
 See the [installation guide](https://github.com/noteflowai/robot-reel/blob/main/docs/distribution.md)
 for optional dependencies and verified downloads.
 
+## Review a model explanation
+
+The Qwen3.8 review pairs six actual model outputs with three original SmolVLA
+episodes. Compare sampled images with images plus outcome records, replay both
+cameras and download every response and independent fact check. Explanations
+remain unverified interpretations.
+[Method and source records](https://github.com/noteflowai/robot-reel/blob/main/docs/model-review.md).
+
 ## Choose a starting point
 
 - **Policy review:** compare paired outcomes in SmolVLA Stress Lab, then inspect

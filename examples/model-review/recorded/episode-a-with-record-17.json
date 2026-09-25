@@ -1,0 +1,34 @@
+{
+  "case_id": "episode-a-with-record",
+  "seed": 17,
+  "started_at": "2026-09-25T12:06:37.948158+00:00",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Review a recorded robot episode using the supplied contact sheet. Return ONLY one JSON object with outcome (\"success\", \"step_limit\", or \"unknown\"), action_count (integer or null), cited_frames (an array of integer frame labels from this sheet), and explanation (at most 90 words). Explain observed behavior and uncertainty. Do not claim that images alone establish the simulator's success criterion or a causal failure mechanism. If a machine-readable record is supplied, distinguish its facts from your visual interpretation. Never invent a measurement."
+    },
+    {
+      "role": "user",
+      "content": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. Recorded facts: {\"outcome\": \"success\", \"actions\": 82, \"simulation_seconds\": 4.1, \"max_steps\": 160, \"condition\": \"reference\", \"physics_unchanged_by_condition\": true}. These record fields are authoritative for the checks; explain what the images additionally suggest."
+    }
+  ],
+  "images": [
+    "episode-a.png"
+  ],
+  "rendered_prompt": "<|im_start|>system\nReview a recorded robot episode using the supplied contact sheet. Return ONLY one JSON object with outcome (\"success\", \"step_limit\", or \"unknown\"), action_count (integer or null), cited_frames (an array of integer frame labels from this sheet), and explanation (at most 90 words). Explain observed behavior and uncertainty. Do not claim that images alone establish the simulator's success criterion or a causal failure mechanism. If a machine-readable record is supplied, distinguish its facts from your visual interpretation. Never invent a measurement.<|im_end|>\n<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. Recorded facts: {\"outcome\": \"success\", \"actions\": 82, \"simulation_seconds\": 4.1, \"max_steps\": 160, \"condition\": \"reference\", \"physics_unchanged_by_condition\": true}. These record fields are authoritative for the checks; explain what the images additionally suggest.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+  "raw_output": "{\n  \"outcome\": \"success\",\n  \"action_count\": 82,\n  \"cited_frames\": [0, 20, 41, 62, 82],\n  \"explanation\": \"The recorded facts confirm a successful outcome within 82 actions. Visually, the wrist camera shows the gripper approaching the black bowl (frames 41-62) and then retracting. The main camera shows the black bowl moving from the table surface to the plate between frames 62 and 82. The images are consistent with the recorded success, showing the object reaching the target location.\"\n}<|im_end|>",
+  "text": "{\n  \"outcome\": \"success\",\n  \"action_count\": 82,\n  \"cited_frames\": [0, 20, 41, 62, 82],\n  \"explanation\": \"The recorded facts confirm a successful outcome within 82 actions. Visually, the wrist camera shows the gripper approaching the black bowl (frames 41-62) and then retracting. The main camera shows the black bowl moving from the table surface to the plate between frames 62 and 82. The images are consistent with the recorded success, showing the object reaching the target location.\"\n}",
+  "prompt_tokens": 1284,
+  "completion_tokens": 138,
+  "budget_reached": false,
+  "generation_seconds": 22.205218717921525,
+  "cuda_peak_allocated_bytes": 30966130688,
+  "generation": {
+    "max_new_tokens": 512,
+    "temperature": 0.6,
+    "top_p": 0.9,
+    "top_k": 20,
+    "enable_thinking": false
+  },
+  "protocol_sha256": "87719738bef8021cb646de399be4987185d1eddc78de1eb35e1c8f44183e3d04"
+}

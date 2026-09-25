@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Review Qwen3.8 explanations alongside recorded SmolVLA robot episodes and independently checked facts.">
+<title>Model explanations, recorded evidence — Robot Reel</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#090f17;color:#e7edf5}*{box-sizing:border-box}body{margin:0}main{max-width:1180px;margin:auto;padding:32px 24px 80px}a{color:#80e6cf}header{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:56px}.eyebrow{font-size:12px;letter-spacing:.15em;color:#80e6cf;font-weight:700}h1{font-size:clamp(36px,6vw,68px);line-height:1.08;max-width:850px;margin:20px 0}h2{font-size:24px}.intro{color:#aebdce;line-height:1.7;max-width:850px}.bar{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}button,.download{border:1px solid #344457;background:#142030;color:#e7edf5;border-radius:8px;padding:11px 16px;font:inherit;cursor:pointer;text-decoration:none}button[aria-pressed=true]{border-color:#80e6cf;color:#80e6cf;background:#17312f}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #f9c878;outline-offset:4px}.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px}.panel{background:#101a27;border:1px solid #27384b;border-radius:16px;padding:22px;min-width:0}.cameras{display:grid;grid-template-columns:1fr 1fr;gap:12px}video{width:100%;background:#080d14;border-radius:8px}figure{margin:0}figcaption,.muted{font-size:13px;color:#aebdce;line-height:1.6}.facts{display:flex;gap:24px;flex-wrap:wrap;margin:24px 0}.facts strong{display:block;font-size:24px;color:#80e6cf}.facts span{color:#aebdce;font-size:13px}table{border-collapse:collapse;width:100%;font-size:14px}td,th{text-align:left;padding:12px 6px;border-bottom:1px solid #27384b;overflow-wrap:anywhere}.matched{color:#80e6cf}.contradicted{color:#ffad9a}.unassessed{color:#f9c878}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#080e17;padding:16px;border-radius:8px;font-size:12px;line-height:1.55}#explanation{line-height:1.7;white-space:pre-wrap}details{margin-top:24px}summary{cursor:pointer;color:#80e6cf}details img{width:100%;max-width:768px;margin-top:16px}footer{margin-top:56px;line-height:1.7;color:#aebdce}noscript{display:block;padding:20px}.scope{border-left:3px solid #f9c878;padding-left:16px;margin:20px 0;color:#c6d0dd;line-height:1.7}@media(max-width:780px){main{padding:24px 16px}.grid{grid-template-columns:1fr}header{margin-bottom:32px}.panel{padding:16px}.cameras{gap:8px}button{padding:10px 12px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+td:last-child,th:last-child{white-space:nowrap}
+</style></head>
+<body><main>
+<header><a href="../">ROBOT REEL</a><a class="download" href="review.zip" download>Download offline review</a></header>
+<p class="eyebrow">QWEN3.8 + RECORDED SMOLVLA EPISODES</p>
+<h1>Review a robot failure.<br>Keep the evidence.</h1>
+<p class="intro">Read a model's explanation beside the original camera views. Compare what it says from sampled images with what it says after receiving the outcome record. Check the concrete facts independently.</p>
+<p class="scope">Three selected episodes, six actual model outputs, one generation per mode. These are recorded simulations. Explanations are interpretations; the checks below do not establish a physical cause.</p>
+<nav class="bar" aria-label="Recorded episode" id="episodes"></nav>
+<div class="facts"><div><strong id="record-outcome"></strong><span>recorded outcome</span></div><div><strong id="record-actions"></strong><span>recorded actions</span></div><div><strong id="record-condition"></strong><span>rendering condition</span></div></div>
+<div class="grid">
+<section class="panel"><h2>Replay the original episode</h2><div class="cameras"><figure><video id="main-video" controls preload="none" playsinline aria-label="Main camera"></video><figcaption>Main camera · playback controls</figcaption></figure><figure><video id="wrist-video" muted preload="none" playsinline aria-label="Wrist camera"></video><figcaption>Wrist camera · follows main camera</figcaption></figure></div><p class="muted">The model received five labeled samples from each camera. The videos retain all recorded frames; they are lossy viewing derivatives.</p><p><a id="trace-link">Download trace</a> · <a id="source-link">Original episode source</a></p><details><summary>See the exact image supplied to the model</summary><img id="sheet" alt="Five labeled main and wrist camera samples" loading="lazy"></details></section>
+<section class="panel"><h2>Compare the two reviews</h2><div class="bar" id="modes"><button data-mode="images-only" aria-pressed="true">Images only</button><button data-mode="with-record" aria-pressed="false">Images + record</button></div><p id="mode-note" class="muted"></p><p id="explanation"></p><p class="muted">Explanation: not assessed by the fact checker.</p><table><thead><tr><th>Claim</th><th>Model</th><th>Check</th></tr></thead><tbody id="checks"></tbody></table><details><summary>Original output and generation settings</summary><pre id="raw"></pre><a id="raw-link">Download original generation</a></details></section>
+</div>
+<details><summary>Method, limits and reproduction</summary><p class="intro">The episodes are the previously published seed-09 reference, dim and camera conditions. The same task and initial physics were recorded across those conditions. Selection predates these reviews. Each mode receives the same contact sheet, with the recorded facts added only in the second mode. Added facts change the prompt; the comparison does not isolate visual ability.</p><p class="intro">Qwen/Qwen3.8-27B-FP8 is fixed to revision 017b9c7af6b5689d5dd426a76e0bc077eb5ca20a. Generation uses seed 17, temperature 0.6 and at most 512 new tokens. The source bundle retains the protocol, hashes, raw outputs, runtime identity and every check. A model that repeats a supplied field has demonstrated record reading, not independent discovery.</p><pre>robot-reel review-claims trace.json claims.json --output review.json</pre><p class="intro">The offline checker compares outcome and action count, and checks whether cited frame labels exist. It does not verify that a cited image supports the explanation or authenticate the supplied trace.</p><p><a href="review.json">All review results</a> · <a href="protocol.json">Frozen protocol</a> · <a href="sources.json">Source hashes</a> · <a href="NOTICE.txt">Media attribution</a></p></details>
+<footer>Robot Reel · Independent community project.<br><a href="https://github.com/noteflowai/robot-reel/blob/main/docs/model-review.md">Reproduce this review</a> · <a href="../stress/">Explore all recorded stress trials</a></footer>
+<noscript>This interactive comparison requires JavaScript. Download the offline review or open the linked JSON records to inspect the evidence.</noscript>
+</main>
+<script id="lab-data" type="application/json">__LAB_DATA__</script>
+<script>
+const data = JSON.parse(document.getElementById('lab-data').textContent);
+/** @param {string} id @returns {any} */
+const el = id => document.getElementById(id);
+/** @type {NodeListOf<HTMLButtonElement>} */
+const modeButtons = document.querySelectorAll('button[data-mode]');
+let episode = data.episodes[0], mode = 'images-only';
+const main = el('main-video'), wrist = el('wrist-video');
+function renderReview() {
+  for (const button of modeButtons) button.setAttribute('aria-pressed', String(button.dataset.mode === mode));
+  const selected = episode.reviews[mode];
+  el('mode-note').textContent = mode === 'images-only' ? 'Input: sampled images and task. No outcome record.' : 'Input: the same images, task and machine-readable outcome record.';
+  if (selected.display_claims) el('mode-note').textContent += ' Format failure: the original answer is wrapped in a Markdown fence. Its explanation is displayed for reading only; the strict JSON checks remain failed.';
+  el('explanation').textContent = selected.claims?.explanation || selected.display_claims?.explanation || 'The model output could not be parsed as the required claims object. Inspect the original output below.';
+  el('raw').textContent = JSON.stringify(selected.record, null, 2);
+  el('raw-link').href = `recorded/${episode.id}-${mode}-17.json`;
+  el('checks').replaceChildren();
+  for (const check of selected.review.checks || [{claim:'input', claimed:'invalid', status:'unassessed'}]) {
+    const row = document.createElement('tr');
+    for (const value of [check.claim.replaceAll('_', ' '), JSON.stringify(check.claimed), check.status]) { const cell = document.createElement('td'); cell.textContent = value; row.append(cell); }
+    row.lastElementChild.className = check.status; el('checks').append(row);
+  }
+}
+function selectEpisode(selected) {
+  main.pause(); wrist.pause(); episode = selected;
+  for (const button of el('episodes').children) button.setAttribute('aria-pressed', String(button.dataset.episode === episode.id));
+  for (const [video, camera] of [[main,'main'],[wrist,'wrist']]) { video.src = `media/${episode.id}/${camera}.mp4`; video.poster = `media/${episode.id}/${camera}-poster.png`; }
+  el('record-outcome').textContent = episode.record.outcome.replaceAll('_',' ');
+  el('record-actions').textContent = String(episode.record.actions);
+  el('record-condition').textContent = episode.condition;
+  el('trace-link').href = `media/${episode.id}/trace.json`;
+  el('source-link').href = `https://github.com/noteflowai/robot-reel/tree/${episode.source_commit}/${episode.source_directory}`;
+  el('sheet').src = episode.sheet; renderReview();
+}
+for (const item of data.episodes) { const button = document.createElement('button'); button.textContent = item.condition; button.dataset.episode = item.id; button.addEventListener('click', () => selectEpisode(item)); el('episodes').append(button); }
+for (const button of modeButtons) button.addEventListener('click', () => { mode = button.dataset.mode; renderReview(); });
+main.addEventListener('play', () => { wrist.currentTime = main.currentTime; wrist.play().catch(() => {}); });
+main.addEventListener('pause', () => wrist.pause());
+main.addEventListener('seeked', () => { wrist.currentTime = main.currentTime; });
+main.addEventListener('timeupdate', () => { if (Math.abs(main.currentTime-wrist.currentTime) > 0.15) wrist.currentTime = main.currentTime; });
+selectEpisode(episode);
+</script></body></html>

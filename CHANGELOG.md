@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.16.0 — 2026-09-25
+
+- Add `robot-reel review-claims` to compare structured model claims with recorded VLA outcomes, action counts and frame labels without inference. Unknown claims remain unassessed; visual explanations are never automatically verified.
+- Publish a Qwen3.8-27B-FP8 review of three existing SmolVLA episodes with six original outputs, exact image inputs, both prompt modes, paired playback and a complete offline download.
+- Preserve pinned source media, runtime loading diagnostics, all model outputs and reproducible fact checks.
+
 ## Unreleased
 
 ## 0.15.0 — 2026-09-25
