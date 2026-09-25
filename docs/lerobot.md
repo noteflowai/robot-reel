@@ -15,10 +15,9 @@ joints, 303 frames at 30 fps.
 ## Quick start
 
 ```bash
-git clone https://github.com/noteflowai/robot-reel.git
-cd robot-reel
-python3.12 -m venv .venv && source .venv/bin/activate
-pip install -e '.[lerobot]'
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install 'robot-reel[lerobot]==0.15.0'
 
 # Any public Hub dataset; only the files this episode needs are downloaded.
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
