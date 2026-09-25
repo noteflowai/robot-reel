@@ -39,6 +39,11 @@ Seven interactive experiments include their original recordings, source data
 and downloadable files. Start with a workflow below; no installation or
 model-service account is needed to explore.
 
+Install the CLI from [PyPI](https://pypi.org/project/robot-reel/) with
+`python -m pip install robot-reel==0.15.0` (Python 3.12+).
+See the [installation guide](https://github.com/noteflowai/robot-reel/blob/main/docs/distribution.md)
+for optional dependencies and verified downloads.
+
 ## Choose a starting point
 
 - **Policy review:** compare paired outcomes in SmolVLA Stress Lab, then inspect

@@ -62,7 +62,17 @@ Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回
 [场景库](https://noteflowai.github.io/robot-reel/#demos)支持按策略运行、实验对照和
 三维创作筛选；预览点击后播放。
 
-Python 3.12+，只需标准库就能校验一份真实录制：
+使用 Python 3.12+，从 [PyPI](https://pypi.org/project/robot-reel/0.15.0/)
+安装已发布的命令行工具：
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install robot-reel==0.15.0
+robot-reel --help
+```
+
+也可以直接校验源码仓库中的录制；这条路径只需 Python 3.12+ 和标准库：
 
 ```bash
 git clone https://github.com/noteflowai/robot-reel.git
@@ -81,7 +91,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 
 [![在 Colab 中打开](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/noteflowai/robot-reel/blob/main/examples/quickstart.ipynb)
 也可以使用[经过验证的安装包或普通用户 Docker 镜像](docs/distribution.md)；
-安装包发布在 GitHub Releases，容器支持按宿主机 UID/GID 写出文件。
+PyPI 与 GitHub Releases 提供相同的 wheel 和源码包，容器支持按宿主机 UID/GID 写出文件。
 录制新的运行需要[完整运行环境](docs/recording.zh-CN.md)。
 在线回放可直接在浏览器中打开，无需在本机安装仿真环境。
 
@@ -94,7 +104,7 @@ python3 -m robot_reel.cli direct docs/compare/braking \
 SHA-256；`--check-source` 会重新读取数据集逐值比对。支持 v3.0 与 v2.x，无需安装 LeRobot。
 
 ```bash
-pip install -e '.[lerobot]'
+python -m pip install 'robot-reel[lerobot]==0.15.0'
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
 robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 ```

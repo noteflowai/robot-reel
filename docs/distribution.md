@@ -1,10 +1,22 @@
 # Installing and releasing Robot Reel
 
 Python 3.12 or newer is required. The browser demos need no installation.
-Published wheels and source distributions are available from
-[GitHub Releases](https://github.com/noteflowai/robot-reel/releases).
-PyPI publishing is optional and is not enabled for this release; do not assume
-that `pip install robot-reel` resolves to this project's current version.
+Version **0.15.0** is available from
+[PyPI](https://pypi.org/project/robot-reel/0.15.0/) and
+[GitHub Releases](https://github.com/noteflowai/robot-reel/releases/tag/v0.15.0).
+Both channels serve the same wheel and source distribution, checked by SHA-256.
+
+Install the CLI in a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install robot-reel==0.15.0
+robot-reel --help
+```
+
+To read a LeRobot dataset, install its optional dependencies with
+`python -m pip install 'robot-reel[lerobot]==0.15.0'`.
 
 The release also includes `robot-reel-seed-09.rrd`: the verified native
 [Rerun recording](telemetry.md#native-rerun-workspace), with six embedded videos
@@ -19,8 +31,8 @@ Starting with 0.7.0, releases also include `robot-reel-cloth-experiment.zip`
 and its standalone USD scene. The installed CLI verifies and re-exports the
 complete cloth experiment without Newton, Blender, a GPU or a source checkout.
 
-Download the wheel and `SHA256SUMS` from the same release, then install the
-downloaded file in a virtual environment:
+For a downloaded installation with an explicit checksum check, get the wheel
+and `SHA256SUMS` from the same GitHub release, then install in a virtual environment:
 
 ```bash
 # Run from the directory containing the downloaded release files.
@@ -156,7 +168,7 @@ tested wheel, source distribution, four offline ZIPs, cloth USD, sample reviews 
 with SHA-256 checksums. It does not rebuild different artifacts after validation.
 The native Rerun recording is copied from the same checked commit and included
 in those checksums. The release assembler rejects missing, stale or extra files.
-Offline artifacts remain separate from Python distributions, so optional PyPI
+Offline artifacts remain separate from Python distributions, so PyPI
 publishing receives only the wheel and source distribution.
 Files are uploaded to a draft first. The uploader validates the complete local
 SHA256SUMS inventory, the tag's source commit, and every existing remote asset's
@@ -184,8 +196,15 @@ then verify its public downloads. A mismatch requires investigation; preserve
 the existing files. The 0.10.0 recovery is recorded in
 [the publication receipts](../notes/outreach/publication-0.10.0.json).
 
-PyPI publishing additionally requires the project's trusted publisher and the
-GitHub `pypi` environment to be configured, then the repository variable
-`PYPI_PUBLISH_ENABLED` set to `true`. Until then the PyPI job is skipped and
-GitHub Releases remains the installation channel. Existing recorded-data
-release assets retain their original versioned URLs.
+The canonical repository's PyPI trusted publisher uses owner `noteflowai`,
+repository `robot-reel`, workflow `release.yml` and environment `pypi`.
+`PYPI_PUBLISH_ENABLED=true` enables the release workflow's PyPI job. A repository
+without that setup skips PyPI publishing and still publishes GitHub Releases.
+
+Version 0.15.0 was first published to PyPI on September 25, 2026, by rerunning
+only the previously skipped `publish` job of its successful release run.
+The job used the original, unexpired `dist` artifact. Both public PyPI files
+matched the GitHub release hashes; a fresh Python 3.12 environment installed
+the package and its dependencies, passed `pip check`, and verified the LeRobot
+example including all 606 camera frames. Existing recorded-data release assets
+retain their original versioned URLs.
