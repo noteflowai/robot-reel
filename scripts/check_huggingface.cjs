@@ -30,7 +30,7 @@ async function check(directory){
  try{
   for(const width of [1440,390]){
    const page=await browser.newPage({viewport:{width,height:1000},reducedMotion:'reduce'}),errors=[],missing=[],external=[],requests=[];
-    page.on("request", request=>requests.push(request.url()));
+   page.on("request", request=>requests.push(request.url()));
    page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)missing.push(r.url());});
    await page.route(/^https?:/,route=>{const host=new URL(route.request().url()).hostname;if(!['localhost','127.0.0.1'].includes(host)){external.push(route.request().url());return route.abort();}return route.continue();});
    await page.goto(`http://localhost:${server.address().port}/embed`);
@@ -43,7 +43,8 @@ async function check(directory){
    assert.ok(!homeText.includes('\uFFFD'));
    const home=page.frames().find(f=>f.url().includes('127.0.0.1'));
    assert.equal(await home.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-   assert.equal(await frame.locator('video').evaluate(v=>v.paused&&v.preload==='none'),true);
+   assert.equal(await frame.locator('.hero video').evaluate(v=>v.paused&&v.preload==='none'),true);
+   await checkAIWalkthrough(frame,requests);
    for(const [lab,fragment] of [['cloth','frame=61&case=1&view=overlay&yaw=-0.9'],['stress','seed=9&condition=dim&frame=61&camera=wrist'],['chaos','frame=61&world=4&view=overlay'],['microduck-lab','run=right&frame=61&joint=3']]){
     const inside=page.frames().find(f=>f.url().includes('127.0.0.1'));
     await inside.goto(`http://127.0.0.1:${server.address().port}/${lab}/index.html#${fragment}`);
