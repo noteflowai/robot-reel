@@ -34,6 +34,19 @@
 
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
 
+## Review an AI explanation against the run
+
+[Open the Qwen3.8 robot review](https://noteflowai.github.io/robot-reel/model-review/):
+compare six actual model outputs with three original SmolVLA episodes, sampled images
+and recorded facts. Switch between images only and images plus the outcome record.
+
+```sh
+robot-reel review-claims trace.json claims.json --output review.json
+```
+
+Check outcomes, action counts and cited frame labels offline. Explanations remain
+unverified interpretations. [Method, complete records and tutorial](docs/model-review.md).
+
 ## Choose your workflow
 
 Robot Reel packages policy simulations and 3D scene edits into replayable
@@ -66,13 +79,13 @@ compare a real paired outcome, inspect its native Rerun workspace, then verify
 the full experiment locally. The [demo gallery](https://noteflowai.github.io/robot-reel/#demos)
 filters policy runs, comparison experiments and 3D creation; previews play on request.
 
-Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.15.0/)
+Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.16.0/)
 with Python 3.12+:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install robot-reel==0.15.0
+python -m pip install robot-reel==0.16.0
 robot-reel --help
 ```
 
@@ -111,7 +124,7 @@ the dataset and compares every value. Supports v3.0 and v2.x; LeRobot itself
 is not required.
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.15.0'
+python -m pip install 'robot-reel[lerobot]==0.16.0'
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
 robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 ```

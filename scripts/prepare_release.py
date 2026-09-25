@@ -39,6 +39,11 @@ def prepare(source, distributions, offline, output):
     with tempfile.TemporaryDirectory(prefix="robot-reel-release-") as temporary:
         for path in fetch_assets(source, Path(temporary)/"research"):
             shutil.copyfile(path, output/path.name)
+    model_review = source/"docs/model-review"
+    if model_review.exists():
+        from build_model_review import verify as verify_model_review
+        verify_model_review(model_review)
+        shutil.copyfile(model_review/"review.zip", output/"robot-reel-model-review.zip")
     paths = sorted(output.iterdir())
     (output/"SHA256SUMS").write_text("".join(
         f"{hashlib.sha256(path.read_bytes()).hexdigest()}  {path.name}\n" for path in paths

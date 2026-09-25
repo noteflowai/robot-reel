@@ -49,6 +49,8 @@ jobs:
         run: npm run check:js
       - run: npx playwright install --with-deps chromium
       - run: npm test
+      - name: Check actual model review offline
+        run: node scripts/check_model_review.cjs
       - name: Build and exercise the native Hugging Face Space inside an embedded host
         run: |
           python scripts/build_huggingface.py --output artifacts/huggingface-space

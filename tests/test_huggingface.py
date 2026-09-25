@@ -24,7 +24,7 @@ class HuggingFaceSpaceTests(unittest.TestCase):
 
     def test_package_preserves_original_evidence_and_includes_no_private_workspace(self):
         manifest = verify(self.site)
-        # Seven labs include 24 MB of new scene/native policy evidence, loaded on demand.
+        # Recorded labs include scene/native policy evidence and model review, loaded on demand.
         self.assertLess(self.result["bytes"], 160*1024*1024)
         self.assertNotIn(".git", {p.name for p in self.site.iterdir()})
         self.assertTrue(all(path.startswith(tuple(f"docs/{lab}/" for lab in LABS))
@@ -32,7 +32,7 @@ class HuggingFaceSpaceTests(unittest.TestCase):
                             ("LICENSE", "pyproject.toml", "docs/showcase/butterfly-preview.mp4")
                             for path in manifest["source_files"]))
         transformed = {f"{lab}/{name}" for lab in LABS for name in
-                       ("index.html", "manifest.json", "showcase-manifest.json", "experiment.zip")}
+                       ("index.html", "manifest.json", "showcase-manifest.json", "experiment.zip", "review.zip")}
         count = 0
         for original, checksum in manifest["source_files"].items():
             if not original.startswith("docs/") or original.startswith("docs/showcase/"):

@@ -1,4 +1,4 @@
-# Robot Reel 0.15.0 — choose an offline lab
+# Robot Reel 0.16.0 — choose an offline lab
 
 Download these files from the same Robot Reel GitHub release:
 
@@ -13,7 +13,7 @@ Download these files from the same Robot Reel GitHub release:
 | `robot-reel-microduck-frame.json` | Matching frame 120 / left_knee sample for independent checks |
 | `robot-reel-solver-experiment.zip` | Six CUDA flights, analytic diagnostics, native Genesis replay and editable USD |
 | `SHA256SUMS` | SHA-256 checksums for the release files |
-| `robot_reel-0.15.0-py3-none-any.whl` | Optional Python installation for independent checks and exports |
+| `robot_reel-0.16.0-py3-none-any.whl` | Optional Python installation for independent checks and exports |
 | `robot-reel-seed-09.rrd` | Optional native Rerun workspace; open in Rerun 0.37.2 |
 | `scene-lab-native.zip` | Scene Lab's packed baseline and edited Blender scenes with native checks |
 | `scene-motion-native.zip` | Both animated Microduck Blender projects, USD caches and a standalone checker |
@@ -22,6 +22,14 @@ Download these files from the same Robot Reel GitHub release:
 The Cloth, Stress, Microduck and Solver ZIPs open in a browser without Python,
 a GPU or a network connection. They contain recorded runs; opening them does not
 execute policy inference or cloth simulation. Keep the experiments in separate extracted folders.
+
+## Model explanation review
+
+`robot-reel-model-review.zip` contains six Qwen3.8 outputs beside three recorded
+SmolVLA episodes, contact sheets, prompts, runtime identities and independent fact
+checks. Extract it and open `index.html`; the full source cameras are included.
+Use `robot-reel review-claims trace.json claims.json` to check facts without a model.
+Visual explanations remain unverified interpretations.
 
 ## Inspect timestep error
 
@@ -143,7 +151,7 @@ on Linux/macOS:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.15.0-py3-none-any.whl
+python -m pip install ./robot_reel-0.16.0-py3-none-any.whl
 robot-reel stress stress-lab --review robot-reel-seed-09-review.json
 ```
 
@@ -152,7 +160,7 @@ directly without changing its activation policy:
 
 ```powershell
 py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.15.0-py3-none-any.whl
+.\.venv\Scripts\python.exe -m pip install .\robot_reel-0.16.0-py3-none-any.whl
 .\.venv\Scripts\robot-reel.exe stress stress-lab --review robot-reel-seed-09-review.json
 ```
 

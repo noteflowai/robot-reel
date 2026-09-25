@@ -1,0 +1,34 @@
+{
+  "case_id": "episode-b-with-record",
+  "seed": 17,
+  "started_at": "2026-09-25T12:07:24.402485+00:00",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Review a recorded robot episode using the supplied contact sheet. Return ONLY one JSON object with outcome (\"success\", \"step_limit\", or \"unknown\"), action_count (integer or null), cited_frames (an array of integer frame labels from this sheet), and explanation (at most 90 words). Explain observed behavior and uncertainty. Do not claim that images alone establish the simulator's success criterion or a causal failure mechanism. If a machine-readable record is supplied, distinguish its facts from your visual interpretation. Never invent a measurement."
+    },
+    {
+      "role": "user",
+      "content": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. Recorded facts: {\"outcome\": \"step_limit\", \"actions\": 160, \"simulation_seconds\": 8.0, \"max_steps\": 160, \"condition\": \"dim\", \"physics_unchanged_by_condition\": true}. These record fields are authoritative for the checks; explain what the images additionally suggest."
+    }
+  ],
+  "images": [
+    "episode-b.png"
+  ],
+  "rendered_prompt": "<|im_start|>system\nReview a recorded robot episode using the supplied contact sheet. Return ONLY one JSON object with outcome (\"success\", \"step_limit\", or \"unknown\"), action_count (integer or null), cited_frames (an array of integer frame labels from this sheet), and explanation (at most 90 words). Explain observed behavior and uncertainty. Do not claim that images alone establish the simulator's success criterion or a causal failure mechanism. If a machine-readable record is supplied, distinguish its facts from your visual interpretation. Never invent a measurement.<|im_end|>\n<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. Recorded facts: {\"outcome\": \"step_limit\", \"actions\": 160, \"simulation_seconds\": 8.0, \"max_steps\": 160, \"condition\": \"dim\", \"physics_unchanged_by_condition\": true}. These record fields are authoritative for the checks; explain what the images additionally suggest.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+  "raw_output": "{\n  \"outcome\": \"step_limit\",\n  \"action_count\": 160,\n  \"cited_frames\": [0, 40, 80, 120, 160],\n  \"explanation\": \"The robot arm approaches the target black bowl and closes the gripper, visible in wrist frames 80 and 120. However, by frame 160, the bowl remains on the table surface rather than being lifted or placed on the plate. The recorded step limit of 160 was reached without task completion.\"\n}<|im_end|>",
+  "text": "{\n  \"outcome\": \"step_limit\",\n  \"action_count\": 160,\n  \"cited_frames\": [0, 40, 80, 120, 160],\n  \"explanation\": \"The robot arm approaches the target black bowl and closes the gripper, visible in wrist frames 80 and 120. However, by frame 160, the bowl remains on the table surface rather than being lifted or placed on the plate. The recorded step limit of 160 was reached without task completion.\"\n}",
+  "prompt_tokens": 1286,
+  "completion_tokens": 127,
+  "budget_reached": false,
+  "generation_seconds": 20.798092374112457,
+  "cuda_peak_allocated_bytes": 30964630016,
+  "generation": {
+    "max_new_tokens": 512,
+    "temperature": 0.6,
+    "top_p": 0.9,
+    "top_k": 20,
+    "enable_thinking": false
+  },
+  "protocol_sha256": "87719738bef8021cb646de399be4987185d1eddc78de1eb35e1c8f44183e3d04"
+}

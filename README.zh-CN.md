@@ -34,6 +34,19 @@
 
 <p align="center"><sub>观看无需安装，无需账号。封面各面板展示独立录制的运行。</sub></p>
 
+## 对照原始回放，检查 AI 的解释
+
+[打开 Qwen3.8 机器人复核页面](https://noteflowai.github.io/robot-reel/model-review/)：
+六次真实模型输出，对照三个原始 SmolVLA 片段、抽帧图和结果记录。
+可切换“只看图像”与“图像加结果记录”，完整数据支持离线下载。
+
+```sh
+robot-reel review-claims trace.json claims.json --output review.json
+```
+
+独立核对结果、动作数量和引用帧。模型解释仍是未验证的推断。
+[方法、原始记录与教程](docs/model-review.md)。
+
 ## 选择你的工作场景
 
 Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回放、数据与工程文件。
@@ -62,13 +75,13 @@ Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回
 [场景库](https://noteflowai.github.io/robot-reel/#demos)支持按策略运行、实验对照和
 三维创作筛选；预览点击后播放。
 
-使用 Python 3.12+，从 [PyPI](https://pypi.org/project/robot-reel/0.15.0/)
+使用 Python 3.12+，从 [PyPI](https://pypi.org/project/robot-reel/0.16.0/)
 安装已发布的命令行工具：
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install robot-reel==0.15.0
+python -m pip install robot-reel==0.16.0
 robot-reel --help
 ```
 
@@ -104,7 +117,7 @@ PyPI 与 GitHub Releases 提供相同的 wheel 和源码包，容器支持按宿
 SHA-256；`--check-source` 会重新读取数据集逐值比对。支持 v3.0 与 v2.x，无需安装 LeRobot。
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.15.0'
+python -m pip install 'robot-reel[lerobot]==0.16.0'
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
 robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 ```

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "episode-a",
+    "condition": "reference",
+    "source_directory": "docs/stress/runs/seed-09-reference/attempt-001",
+    "source_commit": "f24849dd13860dd6c6989977647aeb2a1ecd6b2c",
+    "frame_indexes": [
+      0,
+      20,
+      41,
+      62,
+      82
+    ],
+    "sheet": "episode-a.png",
+    "sheet_sha256": "572d176634ce8a25530c89814452383182a33060539630d514d532dd39ff892a",
+    "files": {
+      "trace.json": "368c1b8389568c4174bc11b2f745e23ddc41932480a5decc782c1d65e5ef9f91",
+      "main.mp4": "1cfeba287c96b10902f4dede55dd8410303c3a79851bcb38fbd0e54f8a0903e9",
+      "wrist.mp4": "7c635c6461a1544ecf836737508f5f7c61c706844ef78f24630597aaad9ac542"
+    },
+    "record": {
+      "outcome": "success",
+      "actions": 82,
+      "simulation_seconds": 4.1,
+      "max_steps": 160,
+      "condition": "reference",
+      "physics_unchanged_by_condition": true
+    }
+  },
+  {
+    "id": "episode-b",
+    "condition": "dim",
+    "source_directory": "docs/stress/runs/seed-09-dim/attempt-001",
+    "source_commit": "f24849dd13860dd6c6989977647aeb2a1ecd6b2c",
+    "frame_indexes": [
+      0,
+      40,
+      80,
+      120,
+      160
+    ],
+    "sheet": "episode-b.png",
+    "sheet_sha256": "3f5b2cbea4dd8f0329beec0b4ff2f2634dabed15dc1e13263d6f632293e917fc",
+    "files": {
+      "trace.json": "0cbf0b757761b6cfaca22465055c834c2e720f972b3f8da8924b7850c341182d",
+      "main.mp4": "184b7309bd7774dbbedde700dfead510963c9e99fdd83b82c73e40186ac7f953",
+      "wrist.mp4": "d04407c12d7ebeb66a8d60a23e7c1683f17335fa6708be28c3dac6a9f417fb24"
+    },
+    "record": {
+      "outcome": "step_limit",
+      "actions": 160,
+      "simulation_seconds": 8.0,
+      "max_steps": 160,
+      "condition": "dim",
+      "physics_unchanged_by_condition": true
+    }
+  },
+  {
+    "id": "episode-c",
+    "condition": "camera",
+    "source_directory": "docs/stress/runs/seed-09-camera/attempt-001",
+    "source_commit": "f24849dd13860dd6c6989977647aeb2a1ecd6b2c",
+    "frame_indexes": [
+      0,
+      40,
+      80,
+      120,
+      160
+    ],
+    "sheet": "episode-c.png",
+    "sheet_sha256": "9af17b13f83578c7b513a09f0178fe0841019682d34991226d9c15175e81974e",
+    "files": {
+      "trace.json": "0136050c891ab7488e13c5bad83994f477643ff55827d31d558ce5b449c257f0",
+      "main.mp4": "1fdaa6de0f2e62fb8c334d9afc499645728a3b59f8d73029fbe7049f08dc0b91",
+      "wrist.mp4": "657536361a9a88fa025558e802edde7431ebb1ae193fcfd72d4480f22c3d781d"
+    },
+    "record": {
+      "outcome": "step_limit",
+      "actions": 160,
+      "simulation_seconds": 8.0,
+      "max_steps": 160,
+      "condition": "camera",
+      "physics_unchanged_by_condition": true
+    }
+  }
+]

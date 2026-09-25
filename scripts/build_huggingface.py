@@ -22,11 +22,12 @@ from robot_reel.stress_site import verify_site as verify_stress
 from scripts.build_cloth_showcase import verify_showcase as verify_cloth
 from scripts.build_chaos_showcase import verify_showcase as verify_chaos
 from scripts.build_microduck_lab import verify_showcase as verify_microduck
+from scripts.build_model_review import verify as verify_model_review
 from robot_reel.solver_lab import verify as verify_solver
 from robot_reel.scene_lab import verify as verify_scene
 from robot_reel.libero_plus_site import verify as verify_plus
 
-LABS = ("cloth", "stress", "chaos", "microduck-lab", "solver-lab", "scene-lab", "libero-plus")
+LABS = ("cloth", "stress", "chaos", "microduck-lab", "solver-lab", "scene-lab", "libero-plus", "model-review")
 SOURCE = "https://github.com/noteflowai/robot-reel"
 SITE = "https://noteflowai.github.io/robot-reel/"
 SCHEMA = "robot-reel-space-1"
@@ -118,6 +119,7 @@ def verify(directory):
     verify_solver(directory/"solver-lab")
     verify_scene(directory/"scene-lab")
     verify_plus(directory/"libero-plus")
+    verify_model_review(directory/"model-review")
     if cloth["vertex_samples"] != 42471 or stress["completed_trials"] != 30:
         raise ValueError("Space evidence counts differ from the advertised experiments")
     return record
