@@ -1,0 +1,9 @@
+The camera clips and recorded values in this folder come from episode 0 of the
+Hugging Face dataset lerobot/svla_so101_pickplace, commit
+f641879e22172be7e8161d5e6c1503c2d2feb657:
+https://huggingface.co/datasets/lerobot/svla_so101_pickplace
+
+The dataset card lists the Apache License 2.0. The clips were cut from the
+source AV1 videos and re-encoded as H.264; episode.json records the SHA-256 of
+every source file used. Robot Reel is an independent project; no endorsement
+by Hugging Face or the LeRobot team is implied.

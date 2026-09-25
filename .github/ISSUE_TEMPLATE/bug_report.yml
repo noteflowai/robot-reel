@@ -44,6 +44,7 @@ body:
         - robot-reel mcp (MCP director server)
         - robot-reel vla
         - robot-reel stress
+        - robot-reel lerobot (LeRobotDataset replay; include the repo id or format version)
         - python -m robot_reel.chaos
         - python -m robot_reel.pages
         - Demo page (replay / comparison / newton / director / vla / chaos / stress)

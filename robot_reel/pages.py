@@ -44,6 +44,7 @@ PAGES = {
     "docs/scene-lab/index.html": "robot_reel/scene_lab.html",
     "docs/libero-plus/index.html": "robot_reel/libero_plus.html",
     "docs/stress/index.html": "robot_reel/stress.html",
+    "docs/lerobot/index.html": "robot_reel/lerobot.html",
     "docs/blender/index.html": "scripts/blender_demo.html",
     "docs/remix/index.html": "scripts/remix_demo.html",
 }

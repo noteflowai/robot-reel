@@ -24,7 +24,7 @@ robot-reel = "robot_reel.cli:main"
 include = ["robot_reel*"]
 
 [tool.setuptools.package-data]
-robot_reel = ["replay.html", "comparison.html", "newton.html", "cloth.html", "solver_lab.html", "scene_lab.html", "scene_lab.js", "scene_motion_view.js", "libero_plus.html", "libero_plus.js", "director.html", "vla.html", "chaos.html", "stress.html", "resources/stress/*.txt", "resources/cloth/*.txt"]
+robot_reel = ["replay.html", "comparison.html", "newton.html", "cloth.html", "solver_lab.html", "scene_lab.html", "scene_lab.js", "scene_motion_view.js", "libero_plus.html", "libero_plus.js", "lerobot.html", "director.html", "vla.html", "chaos.html", "stress.html", "resources/stress/*.txt", "resources/cloth/*.txt"]
 
 [project.optional-dependencies]
 microduck = ["onnxruntime==1.30.0"]
@@ -32,6 +32,7 @@ newton = ["newton==1.6.0", "warp-lang==1.17.0", "usd-core==26.3"]
 director = ["mcp==2.1.1"]
 inspect = ["mcap==1.4.0"]
 rerun = ["rerun-sdk==0.37.2"]
+lerobot = ["pyarrow>=15", "huggingface_hub>=0.25"]
 
 [project.urls]
 Homepage = "https://noteflowai.github.io/robot-reel/"

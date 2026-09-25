@@ -1002,6 +1002,55 @@ test('VLA synchronizes both camera views, applied controls and terminal observat
     assert.deepEqual(await readFile(await (await pending).path()),await readFile('docs/vla/episode.zip'));
   }finally{await page.close();}
 });
+test('LeRobot episode replay keeps cameras, joint panels and largest command gaps on one frame',async()=>{
+  const page=await browser.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.goto(base+'/lerobot/#frame=150');
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=1&&Math.abs(v.currentTime-150.5/30)<.01));
+    const data=await page.evaluate(()=>JSON.parse(document.querySelector('#episode-data').textContent));
+    const [action,state]=['action','observation.state'].map(key=>data.series.find(s=>s.key===key));
+    assert.equal(await page.locator('#counter').textContent(),'Frame 150 / 302');
+    assert.equal(await page.locator('#task').textContent(),'pink lego brick into the transparent box');
+    assert.equal(await page.locator('.chart').count(),6);
+    assert.equal(await page.locator('.chart').first().locator('.values b').first().textContent(),action.values[150][0].toFixed(3));
+    // Each jump goes to the recorded frame with the largest |action - state| for that joint.
+    const gaps=action.names.map((_,i)=>{let best=-1,at=0;action.values.forEach((row,f)=>{const d=Math.abs(row[i]-state.values[f][i]);if(d>best){best=d;at=f;}});return at;});
+    for(const [i,at] of gaps.entries()){
+      await page.locator('.gap').nth(i).click();
+      assert.equal(await page.locator('#counter').textContent(),`Frame ${at} / 302`);
+    }
+    await page.locator('body').click({position:{x:5,y:5}});
+    await page.keyboard.press('Home');await page.keyboard.press('ArrowRight');
+    assert.equal(await page.locator('#counter').textContent(),'Frame 1 / 302');
+    const canvas=page.locator('canvas').first(),box=await canvas.boundingBox();
+    await canvas.click({position:{x:box.width/2,y:box.height/2}});
+    assert.equal(await page.locator('#counter').textContent(),'Frame 151 / 302');
+    await page.keyboard.press('End');
+    assert.equal(await page.locator('#counter').textContent(),'Frame 302 / 302');
+    await page.keyboard.press('Home');
+    await page.locator('#play').click();
+    await page.waitForFunction(()=>document.querySelector('video').currentTime>1);
+    await page.locator('#play').click();
+    assert.ok(await page.evaluate(()=>{const [a,b]=document.querySelectorAll('video');return Math.abs(a.currentTime-b.currentTime)<.1;}));
+    await page.locator('#share').click();
+    assert.match(page.url(),/#frame=\d+$/);
+    assert.equal(await page.locator('#visualizer').getAttribute('href'),'https://huggingface.co/spaces/lerobot/visualize_dataset?path=/lerobot/svla_so101_pickplace/episode_0');
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+test('LeRobot episode replay opens offline on mobile without overflow',async()=>{
+  const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.route(/^https?:/,route=>route.abort());
+    await page.goto(pathToFileURL(resolve('docs/lerobot/index.html')).href+'#frame=40');
+    await page.waitForFunction(()=>[...document.querySelectorAll('video')].every(v=>v.readyState>=1));
+    assert.equal(await page.locator('#counter').textContent(),'Frame 40 / 302');
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+    await page.locator('#share').click();
+    assert.equal(await page.locator('#status').textContent(),'Share this folder and frame 40.');
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
 for(const pack of ['director','vla']){
   test(`${pack} works offline on mobile with keyboard stepping and no overflow`,async()=>{
     const page=await browser.newPage({viewport:{width:390,height:844}});
@@ -1202,7 +1251,7 @@ test('landing page indexes every published demo and copies the quick start',asyn
   try{
     await page.goto(base+'/');
     const cards=page.locator('.card');
-    assert.equal(await cards.count(),17);
+    assert.equal(await cards.count(),18);
     const hrefs=await cards.evaluateAll(links=>links.map(link=>link.getAttribute('href')));
     for(const href of hrefs){
       assert.ok(existsSync(resolve('docs',href,'index.html')),`${href} has no published page`);
@@ -1277,10 +1326,10 @@ test('homepage purpose filters preserve keyboard focus, share links and browser 
     await page.locator('[data-filter="experiments"]').click();
     assert.deepEqual(await visible(),['braking/','chaos/','cloth/','compare/braking/','compare/microduck/','libero-plus/','microduck-lab/','newton/','scene-lab/','solver-lab/','stress/']);
     await page.locator('[data-filter="all"]').click();
-    assert.equal((await visible()).length,17);
+    assert.equal((await visible()).length,18);
     assert.equal(new URL(page.url()).searchParams.has('category'),false);
     await page.goto(base+'/?category=__proto__#demos');
-    assert.equal((await visible()).length,17);
+    assert.equal((await visible()).length,18);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   }finally{await page.close();}
 });
@@ -1320,7 +1369,7 @@ test('homepage remains navigable without JavaScript and its filters work from fi
     const page=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
     try{
       await page.goto(target);
-      assert.equal(await page.locator('#demo-grid .card:visible').count(),17);
+      assert.equal(await page.locator('#demo-grid .card:visible').count(),18);
       assert.equal(await page.locator('#filters').isVisible(),false);
       assert.equal(await page.locator('#copy').isVisible(),false);
       await page.locator('#tour-inspect').click();
@@ -1336,7 +1385,7 @@ test('homepage remains navigable without JavaScript and its filters work from fi
     await page.locator('[data-filter="create"]').click();
     assert.equal(await page.locator('#demo-grid .card:visible').count(),8);
     await page.locator('[data-filter="all"]').click();
-    assert.equal(await page.locator('#demo-grid .card:visible').count(),17);
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),18);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     assert.deepEqual(errors,[]);
   }finally{await page.close();}
