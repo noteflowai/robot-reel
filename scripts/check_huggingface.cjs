@@ -4,6 +4,7 @@ const {createServer}=require('node:http');
 const {readFile}=require('node:fs/promises');
 const {resolve,extname}=require('node:path');
 const {chromium}=require('playwright');
+const {checkAIWalkthrough}=require('./check_ai_walkthrough.cjs');
 
 async function check(directory){
  const root=resolve(directory);
@@ -16,7 +17,7 @@ async function check(directory){
   const path=resolve(root,'.'+decodeURIComponent(url.pathname.endsWith('/')?url.pathname+'index.html':url.pathname));
   if(!path.startsWith(root+'/')){res.writeHead(403).end();return;}
   try{
-   const bytes=await readFile(path),mime={'.html':'text/html','.mp4':'video/mp4','.png':'image/png','.json':'application/json'};
+   const bytes=await readFile(path),mime={'.html':'text/html','.mp4':'video/mp4','.png':'image/png','.json':'application/json','.vtt':'text/vtt'};
    res.setHeader('Content-Type',mime[extname(path)]||'application/octet-stream');
    const range=/^bytes=(\d+)-(\d*)$/.exec(req.headers.range||'');
    if(range){const start=Number(range[1]),end=Math.min(bytes.length-1,range[2]?Number(range[2]):bytes.length-1);
@@ -28,7 +29,8 @@ async function check(directory){
  const browser=await chromium.launch(),rows=[];
  try{
   for(const width of [1440,390]){
-   const page=await browser.newPage({viewport:{width,height:1000},reducedMotion:'reduce'}),errors=[],missing=[],external=[];
+   const page=await browser.newPage({viewport:{width,height:1000},reducedMotion:'reduce'}),errors=[],missing=[],external=[],requests=[];
+    page.on("request", request=>requests.push(request.url()));
    page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)missing.push(r.url());});
    await page.route(/^https?:/,route=>{const host=new URL(route.request().url()).hostname;if(!['localhost','127.0.0.1'].includes(host)){external.push(route.request().url());return route.abort();}return route.continue();});
    await page.goto(`http://localhost:${server.address().port}/embed`);

@@ -35,12 +35,12 @@ pinned: true
 # Give Physical AI a replay button.
 
 **Review policy behavior, inspect simulation error, and edit captured scenes.**
-Seven interactive experiments include their original recordings, source data
+Eight interactive experiments include their original recordings, source data
 and downloadable files. Start with a workflow below; no installation or
 model-service account is needed to explore.
 
 Install the CLI from [PyPI](https://pypi.org/project/robot-reel/) with
-`python -m pip install robot-reel==0.15.0` (Python 3.12+).
+`python -m pip install robot-reel==0.16.0` (Python 3.12+).
 See the [installation guide](https://github.com/noteflowai/robot-reel/blob/main/docs/distribution.md)
 for optional dependencies and verified downloads.
 
@@ -51,6 +51,10 @@ episodes. Compare sampled images with images plus outcome records, replay both
 cameras and download every response and independent fact check. Explanations
 remain unverified interpretations.
 [Method and source records](https://github.com/noteflowai/robot-reel/blob/main/docs/model-review.md).
+
+[First review with the published CLI](https://github.com/noteflowai/robot-reel/blob/main/docs/first-claim-review.md): Install the released CLI and check one original model response against its recorded robot trace.
+The 30-second walkthrough uses four annotated views of the actual interface,
+with captions and source hashes. No GPU or model-service account is needed.
 
 ## Choose a starting point
 

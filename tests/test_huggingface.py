@@ -29,7 +29,9 @@ class HuggingFaceSpaceTests(unittest.TestCase):
         self.assertNotIn(".git", {p.name for p in self.site.iterdir()})
         self.assertTrue(all(path.startswith(tuple(f"docs/{lab}/" for lab in LABS))
                             or path.startswith("huggingface/") or path in
-                            ("LICENSE", "pyproject.toml", "docs/showcase/butterfly-preview.mp4")
+                            ("LICENSE", "pyproject.toml", "docs/showcase/butterfly-preview.mp4",
+                             "docs/assets/ai-first-review.mp4", "docs/assets/ai-first-review.png",
+                             "docs/assets/ai-first-review.vtt", "docs/assets/ai-first-review-media.json")
                             for path in manifest["source_files"]))
         transformed = {f"{lab}/{name}" for lab in LABS for name in
                        ("index.html", "manifest.json", "showcase-manifest.json", "experiment.zip", "review.zip")}

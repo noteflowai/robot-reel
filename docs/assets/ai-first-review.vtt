@@ -1,0 +1,17 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.500
+Start with the recorded outcome.
+The dim episode reached its 160-action limit. This is an existing SmolVLA recording.
+
+00:00:07.500 --> 00:00:15.000
+Look at both original camera views.
+The model received five samples per camera. The viewer retains the full recorded clips.
+
+00:00:15.000 --> 00:00:22.500
+Keep the model's real format failure.
+The images-only answer wraps JSON in Markdown. Display extraction does not make it pass.
+
+00:00:22.500 --> 00:00:30.000
+Match facts. Leave the explanation unassessed.
+With the record supplied, facts match. Frame existence does not prove visual support or causality.

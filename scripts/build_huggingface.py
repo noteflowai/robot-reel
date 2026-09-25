@@ -149,6 +149,9 @@ def build(destination, *, root=ROOT, allow_dirty=False):
         "huggingface/thumbnail.json": "thumbnail.json", "huggingface/NOTICE.txt": "NOTICE.txt",
         "LICENSE": "LICENSE", "docs/showcase/butterfly-preview.mp4": "assets/butterfly-preview.mp4",
     })
+    for name in ("ai-first-review.mp4", "ai-first-review.png", "ai-first-review.vtt",
+                 "ai-first-review-media.json"):
+        inputs[f"docs/assets/{name}"] = f"assets/{name}"
     destination.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=".robot-reel-space-", dir=destination.parent) as temporary:
         stage = Path(temporary)/"docs"
