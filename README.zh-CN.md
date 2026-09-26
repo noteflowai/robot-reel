@@ -34,6 +34,8 @@
 
 <p align="center"><sub>观看无需安装，无需账号。封面各面板展示独立录制的运行。</sub></p>
 
+[首页](https://noteflowai.github.io/robot-reel/)在手机首屏呈现录制预览，点击后开始播放。使用 **Save this view as an image** 可保存当前预览帧或原始海报，图片注明来源、预览时间与仿真范围。
+
 ## 对照原始回放，检查 AI 的解释
 
 [打开 Qwen3.8 机器人复核页面](https://noteflowai.github.io/robot-reel/model-review/)：
