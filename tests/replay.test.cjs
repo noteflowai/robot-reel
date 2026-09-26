@@ -1260,6 +1260,19 @@ test('landing page indexes every published demo and copies the quick start',asyn
     await page.locator('#copy').click();
     await page.waitForFunction(()=>['Copied','Select and copy'].includes(document.querySelector('#copy').textContent));
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);
+    const imageDownload=page.waitForEvent('download');
+    await page.locator('#preview-image').click();
+    const imageBytes=await readFile(await (await imageDownload).path());
+    assert.equal(imageBytes.readUInt32BE(16),1200);
+    assert.equal(imageBytes.readUInt32BE(20),800);
+    assert(imageBytes.length>15000,'The image must contain the recorded poster');
+    await page.setViewportSize({width:390,height:844});
+    await page.evaluate(()=>window.scrollTo(0,0));
+    const preview=await page.locator('#hero-video').boundingBox();
+    assert(preview.y<420,'The recorded visual must appear in the first mobile viewport');
+    await page.locator('.nav-more summary').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('.nav-more').evaluate(element=>element.open),true);
   }finally{await page.close();}
 });
 test('landing page offers a portable native inspector without loading a viewer in the background',async()=>{

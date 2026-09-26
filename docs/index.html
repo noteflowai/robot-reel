@@ -57,22 +57,31 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin
 @media(max-width:560px){header,main,footer{padding:16px}.grid,.pillars{grid-template-columns:1fr}.tour{padding:18px}}
 
 .ai-tour{margin:24px 0;padding:18px;border:1px solid #48625e;border-radius:14px;background:#101b24;color:#edf5f2}.ai-tour summary{cursor:pointer;font-weight:650}.ai-tour video{display:block;width:100%;max-width:1000px;height:auto;margin:18px auto 0;background:#101618}.ai-tour p{font-size:14px;line-height:1.6}.ai-tour a{color:#80e6cf}
+
+/* A focused entry point with the recorded visual visible on phones. */
+header,main,footer{max-width:1280px}header{padding-block:18px;border-bottom:1px solid #ffffff16}.brand{font-size:21px;letter-spacing:-.04em}nav{align-items:center;gap:18px;letter-spacing:.02em;text-transform:none}nav>a,nav summary{display:flex;align-items:center;min-height:44px}nav details{position:relative}nav summary{cursor:pointer;list-style:none}nav summary::after{content:"+";margin-left:8px;color:var(--mint)}nav details[open] summary::after{content:"−"}nav details>div{position:absolute;right:0;top:48px;z-index:3;width:210px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#15212e;box-shadow:0 20px 45px #0007}nav details a{display:flex;align-items:center;min-height:44px;padding:6px 10px}summary:focus-visible{outline:3px solid var(--orange);outline-offset:4px}
+.hero{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:42px;padding:24px 0 12px}.hero h1{font-size:clamp(42px,5.3vw,67px);letter-spacing:-.045em;line-height:1.04;margin:18px 0 22px}.hero p{max-width:34ch;font-size:18px;line-height:1.65}.hero .note{font-size:12px;margin:14px 0 0}.hero .actions{gap:10px}.hero .button{font-size:13px;min-height:44px;padding:11px 15px}.hero-preview{padding:12px;border:1px solid #537267;border-radius:22px;background:radial-gradient(ellipse at top,#2a354a,#0a1620);box-shadow:0 24px 85px #0004}.hero-preview video{border:0;border-radius:12px}.preview-actions{justify-content:space-between;margin-top:10px}.preview-actions button{min-height:44px;background:var(--mint);color:#062018;font-weight:650}.preview-actions a{font-size:12px;min-height:44px;display:flex;align-items:center}.hero-preview figcaption{font-size:11px;line-height:1.5}.preview-share{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.preview-share button{font-size:11px;min-height:44px;border:0;border-radius:6px;color:var(--muted);background:transparent;padding:8px 0}.preview-share span{font-size:11px;color:var(--muted)}.hero-extras{display:flex;gap:10px 24px;flex-wrap:wrap;color:var(--muted);font-size:12px}.hero-extras a{min-height:44px;display:flex;align-items:center}
+@media(max-width:900px){.hero{grid-template-columns:minmax(0,1fr);gap:22px}.hero>div{max-width:650px}.hero p{max-width:50ch}.hero-preview{max-width:760px}.hero h1{font-size:58px}}
+@media(max-width:560px){header{padding-block:8px;gap:8px}.brand{font-size:19px}nav{gap:12px;font-size:11px}.hero{padding-top:0;gap:20px}.hero h1{font-size:45px;margin:12px 0 14px}.hero p{font-size:15px;margin-bottom:16px}.hero .note{font-size:11px;margin-top:10px}.hero .actions{gap:8px}.hero .button{font-size:11px;padding:10px 12px}.hero-preview{padding:10px;border-radius:16px}.hero-extras{gap:4px 16px}.preview-actions a{font-size:11px}.hero-preview figcaption{font-size:10px}.preview-share{gap:4px}.hero .eyebrow{font-size:10px}}
+@media(max-width:560px){.hero h1{font-size:clamp(32px,9.7vw,38px);letter-spacing:-.05em}}
 </style></head><body>
 <a class="skip" href="#main">Skip to content</a>
-<header><a class="brand" href="./">Robot<span>Reel</span></a><nav aria-label="Main navigation"><a href="#tour">Start here</a><a href="#demos">Demos</a><a href="#inspect">Inspect</a><a href="#start">Quick start</a><a href="https://github.com/noteflowai/robot-reel/blob/main/docs/recording.md">Record your own</a><a href="#offline">Downloads</a><a href="https://huggingface.co/spaces/glayguo/robot-reel">Hugging Face</a><a href="https://github.com/noteflowai/robot-reel">GitHub</a><a href="https://github.com/noteflowai/robot-reel/blob/main/README.zh-CN.md">中文</a></nav></header>
+<header><a class="brand" href="./">Robot<span>Reel</span></a><nav aria-label="Main navigation"><a href="#demos">Experiments</a><a href="https://github.com/noteflowai/robot-reel">GitHub</a><details class="nav-more"><summary>More</summary><div><a href="#tour">Start here</a><a href="#inspect">Inspect</a><a href="#start">Quick start</a><a href="https://github.com/noteflowai/robot-reel/blob/main/docs/recording.md">Record your own</a><a href="#offline">Downloads</a><a href="https://huggingface.co/spaces/glayguo/robot-reel">Hugging Face</a><a href="https://github.com/noteflowai/robot-reel/blob/main/README.zh-CN.md">中文</a></div></details></nav></header>
 <main id="main">
 <section class="hero">
 <div><div class="eyebrow">Physical AI replay lab</div><h1>Give Physical AI<br><span>a replay button.</span></h1>
-<p>Review recorded policy runs in simulation, compare outcomes, and edit the exported Blender or OpenUSD scenes. Follow each result back to its source data.</p>
-<div class="actions"><a class="button primary" href="#tour">Start with a recorded trial ↓</a><a class="button" href="#demos">Choose a demo</a><a class="button" id="open-cloth" href="cloth/">GPU Cloth Lab ↗</a><a class="button" id="open-huggingface" href="https://huggingface.co/spaces/glayguo/robot-reel">Explore the Hugging Face labs ↗</a></div>
-<p class="note">No account or install to watch. Recorded experiments include source data, methods and file checksums; captured-scene examples identify their input assets and edits.</p></div>
+<p>Play the motion. Inspect the failure. Keep the evidence behind every recorded experiment.</p>
+<div class="actions"><a class="button primary" href="stress/#seed=9&amp;condition=dim&amp;frame=61&amp;camera=main">Inspect a failure ↗</a><a class="button" href="#demos">All experiments ↓</a></div>
+<p class="note">Recorded simulations · No account or install</p></div>
 <figure class="hero-preview">
 <video id="hero-video" controls muted loop playsinline preload="none" width="900" height="640" poster="chaos/poster.png" src="showcase/butterfly-preview.mp4" aria-label="Butterfly Lab: twelve recorded Newton trajectories forming a time sculpture"></video>
 <div class="preview-actions"><button id="preview-play" type="button" aria-controls="hero-video" aria-pressed="false" hidden>Play preview</button><a href="chaos/">Explore all 12 worlds ↗</a></div>
+<div class="preview-share"><button id="preview-image" type="button" hidden>Save this view as an image</button><span id="preview-image-status" role="status"></span></div>
 <figcaption id="preview-note">Recorded Newton poses · preview at 3.33× speed · sculpture depth represents time. Motion starts when you press play.</figcaption>
 </figure>
 </section>
 
+<p class="hero-extras"><a id="open-cloth" href="cloth/">GPU Cloth Lab ↗</a><a id="open-huggingface" href="https://huggingface.co/spaces/glayguo/robot-reel">Explore the Hugging Face labs ↗</a><a href="#tour">Follow a guided review ↓</a></p>
 <section class="inspector" aria-labelledby="model-review-title"><div class="inspector-copy"><div><span class="eyebrow">QWEN3.8 / MODEL EXPLANATION REVIEW</span><h2 id="model-review-title">Read the explanation.<br>Check the recorded facts.</h2></div><div><p>Six actual model outputs beside three original SmolVLA episodes. Compare images-only review with review supplied the outcome record, then inspect every claim offline.</p><p class="note">Selected development examples · explanations are not verified causes</p><div class="actions"><a class="button primary" href="model-review/">Review the model outputs ↗</a><a class="button" href="model-review/review.zip">Download the full review ↓</a></div></div></div></section>
 
 <details class="ai-tour" id="ai-first-review">
@@ -242,5 +251,46 @@ for (const button of filters) button.addEventListener("click", () => {
 window.addEventListener("popstate", () => applyFilter(new URL(location.href).searchParams.get("category")));
 applyFilter(new URL(location.href).searchParams.get("category"));
 $("filters").hidden = false;
+
+// Export only the recorded preview (or its original poster), with source and scope.
+const previewImage = $("preview-image");
+previewImage.hidden = false;
+previewImage.addEventListener("click", async () => {
+  const status = $("preview-image-status");
+  previewImage.disabled = true;
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1200; canvas.height = 800;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Canvas unavailable");
+    const current = video.readyState >= 2;
+    const poster = new Image();
+    if (!current) { poster.src = video.poster; await poster.decode(); }
+    const snapshot = current ? video : poster;
+    const previewTime = video.currentTime.toFixed(2);
+    ctx.fillStyle = "#09121b"; ctx.fillRect(0, 0, 1200, 800);
+    ctx.fillStyle = "#79dfc3"; ctx.font = "600 24px system-ui, sans-serif";
+    ctx.fillText("ROBOT REEL / BUTTERFLY LAB", 48, 60);
+    ctx.fillStyle = "#edf4ef"; ctx.font = "600 48px system-ui, sans-serif";
+    ctx.fillText("0.05° apart. Worlds apart.", 48, 125);
+    ctx.drawImage(snapshot, 252, 158, 696, 495);
+    ctx.fillStyle = "#b6c8d1"; ctx.font = "20px system-ui, sans-serif";
+    ctx.fillText(`12 recorded Newton worlds · ${current ? "preview time " + previewTime + "s at 3.33× speed" : "original poster"}`, 48, 697);
+    ctx.fillText("Sculpture depth represents time. Recorded simulation; no live inference.", 48, 730);
+    ctx.fillStyle = "#79dfc3"; ctx.font = "18px ui-monospace, monospace";
+    ctx.fillText("noteflowai.github.io/robot-reel/chaos/", 48, 770);
+    canvas.toBlob(blob => {
+      previewImage.disabled = false;
+      if (!blob) { status.textContent = "Image export failed. Open the Butterfly Lab to download its figures."; return; }
+      const url = URL.createObjectURL(blob), link = document.createElement("a");
+      link.href = url; link.download = "robot-reel-recorded-view.png"; link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      status.textContent = "Saved the recorded view with source and scope.";
+    }, "image/png");
+  } catch (error) {
+    previewImage.disabled = false;
+    status.textContent = "Image export unavailable. Open the Butterfly Lab to download its figures.";
+  }
+});
 </script>
 </body></html>

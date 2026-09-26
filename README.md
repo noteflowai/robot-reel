@@ -34,6 +34,8 @@
 
 <p align="center"><sub>No account or install to watch. Preview panels show independent recorded runs.</sub></p>
 
+The [homepage](https://noteflowai.github.io/robot-reel/) brings the recorded preview into the first mobile screen. Play it deliberately, then **Save this view as an image** to keep the preview frame or original poster with its source, playback time and simulation scope.
+
 ## Review an AI explanation against the run
 
 [Open the Qwen3.8 robot review](https://noteflowai.github.io/robot-reel/model-review/):
