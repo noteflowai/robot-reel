@@ -88,6 +88,131 @@ def taxonomy(traces):
     }
 
 
+SENSITIVITY_SCHEMA = "robot-reel-stall-sensitivity-1"
+MAX_SWEEP_THRESHOLDS = 8
+# Thresholds are metres of end-effector travel. A value above one metre is
+# almost certainly a unit mistake (millimetres typed as metres).
+MAX_STALL_METRES = 1.0
+_SWEEP_HINT = "for example --stall-sweep 0.0005,0.002 (metres; the reference is 0.001 = 1 mm)"
+
+
+def parse_thresholds(text):
+    """Read a comma-separated list of stall thresholds in metres.
+
+    Raises ValueError with a message that names the problem, so the CLI can
+    report it without a traceback.
+    """
+    parts = [part.strip() for part in str(text).split(",")]
+    if not all(parts):
+        raise ValueError(
+            "--stall-sweep needs one to eight comma-separated thresholds with no empty entries; "
+            + _SWEEP_HINT
+        )
+    if len(parts) > MAX_SWEEP_THRESHOLDS:
+        raise ValueError(
+            f"--stall-sweep accepts at most {MAX_SWEEP_THRESHOLDS} thresholds, got {len(parts)}"
+        )
+    values = []
+    for part in parts:
+        try:
+            value = float(part)
+        except ValueError:
+            raise ValueError(f"--stall-sweep value {part!r} is not a number; {_SWEEP_HINT}") from None
+        if not math.isfinite(value):
+            raise ValueError(f"--stall-sweep value {part!r} is not finite; {_SWEEP_HINT}")
+        if value <= 0:
+            raise ValueError(f"--stall-sweep value {part!r} must be greater than zero")
+        if value > MAX_STALL_METRES:
+            raise ValueError(
+                f"--stall-sweep value {part!r} exceeds 1 m; thresholds are metres of "
+                "end-effector travel, not millimetres"
+            )
+        if value in values:
+            raise ValueError(f"--stall-sweep lists {part!r} more than once (duplicate threshold)")
+        values.append(value)
+    return values
+
+
+def _threshold_key(value):
+    return repr(float(value))
+
+
+def stall_sensitivity(traces, thresholds):
+    """Re-label recorded step-limit trials at several stall thresholds.
+
+    The published reference threshold is always included and every comparison
+    is made against it. Only the stalled/in-motion split of step-limit trials
+    can change; success and terminated trials keep their kind by construction.
+    This describes how sensitive the labels are on these recordings. It does
+    not choose, calibrate or validate any threshold.
+    """
+    tested = sorted({float(value) for value in thresholds} | {STALL_METRES})
+    if len(tested) > MAX_SWEEP_THRESHOLDS + 1:
+        raise ValueError(f"A stall sweep accepts at most {MAX_SWEEP_THRESHOLDS} thresholds")
+    for value in tested:
+        if not math.isfinite(value) or value <= 0 or value > MAX_STALL_METRES:
+            raise ValueError("Stall thresholds must be finite, positive and at most 1 m")
+    if not traces:
+        raise ValueError("A stall sweep needs at least one recorded trial")
+    runs = {
+        value: {name: classify_run(trace, stall_metres=value) for name, trace in sorted(traces.items())}
+        for value in tested
+    }
+    reference = runs[STALL_METRES]
+    by_threshold = {}
+    for value in tested:
+        counts = {}
+        for run in runs[value].values():
+            counts[run["kind"]] = counts.get(run["kind"], 0) + 1
+        by_threshold[_threshold_key(value)] = {
+            "threshold_m": value,
+            "counts": dict(sorted(counts.items())),
+            "stalled_trials": sorted(
+                name for name, run in runs[value].items() if run["kind"] == "step_limit_stalled"
+            ),
+        }
+    changed = {
+        _threshold_key(value): [
+            {
+                "trial": name,
+                "reference_kind": reference[name]["kind"],
+                "kind": runs[value][name]["kind"],
+                "tail_travel_m": reference[name]["tail_travel_m"],
+            }
+            for name in sorted(reference)
+            if runs[value][name]["kind"] != reference[name]["kind"]
+        ]
+        for value in tested
+        if value != STALL_METRES
+    }
+    step_limit = sorted(name for name, run in reference.items() if run["outcome"] == "step_limit")
+    stable = [name for name in step_limit if len({runs[value][name]["kind"] for value in tested}) == 1]
+    boundary = {
+        name: {
+            "tail_travel_m": reference[name]["tail_travel_m"],
+            "depends_on_threshold": name not in stable,
+            "kinds": {_threshold_key(value): runs[value][name]["kind"] for value in tested},
+        }
+        for name in step_limit
+    }
+    return {
+        "schema": SENSITIVITY_SCHEMA,
+        "trials": len(reference),
+        "reference_threshold_m": STALL_METRES,
+        "thresholds": tested,
+        "by_threshold": by_threshold,
+        "changed": changed,
+        "step_limit_trials": len(step_limit),
+        "stable_step_limit_trials": stable,
+        "boundary": boundary,
+        "scope": (
+            "Label sensitivity on these recorded traces only, using tail travel over "
+            "the final tenth of frames. The sweep does not validate any threshold, "
+            "re-run a policy or test statistical significance."
+        ),
+    }
+
+
 def _input_frames(frames, action_steps):
     """Indices of the frames a policy call actually consumed.
 
