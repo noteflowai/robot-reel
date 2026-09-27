@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "check:js": "node scripts/check_viewer_js.cjs",
-    "test": "node --test tests/replay.test.cjs"
+    "test": "node --test"
   },
   "devDependencies": {
     "playwright": "1.63.0",
