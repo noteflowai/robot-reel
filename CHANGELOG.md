@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.17.0 — 2026-09-27
+
+- stall-threshold sensitivity for recorded step-limit failures. Adds --stall-sweep T1,T2,... to python -m robot_reel.stress. It re-labels verified recorded step-limit traces at up to eight stall thresholds in metres and reports per-threshold counts, changed and stable trials, and threshold-dependent boundaries against the unchanged 1 mm reference. No policy is re-run and no threshold is validated.
+
 ## 0.16.0 — 2026-09-25
 
 - Add `robot-reel review-claims` to compare structured model claims with recorded VLA outcomes, action counts and frame labels without inference. Unknown claims remain unassessed; visual explanations are never automatically verified.

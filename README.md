@@ -88,13 +88,13 @@ compare a real paired outcome, inspect its native Rerun workspace, then verify
 the full experiment locally. The [demo gallery](https://noteflowai.github.io/robot-reel/#demos)
 filters policy runs, comparison experiments and 3D creation; previews play on request.
 
-Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.16.0/)
+Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.17.0/)
 with Python 3.12+:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install robot-reel==0.16.0
+python -m pip install robot-reel==0.17.0
 robot-reel --help
 ```
 
@@ -121,6 +121,33 @@ Or use the [verified installation packages or non-root Docker image](docs/distri
 Recording new runs needs the [full runtime](docs/recording.md).
 The hosted replays open in a browser without a local simulation environment.
 
+### How stable are the failure labels?
+
+The reliability taxonomy labels a step-limit failure as `step_limit_stalled` or
+`step_limit_in_motion` using one fixed cutoff: 1 mm of end-effector travel over
+the final tenth of recorded frames. `--stall-sweep` re-reads the verified
+recorded traces and re-labels them at up to eight other thresholds, in metres.
+It does not re-run any policy.
+
+```bash
+python3 -m robot_reel.stress docs/stress --reliability --stall-sweep 0.0005,0.002,0.005
+```
+
+The JSON gains a `stall_sensitivity` object with these fields:
+
+- `thresholds`: the tested values, sorted, always including the 0.001 reference.
+- `by_threshold`: per-kind `counts` and `stalled_trials` at each threshold.
+- `changed`: for each non-reference threshold, the trials whose kind differs from the reference, with `tail_travel_m`.
+- `stable_step_limit_trials`: step-limit trials that keep the same kind at every tested threshold.
+- `boundary`: each step-limit trial's `tail_travel_m`, its kind per threshold, and `depends_on_threshold`.
+
+Success and terminated trials never change kind. The published
+`reliability.json` and its 1 mm reference are unchanged. The sweep only
+describes how sensitive the labels are on these recordings. It does not
+validate or calibrate any threshold. An invalid list (empty, non-numeric,
+non-finite, zero or negative, duplicated, more than eight values, or above 1 m)
+exits with status 2 and a message naming the problem.
+
 
 ## Your LeRobot dataset. One command.
 
@@ -133,7 +160,7 @@ the dataset and compares every value. Supports v3.0 and v2.x; LeRobot itself
 is not required.
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.16.0'
+python -m pip install 'robot-reel[lerobot]==0.17.0'
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
 robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 ```

@@ -289,10 +289,22 @@ def main(argv=None):
         "--repeat", type=Path,
         help="Compare this collection against a repeat of the same plan and report reproducibility",
     )
+    parser.add_argument(
+        "--stall-sweep", metavar="T1,T2,...",
+        help=("Re-label recorded step-limit failures at 1-8 comma-separated stall thresholds in metres "
+              "(the published 0.001 reference is always included); reports which labels change"),
+    )
     paired = parser.add_mutually_exclusive_group()
     paired.add_argument("--paired", action="store_true", help="Export paired outcome groups for every condition as JSON")
     paired.add_argument("--paired-report", type=Path, help="Verify a downloaded paired-outcome report against all source trials")
     args = parser.parse_args(argv)
+    sweep = None
+    if args.stall_sweep is not None:
+        from .reliability import parse_thresholds
+        try:
+            sweep = parse_thresholds(args.stall_sweep)
+        except ValueError as exc:
+            parser.error(str(exc))
     from .stress_site import check_media, load_collection, verify_site
     try:
         result = verify_site(args.source)
@@ -304,13 +316,15 @@ def main(argv=None):
                 result["paired_report_verified"] = verify_report(args.paired_report, report)
             if args.paired:
                 result = report
-        if args.reliability or args.repeat:
-            from .reliability import reproducibility, taxonomy
+        if args.reliability or args.repeat or sweep is not None:
+            from .reliability import reproducibility, stall_sensitivity, taxonomy
             from .stress_site import load_collection
             document, _, traces = load_collection(args.source)
             named = {t["stress"]["trial_id"]: t for t in traces}
             if args.reliability:
                 result["reliability"] = taxonomy(named)
+            if sweep is not None:
+                result["stall_sensitivity"] = stall_sensitivity(named, sweep)
             if args.repeat:
                 repeat_document, _, repeat_traces = load_collection(args.repeat)
                 if canonical_hash(repeat_document) != canonical_hash(document):
