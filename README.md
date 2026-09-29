@@ -106,6 +106,8 @@ git clone https://github.com/noteflowai/robot-reel.git
 cd robot-reel
 
 # Check every trial in the paired policy experiment.
+
+Product direction and acceptance milestones: [Roadmap](ROADMAP.md).
 python3 -m robot_reel.cli stress docs/stress
 
 # Check the recorded policy episode and its evidence.

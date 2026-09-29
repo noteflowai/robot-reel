@@ -1,3 +1,5 @@
+> Current priorities and delivery criteria: [Roadmap](../ROADMAP.md). This earlier plan is retained as background; its dates and completion claims are historical.
+
 2026-09-14 进展：[Solver Lab](solver-lab.md) 已接入 Genesis 1.4.1 与 Newton
 1.6.0 的真实 CUDA 录制，完成双引擎、三步长、366 个状态的解析解对照，
 并核对 Genesis 原生轨迹与 OpenUSD。首版隔离无接触抛体的积分误差；
