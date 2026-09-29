@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+from fractions import Fraction
+from math import comb
 from pathlib import Path
 
 from .stress import canonical_hash
@@ -48,6 +50,73 @@ def paired_report(summary, plan_sha256):
             "planned_trials", "completed_trials", "attempts", "execution_errors",
         )},
         "comparisons": comparisons,
+    }
+
+
+def exact_paired_test(report):
+    """Exact two-sided sign tests on the recorded discordant pairs."""
+    if not isinstance(report, dict) or report.get("schema") != SCHEMA:
+        raise ValueError("Paired report schema differs from paired_report")
+    if not isinstance(report.get("plan_sha256"), str):
+        raise ValueError("Paired report plan_sha256 is missing")
+    comparisons = report.get("comparisons")
+    if not isinstance(comparisons, list) or not comparisons:
+        raise ValueError("Paired report comparisons must be a nonempty list")
+
+    rows = []
+    raw_p = []
+    for comparison in comparisons:
+        if not isinstance(comparison, dict):
+            raise ValueError("Paired comparison must be an object")
+        if not isinstance(comparison.get("condition"), str):
+            raise ValueError("Paired comparison condition is missing")
+        groups = comparison.get("groups")
+        if not isinstance(groups, dict):
+            raise ValueError("Paired comparison groups are missing")
+        seeds = []
+        for name in GROUPS:
+            values = groups.get(name)
+            if not isinstance(values, list) or any(type(seed) is not int for seed in values):
+                raise ValueError(f"Paired group {name} must be a list of integer seeds")
+            seeds.extend(values)
+        if len(seeds) != len(set(seeds)):
+            raise ValueError("A paired seed repeats within or across groups")
+        paired_seeds = comparison.get("paired_seeds")
+        if type(paired_seeds) is not int or len(seeds) != paired_seeds:
+            raise ValueError("Paired group sizes do not sum to paired_seeds")
+        b, c = len(groups["lost_success"]), len(groups["gained_success"])
+        if comparison.get("net_success_difference") != c - b:
+            raise ValueError("Paired net_success_difference disagrees with the groups")
+        n = b + c
+        denominator = 2 ** n
+        numerator = min(2 * sum(comb(n, k) for k in range(min(b, c) + 1)), denominator)
+        p = Fraction(numerator, denominator)
+        raw_p.append(p)
+        rows.append({
+            "condition": comparison["condition"],
+            "paired_seeds": paired_seeds,
+            "lost_success": b,
+            "gained_success": c,
+            "discordant": n,
+            "net_success_difference": comparison["net_success_difference"],
+            "p_numerator": numerator,
+            "p_denominator": denominator,
+            "exact_p_two_sided": float(p),
+            "min_attainable_p": float(min(Fraction(2, denominator), 1)),
+            "conventional_0_05_attainable": Fraction(2, denominator) < Fraction(1, 20),
+            "direction": "gained" if c > b else "lost" if b > c else "none",
+        })
+
+    previous = Fraction(0)
+    for rank, index in enumerate(sorted(range(len(rows)), key=lambda i: (raw_p[i], i))):
+        previous = min(Fraction(1), max(previous, (len(rows) - rank) * raw_p[index]))
+        rows[index]["holm_adjusted_p"] = float(previous)
+    return {
+        "schema": "robot-reel-paired-exact-1",
+        "plan_sha256": report["plan_sha256"],
+        "comparisons": rows,
+        "method": "exact two-sided binomial sign test on discordant paired seeds (exact McNemar); Holm across listed conditions",
+        "scope": "Recorded pairs in this locked plan only; no multi-level outcomes, sequential stopping, power analysis or causal attribution",
     }
 
 
