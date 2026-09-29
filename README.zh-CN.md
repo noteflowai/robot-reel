@@ -270,8 +270,8 @@ Markdown，重新导入可恢复原始样本位置，也可用命令行与完整
 [打开结果分组](https://noteflowai.github.io/robot-reel/stress/#outcomes) ·
 [报告方法与命令](docs/stress.md#compare-paired-outcomes)。
 
-**检验已记录的配对结果。** 从源码目录运行
-`python3 -m robot_reel.cli stress docs/stress --paired-exact`
+**检验已记录的配对结果。** 使用 Robot Reel 0.17.1+ 运行
+`robot-reel stress stress-lab --paired-exact`
 得到双侧精确配对符号检验：`dim` 失去一次成功、获得零次（2/2，p = 1.0）；
 `camera` 失去一次、获得三次（10/16，p = 0.625）。两项的 Holm 校正后
 p 值均为 1.0。当前不一致种子数量下，最小可达 p 值分别为 1.0 和 0.125，
