@@ -113,9 +113,8 @@ pack rather than inside it: it is a property of two collections, so it does not
 belong to either one. This is one repeat of one plan on one machine, and it does
 not establish determinism on other hardware, drivers or stack versions.
 
-The outcome groups and repeat comparison above are descriptive. The optional
-exact paired test below quantifies evidence against equal success probability
-within the recorded seed pairs. It does not establish general robustness.
+These are descriptive paired outcomes, not a significance test or a claim of
+general robustness.
 
 With Robot Reel **0.8.0+** installed and the offline experiment extracted as
 `stress-lab`, export or independently verify a report:
@@ -123,7 +122,6 @@ With Robot Reel **0.8.0+** installed and the offline experiment extracted as
 ```bash
 robot-reel stress stress-lab --paired > paired-outcomes.json
 robot-reel stress stress-lab --paired-report paired-outcomes.json
-robot-reel stress stress-lab --paired-exact
 ```
 
 Both commands first verify the complete source collection. The second compares
@@ -134,29 +132,6 @@ See the [download guide](https://github.com/noteflowai/robot-reel/blob/main/docs
 command is `python3 -m robot_reel.cli stress docs/stress --paired`.
 Earlier release assets retain their original viewer; the current verifier can
 also read their complete collection.
-
-### Exact paired test
-
-`--paired-exact` verifies the complete collection, builds the same seed groups
-as `--paired`, then adds `paired_exact_test` to the verified JSON. It counts
-`lost_success` as \(b\) and `gained_success` as \(c\). With \(n=b+c\)
-discordant seeds, it reports the exact two-sided binomial sign test (exact
-McNemar): \(p=\min(1, 2\sum_{k=0}^{\min(b,c)}\binom{n}{k}/2^n)\). The output
-keeps the integer numerator and denominator and applies Holm's adjustment
-across the two condition comparisons. Both-success and neither-success seeds
-do not contribute to this paired test.
-
-| Condition ID | Lost \(b\) | Gained \(c\) | Exact \(p\) | Holm-adjusted \(p\) | Smallest attainable \(p\) |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| `dim` (25% light) | 1 | 0 | 2/2 = 1.0 | 1.0 | 1.0 |
-| `camera` (+12 cm) | 1 | 3 | 10/16 = 0.625 | 1.0 | 0.125 |
-
-With only one and four discordant seeds respectively, even the most extreme
-split cannot produce \(p<0.05\) in either comparison. These results concern
-one locked task and its recorded pairs. They are not a power analysis,
-multi-level outcome model, sequential-stopping correction or causal claim.
-Run `--paired-exact` separately from `--paired` so the latter's exported JSON
-remains directly comparable for `--paired-report` verification.
 
 ## What changes
 
