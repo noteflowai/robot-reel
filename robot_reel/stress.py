@@ -297,7 +297,11 @@ def main(argv=None):
     paired = parser.add_mutually_exclusive_group()
     paired.add_argument("--paired", action="store_true", help="Export paired outcome groups for every condition as JSON")
     paired.add_argument("--paired-report", type=Path, help="Verify a downloaded paired-outcome report against all source trials")
+    parser.add_argument("--paired-exact", action="store_true",
+                        help="Add exact paired sign tests and Holm-adjusted p-values to the verified summary")
     args = parser.parse_args(argv)
+    if args.paired and args.paired_exact:
+        parser.error("--paired output must stay byte-comparable for --paired-report; run --paired-exact separately")
     sweep = None
     if args.stall_sweep is not None:
         from .reliability import parse_thresholds
@@ -308,12 +312,14 @@ def main(argv=None):
     from .stress_site import check_media, load_collection, verify_site
     try:
         result = verify_site(args.source)
-        if args.paired or args.paired_report:
-            from .stress_pairs import paired_report, verify_report
+        if args.paired or args.paired_report or args.paired_exact:
+            from .stress_pairs import exact_paired_test, paired_report, verify_report
             document = json.loads((args.source/"experiment.json").read_text())
             report = paired_report(result, canonical_hash(document))
             if args.paired_report:
                 result["paired_report_verified"] = verify_report(args.paired_report, report)
+            if args.paired_exact:
+                result["paired_exact_test"] = exact_paired_test(report)
             if args.paired:
                 result = report
         if args.reliability or args.repeat or sweep is not None:

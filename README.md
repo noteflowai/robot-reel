@@ -305,6 +305,14 @@ report for independent verification with the 0.8.0+ installed CLI.
 [Compare paired outcomes](https://noteflowai.github.io/robot-reel/stress/#outcomes)
 · [Report method and CLI](docs/stress.md#compare-paired-outcomes).
 
+**Test the recorded pairs.** `robot-reel stress stress-lab --paired-exact`
+reports an exact two-sided paired sign test: `dim` lost one success and gained
+none (2/2, p = 1.0); `camera` lost one and gained three (10/16, p = 0.625).
+Holm-adjusted p is 1.0 for both. The smallest attainable p values with these
+discordant counts are 1.0 and 0.125, so this plan cannot reach p < 0.05.
+This single task does not establish general robustness or causation.
+[Method and limits](docs/stress.md#exact-paired-test).
+
 **[Inspect every failure](https://noteflowai.github.io/robot-reel/stress/#failures).** Filter the recorded classifications and jump to each final motion window, with measured end-effector travel.
 
 [![Recorded failure review: classified episodes, complete denominators and a jump to the final motion window.](docs/failure-review.png)](https://noteflowai.github.io/robot-reel/stress/#failures)
