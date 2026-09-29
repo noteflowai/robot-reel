@@ -36,6 +36,8 @@
 
 The [homepage](https://noteflowai.github.io/robot-reel/) brings the recorded preview into the first mobile screen. Play it deliberately, then **Save this view as an image** to keep the preview frame or original poster with its source, playback time and simulation scope.
 
+Product direction and acceptance milestones: [Roadmap](ROADMAP.md).
+
 ## Review an AI explanation against the run
 
 [Open the Qwen3.8 robot review](https://noteflowai.github.io/robot-reel/model-review/):
@@ -88,13 +90,13 @@ compare a real paired outcome, inspect its native Rerun workspace, then verify
 the full experiment locally. The [demo gallery](https://noteflowai.github.io/robot-reel/#demos)
 filters policy runs, comparison experiments and 3D creation; previews play on request.
 
-Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.17.0/)
+Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.17.1/)
 with Python 3.12+:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install robot-reel==0.17.0
+python -m pip install robot-reel==0.17.1
 robot-reel --help
 ```
 
@@ -106,8 +108,6 @@ git clone https://github.com/noteflowai/robot-reel.git
 cd robot-reel
 
 # Check every trial in the paired policy experiment.
-
-Product direction and acceptance milestones: [Roadmap](ROADMAP.md).
 python3 -m robot_reel.cli stress docs/stress
 
 # Check the recorded policy episode and its evidence.
@@ -162,7 +162,7 @@ the dataset and compares every value. Supports v3.0 and v2.x; LeRobot itself
 is not required.
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.17.0'
+python -m pip install 'robot-reel[lerobot]==0.17.1'
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
 robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 ```
@@ -170,6 +170,7 @@ robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 [![A real SO-101 LeRobot episode: two camera views on one clock above commanded versus measured joint curves.](docs/lerobot/poster.png)](https://noteflowai.github.io/robot-reel/lerobot/)
 
 **[Open the SO-101 example ↗](https://noteflowai.github.io/robot-reel/lerobot/)** ·
+[First dataset review and handoff](docs/first-dataset-review.md) ·
 [Guide, checks and limits](docs/lerobot.md) ·
 Source: episode 0 of [`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace)
 (Apache-2.0), the real SO-101 data SmolVLA was fine-tuned on.

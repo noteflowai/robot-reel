@@ -17,7 +17,7 @@ joints, 303 frames at 30 fps.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.17.0'
+python -m pip install 'robot-reel[lerobot]==0.17.1'
 
 # Any public Hub dataset; only the files this episode needs are downloaded.
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
@@ -27,8 +27,14 @@ robot-reel lerobot ~/.cache/huggingface/lerobot/you/your_dataset --episode 3 --o
 ```
 
 Open `artifacts/so101/index.html` directly from disk. The SO-101 export above
-took 15 seconds in our test on a CPU, including the download; no GPU is used.
+took 29.3 seconds in a maintainer check on 2026-09-29 with an empty Hub cache;
+package installation took another 164.6 seconds in a new Python 3.12 environment
+using the host's existing pip cache. These are one-machine measurements, not
+a prediction for other networks or datasets; no GPU is used for this workflow.
 Private or gated Hub datasets use your existing `hf auth login` token.
+
+For a pinned dataset revision, expected verification counts and an offline
+collaborator handoff, follow [First dataset review](first-dataset-review.md).
 
 ## What the replay shows
 

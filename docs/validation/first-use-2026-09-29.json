@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-29",
+  "kind": "single maintainer first-use check; not a comparative benchmark",
+  "environment": {
+    "os": "Linux",
+    "python": "3.12.3",
+    "new_virtual_environment": true,
+    "pip_cache": "existing host cache",
+    "hub_cache": "empty at export",
+    "hub_authentication": "implicit token disabled"
+  },
+  "install": {
+    "step": "fresh-venv-install",
+    "python": "3.12",
+    "requested_package": "robot-reel[lerobot]==0.17.1",
+    "seconds": 164.649,
+    "returncode": 0,
+    "pip_cache": "existing host cache permitted; new virtual environment"
+  },
+  "replay": [
+    {
+      "step": "help",
+      "seconds": 0.585,
+      "exit_code": 0
+    },
+    {
+      "step": "export",
+      "seconds": 29.284,
+      "exit_code": 0
+    },
+    {
+      "step": "verify",
+      "seconds": 5.472,
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "frames": 303,
+    "fps": 30,
+    "duration_seconds": 10.1,
+    "cameras": 2,
+    "decoded_video_frames_checked": 606,
+    "source_values_checked": 3939
+  },
+  "handoff": [
+    {
+      "step": "reopen-offline",
+      "seconds": 2.908,
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "step": "tamper-detection",
+      "seconds": 0.344,
+      "exit_code": 2,
+      "expected_exit_code": 2
+    }
+  ],
+  "browser": {
+    "http_https_requests": "blocked",
+    "camera_count": 2,
+    "video_durations_seconds": [
+      10.1,
+      10.1
+    ],
+    "stepped_frame": 2,
+    "reopened_fragment_frame": 239,
+    "page_errors": []
+  },
+  "review_note": {
+    "dataset": {
+      "kind": "hub",
+      "repo_id": "lerobot/svla_so101_pickplace",
+      "revision": "f641879e22172be7e8161d5e6c1503c2d2feb657",
+      "url": "https://huggingface.co/datasets/lerobot/svla_so101_pickplace/tree/f641879e22172be7e8161d5e6c1503c2d2feb657",
+      "codebase_version": "v3.0",
+      "robot_type": "so100_follower",
+      "total_episodes": 50,
+      "license": "apache-2.0"
+    },
+    "episode": 0,
+    "frame": 239,
+    "timestamp": 7.9666667,
+    "channel": "shoulder_pan.pos",
+    "command": 45.14706,
+    "measurement": 61.75649,
+    "absolute_difference": 16.609429999999996,
+    "unit": "dataset channel units; no physical-unit calibration inferred",
+    "interpretation": "A recorded command/measurement difference, not a failure or safety classification."
+  },
+  "limitations": [
+    "One maintainer and one dataset episode, with a warm pip cache.",
+    "No external first-use trial, repeat-use evidence, or same-task baseline comparison.",
+    "File integrity checks are not digital signatures or task-success judgments."
+  ]
+}
