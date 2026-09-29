@@ -305,8 +305,8 @@ report for independent verification with the 0.8.0+ installed CLI.
 [Compare paired outcomes](https://noteflowai.github.io/robot-reel/stress/#outcomes)
 · [Report method and CLI](docs/stress.md#compare-paired-outcomes).
 
-**Test the recorded pairs.** From a source checkout,
-`python3 -m robot_reel.cli stress docs/stress --paired-exact`
+**Test the recorded pairs.** With Robot Reel 0.17.1+,
+`robot-reel stress stress-lab --paired-exact`
 reports an exact two-sided paired sign test: `dim` lost one success and gained
 none (2/2, p = 1.0); `camera` lost one and gained three (10/16, p = 0.625).
 Holm-adjusted p is 1.0 for both. The smallest attainable p values with these

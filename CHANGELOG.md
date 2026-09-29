@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.1 — 2026-09-29
+
+- Add `robot-reel stress SOURCE --paired-exact` for exact two-sided paired sign
+  tests and Holm-adjusted p values on the recorded Stress Lab seed pairs.
+  Keep the existing paired export and published offline experiment unchanged.
+  The [method addendum](docs/stress-exact.md) reports the observed fractions
+  and the smallest attainable p values for this small experiment.
+
 ## 0.17.0 — 2026-09-27
 
 - stall-threshold sensitivity for recorded step-limit failures. Adds --stall-sweep T1,T2,... to python -m robot_reel.stress. It re-labels verified recorded step-limit traces at up to eight stall thresholds in metres and reports per-threshold counts, changed and stable trials, and threshold-dependent boundaries against the unchanged 1 mm reference. No policy is re-run and no threshold is validated.

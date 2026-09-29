@@ -1,6 +1,13 @@
 # Exact test for paired Stress Lab outcomes
 
-From a source checkout, run:
+With Robot Reel 0.17.1+ installed and the offline experiment extracted as
+`stress-lab`, run:
+
+```bash
+robot-reel stress stress-lab --paired-exact
+```
+
+From a source checkout, the equivalent command is:
 
 ```bash
 python3 -m robot_reel.cli stress docs/stress --paired-exact
