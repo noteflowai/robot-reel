@@ -16,6 +16,14 @@ Reviewed `f69ffee` / v0.17.1. The project already offers LeRobot episode inspect
 
 External first-use time, repeat use and debugging success have not been established by this review. Recent issue history does not provide an external demand backlog.
 
+## External evidence and positioning — reviewed 2026-09-29
+
+[Rerun](https://rerun.io/) already offers multimodal logging, visualization and data querying. [Foxglove](https://docs.foxglove.dev/docs/data) already supports recording management, events, metadata and robotics inspection. Their product descriptions establish capabilities, not independent comparisons. A general viewer, offline mode or a failure timeline alone is insufficient differentiation.
+
+Robot Reel already supports [LeRobot v3/v2](docs/lerobot.md), native Rerun export and MCAP/Foxglove inspection; do not rebuild these integrations. Test the narrower hypothesis that a small, portable, provenance-preserving diagnosis is easier to produce and share. [LeRobot's v3 specification](https://huggingface.co/docs/lerobot/lerobot-dataset-v3) makes episode metadata and video offsets essential. [Upstream timestamp report #4524](https://github.com/huggingface/lerobot/issues/4524) is a reproduction lead, not a confirmed defect in Robot Reel or proof of demand.
+
+For RR-01/RR-02, compare the same permitted episode and debugging question against an existing Rerun/LeRobot workflow. Record setup effort, correct diagnosis, missing evidence and collaborator reopening time. Within 30 days, seek three independent attempts. If the baseline solves the task as well, prefer an upstream contribution or a smaller integration over another viewer feature. User recruitment and improvement targets remain unfulfilled validation work.
+
 ## Now — make one real workflow dependable
 
 | ID | Outcome | Acceptance evidence |
