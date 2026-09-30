@@ -94,3 +94,35 @@ class ResearchReleaseTests(unittest.TestCase):
             data["scene-lab-native.zip"] += b"unreviewed"
             with self.assertRaisesRegex(ValueError, "asset changed"):
                 fetch_assets(root, root/"bad", opener=open_file)
+
+    def test_factory_twin_projects_must_match_the_published_receipt(self):
+        root = Path(__file__).resolve().parents[1]
+        buffer = io.BytesIO()
+        names = ("README.md", "lab.json", "LICENSE", "factory_twin_scene.py", "build_factory_twin_blender.py",
+                 "check_factory_twin_blender.py", "render_factory_twin.py", "check-closed.json", "check-shadow.json",
+                 *(f"factory-twin-{m}.{e}" for m in ("closed", "shadow") for e in ("blend", "usdc")))
+        receipt = json.loads((root/"docs/factory-twin/blender-check.json").read_text())
+        with zipfile.ZipFile(buffer, "w") as archive:
+            for name in names:
+                data = b"unreviewed replacement project"
+                if name == "lab.json":
+                    data = (root/"docs/factory-twin/lab.json").read_bytes()
+                elif name.startswith("check-"):
+                    data = json.dumps(receipt["modes"][name[6:-5]]).encode()  # passing reports, genuine hashes
+                archive.writestr(name, data)
+        raw = buffer.getvalue()
+        with tempfile.TemporaryDirectory() as temporary:
+            source = Path(temporary)
+            (source/"requirements").mkdir()
+            (source/"scripts").mkdir()
+            (source/"docs").mkdir()
+            (source/"docs/factory-twin").symlink_to(root/"docs/factory-twin")
+            for script in ("package_factory_twin_blender.py",):
+                (source/"scripts"/script).write_bytes((root/"scripts"/script).read_bytes())
+            files = {"factory-twin-blender.zip": {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()},
+                     "scene-lab-native.zip": {"bytes": 1, "sha256": "a"*64},
+                     "research-records.zip": {"bytes": 1, "sha256": "a"*64}}
+            (source/"requirements/research-release-assets.json").write_text(json.dumps({
+                "dataset": "glayguo/noteflow-research-pilots", "revision": "a"*40, "files": files}))
+            with self.assertRaisesRegex(ValueError, "factory-twin-closed.blend differs from the published receipt"):
+                fetch_assets(source, source/"output", opener=lambda url, timeout: io.BytesIO(raw))

@@ -1,6 +1,6 @@
 {
   "dataset": "glayguo/noteflow-research-pilots",
-  "revision": "edccf9ab6edac5c7c89b3633fe32dbd2781c8c7c",
+  "revision": "d3efb35609782cda97400c92bb0a5e148f12499e",
   "files": {
     "research-records.zip": {
       "sha256": "d7d9084f4b8b69ed7b5faf82b4cb387e5f4c91e68816799f400701fa5aa50fd7",
@@ -13,6 +13,10 @@
     "scene-motion-native.zip": {
       "sha256": "403a2cd624b82f4174275353b796f1ed37f1c24df67777bb706f784770f46eab",
       "bytes": 56483622
+    },
+    "factory-twin-blender.zip": {
+      "sha256": "e205a6e633784898e7db7b27ede00b572056c116f4a5cd62153a8ac869788baf",
+      "bytes": 3388112
     }
   }
 }

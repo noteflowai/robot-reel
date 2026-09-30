@@ -69,6 +69,12 @@ async function main(){
    await page.locator('#ghosts').click();assert.equal(await page.locator('#ghosts').getAttribute('aria-pressed'),'false');
    if(process.env.FACTORY_SCREENSHOTS){await fs.mkdir(process.env.FACTORY_SCREENSHOTS,{recursive:true});
     await page.screenshot({path:path.join(process.env.FACTORY_SCREENSHOTS,`factory-twin-${width}.png`),fullPage:true});}
+   // The film loads locally when present; otherwise the offline copy offers the site link.
+   const hasFilm=await fs.access(path.join(root,'film.mp4')).then(()=>true,()=>false);
+   await page.locator('#film').evaluate(v=>{v.preload='metadata';v.load();});
+   if(hasFilm){await page.waitForFunction(()=>document.querySelector('#film').readyState>=1);
+    assert.equal(Math.round(await page.locator('#film').evaluate(v=>v.duration)),24);assert.equal(await page.locator('#film-fallback').isHidden(),true);}
+   else await page.waitForFunction(()=>!document.querySelector('#film-fallback').hidden);
    assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
    await page.close();
   }

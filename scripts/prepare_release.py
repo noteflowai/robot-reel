@@ -65,6 +65,8 @@ Factory Twin Lab includes both loop modes of the featured shift, raw telemetry,
 the twin's decision log, all 12 seed pairs, Cycles renders and the Blender/OpenUSD
 readback receipt. Run `robot-reel factory-twin --output factory-twin --verify` after
 extraction to re-execute plant and twin with the standard library.
+`factory-twin-blender.zip` holds both animated Blender 5.2 projects and their
+OpenUSD exports; every hash matches the lab's `blender-check.json`.
 
 Solver Lab includes six CUDA recordings from Genesis 1.4.1 and Newton 1.6.0,
 the analytic-reference diagnostics, native Genesis replays and editable USD.

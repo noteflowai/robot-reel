@@ -193,7 +193,8 @@ with the loop **closed** or with the identical twin in **shadow** mode.
 **[Open the Factory Twin Lab ↗](https://noteflowai.github.io/robot-reel/factory-twin/)** ·
 [Offline experiment](https://noteflowai.github.io/robot-reel/factory-twin/experiment.zip) ·
 [Blender + OpenUSD projects](https://github.com/noteflowai/robot-reel/releases/latest/download/factory-twin-blender.zip) ·
-[Model, loop and checks](docs/factory-twin.md)
+[Model, loop and checks](docs/factory-twin.md) ·
+[24 s Cycles flythrough ▶](https://noteflowai.github.io/robot-reel/factory-twin/film.mp4)
 
 Across **12 paired shifts** the closed loop had 0 spindle failures (shadow: 11)
 and 0 billing intervals over the demand limit (shadow: 8); good parts rose in

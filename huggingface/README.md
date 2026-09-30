@@ -24,6 +24,7 @@ tags:
   - genesis
   - blender
   - openusd
+  - digital-twin
   - simulation
   - policy-evaluation
   - microduck
@@ -35,12 +36,12 @@ pinned: true
 # Give Physical AI a replay button.
 
 **Review policy behavior, inspect simulation error, and edit captured scenes.**
-Eight interactive experiments include their original recordings, source data
+Nine interactive experiments include their original recordings, source data
 and downloadable files. Start with a workflow below; no installation or
 model-service account is needed to explore.
 
 Install the CLI from [PyPI](https://pypi.org/project/robot-reel/) with
-`python -m pip install robot-reel==0.16.0` (Python 3.12+).
+`python -m pip install robot-reel==0.18.0` (Python 3.12+).
 See the [installation guide](https://github.com/noteflowai/robot-reel/blob/main/docs/distribution.md)
 for optional dependencies and verified downloads.
 
@@ -67,6 +68,11 @@ with captions and source hashes. No GPU or model-service account is needed.
 
 ## Explore the experiments
 
+- **Factory Twin Lab.** Replay a simulated factory and campus shift with the
+  digital-twin loop closed or in shadow mode. Follow hidden spindle wear
+  against the twin's estimate, every decision with its evidence, and 12 paired
+  seeds. Download the traces, raw telemetry and the procedural Blender 5.2 /
+  OpenUSD projects. The plant is illustrative, not calibrated to a real site.
 - **Scene Lab.** Replay Microduck on captured terrain, inspect its camera, body
   poses and contacts, and compare the Blender frame. Take away all 362 source
   frames, both original and edited scenes, checked videos, animated USD and
@@ -110,6 +116,7 @@ Space, then inspect the actual policy and asset snapshots behind its recordings.
 - [Complete project website](https://noteflowai.github.io/robot-reel/)
 - [SmolVLA protocol and limits](https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md)
 - [Cloth data, checked samples and Blender workflow](https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md)
+- [Factory Twin model, loop and checks](https://github.com/noteflowai/robot-reel/blob/main/docs/factory-twin.md)
 - [Solver Lab equations, error measurements and reproduction](https://github.com/noteflowai/robot-reel/blob/main/docs/solver-lab.md)
 - [Newton release sweep](https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md)
 - [Review a Microduck frame with an agent and Skills Anywhere](https://github.com/noteflowai/robot-reel/blob/main/docs/agent-review.md)

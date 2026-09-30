@@ -4,6 +4,13 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
 <title>Factory Twin Lab — Close the loop · Robot Reel</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Factory Twin Lab · Robot Reel">
+<meta property="og:description" content="Same shift. Same failure. Close the loop. A digital twin of a simulated factory and campus, paired against the same twin in shadow mode, with a procedural Blender 5.2 model.">
+<meta property="og:url" content="https://noteflowai.github.io/robot-reel/factory-twin/">
+<meta property="og:image" content="https://noteflowai.github.io/robot-reel/factory-twin/render-hall.jpg">
+<meta property="og:image:width" content="1920"><meta property="og:image:height" content="1080">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="description" content="A closed-loop digital twin of a simulated factory and campus: telemetry, state estimation, what-if prediction and actuated decisions, paired against a shadow twin that only advises. Procedural Blender 5.2 model and OpenUSD included.">
 <style>
 :root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:#070d17;color:#edf4ff;font-size:16px;--muted:#a3b3c9;--line:#24324a;--cyan:#38d9ff;--mint:#79efcb;--amber:#ffbf5c;--red:#ff6b5c;--blue:#5f9bff;--violet:#b6a4ff;--panel:#0b1423;--panel2:#0e1a2c}
@@ -29,6 +36,7 @@ main,nav,footer{max-width:1320px;margin:auto;padding:22px 30px}nav{display:flex;
 .num{font-family:ui-monospace,monospace;text-align:right;white-space:nowrap}.good{color:var(--mint)}.bad{color:var(--red)}
 .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}.gallery figure{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}.gallery img{width:100%;height:auto;display:block}.gallery figcaption{font-size:.74rem;color:var(--muted);padding:8px 10px;line-height:1.4}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 0}.status{color:var(--mint);min-height:1.5em;font-size:.86rem;margin:12px 0 0}.note{font-size:.8rem;color:var(--muted);line-height:1.6}.scope{border-left:2px solid var(--amber);padding-left:14px}code{font-size:.85em;background:#101c2e;padding:1px 5px;border-radius:5px}
+.film{margin-top:22px}.film video{display:block;width:100%;height:auto;background:#000}.film .panel-head p{max-width:900px}.film-fallback{padding:14px 20px;color:var(--muted);font-size:.86rem}
 footer{font-size:.8rem;color:var(--muted);line-height:1.7;padding-bottom:40px}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 @media(max-width:1100px){.stage{grid-template-columns:1fr}.side{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr)}.loop{grid-template-columns:repeat(3,1fr)}.gallery{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:800px){main,nav,footer{padding:16px}.hero{grid-template-columns:1fr}.below,.charts{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.loop{grid-template-columns:1fr 1fr}nav small{display:none}.legend3d{position:static;border-radius:0}.overlay{position:static;padding:8px;background:#0a1220}.scrub{grid-template-columns:1fr auto}.scrub label{grid-column:1/-1}.scrub output{min-width:0}.hud{display:none}}
@@ -84,6 +92,12 @@ footer{font-size:.8rem;color:var(--muted);line-height:1.7;padding-bottom:40px}.s
 <div class="chart"><h3>Grid import and 15-minute billed demand</h3><p>Line: instantaneous import. Bars: completed billing intervals. Red: demand limit.</p><canvas id="c-grid" width="630" height="210" role="img" aria-label="Grid import and billing intervals for the selected mode."></canvas></div>
 </div>
 <p id="description" class="sr-only" aria-live="polite"></p>
+</section>
+
+<section class="panel film" aria-labelledby="film-title">
+<div class="panel-head"><div><h2 id="film-title">Fly through the recorded shift</h2><p>24 seconds of Cycles footage from the checked closed-loop Blender project. The camera path is cinematography; every frame shows one recorded sample, from 10:00 to 13:00, with the time map in <a href="https://noteflowai.github.io/robot-reel/factory-twin/film.json">film.json</a>.</p></div></div>
+<video id="film" controls playsinline preload="none" width="1600" height="900" poster="render-aerial.jpg" aria-describedby="film-title"><source src="film.mp4" type="video/mp4"></video>
+<p class="film-fallback" id="film-fallback" hidden>This copy does not include the film. <a href="https://noteflowai.github.io/robot-reel/factory-twin/film.mp4">Watch it on the project site ↗</a></p>
 </section>
 
 <div class="gallery" aria-label="Cycles renders from the Blender project">
@@ -280,6 +294,7 @@ $('csv').addEventListener('click',()=>{const p=P(),t=T(),rows=['time,sample,mode
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.join('\n')+'\n'],{type:'text/csv'}));a.download=`factory-twin-${mode}-seed-${R().seed}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);$('status').textContent=`Downloaded ${N} recorded samples (${mode}).`});
 $('share').addEventListener('click',async()=>{hash();try{await navigator.clipboard.writeText(location.href);$('status').textContent='Link copied: it reopens this mode and sample.'}catch(err){$('status').textContent=location.href}});
 const m=/mode=(closed|shadow)/.exec(location.hash),s=/k=(\d+)/.exec(location.hash);if(m)mode=m[1];if(s)k=Math.min(N-1,Number(s[1]));else k=360;
+$('film').querySelector('source').addEventListener('error',()=>{$('film-fallback').hidden=false});
 seeds();setMode(mode);if(reduced)$('speed').value='900';
 </script>
 </body>
