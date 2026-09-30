@@ -153,7 +153,8 @@ robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 **[打开工厂数字孪生实验室 ↗](https://noteflowai.github.io/robot-reel/factory-twin/)** ·
 [离线实验包](https://noteflowai.github.io/robot-reel/factory-twin/experiment.zip) ·
 [Blender 与 OpenUSD 工程](https://github.com/noteflowai/robot-reel/releases/latest/download/factory-twin-blender.zip) ·
-[模型、闭环与校验说明](docs/factory-twin.md)
+[模型、闭环与校验说明](docs/factory-twin.md) ·
+[24 秒 Cycles 园区漫游 ▶](https://noteflowai.github.io/robot-reel/factory-twin/film.mp4)
 
 在 **12 组配对班次**中，闭环模式主轴故障为 0 次（影子模式 11 次），超出需量上限的计费时段
 为 0 个（影子模式 8 个）；合格品数量 10 组增加、2 组减少。整个园区在 Blender 中程序化建模，

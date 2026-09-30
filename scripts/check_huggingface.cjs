@@ -36,7 +36,7 @@ async function check(directory){
    await page.goto(`http://localhost:${server.address().port}/embed`);
    const frame=page.frameLocator('iframe');
    await frame.locator('#lab-cloth').waitFor();
-   assert.equal(await frame.locator('.card').count(),8);
+   assert.equal(await frame.locator('.card').count(),9);
    const homeText=await frame.locator('body').innerText();
    assert.ok(homeText.includes('0.05° apart.'));
    assert.ok(homeText.includes('中文'));
@@ -91,6 +91,15 @@ async function check(directory){
      assert.equal(await frame.locator('#joint').inputValue(),'3');
     }
    }
+   const factory=page.frames().find(f=>f.url().includes('127.0.0.1'));
+   await factory.goto(`http://127.0.0.1:${server.address().port}/factory-twin/index.html#mode=shadow&k=400`);
+   const factoryLab=JSON.parse(await readFile(resolve(root,'factory-twin','lab.json'),'utf8'));
+   assert.equal(await frame.locator('#k-good').textContent(),String(factoryLab.runs.shadow.plant.good[400]));
+   assert.equal(await frame.locator('[data-mode=shadow]').getAttribute('aria-pressed'),'true');
+   await frame.locator('#film').evaluate(v=>{v.preload='metadata';v.load();});
+   await factory.waitForFunction(()=>document.querySelector('#film').readyState>=1);
+   assert.equal(Math.round(await frame.locator('#film').evaluate(v=>v.duration)),24);
+   assert.equal(await factory.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    const solver=page.frames().find(f=>f.url().includes('127.0.0.1'));
    await solver.goto(`http://127.0.0.1:${server.address().port}/solver-lab/index.html#engine=newton&substeps=16&sample=60`);
    assert.equal(await frame.locator('#position-error').textContent(),'2.046 cm');
@@ -100,7 +109,7 @@ async function check(directory){
    const solverDownload=page.waitForEvent('download');await frame.locator('#csv').click();
    assert.equal((await readFile(await (await solverDownload).path(),'utf8')).trim().split('\n').length,367);
    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(external,[]);
-   rows.push({width,labs:5,cross_origin_embed:true,clipboard_denied:true,share_links:true,solver_export:true,
+   rows.push({width,labs:6,factory_twin:true,cross_origin_embed:true,clipboard_denied:true,share_links:true,solver_export:true,
     cloth_figure_and_sample:true,microduck_video_and_frame_json:true,missing_assets:0,external_runtime_requests:0});
    await page.close();
   }

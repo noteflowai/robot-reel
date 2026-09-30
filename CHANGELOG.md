@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- Publish a 24-second Cycles flythrough of the Factory Twin campus with
+  `film.json`, which maps every film frame to one recorded sample and pins the
+  checked Blender project (`scripts/render_factory_twin_film.py`,
+  `scripts/build_factory_twin_film.py --verify`).
+- Host the Factory Twin Lab in the Hugging Face Space.
+- Fetch `factory-twin-blender.zip` from a pinned dataset revision in release
+  builds, verify it against `blender-check.json` and list it in `SHA256SUMS`.
+- Add Open Graph and Twitter card metadata to the Factory Twin page.
+
 ## 0.18.0 — 2026-09-30
 
 - Add the Factory Twin Lab and `robot-reel factory-twin`: a closed-loop

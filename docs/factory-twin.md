@@ -7,6 +7,11 @@
 
 ![Cycles render of the procedural factory hall with the digital-twin overlay](factory-twin/poster.png)
 
+**[Watch the 24-second flythrough](https://noteflowai.github.io/robot-reel/factory-twin/film.mp4)**
+(Cycles, rendered at 1080p, encoded at 1600 × 900). The camera path is cinematography; every film frame shows one
+recorded sample of the closed-loop shift, and [`film.json`](factory-twin/film.json)
+lists that mapping, the camera keys and the hash of the checked Blender project.
+
 A simulated plant (a six-station production line, three AMRs, hall climate and
 campus energy) sends noisy, lossy, delayed telemetry to a digital twin. The twin
 completes the loop:
@@ -66,6 +71,27 @@ AMR poses and payloads, twin ghost AMRs, the wear gauge (truth, estimate and
 dimming under the recorded cloud. Frame `k + 1` shows sample `k` (5 s of plant
 time) at 30 fps. Blender performs no physics.
 
+## Where to get it
+
+| Channel | What it contains |
+| --- | --- |
+| [Project site](https://noteflowai.github.io/robot-reel/factory-twin/) | Interactive lab, renders and the flythrough film |
+| [Hugging Face Space](https://huggingface.co/spaces/glayguo/robot-reel/tree/main/factory-twin) | The same lab, hosted beside the other experiments |
+| [GitHub Release](https://github.com/noteflowai/robot-reel/releases/latest) | `robot-reel-factory-twin-experiment.zip` (offline lab) and `factory-twin-blender.zip` (Blender + OpenUSD) |
+| [PyPI](https://pypi.org/project/robot-reel/) | `robot-reel factory-twin --verify` and `--export-from` |
+
+The Blender archive is stored at a pinned revision of the
+[`glayguo/noteflow-research-pilots`](https://huggingface.co/datasets/glayguo/noteflow-research-pilots)
+dataset (see `requirements/research-release-assets.json`); release builds fetch
+it, check every project and USD hash against `blender-check.json` and list it in
+`SHA256SUMS`. The copy attached to v0.18.0 after publication has SHA-256
+`e205a6e633784898e7db7b27ede00b572056c116f4a5cd62153a8ac869788baf`. Check any copy with:
+
+```bash
+python3 scripts/package_factory_twin_blender.py --verify factory-twin-blender.zip
+python3 scripts/build_factory_twin_film.py --verify docs/factory-twin
+```
+
 ## Reproduce
 
 ```bash
@@ -76,6 +102,13 @@ robot-reel factory-twin --output docs/factory-twin --verify --all-seeds
 # Rebuild everything: simulate, model, check, render, publish (Blender 5.2 LTS)
 python3 scripts/build_factory_twin.py --output docs/factory-twin \
   --work artifacts/factory-twin --blender /path/to/blender --preview
+
+# Render and encode the flythrough film (about 50 minutes on an L40S)
+blender --background --python scripts/render_factory_twin_film.py -- \
+  --blend artifacts/factory-twin/factory-twin-closed.blend --output artifacts/factory-twin/film \
+  --samples 40 --width 1920 --height 1080
+python3 scripts/build_factory_twin_film.py --frames artifacts/factory-twin/film \
+  --blend artifacts/factory-twin/factory-twin-closed.blend --output docs/factory-twin
 
 # Or run the Blender stages by hand
 blender --background --factory-startup --python scripts/build_factory_twin_blender.py -- \

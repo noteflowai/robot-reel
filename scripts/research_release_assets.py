@@ -17,7 +17,8 @@ def fetch_assets(source, output, *, opener=urllib.request.urlopen):
         raise ValueError("expected the reviewed immutable public dataset")
     files = document["files"]
     required = {"scene-lab-native.zip", "research-records.zip"}
-    if set(files) not in (required, required | {"scene-motion-native.zip"}):
+    optional = {"scene-motion-native.zip", "factory-twin-blender.zip"}
+    if not required <= set(files) <= required | optional:
         raise ValueError("unexpected research release inventory")
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
@@ -58,6 +59,12 @@ def fetch_assets(source, output, *, opener=urllib.request.urlopen):
                     if (scene["files"]["scene.blend"] != {"sha256": checksum, "bytes": len(native)}
                             or check["scene_sha256"] != checksum or check["passed"] is not True):
                         raise ValueError("native scene differs from recorded independent check")
+            elif name == "factory-twin-blender.zip":
+                # Every project and USD hash must match the receipt published with the lab.
+                import sys
+                sys.path.insert(0, str(Path(source) / "scripts"))
+                from package_factory_twin_blender import verify as verify_factory
+                verify_factory(path, Path(source) / "docs/factory-twin")
             elif name == "scene-motion-native.zip":
                 expected_names = {"README.md", "LICENSE", "check_scene_motion_blender.py"}
                 for variant in ("baseline", "edited"):

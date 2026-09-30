@@ -25,7 +25,10 @@ class HuggingFaceSpaceTests(unittest.TestCase):
     def test_package_preserves_original_evidence_and_includes_no_private_workspace(self):
         manifest = verify(self.site)
         # Recorded labs include scene/native policy evidence and model review, loaded on demand.
-        self.assertLess(self.result["bytes"], 160*1024*1024)
+        # 0.18.0 added the Factory Twin (about 14 MB of traces, renders and its offline ZIP,
+        # plus a 5 MB flythrough film).
+        self.assertLess(self.result["bytes"], 182*1024*1024)
+        self.assertNotIn("factory-twin/preview.gif", manifest["files"])
         self.assertNotIn(".git", {p.name for p in self.site.iterdir()})
         self.assertTrue(all(path.startswith(tuple(f"docs/{lab}/" for lab in LABS))
                             or path.startswith("huggingface/") or path in

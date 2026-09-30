@@ -26,8 +26,10 @@ from scripts.build_model_review import verify as verify_model_review
 from robot_reel.solver_lab import verify as verify_solver
 from robot_reel.scene_lab import verify as verify_scene
 from robot_reel.libero_plus_site import verify as verify_plus
+from robot_reel.factory_twin import verify as verify_factory
 
-LABS = ("cloth", "stress", "chaos", "microduck-lab", "solver-lab", "scene-lab", "libero-plus", "model-review")
+LABS = ("cloth", "stress", "chaos", "microduck-lab", "solver-lab", "scene-lab", "libero-plus", "model-review",
+        "factory-twin")
 SOURCE = "https://github.com/noteflowai/robot-reel"
 SITE = "https://noteflowai.github.io/robot-reel/"
 SCHEMA = "robot-reel-space-1"
@@ -120,6 +122,8 @@ def verify(directory):
     verify_scene(directory/"scene-lab")
     verify_plus(directory/"libero-plus")
     verify_model_review(directory/"model-review")
+    # Source files are hash-checked above; skip re-execution to keep the build bounded.
+    verify_factory(directory/"factory-twin", reexecute=False)
     if cloth["vertex_samples"] != 42471 or stress["completed_trials"] != 30:
         raise ValueError("Space evidence counts differ from the advertised experiments")
     return record
@@ -142,7 +146,9 @@ def build(destination, *, root=ROOT, allow_dirty=False):
     tracked = subprocess.check_output(
         ["git", "-C", str(root), "ls-files", "-z", *(f"docs/{lab}" for lab in LABS)]
     ).decode().split("\0")
-    inputs = {name: name.removeprefix("docs/") for name in tracked if name}
+    # README-only media is not part of any lab and would only add weight to the Space.
+    readme_only = {"docs/factory-twin/preview.gif", "docs/factory-twin/preview.json"}
+    inputs = {name: name.removeprefix("docs/") for name in tracked if name and name not in readme_only}
     inputs.update({
         "huggingface/index.html": "index.html", "huggingface/README.md": "README.md",
         "huggingface/space.gitattributes": ".gitattributes", "huggingface/thumbnail.png": "thumbnail.png",
