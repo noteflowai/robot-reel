@@ -1,0 +1,175 @@
+{
+  "schema": "robot-reel-factory-twin-1",
+  "verified": true,
+  "frames_checked": 2161,
+  "usd_frames_checked": 2161,
+  "inputs": {
+    "lab.json": "ecc4a4d01327f8b0905bdec9d8adbd2cb1fdd121513f67a0b371dcf75d47d2f1"
+  },
+  "blender_version": "5.2.1 LTS",
+  "modes": {
+    "shadow": {
+      "schema": "robot-reel-factory-twin-1",
+      "mode": "shadow",
+      "verified": true,
+      "blender_version": "5.2.1 LTS",
+      "frames_checked": 2161,
+      "channels": 313,
+      "channel_values_checked": 676393,
+      "maximum_channel_error": 3.0273437459982233e-05,
+      "independent_checks": [
+        "AMR positions",
+        "visible crates per buffer",
+        "station beacon colours",
+        "CNC 2 wear gauge height",
+        "constant hold at sub-frame 0.5 (every 60th frame)"
+      ],
+      "usd_up_axis": "Z",
+      "usd_animated_prims": 85,
+      "usd_frames_checked": 2161,
+      "maximum_usd_transform_error": 1.2780917707289063e-05,
+      "inputs": {
+        "lab.json": "ecc4a4d01327f8b0905bdec9d8adbd2cb1fdd121513f67a0b371dcf75d47d2f1",
+        "blend": "26742197a692315b0eaa5dbf2848cd7f4ddb8f8c973f097a432ada13fe1b5f5f",
+        "usd": "a9e3b7cea6d2223e59da93b4323ff22282a8d9097c515a4872c6ea3950479125"
+      },
+      "bytes": {
+        "blend": 1156246,
+        "usd": 2795526
+      }
+    },
+    "closed": {
+      "schema": "robot-reel-factory-twin-1",
+      "mode": "closed",
+      "verified": true,
+      "blender_version": "5.2.1 LTS",
+      "frames_checked": 2161,
+      "channels": 313,
+      "channel_values_checked": 676393,
+      "maximum_channel_error": 2.392578130638867e-05,
+      "independent_checks": [
+        "AMR positions",
+        "visible crates per buffer",
+        "station beacon colours",
+        "CNC 2 wear gauge height",
+        "constant hold at sub-frame 0.5 (every 60th frame)"
+      ],
+      "usd_up_axis": "Z",
+      "usd_animated_prims": 85,
+      "usd_frames_checked": 2161,
+      "maximum_usd_transform_error": 1.2780917707289063e-05,
+      "inputs": {
+        "lab.json": "ecc4a4d01327f8b0905bdec9d8adbd2cb1fdd121513f67a0b371dcf75d47d2f1",
+        "blend": "19b8c2ca1f8f8f37e19422330d3df6d8af260cb9c1f8d451250ff13a4ef02bbe",
+        "usd": "9797133af1f71c4d37916e3ad2da81195ffd4e66f5dcdfa1f36ca621dc403ba2"
+      },
+      "bytes": {
+        "blend": 1187300,
+        "usd": 2853121
+      }
+    }
+  },
+  "renders": [
+    {
+      "view": "hall",
+      "camera": "Camera / Hall cutaway",
+      "cutaway": true,
+      "device": [
+        "OPTIX",
+        [
+          "NVIDIA L40S"
+        ]
+      ],
+      "samples": 160,
+      "frames": [
+        {
+          "frame": 361,
+          "file": "poster-hall-0361.png",
+          "seconds": 96.68
+        }
+      ],
+      "published_as": "poster.png"
+    },
+    {
+      "view": "aerial",
+      "camera": "Camera / Campus aerial",
+      "cutaway": false,
+      "device": [
+        "OPTIX",
+        [
+          "NVIDIA L40S"
+        ]
+      ],
+      "samples": 160,
+      "frames": [
+        {
+          "frame": 361,
+          "file": "render-aerial-aerial-0361.png",
+          "seconds": 111.57
+        }
+      ],
+      "published_as": "render-aerial.jpg"
+    },
+    {
+      "view": "hall",
+      "camera": "Camera / Hall cutaway",
+      "cutaway": true,
+      "device": [
+        "OPTIX",
+        [
+          "NVIDIA L40S"
+        ]
+      ],
+      "samples": 160,
+      "frames": [
+        {
+          "frame": 361,
+          "file": "render-hall-hall-0361.png",
+          "seconds": 91.06
+        }
+      ],
+      "published_as": "render-hall.jpg"
+    },
+    {
+      "view": "cnc",
+      "camera": "Camera / CNC twin close-up",
+      "cutaway": true,
+      "device": [
+        "OPTIX",
+        [
+          "NVIDIA L40S"
+        ]
+      ],
+      "samples": 160,
+      "frames": [
+        {
+          "frame": 361,
+          "file": "render-cnc-cnc-0361.png",
+          "seconds": 87.93
+        }
+      ],
+      "published_as": "render-cnc.jpg"
+    },
+    {
+      "view": "energy",
+      "camera": "Camera / Energy & parking",
+      "cutaway": false,
+      "device": [
+        "OPTIX",
+        [
+          "NVIDIA L40S"
+        ]
+      ],
+      "samples": 160,
+      "frames": [
+        {
+          "frame": 1201,
+          "file": "render-energy-energy-1201.png",
+          "seconds": 74.38
+        }
+      ],
+      "published_as": "render-energy.jpg"
+    }
+  ],
+  "note": "Produced by scripts/check_factory_twin_blender.py; robot-reel --verify checks this receipt's inputs but does not re-run Blender."
+}

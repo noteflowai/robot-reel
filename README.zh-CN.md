@@ -65,6 +65,7 @@ Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回
 | --- | --- | --- |
 | 回放自己的 LeRobot 数据集 | [`robot-reel lerobot`](docs/lerobot.md) · [SO-101 示例](https://noteflowai.github.io/robot-reel/lerobot/) | 可离线打开的页面：全部相机、各关节指令与实测对照、带校验的源文件指纹 |
 | 复核策略在不同条件下的表现 | [SmolVLA 压力实验室](https://noteflowai.github.io/robot-reel/stress/) | 配对结果、相机画面、动作轨迹与离线实验包 |
+| 在工厂与园区上跑通数字孪生闭环 | [工厂数字孪生实验室](https://noteflowai.github.io/robot-reel/factory-twin/) | 闭环与影子模式配对班次、决策依据、Blender 与 OpenUSD 工程 |
 | 检查仿真参数与数值误差 | [Genesis × Newton 步长对照](https://noteflowai.github.io/robot-reel/solver-lab/) | 误差曲线、原始样本与可编辑 OpenUSD |
 | 编辑实景资产并复核修改 | [Blender 场景实验室](https://noteflowai.github.io/robot-reel/scene-lab/) | 修改前后工程、渲染图与编辑参数 |
 
@@ -84,13 +85,13 @@ Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回
 [场景库](https://noteflowai.github.io/robot-reel/#demos)支持按策略运行、实验对照和
 三维创作筛选；预览点击后播放。
 
-使用 Python 3.12+，从 [PyPI](https://pypi.org/project/robot-reel/0.17.0/)
+使用 Python 3.12+，从 [PyPI](https://pypi.org/project/robot-reel/0.18.0/)
 安装已发布的命令行工具：
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install robot-reel==0.17.0
+python -m pip install robot-reel==0.18.0
 robot-reel --help
 ```
 
@@ -126,7 +127,7 @@ PyPI 与 GitHub Releases 提供相同的 wheel 和源码包，容器支持按宿
 SHA-256；`--check-source` 会重新读取数据集逐值比对。支持 v3.0 与 v2.x，无需安装 LeRobot。
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.17.0'
+python -m pip install 'robot-reel[lerobot]==0.18.0'
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
 robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 ```
@@ -135,6 +136,30 @@ robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 [使用说明、校验与限制](docs/lerobot.md) ·
 数据来源：[`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace)
 第 0 个 episode（Apache-2.0），即 SmolVLA 微调所用的真实 SO-101 数据。
+
+## 同一班次，闭环运行。
+
+**工厂数字孪生实验室：工厂与园区 × Blender 5.2 × OpenUSD。** 一条仿真产线、AMR 车队、
+车间温控与园区能源系统，把带噪声、会丢包、有延迟的遥测发送给数字孪生。孪生体据此同步
+工厂状态，用卡尔曼滤波估计看不见的主轴磨损，在自己的模型上推演 14 种维护方案，预测计费
+需量，再把指令下发回工厂。同一班次可在**闭环**模式下回放，也可切换到**影子**模式：同一个
+孪生体只给建议、不执行。
+
+<a href="https://noteflowai.github.io/robot-reel/factory-twin/"><picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="docs/factory-twin/poster.png">
+  <img src="docs/factory-twin/preview.gif" width="100%" alt="程序化工厂车间在闭环班次中的 Cycles 延时渲染：工位信号灯、料箱、AMR 与青色孪生状态环随每个样本变化。">
+</picture></a>
+
+**[打开工厂数字孪生实验室 ↗](https://noteflowai.github.io/robot-reel/factory-twin/)** ·
+[离线实验包](https://noteflowai.github.io/robot-reel/factory-twin/experiment.zip) ·
+[Blender 与 OpenUSD 工程](https://github.com/noteflowai/robot-reel/releases/latest/download/factory-twin-blender.zip) ·
+[模型、闭环与校验说明](docs/factory-twin.md)
+
+在 **12 组配对班次**中，闭环模式主轴故障为 0 次（影子模式 11 次），超出需量上限的计费时段
+为 0 个（影子模式 8 个）；合格品数量 10 组增加、2 组减少。整个园区在 Blender 中程序化建模，
+每种模式的 676,393 个动画数值逐帧核对，并经 OpenUSD 读回校验。
+`robot-reel factory-twin --verify` 仅用 Python 标准库即可重新执行工厂与孪生体。
+该工厂为示意模型，未按真实工厂标定。
 
 ## 同一帧，回到三维现场。
 
@@ -441,6 +466,7 @@ EvalArc 根据原始坐标与时钟检查模型交付的程序。
 | 在本地运行 SmolVLA | [独立 CPU 环境与固定模型版本](docs/vla.md) |
 | 让 Agent 为实验编排成片 | [MCP 配置与 Blender 构建／渲染](docs/director.md) |
 | 把仿真运行记录导入三维软件 | [Newton → OpenUSD → Blender](docs/newton.md) |
+| 在 Blender 中构建工厂孪生 | [程序化园区 → 校验过的 Blender/OpenUSD](docs/factory-twin.md) |
 | 探索仿真参数扫描 | [蝴蝶效应实验室 → 12 个隔离世界](docs/chaos.md) |
 | 录制 Microduck、制动或机械臂 | [录制场景与运行环境](docs/recording.zh-CN.md) |
 | 对照两次运行的结果 | [比较约定与 CLI](docs/comparison.md) |

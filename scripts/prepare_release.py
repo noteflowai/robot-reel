@@ -15,7 +15,7 @@ OFFLINE_FILES = {
     "robot-reel-cloth-experiment.zip", "robot-reel-cloth-scene.usdc",
     "robot-reel-paired-outcomes.json",
     "robot-reel-microduck-experiment.zip", "robot-reel-microduck-frame.json",
-    "robot-reel-solver-experiment.zip",
+    "robot-reel-solver-experiment.zip", "robot-reel-factory-twin-experiment.zip",
 }
 
 
@@ -60,6 +60,11 @@ download documented in `examples/scene-motion/README.md`.
 interop receipts. Research assets are fetched from a pinned immutable public dataset
 revision, verified against committed sizes/SHA-256, and included in SHA256SUMS.
 OpenEnv's actual recipe controls are documented with raw evidence in the repository.
+
+Factory Twin Lab includes both loop modes of the featured shift, raw telemetry,
+the twin's decision log, all 12 seed pairs, Cycles renders and the Blender/OpenUSD
+readback receipt. Run `robot-reel factory-twin --output factory-twin --verify` after
+extraction to re-execute plant and twin with the standard library.
 
 Solver Lab includes six CUDA recordings from Genesis 1.4.1 and Newton 1.6.0,
 the analytic-reference diagnostics, native Genesis replays and editable USD.

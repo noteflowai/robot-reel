@@ -68,6 +68,7 @@ then use its guide to record or edit your own scene.
 | --- | --- | --- |
 | Replay your own LeRobot dataset episode | [`robot-reel lerobot`](docs/lerobot.md) · [SO-101 example](https://noteflowai.github.io/robot-reel/lerobot/) | An offline page with every camera, commanded vs. measured joints and fingerprinted source files |
 | Review a policy under changed conditions | [SmolVLA Stress Lab](https://noteflowai.github.io/robot-reel/stress/) | Paired outcomes, camera views, action traces and an offline experiment |
+| Close a digital-twin loop on a factory and campus | [Factory Twin Lab](https://noteflowai.github.io/robot-reel/factory-twin/) | Paired closed-loop and shadow shifts, decision evidence, Blender and OpenUSD projects |
 | Inspect simulation parameters and numerical error | [Genesis × Newton Solver Lab](https://noteflowai.github.io/robot-reel/solver-lab/) | Error curves, original samples and editable OpenUSD |
 | Edit captured assets and review the change | [Blender Scene Lab](https://noteflowai.github.io/robot-reel/scene-lab/) | Baseline and edited projects, renders and edit parameters |
 
@@ -90,13 +91,13 @@ compare a real paired outcome, inspect its native Rerun workspace, then verify
 the full experiment locally. The [demo gallery](https://noteflowai.github.io/robot-reel/#demos)
 filters policy runs, comparison experiments and 3D creation; previews play on request.
 
-Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.17.1/)
+Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.18.0/)
 with Python 3.12+:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install robot-reel==0.17.1
+python -m pip install robot-reel==0.18.0
 robot-reel --help
 ```
 
@@ -162,7 +163,7 @@ the dataset and compares every value. Supports v3.0 and v2.x; LeRobot itself
 is not required.
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.17.1'
+python -m pip install 'robot-reel[lerobot]==0.18.0'
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
 robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 ```
@@ -174,6 +175,33 @@ robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 [Guide, checks and limits](docs/lerobot.md) ·
 Source: episode 0 of [`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace)
 (Apache-2.0), the real SO-101 data SmolVLA was fine-tuned on.
+
+## One shift. Close the loop.
+
+**Factory Twin Lab — factory & campus × Blender 5.2 × OpenUSD.** A simulated
+production line, AMR fleet, hall climate and campus energy system stream noisy,
+lossy telemetry to a digital twin. The twin mirrors the plant, estimates hidden
+spindle wear with a Kalman filter, tests 14 what-if maintenance plans on its own
+model, forecasts billed demand and sends commands back. Replay the same shift
+with the loop **closed** or with the identical twin in **shadow** mode.
+
+<a href="https://noteflowai.github.io/robot-reel/factory-twin/"><picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="docs/factory-twin/poster.png">
+  <img src="docs/factory-twin/preview.gif" width="100%" alt="Time-lapse Cycles render of the procedural factory hall over the recorded closed-loop shift: station beacons, crates, AMRs and cyan twin rings change with every sample.">
+</picture></a>
+
+**[Open the Factory Twin Lab ↗](https://noteflowai.github.io/robot-reel/factory-twin/)** ·
+[Offline experiment](https://noteflowai.github.io/robot-reel/factory-twin/experiment.zip) ·
+[Blender + OpenUSD projects](https://github.com/noteflowai/robot-reel/releases/latest/download/factory-twin-blender.zip) ·
+[Model, loop and checks](docs/factory-twin.md)
+
+Across **12 paired shifts** the closed loop had 0 spindle failures (shadow: 11)
+and 0 billing intervals over the demand limit (shadow: 8); good parts rose in
+10 pairs and fell in 2. The whole campus is modelled procedurally in Blender,
+and all 676,393 animated values per mode were checked frame by frame, then read
+back through OpenUSD. `robot-reel factory-twin --verify` re-executes plant and
+twin with the standard library. The plant is illustrative, not calibrated to a
+real site.
 
 ## One frame. Back in the scene.
 
@@ -512,6 +540,7 @@ Choose the workflow you want to build:
 | Run SmolVLA locally | [Isolated CPU environment + pinned models](docs/vla.md) |
 | Let an agent direct a film | [MCP setup + Blender build/render](docs/director.md) |
 | Export recorded simulations to a DCC | [Newton → OpenUSD → Blender](docs/newton.md) |
+| Model a factory twin in Blender | [Procedural campus → checked Blender/OpenUSD](docs/factory-twin.md) |
 | Explore a physics parameter sweep | [Butterfly Lab → twelve isolated worlds](docs/chaos.md) |
 | Record Microduck, braking or the arm | [Recording packs + runtime setup](docs/recording.md) |
 | Compare two captured runs | [Comparison contract + CLI](docs/comparison.md) |

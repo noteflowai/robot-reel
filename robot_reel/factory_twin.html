@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Factory Twin Lab — Close the loop · Robot Reel</title>
+<meta name="description" content="A closed-loop digital twin of a simulated factory and campus: telemetry, state estimation, what-if prediction and actuated decisions, paired against a shadow twin that only advises. Procedural Blender 5.2 model and OpenUSD included.">
+<style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:#070d17;color:#edf4ff;font-size:16px;--muted:#a3b3c9;--line:#24324a;--cyan:#38d9ff;--mint:#79efcb;--amber:#ffbf5c;--red:#ff6b5c;--blue:#5f9bff;--violet:#b6a4ff;--panel:#0b1423;--panel2:#0e1a2c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#133049 0,transparent 50%)}a{color:var(--cyan);text-underline-offset:4px}button,select,input{font:inherit}
+button,.link{border:1px solid #3a4b64;background:#152237;color:#edf5ff;min-height:44px;padding:9px 14px;border-radius:10px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+button:hover,.link:hover{background:#213551}button:focus-visible,a:focus-visible,input:focus-visible,canvas:focus-visible,select:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+button[aria-pressed=true]{border-color:var(--cyan);background:#123447}button.primary{color:#04121a;background:var(--cyan);border-color:var(--cyan);font-weight:750}
+.skip{position:absolute;top:-100px;padding:14px;background:#123447;z-index:4}.skip:focus{top:10px}
+main,nav,footer{max-width:1320px;margin:auto;padding:22px 30px}nav{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line)}nav a{text-decoration:none;font-weight:700}nav small{color:var(--muted)}
+.eyebrow{color:var(--cyan);font:700 .76rem ui-monospace,monospace;letter-spacing:.15em;text-transform:uppercase;margin:0}
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:30px;align-items:center;padding:18px 0 26px}h1{font-size:clamp(2.3rem,5vw,4.2rem);line-height:1.03;letter-spacing:-.05em;margin:14px 0 18px}h1 span{color:var(--cyan)}
+.intro{color:var(--muted);font-size:1.05rem;line-height:1.65;margin:0 0 18px}.hero figure{margin:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}.hero img{display:block;width:100%;height:auto}.hero figcaption{font-size:.78rem;color:var(--muted);padding:10px 14px;background:var(--panel)}
+.stamps{display:flex;gap:26px;flex-wrap:wrap}.stamps div{border-left:2px solid var(--line);padding-left:12px}.stamps strong{display:block;font:650 1.55rem ui-monospace,monospace}.stamps small{color:var(--muted);font-size:.78rem}
+.loop{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:0 0 22px;padding:0;list-style:none;counter-reset:s}.loop li{position:relative;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px 12px 12px 14px;font-size:.8rem;color:var(--muted);line-height:1.45}.loop li b{display:block;color:#edf4ff;font-size:.88rem;margin-bottom:4px}.loop li b::before{counter-increment:s;content:counter(s) " ";color:var(--cyan);font-family:ui-monospace,monospace}.loop li output{display:block;color:var(--mint);font:.78rem ui-monospace,monospace;margin-top:6px;min-height:2.4em}.loop li[data-loop=shadow]{border-style:dashed}
+.panel{border:1px solid var(--line);border-radius:18px;background:var(--panel);overflow:hidden}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}.panel-head h2{font-size:1.05rem;margin:0}.panel-head p{color:var(--muted);font-size:.84rem;margin:6px 0 0}
+.seg{display:inline-flex;border:1px solid #3a4b64;border-radius:12px;overflow:hidden}.seg button{border:0;border-radius:0;min-height:42px}.seg button+button{border-left:1px solid #3a4b64}
+.stage{display:grid;grid-template-columns:1fr 330px;align-items:start}.view{position:relative;background:#0a1220;touch-action:none}.view canvas{display:block;width:100%;height:auto;cursor:grab}.view canvas:active{cursor:grabbing}.overlay{position:absolute;left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap}.overlay button{min-height:36px;padding:6px 10px;font-size:.8rem;background:#0d1a2bd9}.hud{position:absolute;right:12px;top:12px;font:.8rem ui-monospace,monospace;background:#07101cd9;border:1px solid var(--line);border-radius:10px;padding:8px 10px;text-align:right;line-height:1.5}.legend3d{pointer-events:none;position:absolute;left:12px;bottom:12px;display:flex;gap:10px;flex-wrap:wrap;font-size:.72rem;color:var(--muted);background:#07101cd0;border-radius:8px;padding:6px 9px}.legend3d i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.side{border-left:1px solid var(--line);display:flex;flex-direction:column}.kpi{padding:13px 16px;border-bottom:1px solid var(--line)}.kpi span{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em}.kpi strong{display:block;font:600 1.35rem ui-monospace,monospace;margin:4px 0 2px}.kpi small{color:var(--muted);font-size:.74rem;line-height:1.4;display:block}.bar{height:6px;border-radius:3px;background:#1a2940;margin-top:7px;position:relative;overflow:hidden}.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px}
+.controls{padding:14px 20px;background:var(--panel2);border-top:1px solid var(--line)}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.toolbar label{color:var(--muted);font-size:.84rem}.scrub{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;margin-top:12px}.scrub input{width:100%;accent-color:var(--cyan);min-height:32px}.scrub output{font:.86rem ui-monospace,monospace;min-width:190px;text-align:right}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-top:1px solid var(--line)}.chart{background:var(--panel);padding:12px 14px}.chart h3{font-size:.9rem;margin:0 0 3px}.chart p{font-size:.76rem;color:var(--muted);margin:0 0 6px}.chart canvas{width:100%;height:auto;display:block;cursor:crosshair}.chart.wide{grid-column:1/-1}
+.below{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;margin-top:22px}.section{padding:20px}.section h2{font-size:1.15rem;margin:0 0 10px}.section p,.section li{color:var(--muted);font-size:.9rem;line-height:1.62}.section ul{padding-left:20px}
+.table-wrap{overflow:auto;max-height:520px}table{width:100%;border-collapse:collapse;text-align:left;font-size:.82rem}caption{text-align:left;color:var(--muted);padding:0 0 12px;line-height:1.55}th,td{padding:8px 7px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-weight:500;position:sticky;top:0;background:var(--panel)}td button{min-height:36px;padding:5px 9px;font-size:.78rem;white-space:nowrap}tr[data-current=true]{background:#10303c}.tag{display:inline-block;font:.7rem ui-monospace,monospace;padding:2px 6px;border-radius:6px;border:1px solid currentColor;white-space:nowrap}.tag.act{color:var(--mint)}.tag.adv{color:var(--amber)}.tag.info{color:var(--muted)}.tag.alarm{color:var(--red)}
+.num{font-family:ui-monospace,monospace;text-align:right;white-space:nowrap}.good{color:var(--mint)}.bad{color:var(--red)}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}.gallery figure{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}.gallery img{width:100%;height:auto;display:block}.gallery figcaption{font-size:.74rem;color:var(--muted);padding:8px 10px;line-height:1.4}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 0}.status{color:var(--mint);min-height:1.5em;font-size:.86rem;margin:12px 0 0}.note{font-size:.8rem;color:var(--muted);line-height:1.6}.scope{border-left:2px solid var(--amber);padding-left:14px}code{font-size:.85em;background:#101c2e;padding:1px 5px;border-radius:5px}
+footer{font-size:.8rem;color:var(--muted);line-height:1.7;padding-bottom:40px}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:1100px){.stage{grid-template-columns:1fr}.side{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr)}.loop{grid-template-columns:repeat(3,1fr)}.gallery{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:800px){main,nav,footer{padding:16px}.hero{grid-template-columns:1fr}.below,.charts{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.loop{grid-template-columns:1fr 1fr}nav small{display:none}.legend3d{position:static;border-radius:0}.overlay{position:static;padding:8px;background:#0a1220}.scrub{grid-template-columns:1fr auto}.scrub label{grid-column:1/-1}.scrub output{min-width:0}.hud{display:none}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#twin">Skip to the twin</a>
+<nav><a href="../">↖ Robot Reel</a><small>SENSE · SYNC · PREDICT · DECIDE · ACT</small><a href="METHODS.md">Methods &amp; limits ↗</a></nav>
+<main>
+<header class="hero">
+<div>
+<p class="eyebrow">Factory Twin Lab / campus × line × energy</p>
+<h1>Same shift. Same failure.<br><span>Close the loop.</span></h1>
+<p class="intro">A simulated plant streams noisy, lossy telemetry to its digital twin. The twin mirrors the line, estimates hidden spindle wear, forecasts the billed power demand, tests what-if plans on its own model and sends commands back. Replay the shift with the loop <strong>closed</strong>, or with the same twin in <strong>shadow</strong> mode, where it only advises.</p>
+<div class="stamps" id="stamps"></div>
+</div>
+<figure><img src="poster.png" width="1600" height="900" alt="Cycles render of the procedural Blender model: a cutaway assembly hall with CNC machines, a robotic weld cell, assembly and inspection stations, cyan twin status rings linked to the operations center, and the surrounding campus." ><figcaption>Blender 5.2 Cycles render of the same recorded sample (10:30, CNC 2 in planned service). Procedural model; no downloaded assets.</figcaption></figure>
+</header>
+
+<ol class="loop" aria-label="The digital twin loop at the selected moment">
+<li><b>Plant</b>Six stations, 5 buffers, 3 AMRs, hall climate, PV, EV chargers. 1 s steps.<output id="loop-plant"></output></li>
+<li><b>Telemetry</b>PLC, CNC, energy, hall and AMR packets every 5 s. 2–3% lost; one sample of latency.<output id="loop-telemetry"></output></li>
+<li><b>Sync</b>The twin mirrors buffers, states and AMR poses from the packets it actually received.<output id="loop-sync"></output></li>
+<li><b>Estimate</b>Extended Kalman filter on vibration → CNC 2 wear and wear rate.<output id="loop-estimate"></output></li>
+<li><b>Predict</b>Every 5 min: 14 what-if runs of its own line model over 90 min. 15-min demand forecast every minute.<output id="loop-predict"></output></li>
+<li id="loop-act-item"><b>Decide &amp; act</b>Service, feed derate, setpoint and EV caps. Applied after 5 s — or only logged.<output id="loop-act"></output></li>
+</ol>
+
+<section class="panel" id="twin" aria-labelledby="twin-title">
+<div class="panel-head"><div><h2 id="twin-title">Live campus, recorded shift</h2><p id="selection">Loading the recorded shift…</p></div>
+<div class="seg" role="group" aria-label="Loop mode"><button type="button" data-mode="closed" aria-pressed="true">Closed loop</button><button type="button" data-mode="shadow" aria-pressed="false">Shadow twin (advice only)</button></div></div>
+<div class="stage">
+<div class="view"><canvas id="scene" width="1320" height="760" tabindex="0" role="img" aria-label="Interactive 3D view of the campus and production line at the selected sample. Drag to orbit, scroll to zoom. The panel beside it lists the same values as text."></canvas>
+<div class="overlay" role="group" aria-label="Camera"><button type="button" data-view="campus">Campus</button><button type="button" data-view="hall">Hall</button><button type="button" data-view="cnc">CNC 2</button><button type="button" data-view="energy">Energy</button><button type="button" id="ghosts" aria-pressed="true">Twin overlay</button><button type="button" id="zoom-in" aria-label="Zoom in">＋</button><button type="button" id="zoom-out" aria-label="Zoom out">－</button></div>
+<div class="hud" id="hud" aria-hidden="true"></div>
+<div class="legend3d" aria-hidden="true"><span><i style="background:#1ae65c"></i>busy</span><span><i style="background:#f2b82e"></i>starved</span><span><i style="background:#ff730d"></i>blocked</span><span><i style="background:#ff0a0a"></i>failed</span><span><i style="background:#1a6bff"></i>service</span><span><i style="background:#8c94a3"></i>break</span><span><i style="background:#9e52ff"></i>tip dress</span><span><i style="border:1px dashed #38d9ff"></i>twin's view</span></div>
+</div>
+<div class="side" aria-live="off">
+<div class="kpi"><span>Good parts so far</span><strong id="k-good"></strong><small id="k-good-note"></small></div>
+<div class="kpi"><span>CNC 2 spindle wear</span><strong id="k-wear"></strong><small id="k-wear-note"></small><div class="bar"><i id="k-wear-bar"></i></div></div>
+<div class="kpi"><span>Twin forecast</span><strong id="k-rul"></strong><small id="k-rul-note"></small></div>
+<div class="kpi"><span>Grid exchange now</span><strong id="k-grid"></strong><small id="k-grid-note"></small><div class="bar"><i id="k-grid-bar"></i></div></div>
+<div class="kpi"><span>Hall climate</span><strong id="k-hall"></strong><small id="k-hall-note"></small></div>
+<div class="kpi"><span>Latest twin decision</span><strong id="k-last" style="font-size:.95rem;font-family:inherit;line-height:1.35"></strong><small id="k-last-note"></small></div>
+</div>
+</div>
+<div class="controls"><div class="toolbar"><button id="play" class="primary" type="button">▶ Play shift</button><button id="prev" type="button" aria-label="Previous sample">← 5 s</button><button id="next" type="button" aria-label="Next sample">5 s →</button><button id="prev-decision" type="button">⟨ Decision</button><button id="next-decision" type="button">Decision ⟩</button><label for="speed">Speed</label><select id="speed"><option value="60">60×</option><option value="300" selected>300×</option><option value="900">900×</option></select></div>
+<div class="scrub"><label for="sample">Plant time</label><input id="sample" type="range" min="0" max="2160" value="0" step="1"><output id="clock" for="sample"></output></div></div>
+<div class="charts">
+<div class="chart wide"><h3>CNC 2 wear: plant truth vs. the twin's estimate</h3><p>Amber: true wear (hidden from the twin). Cyan: EKF estimate ±2σ. Red dotted: this plant's actual failure point; grey dashed: the twin's nominal threshold. Click to jump.</p><canvas id="c-wear" width="1280" height="210" role="img" aria-label="Wear over the shift for the selected mode."></canvas></div>
+<div class="chart"><h3>Good parts: closed loop vs. shadow</h3><p>Same seed, same disturbances. The only difference is whether commands reach the plant.</p><canvas id="c-good" width="630" height="210" role="img" aria-label="Cumulative good parts for both modes."></canvas></div>
+<div class="chart"><h3>Grid import and 15-minute billed demand</h3><p>Line: instantaneous import. Bars: completed billing intervals. Red: demand limit.</p><canvas id="c-grid" width="630" height="210" role="img" aria-label="Grid import and billing intervals for the selected mode."></canvas></div>
+</div>
+<p id="description" class="sr-only" aria-live="polite"></p>
+</section>
+
+<div class="gallery" aria-label="Cycles renders from the Blender project">
+<figure><a href="render-aerial.jpg"><img src="render-aerial.jpg" loading="lazy" width="1920" height="1080" alt="Aerial Cycles render of the campus: assembly hall, warehouse with trucks, office tower, energy center with water tower and a solar carport."></a><figcaption>Campus aerial · 10:30</figcaption></figure>
+<figure><a href="render-hall.jpg"><img src="render-hall.jpg" loading="lazy" width="1920" height="1080" alt="Cutaway render of the assembly hall with the production line and twin status rings."></a><figcaption>Hall cutaway · CNC 2 in service</figcaption></figure>
+<figure><a href="render-cnc.jpg"><img src="render-cnc.jpg" loading="lazy" width="1920" height="1080" alt="Close render of CNC 2 with the twin's wear gauge: amber truth bar beside the cyan estimate and its uncertainty band."></a><figcaption>CNC 2 wear gauge: truth vs. estimate</figcaption></figure>
+<figure><a href="render-energy.jpg"><img src="render-energy.jpg" loading="lazy" width="1920" height="1080" alt="Render of the solar carport under a passing cloud with EV chargers glowing orange while capped at 50%."></a><figcaption>Cloud over PV · chargers capped · 11:40</figcaption></figure>
+</div>
+
+<div class="below">
+<section class="panel section" aria-labelledby="log-title"><h2 id="log-title">Every decision, with its evidence.</h2>
+<div class="toolbar" style="margin-bottom:10px"><label><input type="checkbox" id="only-actions"> Commands only</label></div>
+<div class="table-wrap"><table><caption id="log-caption"></caption><thead><tr><th scope="col">Time</th><th scope="col">Twin</th><th scope="col">Decision</th><th scope="col">Evidence → prediction</th><th scope="col"><span class="sr-only">Jump</span></th></tr></thead><tbody id="log"></tbody></table></div>
+<p class="note" id="checks-note"></p></section>
+<section class="panel section" aria-labelledby="seeds-title"><h2 id="seeds-title">Twelve paired shifts.</h2>
+<div class="table-wrap" style="max-height:none"><table><caption id="seeds-caption"></caption><thead><tr><th scope="col">Seed</th><th scope="col" class="num">Good parts<br>shadow → closed</th><th scope="col" class="num">CNC 2<br>failures</th><th scope="col" class="num">Intervals<br>over limit</th><th scope="col" class="num">Peak kW</th></tr></thead><tbody id="seeds"></tbody></table></div>
+<p class="scope">Everything here is simulated. The plant model, its parameters and the twin's cost weights were chosen for this demonstration; they are not calibrated to a real factory. The comparison shows what closing this loop changes inside this model, not the value of a digital twin in general.</p>
+<div class="actions"><a class="link" href="experiment.zip" download>Offline lab ↓</a><a class="link" href="https://github.com/noteflowai/robot-reel/releases/latest/download/factory-twin-blender.zip">Blender + OpenUSD ↓</a><button id="csv" type="button">Samples CSV ↓</button><button id="share" type="button">Copy this view</button></div>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+<p class="note">Verify offline: <code>robot-reel factory-twin --output factory-twin --verify</code> re-executes the plant and twin with the standard library, replays the twin from the recorded telemetry alone and checks every file. <a href="manifest.json">Fingerprints</a> · <a href="blender-check.json">Blender &amp; USD readback</a> · <a href="trace-closed.json">Closed trace</a> · <a href="trace-shadow.json">Shadow trace</a></p></section>
+</div>
+</main>
+<footer>Robot Reel · Original procedural simulation and Blender model · Apache-2.0.<br>The browser replays recorded samples; it runs no simulation. Checks establish file consistency, not producer authentication.</footer>
+<script id="lab-data" type="application/json">__LAB_DATA__</script>
+<script>
+const lab=JSON.parse(document.getElementById('lab-data').textContent),$=id=>document.getElementById(id);
+const C=lab.config,L=lab.layout,N=C.samples,DT=C.sample_s,START=10*3600;
+const STATE=['#f2b82e','#1ae65c','#ff730d','#ff0a0a','#1a6bff','#8c94a3','#9e52ff'];
+const STATE_LABEL=C.state_names.map(s=>s==='idle'?'starved/idle':s);
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let mode='closed',k=0,playing=false,last=0,acc=0,ghosts=true,drag=null;
+const cam={tx:-10,ty:0,yaw:-1.05,pitch:.72,dist:250};
+const VIEWS={campus:{tx:-5,ty:-5,yaw:-1.05,pitch:.72,dist:270},hall:{tx:-22,ty:0,yaw:-1.2,pitch:.62,dist:105},cnc:{tx:-44,ty:-5,yaw:-1.35,pitch:.42,dist:34},energy:{tx:40,ty:-40,yaw:-.7,pitch:.5,dist:140}};
+const R=()=>lab.runs[mode],P=()=>R().plant,T=()=>R().twin;
+const clock=s=>{s=Math.round(s);return `${String(Math.floor(s/3600)).padStart(2,'0')}:${String(Math.floor(s/60)%60).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`};
+const clk=i=>clock(START+i*DT),fmt=(v,d=0)=>v==null?'—':Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const stationIds=C.stations.map(s=>s.id),bufferIds=Object.keys(C.buffers);
+
+// ---------------------------------------------------------------- 3D projection
+const cv=$('scene'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+let eye=[0,0,0],fw=[0,0,0],rt=[0,0,0],up=[0,0,0],focal=900;
+function setup(){const cp=Math.cos(cam.pitch);eye=[cam.tx+cam.dist*cp*Math.cos(cam.yaw),cam.ty+cam.dist*cp*Math.sin(cam.yaw),cam.dist*Math.sin(cam.pitch)];
+ fw=norm([cam.tx-eye[0],cam.ty-eye[1],-eye[2]]);rt=norm([fw[1],-fw[0],0]);up=[rt[1]*fw[2]-rt[2]*fw[1],rt[2]*fw[0]-rt[0]*fw[2],rt[0]*fw[1]-rt[1]*fw[0]];focal=W*.9;}
+function norm(v){const n=Math.hypot(...v)||1;return v.map(x=>x/n)}
+function proj(p){const v=[p[0]-eye[0],p[1]-eye[1],p[2]-eye[2]],z=v[0]*fw[0]+v[1]*fw[1]+v[2]*fw[2];if(z<.5)return null;
+ return [W/2+focal*(v[0]*rt[0]+v[1]*rt[1]+v[2]*rt[2])/z,H/2-focal*(v[0]*up[0]+v[1]*up[1]+v[2]*up[2])/z,z]}
+const SUN=norm([-.45,-.6,.85]);
+function shade(hex,n,alpha=1){const c=parseInt(hex.slice(1),16),f=.55+.45*Math.max(0,n[0]*SUN[0]+n[1]*SUN[1]+n[2]*SUN[2]);
+ return `rgba(${Math.round((c>>16&255)*f)},${Math.round((c>>8&255)*f)},${Math.round((c&255)*f)},${alpha})`}
+/** @type {any[]} */
+let items=[];
+function poly(points,fill,stroke,alpha,lw){const q=points.map(proj);if(q.some(p=>!p))return;items.push({d:q.reduce((a,p)=>a+p[2],0)/q.length,q,fill,stroke,alpha,lw})}
+function box(cx,cy,z0,sx,sy,sz,color,{yaw=0,alpha=1,stroke=null,wire=false}={}){
+ const c=Math.cos(yaw),s=Math.sin(yaw),pt=(dx,dy,z)=>[cx+dx*c-dy*s,cy+dx*s+dy*c,z],hx=sx/2,hy=sy/2,z1=z0+sz;
+ const b=[pt(-hx,-hy,z0),pt(hx,-hy,z0),pt(hx,hy,z0),pt(-hx,hy,z0)],t=[pt(-hx,-hy,z1),pt(hx,-hy,z1),pt(hx,hy,z1),pt(-hx,hy,z1)];
+ /** @type {[number[][],number[]][]} */
+ const faces=[[t,[0,0,1]],[[b[0],b[1],t[1],t[0]],[s,-c,0]],[[b[1],b[2],t[2],t[1]],[c,s,0]],[[b[2],b[3],t[3],t[2]],[-s,c,0]],[[b[3],b[0],t[0],t[3]],[-c,-s,0]]];
+ for(const [f,n] of faces){if(!wire){const v=[f[0][0]-eye[0],f[0][1]-eye[1],f[0][2]-eye[2]];if(v[0]*n[0]+v[1]*n[1]+v[2]*n[2]>0)continue}
+  poly(f,wire?null:shade(color,n,alpha),stroke,alpha,1)}}
+function flat(cx,cy,sx,sy,z,color){const x0=cx-sx/2,x1=cx+sx/2,y0=cy-sy/2,y1=cy+sy/2,q=[[x0,y0,z],[x1,y0,z],[x1,y1,z],[x0,y1,z]].map(proj);if(q.some(p=>!p))return;
+ g.beginPath();q.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();g.fillStyle=color;g.fill()}
+function line3(a,b,color,w=1.5,dash=[]){const p=proj(a),q=proj(b);if(!p||!q)return;items.push({d:(p[2]+q[2])/2-1,line:[p,q],stroke:color,lw:w,dash})}
+function ring(x,y,z,r,color,dash){const pts=[];for(let i=0;i<=32;i++){const a=i/32*Math.PI*2,p=proj([x+r*Math.cos(a),y+r*Math.sin(a),z]);if(!p)return;pts.push(p)}
+ items.push({d:pts.reduce((a,p)=>a+p[2],0)/pts.length-2,ring:pts,stroke:color,lw:3,dash})}
+function label(x,y,z,text,color='#dfe9f7'){const p=proj([x,y,z]);if(p)items.push({d:-1e9,text,p,color})}
+function slot(buffer,i){const b=L.buffers[buffer],dir=b.origin[1]<0?-1:1;return [b.origin[0]+b.pitch*(i%b.columns),b.origin[1]+dir*b.pitch*Math.floor(i/b.columns)]}
+const B=Object.fromEntries(L.buildings.map(b=>[b.id,b]));
+function draw(){
+ setup();items=[];const p=P(),t=T(),limit=C.demand_limit_kw;
+ const sky=g.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#132338');sky.addColorStop(1,'#0b1522');g.fillStyle=sky;g.fillRect(0,0,W,H);
+ flat(0,0,900,900,0,'#18301c');flat(0,0,260,180,.01,'#1f3a22');
+ flat(-20,0,112,56,.02,'#3b3f44');flat(72,12,50,46,.02,'#3b3f44');flat(-22,56,66,26,.02,'#3b3f44');flat(-100,20,36,84,.02,'#3b3f44');
+ for(const r of L.roads)flat(r.center[0],r.center[1],r.size[0],r.size[1],.04,'#1b1e22');
+ const pk=L.parking;flat(pk.center[0],pk.center[1],pk.size[0],pk.size[1],.04,'#1b1e22');
+ const f=B.factory;flat(f.center[0],f.center[1],f.size[0],f.size[1],.06,'#2a3036');
+ for(const y of [-14.5,14.5])flat(f.center[0],y,f.size[0]-4,2.2,.07,'#1d4a33');
+ // Hall shell: low-opacity walls, no roof (cutaway).
+ const [hx,hy]=f.center,[hw,hd]=f.size;
+ box(hx,hy+hd/2,0,hw,.4,f.height,'#b9c1c9',{alpha:.9});box(hx-hw/2,hy,0,.4,hd,f.height,'#b9c1c9',{alpha:.9});
+ box(hx,hy-hd/2,0,hw,.4,1.2,'#8d949b');box(hx+hw/2,hy,0,.4,hd,1.2,'#8d949b');
+ for(const b of L.buildings){if(b.id==='factory')continue;const col={warehouse:'#39424d',office:'#4f6f86',utility:'#8a8f93',small:'#c9ced3'}[b.kind];box(b.center[0],b.center[1],0,b.size[0],b.size[1],b.height,col)}
+ const u=L.utilities;for(const [x,y] of u.chillers)box(x,y,0,10,2.6,2.8,'#d8dde2');for(const [x,y] of u.cooling_towers)box(x,y,0,4.5,4.5,5,'#e2e6ea');
+ box(u.transformer[0],u.transformer[1],0,11,3,3.2,'#667a72');box(u.water_tower[0],u.water_tower[1],18,11,11,8,'#dfe4e8');box(u.water_tower[0],u.water_tower[1],0,1.2,1.2,18,'#59636e');
+ // PV canopy: brightness follows the recorded PV output.
+ const pv=Math.max(0,Math.min(1,p.pv_kw[k]/pk.pv_kwp));const pvc='#'+[20+60*pv,50+90*pv,110+120*pv].map(v=>Math.round(v).toString(16).padStart(2,'0')).join('');
+ for(let r=0;r<pk.canopy_rows;r++){const y=pk.center[1]-pk.size[1]/2+5+r*10;box(pk.center[0],y,3.4,pk.size[0]-2,6,.25,pvc)}
+ const evColor=p.ev_kw[k]<=0?'#2a3038':(p.ev_cap[k]>=1?'#1ae65c':'#ff8c0d');for(const [x,y] of pk.chargers)box(x,y,0,.6,.5,1.6,evColor);
+ for(const [x,y,s] of L.trees){const c=proj([x,y,4.5*s]);if(c)items.push({d:c[2],tree:[c[0],c[1],focal*2.6*s/c[2]]})}
+ // Grid import column (energy center), red while the billing interval runs over the limit.
+ const imp=Math.max(.1,p.net_kw[k]*.02),over=p.interval_kw[k]>limit;box(-84,54,0,2.2,2.2,imp,over?'#ff4a3a':'#38d9ff',{alpha:.85});ring(-84,54,limit*.02,2.2,'#ff6b5c',[4,4]);label(-84,54,Math.max(imp,limit*.02)+3,`${fmt(p.net_kw[k])} kW grid`,over?'#ff8a7a':'#8fe6ff');
+ // Production line.
+ for(const s of L.stations){const j=stationIds.indexOf(s.id),st=p.state[k][j],[x,y]=s.position,[sx,sy,sz]=s.size;
+  box(x,y,0,sx,sy,sz,s.id.startsWith('cnc')?'#d9dde1':s.id==='weld'?'#e3772a':'#c7ced6');box(x+sx/2-.3,y,sz,.35,.35,.9,STATE[st]);
+  const ts=t.state[k];if(ghosts){const tst=ts?ts[j]:null;ring(x,y,sz+2.2,1.4,tst==null?'#38d9ff':STATE[tst],tst!==st?[5,4]:[]);line3([x,y,sz+2.2],[-4,48.5,14],'rgba(56,217,255,.35)',1,[3,6])}}
+ for(const [b,name] of bufferIds.entries()){for(let i=0;i<C.buffers[name];i++){const [x,y]=slot(name,i);if(p.buffers[k][b]>i)box(x,y,.2,name==='outbound'?1.05:.9,name==='outbound'?1.05:.6,name==='outbound'?.9:.4,name==='outbound'?'#b98a4f':'#1d62c9');
+  else if(ghosts&&t.buffers[k]&&t.buffers[k][b]>i)box(x,y,.2,.9,.6,.4,'#38d9ff',{wire:true,stroke:'rgba(56,217,255,.7)'})}}
+ const route=[L.amr.homes[0],...L.amr.corridor];for(let i=1;i<route.length-1;i++)line3([route[i][0],route[i][1],.1],[route[i+1][0],route[i+1][1],.1],'#c9a227',2);
+ p.amr[k].forEach((a,i)=>{box(a[0],a[1],.1,1.4,.9,.45,'#55606c',{yaw:a[2]});if(a[4])box(a[0],a[1],.55,1.1,.75,.9,'#b98a4f',{yaw:a[2]});
+  if(ghosts&&t.amr[k]){const q=t.amr[k][i];box(q[0],q[1],.1,1.6,1.1,.9,'#38d9ff',{yaw:a[2],wire:true,stroke:'rgba(56,217,255,.85)'})}});
+ // Twin wear gauge above CNC 2.
+ if(ghosts){const gz=5,gh=6,w=t.wear[k],sd=t.wear_sd[k];box(-44.45,-11.5,gz,.5,.45,Math.max(.02,gh*p.wear[k]),'#ffbf5c',{alpha:.9});box(-43.55,-11.5,gz,.5,.45,Math.max(.02,gh*w),'#38d9ff',{alpha:.9});
+  box(-43.55,-11.5,gz+gh*Math.max(0,w-2*sd),.8,.7,gh*4*sd,'#38d9ff',{alpha:.25});line3([-45.3,-11.5,gz+gh],[-42.7,-11.5,gz+gh],'#ff6b5c',2.5);label(-44,-11.5,gz+gh+1.6,'CNC 2 wear · truth | twin','#ffd9a0')}
+ label(B.office.center[0],B.office.center[1],B.office.height+5,'Twin operations');label(B.warehouse.center[0],B.warehouse.center[1],B.warehouse.height+3,'Warehouse');label(B.energy.center[0],B.energy.center[1],B.energy.height+4,'Energy center');
+ items.sort((a,b)=>b.d-a.d);
+ for(const it of items){g.globalAlpha=1;if(it.tree){g.beginPath();g.arc(it.tree[0],it.tree[1],it.tree[2],0,Math.PI*2);g.fillStyle='#2f5a2a';g.fill();g.beginPath();g.arc(it.tree[0]-it.tree[2]*.3,it.tree[1]-it.tree[2]*.3,it.tree[2]*.55,0,Math.PI*2);g.fillStyle='#3d7334';g.fill();continue}
+  if(it.text){g.font='600 13px Inter,system-ui,sans-serif';g.fillStyle=it.color;g.textAlign='center';g.fillText(it.text,it.p[0],it.p[1]);g.textAlign='left';continue}
+  const pts=it.q||it.ring||it.line;g.beginPath();pts.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));if(it.q)g.closePath();
+  if(it.fill){g.fillStyle=it.fill;g.fill()}if(it.stroke){g.setLineDash(it.dash||[]);g.lineWidth=it.lw||1;g.strokeStyle=it.stroke;g.stroke();g.setLineDash([])}else if(it.fill){g.lineWidth=.5;g.strokeStyle='rgba(0,0,0,.18)';g.stroke()}}
+}
+
+// ---------------------------------------------------------------- charts
+function axes(ctx,w,h,ymax,unit,pad){ctx.fillStyle='#0b1423';ctx.fillRect(0,0,w,h);ctx.font='11px ui-monospace,monospace';ctx.fillStyle='#8497b0';ctx.strokeStyle='#1c2b40';ctx.lineWidth=1;
+ for(let i=0;i<=4;i++){const y=h-24-(h-40)*i/4;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-8,y);ctx.stroke();ctx.fillText(`${fmt(ymax*i/4,ymax<5?2:0)}${unit}`,4,y+4)}
+ for(let hr=0;hr<=3;hr++){const x=pad+(w-pad-8)*hr/3;ctx.fillText(`${10+hr}:00`,x-16,h-6)}}
+const xs=(i,w,pad)=>pad+(w-pad-8)*i/(N-1),ys=(v,h,ymax)=>h-24-(h-40)*Math.min(1.08,v/ymax);
+function series(ctx,values,w,h,ymax,pad,color,width=2,dash=[]){ctx.beginPath();let on=false;values.forEach((v,i)=>{if(v==null){on=false;return}const x=xs(i,w,pad),y=ys(v,h,ymax);on?ctx.lineTo(x,y):ctx.moveTo(x,y);on=true});ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([])}
+function cursor(ctx,w,h,pad){const x=xs(k,w,pad);ctx.strokeStyle='#edf4ff';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x,10);ctx.lineTo(x,h-22);ctx.stroke()}
+function charts(){const p=P(),t=T();
+ let c=$('c-wear'),x=c.getContext('2d'),w=c.width,h=c.height,pad=46,ym=1.2;axes(x,w,h,ym,'',pad);
+ x.fillStyle='rgba(56,217,255,.16)';x.beginPath();t.wear.forEach((v,i)=>{const X=xs(i,w,pad),Y=ys(v+2*t.wear_sd[i],h,ym);i?x.lineTo(X,Y):x.moveTo(X,Y)});for(let i=N-1;i>=0;i--)x.lineTo(xs(i,w,pad),ys(Math.max(0,t.wear[i]-2*t.wear_sd[i]),h,ym));x.fill();
+ series(x,new Array(N).fill(C.twin_parameters.cnc2_failure_threshold),w,h,ym,pad,'#7f8ea3',1.2,[6,5]);series(x,new Array(N).fill(R().plant_parameters.cnc2_failure_threshold),w,h,ym,pad,'#ff6b5c',1.5,[2,3]);
+ series(x,p.wear,w,h,ym,pad,'#ffbf5c',2.2);series(x,t.wear,w,h,ym,pad,'#38d9ff',2);
+ for(const d of R().decisions){if(d.kind==='plan'||d.kind==='demand')continue;const X=xs(d.t/DT,w,pad);x.fillStyle=d.kind==='alarm'?'#ff6b5c':d.kind==='sync'?'#8497b0':d.actuated?'#79efcb':'#ffbf5c';x.fillRect(X-2,14,4,10)}
+ cursor(x,w,h,pad);
+ c=$('c-good');x=c.getContext('2d');w=c.width;h=c.height;pad=40;ym=Math.max(...lab.runs.closed.plant.good,...lab.runs.shadow.plant.good)*1.05;axes(x,w,h,ym,'',pad);
+ series(x,lab.runs.shadow.plant.good,w,h,ym,pad,'#ffbf5c',mode==='shadow'?2.6:1.6,[6,4]);series(x,lab.runs.closed.plant.good,w,h,ym,pad,'#79efcb',mode==='closed'?2.6:1.6);
+ x.fillStyle='#79efcb';x.fillText(`closed ${lab.runs.closed.plant.good[k]}`,pad+8,22);x.fillStyle='#ffbf5c';x.fillText(`shadow ${lab.runs.shadow.plant.good[k]}`,pad+110,22);cursor(x,w,h,pad);
+ c=$('c-grid');x=c.getContext('2d');w=c.width;h=c.height;pad=48;ym=Math.max(700,...p.net_kw);axes(x,w,h,ym,' kW',pad);
+ const bills=R().kpis.billing_intervals_kw,per=C.billing_s/DT;bills.forEach((v,i)=>{if((i+1)*per>k)return;const X0=xs(i*per,w,pad),X1=xs((i+1)*per,w,pad),Y=ys(v,h,ym);x.fillStyle=v>C.demand_limit_kw?'rgba(255,107,92,.55)':'rgba(56,217,255,.25)';x.fillRect(X0+1,Y,X1-X0-2,h-24-Y)});
+ series(x,p.pv_kw,w,h,ym,pad,'rgba(121,239,203,.8)',1.2);series(x,p.net_kw.map(v=>Math.max(0,v)),w,h,ym,pad,'#dfe9f7',1.3);series(x,new Array(N).fill(C.demand_limit_kw),w,h,ym,pad,'#ff6b5c',1.6,[6,4]);
+ x.fillStyle='#79efcb';x.fillText('PV',w-40,ys(p.pv_kw[k],h,ym)-4);cursor(x,w,h,pad)}
+for(const id of ['c-wear','c-good','c-grid'])$(id).addEventListener('click',e=>{const c=$(id),r=c.getBoundingClientRect(),pad=id==='c-wear'?46:id==='c-good'?40:48,x=(e.clientX-r.left)*c.width/r.width;seek(Math.round((x-pad)/(c.width-pad-8)*(N-1)))});
+
+// ---------------------------------------------------------------- panels
+// Latest non-plan entry wins; routine 'plan' updates only show until a command, alarm or sync supersedes them.
+function lastDecision(){let d=null;for(const e of R().decisions){if(e.t>k*DT)break;if(e.kind!=='plan'||!d||d.kind==='plan')d=e}return d}
+function panels(){const p=P(),t=T(),other=lab.runs[mode==='closed'?'shadow':'closed'].plant,j=stationIds.indexOf('cnc2');
+ $('clock').textContent=`${clk(k)} · sample ${k}/${N-1}`;$('sample').value=String(k);
+ const diff=p.good[k]-other.good[k];$('k-good').textContent=`${p.good[k]}`;$('k-good-note').innerHTML=`${mode==='closed'?'Shadow':'Closed'} run at this time: ${other.good[k]} (${diff>=0?'+':''}${diff}). Scrap ${p.scrap[k]} · delivered ${p.delivered[k]}.`;
+ $('k-wear').innerHTML=`<span style="color:#ffbf5c">${fmt(p.wear[k],3)}</span> / <span style="color:#38d9ff">${fmt(t.wear[k],3)}</span>`;
+ $('k-wear-note').textContent=`truth / twin ±${fmt(2*t.wear_sd[k],3)} (2σ). CNC 2 ${STATE_LABEL[p.state[k][j]]}${t.derate[k]?' · derated':''}.`;
+ const wb=$('k-wear-bar');wb.style.width=`${Math.min(100,p.wear[k]/R().plant_parameters.cnc2_failure_threshold*100)}%`;wb.style.background=p.wear[k]>.85?'#ff6b5c':'#ffbf5c';
+ $('k-rul').textContent=t.rul_min[k]>=999?'> 16 h':`${fmt(t.rul_min[k])} busy min`;$('k-rul-note').textContent=`Estimated remaining spindle life. P(failure within 60 busy min) = ${fmt(100*t.p_fail_60[k],1)}%.${t.pm[k]?' Service requested.':''}`;
+ const lim=C.demand_limit_kw;$('k-grid').textContent=p.net_kw[k]<0?`${fmt(-p.net_kw[k])} kW export`:`${fmt(p.net_kw[k])} kW import`;$('k-grid-note').textContent=`Billing interval so far ${fmt(p.interval_kw[k])} kW (limit ${fmt(lim)}); twin forecast ${fmt(t.forecast_kw[k])} kW. PV ${fmt(p.pv_kw[k])} kW, EV ${fmt(p.ev_kw[k])} kW.`;
+ const gb=$('k-grid-bar');gb.style.width=`${Math.min(100,Math.max(0,p.interval_kw[k])/lim*100)}%`;gb.style.background=p.interval_kw[k]>lim?'#ff6b5c':'#38d9ff';
+ $('k-hall').textContent=`${fmt(p.hall_c[k],2)} °C`;$('k-hall-note').textContent=`Setpoint ${fmt(p.setpoint_c[k],1)} °C (comfort limit ${C.comfort_max_c} °C) · demand level ${t.level[k]} · chiller ${fmt(p.chiller_kw[k])} kW.`;
+ const d=lastDecision();$('k-last').textContent=d?d.action:'Waiting for the first telemetry…';$('k-last-note').textContent=d?`${d.clock} · ${d.actuated===true?'actuated in the plant':d.actuated===false?'logged only: shadow mode':'twin state update'}`:'';
+ const ok=R().fidelity;$('loop-plant').textContent=`${clk(k)} · CNC 2 ${STATE_LABEL[p.state[k][j]]}`;
+ const drop=lab.runs[mode].fidelity.telemetry_dropouts;$('loop-telemetry').textContent=`${drop} packet groups lost over the shift`;
+ const mism=t.buffers[k]?t.buffers[k].reduce((a,v,i)=>a+Math.abs(v-p.buffers[k][i]),0):null;$('loop-sync').textContent=mism==null?'no packet yet':`buffer mirror off by ${mism} part${mism===1?'':'s'} now (latency)`;
+ $('loop-estimate').textContent=`wear ${fmt(t.wear[k],3)} ± ${fmt(2*t.wear_sd[k],3)} · MAE ${fmt(ok.wear_mae_busy,4)}`;
+ let plan=null;for(const e of R().decisions){if(e.t>k*DT)break;if(e.prediction&&e.prediction.expected_good_units!=null)plan=e}
+ $('loop-predict').textContent=plan?`${plan.clock}: best plan ${fmt(plan.prediction.expected_good_units,1)} good / 90 min${plan.prediction.defer_predicts_failure_min!=null?`; deferring fails in ${fmt(plan.prediction.defer_predicts_failure_min)} min`:''}`:'wear still low; no plan yet';
+ $('loop-act').textContent=`${R().decisions.filter(e=>e.actuated!=null&&e.t<=k*DT).length} commands ${mode==='closed'?'sent to the plant':'logged, none applied'}`;$('loop-act-item').dataset.loop=mode;
+ $('hud').innerHTML=`${clk(k)}<br><span style="color:${mode==='closed'?'#79efcb':'#ffbf5c'}">${mode==='closed'?'CLOSED LOOP':'SHADOW TWIN'}</span><br>seed ${R().seed}`;
+ $('selection').textContent=`${mode==='closed'?"Closed loop: the twin's commands reach the plant after 5 s.":'Shadow: the identical twin logs the same kind of advice, but nothing is applied.'} Seed ${R().seed} · ${N} samples · 3 h.`;
+ $('description').textContent=`${clk(k)}, ${mode} mode: ${p.good[k]} good parts, CNC 2 ${STATE_LABEL[p.state[k][j]]}, true wear ${fmt(p.wear[k],3)}, twin estimate ${fmt(t.wear[k],3)}, grid import ${fmt(p.net_kw[k])} kW.`;
+ for(const row of $('log').children)row.dataset.current=String(Number(row.dataset.t)<=k*DT&&Number(row.dataset.next)>k*DT)}
+function kindTag(d){if(d.kind==='alarm')return '<span class="tag alarm">alarm</span>';if(d.actuated===true)return '<span class="tag act">actuated</span>';if(d.actuated===false)return '<span class="tag adv">advised only</span>';return `<span class="tag info">${d.kind}</span>`}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function summary(o){return Object.entries(o).filter(([,v])=>v!=null&&typeof v!=='object').map(([a,v])=>`${a.replace(/_/g,' ')} ${typeof v==='number'?fmt(v,Math.abs(v)<10&&v%1?3:v%1?1:0):v}`).join(' · ')}
+function log(){const only=$('only-actions').checked,rows=R().decisions.filter(d=>!only||d.actuated!=null||d.kind==='alarm');
+ $('log').innerHTML=rows.map((d,i)=>`<tr data-t="${d.t}" data-next="${i+1<rows.length?rows[i+1].t:1e9}"><td class="num">${esc(d.clock)}</td><td>${kindTag(d)}</td><td>${esc(d.action)}</td><td class="note">${esc(summary(d.evidence))}${Object.keys(d.prediction).length?' → '+esc(summary(d.prediction)):''}</td><td><button type="button" data-seek="${d.t/DT}">Go</button></td></tr>`).join('');
+ const acts=R().decisions.filter(d=>d.actuated!=null).length;$('log-caption').textContent=`${R().decisions.length} twin log entries in the ${mode} run; ${acts} ${mode==='closed'?'were actuated':'were commands the twin would have sent'}. Evidence lists what the twin had received; predictions come from its own model.`;
+ const pc=R().prediction_checks;if(pc.length){const err=pc.map(c=>Math.abs(c.actual_good_units-c.predicted_good_units));$('checks-note').textContent=`Forecast check: ${pc.length} maintenance plans in this run can be compared with what the plant then produced over 90 minutes. Mean absolute difference ${fmt(err.reduce((a,b)=>a+b,0)/err.length,1)} parts (largest ${fmt(Math.max(...err),1)}). Plans assume the conservative wear estimate, and deferred or unactuated plans diverge by design.`}else $('checks-note').textContent=''}
+$('log').addEventListener('click',e=>{const b=e.target.closest('button[data-seek]');if(b)seek(Number(b.dataset.seek))});$('only-actions').addEventListener('change',()=>{log();panels()});
+function seeds(){const S=lab.seeds.summary;$('seeds-caption').textContent=`Each seed changes the hidden spindle wear rate and failure point, the cloud, hall thermal parameters and AMR speed. Both modes of a pair share every disturbance. Closed loop: ${S.closed_failures} failures vs. ${S.shadow_failures}; ${S.closed_intervals_over_limit} vs. ${S.shadow_intervals_over_limit} billing intervals over the limit; good parts ${S.good_units_gain.mean>=0?'+':''}${fmt(S.good_units_gain.mean,1)} on average (range ${S.good_units_gain.min} to +${S.good_units_gain.max}; ${S.good_units_gain.pairs_worse} of ${S.pairs} pairs lower).`;
+ $('seeds').innerHTML=lab.seeds.seeds.map(r=>{const a=r.shadow,b=r.closed,d=b.good_units-a.good_units;return `<tr${r.seed===lab.config.featured_seed?' data-current="true"':''}><td>${r.seed}${r.seed===lab.config.featured_seed?' · shown':''}</td><td class="num">${a.good_units} → ${b.good_units} <span class="${d>0?'good':d<0?'bad':''}">(${d>=0?'+':''}${d})</span></td><td class="num">${a.cnc2_failures} → ${b.cnc2_failures}</td><td class="num">${a.intervals_over_limit} → ${b.intervals_over_limit}</td><td class="num">${fmt(a.peak_demand_kw)} → ${fmt(b.peak_demand_kw)}</td></tr>`}).join('');
+ const c=lab.runs.closed.kpis,s=lab.runs.shadow.kpis;$('stamps').innerHTML=[[`${s.good_units} → ${c.good_units}`,'good parts, shadow → closed'],[`${s.cnc2_failures} → ${c.cnc2_failures}`,'spindle failures'],[`${fmt(s.peak_demand_kw)} → ${fmt(c.peak_demand_kw)}`,`peak kW (limit ${fmt(C.demand_limit_kw)})`],[`${S.pairs}`,'paired seeds re-executable']].map(([a,b])=>`<div><strong>${a}</strong><small>${b}</small></div>`).join('')}
+
+// ---------------------------------------------------------------- state
+function render(){draw();charts();panels()}
+function seek(i){k=Math.max(0,Math.min(N-1,i|0));render();hash()}
+function hash(){history.replaceState(null,'',`#mode=${mode}&k=${k}`)}
+function setMode(m){mode=m;for(const b of document.querySelectorAll('button[data-mode]'))b.setAttribute('aria-pressed',String(b.dataset.mode===m));log();render();hash()}
+for(const b of document.querySelectorAll('button[data-mode]'))b.addEventListener('click',()=>setMode(b.dataset.mode));
+for(const b of document.querySelectorAll('[data-view]'))b.addEventListener('click',()=>{Object.assign(cam,VIEWS[b.dataset.view]);draw()});
+$('ghosts').addEventListener('click',()=>{ghosts=!ghosts;$('ghosts').setAttribute('aria-pressed',String(ghosts));draw()});
+$('zoom-in').addEventListener('click',()=>{cam.dist=Math.max(12,cam.dist/1.25);draw()});$('zoom-out').addEventListener('click',()=>{cam.dist=Math.min(600,cam.dist*1.25);draw()});
+$('sample').addEventListener('input',e=>seek(Number(e.target.value)));$('prev').addEventListener('click',()=>seek(k-1));$('next').addEventListener('click',()=>seek(k+1));
+function jump(dir){const ts=R().decisions.filter(d=>d.kind!=='plan').map(d=>d.t/DT);const target=dir>0?ts.find(v=>v>k):[...ts].reverse().find(v=>v<k);if(target!=null)seek(target)}
+$('next-decision').addEventListener('click',()=>jump(1));$('prev-decision').addEventListener('click',()=>jump(-1));
+// A timer (not requestAnimationFrame) keeps the plant clock moving when frames are throttled.
+function tick(){if(!playing)return;const now=performance.now(),dt=Math.min(.25,(now-last)/1000);last=now;acc+=dt*Number($('speed').value)/DT;const step=Math.floor(acc);if(step){acc-=step;k+=step;if(k>=N-1){k=N-1;stop()}render()}if(playing)setTimeout(tick,40)}
+function stop(){playing=false;$('play').textContent='▶ Play shift';hash()}
+$('play').addEventListener('click',()=>{if(playing)return stop();if(k>=N-1)k=0;playing=true;acc=0;last=performance.now();$('play').textContent='❚❚ Pause';setTimeout(tick,40)});
+cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw:cam.yaw,pitch:cam.pitch};cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',e=>{if(!drag)return;cam.yaw=drag.yaw-(e.clientX-drag.x)*.006;cam.pitch=Math.max(.12,Math.min(1.45,drag.pitch+(e.clientY-drag.y)*.005));draw()});
+cv.addEventListener('pointerup',()=>{drag=null});cv.addEventListener('wheel',e=>{e.preventDefault();cam.dist=Math.max(12,Math.min(600,cam.dist*Math.exp(e.deltaY*.001)));draw()},{passive:false});
+cv.addEventListener('keydown',e=>{const m={ArrowLeft:[-.08,0],ArrowRight:[.08,0],ArrowUp:[0,.05],ArrowDown:[0,-.05]}[e.key];if(m){e.preventDefault();cam.yaw+=m[0];cam.pitch=Math.max(.12,Math.min(1.45,cam.pitch+m[1]));draw()}});
+document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA','BUTTON','CANVAS'].includes(e.target.tagName))return;if(e.key===' '){e.preventDefault();$('play').click()}else if(e.key==='ArrowRight')seek(k+1);else if(e.key==='ArrowLeft')seek(k-1)});
+$('csv').addEventListener('click',()=>{const p=P(),t=T(),rows=['time,sample,mode,good,scrap,cnc2_state,wear_truth,wear_twin,wear_twin_sd,rul_busy_min,grid_import_kw,interval_mean_kw,twin_forecast_kw,pv_kw,ev_kw,hall_c,setpoint_c,demand_level'];
+ for(let i=0;i<N;i++)rows.push([clk(i),i,mode,p.good[i],p.scrap[i],C.state_names[p.state[i][2]],p.wear[i],t.wear[i],t.wear_sd[i],t.rul_min[i],p.net_kw[i],p.interval_kw[i],t.forecast_kw[i]??'',p.pv_kw[i],p.ev_kw[i],p.hall_c[i],p.setpoint_c[i],t.level[i]].join(','));
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.join('\n')+'\n'],{type:'text/csv'}));a.download=`factory-twin-${mode}-seed-${R().seed}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);$('status').textContent=`Downloaded ${N} recorded samples (${mode}).`});
+$('share').addEventListener('click',async()=>{hash();try{await navigator.clipboard.writeText(location.href);$('status').textContent='Link copied: it reopens this mode and sample.'}catch(err){$('status').textContent=location.href}});
+const m=/mode=(closed|shadow)/.exec(location.hash),s=/k=(\d+)/.exec(location.hash);if(m)mode=m[1];if(s)k=Math.min(N-1,Number(s[1]));else k=360;
+seeds();setMode(mode);if(reduced)$('speed').value='900';
+</script>
+</body>
+</html>
