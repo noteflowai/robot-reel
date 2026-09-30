@@ -43,8 +43,9 @@ Featured shift (seed 10, 10:00–13:00):
 
 Across 12 paired seeds, the closed loop had **0 spindle failures (shadow: 11)**
 and **0 billing intervals over the limit (shadow: 8)**. Good parts rose in 10
-pairs and fell in 2 (mean +11.1, range −3 to +20): where a failure would have
-come late or not at all within the shift, early service costs output. Exact
+pairs and fell in 2 (mean +11.1, range −3 to +20). In the two lower pairs (seeds
+3 and 11) the shadow run's failure came so late that only about 14 minutes of
+its repair fell inside the shift, less than the planned service cost. Exact
 values are in `seeds.json`; `--verify --all-seeds` re-executes them.
 
 The plant is illustrative: parameters and cost weights were chosen for the

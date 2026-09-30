@@ -69,9 +69,10 @@ derived from them.
 
 Over the 12 pairs the closed loop had no spindle failures (shadow: 11) and no
 billing interval over the limit (shadow: 8). Good parts rose in 10 pairs and
-fell in 2; those two seeds' failures happen late or not at all, so earlier
-service costs output inside the 3-hour window. Read the exact values in
-`seeds.json`.
+fell in 2. In those two seeds (3 and 11) the shadow run's spindle failed late,
+leaving only 13.6 and 14.5 minutes of repair inside the 3-hour window, so the
+closed loop's planned service cost more output than the failure did. Read the
+exact values in `seeds.json`.
 
 ## The 3D model
 
