@@ -17,7 +17,7 @@ joints, 303 frames at 30 fps.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.18.0'
+python -m pip install 'robot-reel[lerobot]==0.18.1'
 
 # Any public Hub dataset; only the files this episode needs are downloaded.
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
@@ -92,6 +92,30 @@ episode, in order.
   not their pixels.
 - The replay shows what the dataset recorded. It does not judge success,
   calibrate units or infer contacts.
+
+### Timeline errors
+
+Every frame must carry `frame_index` 0..length-1 exactly once, with a finite
+timestamp later than the previous frame's. A damaged episode stops the export
+with exit status 2 before any file is written. The message names the data file
+(relative to the dataset root), the episode and the first bad value:
+
+- `Episode 3 in data/chunk-000/episode_000003.parquet is missing frame_index 57 (next recorded frame_index is 58); frames must be 0..length-1 without gaps.`
+  A dropped final frame is still reported as `Episode metadata lists N frames but … holds N-1`.
+- `Episode E in DATA repeats frame_index R; each frame must appear once.`
+- `Episode E in DATA has frame_index R where I was expected.` (a negative,
+  null, NaN or non-numeric value)
+- `Episode E in DATA has no finite timestamp at frame_index I.`
+- `Episode E in DATA: timestamp at frame_index I (B s) is not after frame_index I-1 (A s).`
+
+The numbers are `frame_index` values, not row numbers in the file (v3.0 files
+hold many episodes, and rows may be stored unsorted). Filter the episode for
+that `frame_index` to find the frame. Float or boolean indices numerically
+equal to 0..length-1 (0.0, 1.0, …) are still accepted. Only the first problem
+is reported. Each of these messages ends with `Robot Reel does not reorder, fill
+or interpolate frames; repair or re-export the episode.` Robot Reel refuses a
+damaged episode; it never repairs one. Timestamp columns with more than one
+value per frame keep the generic `Timestamps are missing or not increasing`.
 
 Rerun 0.38 added a reader that streams LeRobot datasets into its native viewer; use that
 for live, multi-episode exploration, and this export when you need a single
