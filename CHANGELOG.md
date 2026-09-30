@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.18.2 — 2026-10-01
+
 - Add a claims inventory (`docs/claims.md`, `scripts/claims_inventory.py`,
   roadmap RR-03): 23 README headline numbers across 10 labs, each recomputed
   from its evidence file and labelled by evidence kind; tested in CI.
