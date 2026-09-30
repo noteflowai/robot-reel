@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Add a claims inventory (`docs/claims.md`, `scripts/claims_inventory.py`,
+  roadmap RR-03): 23 README headline numbers across 10 labs, each recomputed
+  from its evidence file and labelled by evidence kind; tested in CI.
+- Correct the Factory Twin explanation of the two pairs where closing the loop
+  lowered output: both shadow failures came late in the shift, not "late or
+  not at all".
 - Publish the Factory Twin tables as a Hugging Face dataset
   (`glayguo/robot-reel-factory-twin`: pairs, seeds, samples, decisions),
   exported from the verified lab by `scripts/build_hf_factory_twin.py`.
