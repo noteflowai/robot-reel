@@ -183,6 +183,23 @@ def check(source, release_assets=None):
         damaged.write_bytes(original)
         if rejected.returncode != 2 or json.loads(rejected.stdout)["verified"]:
             raise ValueError("Installed solver verifier accepted damaged evidence")
+        factory_output = Path(temporary)/"factory-twin"
+        factory_command = [str(Path(sys.executable).with_name("robot-reel")), "factory-twin"]
+        factory = json.loads(subprocess.run(
+            factory_command + ["--export-from", str(source/"docs/factory-twin"), "--output", str(factory_output)],
+            check=True, capture_output=True, text=True, timeout=600,
+        ).stdout)
+        if not factory["verified"] or factory["samples_per_run"] != 2161:
+            raise ValueError("Installed Factory Twin export failed")
+        from robot_reel.factory_twin import FILES as FACTORY_FILES
+        with zipfile.ZipFile(factory_output/"experiment.zip") as archive:
+            if set(archive.namelist()) != {*FACTORY_FILES, "manifest.json"}:
+                raise ValueError("Unexpected Factory Twin archive inventory")
+            for name in (*FACTORY_FILES, "manifest.json"):
+                if archive.read(name) != (factory_output/name).read_bytes():
+                    raise ValueError(f"Changed Factory Twin archive member: {name}")
+        if (factory_output/"index.html").read_bytes() != (source/"docs/factory-twin/index.html").read_bytes():
+            raise ValueError("Installed Factory Twin template differs from the published page")
         new_labs = {}
         for name, arguments in (
             ("scene-lab", ["scene-lab", "--output", str(source/"docs/scene-lab"), "--verify"]),
@@ -198,7 +215,7 @@ def check(source, release_assets=None):
         report = {"version": expected, "module": str(module), "new_labs": new_labs,
                   "model_claim_control": claims_report,
                   "cloth_vertex_samples": cloth["vertex_samples"],
-                  "solver_lab": solver,
+                  "solver_lab": solver, "factory_twin": factory,
                   "microduck": microduck,
                   "cloth_sample": sample_check,
                   "stress_trials": summary["completed_trials"], "telemetry": telemetry,
@@ -218,6 +235,7 @@ def check(source, release_assets=None):
                 (source/"docs/microduck-lab/experiment.zip", "robot-reel-microduck-experiment.zip"),
                 (source/"examples/microduck-frame.json", "robot-reel-microduck-frame.json"),
                 (solver_output/"experiment.zip", "robot-reel-solver-experiment.zip"),
+                (factory_output/"experiment.zip", "robot-reel-factory-twin-experiment.zip"),
             ):
                 shutil.copyfile(original, release_assets/name)
             report["release_assets"] = {

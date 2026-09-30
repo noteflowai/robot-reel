@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.18.0 — 2026-09-30
+
+- Add the Factory Twin Lab and `robot-reel factory-twin`: a closed-loop
+  digital twin of a simulated factory and campus. The plant (six-station line,
+  AMRs, hall climate, PV, EV charging and 15-minute billed demand) emits noisy,
+  lossy, delayed telemetry; the twin syncs from it, estimates hidden spindle
+  wear with an EKF, forward-simulates 14 maintenance plans, forecasts demand
+  and actuates commands. Every run is paired with a shadow twin that only
+  advises. `--verify` re-executes plant and twin with the standard library and
+  replays the twin from telemetry alone; `--all-seeds` re-executes 12 pairs.
+- Model the campus procedurally in Blender 5.2 LTS
+  (`scripts/build_factory_twin_blender.py`), animate it from the recorded
+  samples, check every channel at every frame and read the OpenUSD export back
+  (`scripts/check_factory_twin_blender.py`), and render Cycles stills and a
+  time-lapse. The `.blend` and `.usdc` projects ship as a release asset.
+
 ## 0.17.1 — 2026-09-29
 
 - Add `robot-reel stress SOURCE --paired-exact` for exact two-sided paired sign

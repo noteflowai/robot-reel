@@ -1251,7 +1251,7 @@ test('landing page indexes every published demo and copies the quick start',asyn
   try{
     await page.goto(base+'/');
     const cards=page.locator('.card');
-    assert.equal(await cards.count(),18);
+    assert.equal(await cards.count(),19);
     const hrefs=await cards.evaluateAll(links=>links.map(link=>link.getAttribute('href')));
     for(const href of hrefs){
       assert.ok(existsSync(resolve('docs',href,'index.html')),`${href} has no published page`);
@@ -1330,19 +1330,19 @@ test('homepage purpose filters preserve keyboard focus, share links and browser 
     assert.equal(await page.locator('#demo-count').textContent(),'Showing 6 policy demos');
     assert.equal(new URL(page.url()).searchParams.get('category'),'policies');
     await page.locator('[data-filter="create"]').click();
-    assert.deepEqual(await visible(),['blender/','cloth/','director/','newton/','remix/','scene-lab/','solver-lab/','studio/']);
+    assert.deepEqual(await visible(),['blender/','cloth/','director/','factory-twin/','newton/','remix/','scene-lab/','solver-lab/','studio/']);
     await page.goBack();
     await page.waitForFunction(()=>document.querySelector('[data-filter="policies"]').getAttribute('aria-pressed')==='true');
     assert.equal((await visible()).length,6);
     await page.goForward();await page.reload();
-    assert.equal((await visible()).length,8);
+    assert.equal((await visible()).length,9);
     await page.locator('[data-filter="experiments"]').click();
-    assert.deepEqual(await visible(),['braking/','chaos/','cloth/','compare/braking/','compare/microduck/','libero-plus/','microduck-lab/','newton/','scene-lab/','solver-lab/','stress/']);
+    assert.deepEqual(await visible(),['braking/','chaos/','cloth/','compare/braking/','compare/microduck/','factory-twin/','libero-plus/','microduck-lab/','newton/','scene-lab/','solver-lab/','stress/']);
     await page.locator('[data-filter="all"]').click();
-    assert.equal((await visible()).length,18);
+    assert.equal((await visible()).length,19);
     assert.equal(new URL(page.url()).searchParams.has('category'),false);
     await page.goto(base+'/?category=__proto__#demos');
-    assert.equal((await visible()).length,18);
+    assert.equal((await visible()).length,19);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   }finally{await page.close();}
 });
@@ -1382,7 +1382,7 @@ test('homepage remains navigable without JavaScript and its filters work from fi
     const page=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
     try{
       await page.goto(target);
-      assert.equal(await page.locator('#demo-grid .card:visible').count(),18);
+      assert.equal(await page.locator('#demo-grid .card:visible').count(),19);
       assert.equal(await page.locator('#filters').isVisible(),false);
       assert.equal(await page.locator('#copy').isVisible(),false);
       await page.locator('#tour-inspect').click();
@@ -1396,9 +1396,9 @@ test('homepage remains navigable without JavaScript and its filters work from fi
     await page.goto(url+'?category=policies#demos');
     assert.equal(await page.locator('#demo-grid .card:visible').count(),6);
     await page.locator('[data-filter="create"]').click();
-    assert.equal(await page.locator('#demo-grid .card:visible').count(),8);
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),9);
     await page.locator('[data-filter="all"]').click();
-    assert.equal(await page.locator('#demo-grid .card:visible').count(),18);
+    assert.equal(await page.locator('#demo-grid .card:visible').count(),19);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     assert.deepEqual(errors,[]);
   }finally{await page.close();}

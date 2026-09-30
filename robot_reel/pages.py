@@ -41,6 +41,7 @@ PAGES = {
     "docs/chaos/index.html": "robot_reel/chaos.html",
     "docs/cloth/index.html": "robot_reel/cloth.html",
     "docs/solver-lab/index.html": "robot_reel/solver_lab.html",
+    "docs/factory-twin/index.html": "robot_reel/factory_twin.html",
     "docs/scene-lab/index.html": "robot_reel/scene_lab.html",
     "docs/libero-plus/index.html": "robot_reel/libero_plus.html",
     "docs/stress/index.html": "robot_reel/stress.html",
@@ -53,6 +54,7 @@ OPEN, CLOSE = "<script>\n", "</script>"
 STATIC_PAGES = {"docs/index.html", "docs/scene-lab/index.html", "docs/libero-plus/index.html"}
 PAYLOAD_PAGES = {
     "docs/solver-lab/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
+    "docs/factory-twin/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
     "docs/microduck-lab/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
     "docs/model-review/index.html": ('<script id="lab-data" type="application/json">', "__LAB_DATA__"),
 }

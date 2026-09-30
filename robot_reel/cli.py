@@ -18,6 +18,9 @@ def main():
     if sys.argv[1:2] == ["scene-lab"]:
         from .scene_lab import main as scene_main
         return scene_main(sys.argv[2:])
+    if sys.argv[1:2] == ["factory-twin"]:
+        from .factory_twin import main as factory_main
+        return factory_main(sys.argv[2:])
     if sys.argv[1:2] == ["solver-lab"]:
         from .solver_lab import main as solver_main
         return solver_main(sys.argv[2:])
@@ -50,7 +53,7 @@ def main():
         return compare_main(sys.argv[2:])
     ap = argparse.ArgumentParser(
         description="Record a robot simulation and export shareable films.",
-        epilog="Other commands: review-claims, lerobot, libero-plus, scene-lab, solver-lab, microduck-review, compare, blender, newton, cloth, direct, mcp, vla, stress. Use COMMAND --help for details.",
+        epilog="Other commands: review-claims, factory-twin, lerobot, libero-plus, scene-lab, solver-lab, microduck-review, compare, blender, newton, cloth, direct, mcp, vla, stress. Use COMMAND --help for details.",
     )
     ap.add_argument("--pack", choices=["studio", "microduck", "braking"], default="studio")
     ap.add_argument("--speed", type=float, help="Microduck forward command in m/s (0–0.6; default 0.5)")

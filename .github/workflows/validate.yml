@@ -77,6 +77,8 @@ jobs:
           node scripts/check_cloth_release.cjs "$RUNNER_TEMP/cloth-lab"
           python -m zipfile -e "$RUNNER_TEMP/offline-assets/robot-reel-solver-experiment.zip" "$RUNNER_TEMP/solver-lab"
           node scripts/check_solver_lab.cjs "$RUNNER_TEMP/solver-lab"
+          python -m zipfile -e "$RUNNER_TEMP/offline-assets/robot-reel-factory-twin-experiment.zip" "$RUNNER_TEMP/factory-twin"
+          node scripts/check_factory_twin.cjs "$RUNNER_TEMP/factory-twin"
   rerun:
     runs-on: ubuntu-latest
     steps:
