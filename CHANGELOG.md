@@ -1,11 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Publish the Factory Twin tables as a Hugging Face dataset
+  (`glayguo/robot-reel-factory-twin`: pairs, seeds, samples, decisions),
+  exported from the verified lab by `scripts/build_hf_factory_twin.py`.
+
 ## 0.18.1 — 2026-09-30
 
 - fix: name the first bad frame in LeRobot timeline errors. robot-reel lerobot now names the first frame that breaks an episode's timeline. It still stops with exit status 2 and writes no output. Each message gives the dataset-relative data file, the episode and the first bad frame_index: a missing frame (with the next recorded one), a repeated frame, an unexpected value (negative, null, NaN or non-numeric), a frame with no finite timestamp, or a timestamp that is not after the previous frame's (both values shown). Frame indices are now checked before the metadata length check, so a frame dropped mid-episode is reported as a gap instead of a count mismatch. A missing final frame keeps the old 'Episode metadata lists' message. Every timeline message ends by saying Robot Reel does not reorder, fill or interpolate frames. The same episodes are accepted and rejected as before, including float frame_index columns equal to 0..length-1. docs/lerobot.md gains a 'Timeline errors' section.
-
-## Unreleased
-
 - Publish a 24-second Cycles flythrough of the Factory Twin campus with
   `film.json`, which maps every film frame to one recorded sample and pins the
   checked Blender project (`scripts/render_factory_twin_film.py`,
