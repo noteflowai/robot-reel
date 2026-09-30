@@ -145,6 +145,39 @@ def locate(source, info, episode):
     return row, data, videos, "meta/episodes.jsonl"
 
 
+REPAIR = " Robot Reel does not reorder, fill or interpolate frames; repair or re-export the episode."
+
+
+def frame_index_error(values, episode, data):
+    """Describe the first frame_index that differs from its position (frame_index values, never file rows)."""
+    where = f"Episode {episode} in {data}"
+    for i, v in enumerate(values):
+        if v == i:
+            continue
+        # Order comparisons run only on finite numbers, so None or strings cannot raise TypeError.
+        numeric = type(v) in (int, float) and math.isfinite(v)
+        if numeric and i > 0 and v == values[i-1]:
+            return f"{where} repeats frame_index {v!r}; each frame must appear once."+REPAIR
+        if numeric and v > i:
+            return (f"{where} is missing frame_index {i} (next recorded frame_index is {v!r}); "
+                    "frames must be 0..length-1 without gaps."+REPAIR)
+        return f"{where} has frame_index {v!r} where {i} was expected."+REPAIR
+    return None
+
+
+def timestamp_error(timestamps, episode, data):
+    """Name the first missing or non-increasing timestamp; position i is frame_index i."""
+    where = f"Episode {episode} in {data}"
+    for i, t in enumerate(timestamps):
+        if t is None:
+            return f"{where} has no finite timestamp at frame_index {i}."+REPAIR
+    for i in range(1, len(timestamps)):
+        if timestamps[i] <= timestamps[i-1]:
+            return (f"{where}: timestamp at frame_index {i} ({timestamps[i]!r} s) is not after "
+                    f"frame_index {i-1} ({timestamps[i-1]!r} s)."+REPAIR)
+    return None
+
+
 def read_episode(source, episode):
     """Read one episode into a JSON-ready trace; media are described, not encoded."""
     import pyarrow.parquet as pq
@@ -161,15 +194,20 @@ def read_episode(source, episode):
     length = table.num_rows
     if not 2 <= length <= MAX_FRAMES:
         raise ValueError(f"Episode has {length} frames; expected 2–{MAX_FRAMES}")
-    if row.get("length") not in (None, length):
-        raise ValueError(f"Episode metadata lists {row['length']} frames but {data} holds {length}")
     columns = table.to_pydict()
     for name in ("timestamp", "frame_index"):
         if name not in columns:
             raise ValueError(f"Data file has no {name} column")
     timestamps = [scalar(v, info["features"].get("timestamp", {}).get("dtype", "float32")) for v in flatten(columns["timestamp"])]
+    # Frame indices first, so a frame dropped mid-episode is named instead of reported as a count mismatch.
     if columns["frame_index"] != list(range(length)):
-        raise ValueError("Frame indices are not 0..length-1")
+        raise ValueError(frame_index_error(columns["frame_index"], episode, data) or "Frame indices are not 0..length-1")
+    if row.get("length") not in (None, length):
+        raise ValueError(f"Episode metadata lists {row['length']} frames but {data} holds {length}")
+    # With exactly one value per frame, position i is frame_index i; otherwise keep the generic message.
+    problem = timestamp_error(timestamps, episode, data) if len(timestamps) == length else None
+    if problem:
+        raise ValueError(problem)
     if any(t is None for t in timestamps) or any(b <= a for a, b in zip(timestamps, timestamps[1:])):
         raise ValueError("Timestamps are missing or not increasing")
     series, cameras, skipped = [], [], []
