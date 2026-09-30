@@ -78,13 +78,14 @@ time) at 30 fps. Blender performs no physics.
 | [Project site](https://noteflowai.github.io/robot-reel/factory-twin/) | Interactive lab, renders and the flythrough film |
 | [Hugging Face Space](https://huggingface.co/spaces/glayguo/robot-reel/tree/main/factory-twin) | The same lab, hosted beside the other experiments |
 | [GitHub Release](https://github.com/noteflowai/robot-reel/releases/latest) | `robot-reel-factory-twin-experiment.zip` (offline lab) and `factory-twin-blender.zip` (Blender + OpenUSD) |
+| [Hugging Face Dataset](https://huggingface.co/datasets/glayguo/robot-reel-factory-twin) | `pairs`, `seeds`, `samples` and `decisions` tables for `load_dataset` (`scripts/build_hf_factory_twin.py`) |
 | [PyPI](https://pypi.org/project/robot-reel/) | `robot-reel factory-twin --verify` and `--export-from` |
 
 The Blender archive is stored at a pinned revision of the
 [`glayguo/noteflow-research-pilots`](https://huggingface.co/datasets/glayguo/noteflow-research-pilots)
 dataset (see `requirements/research-release-assets.json`); release builds fetch
 it, check every project and USD hash against `blender-check.json` and list it in
-`SHA256SUMS`. The copy attached to v0.18.0 after publication has SHA-256
+`SHA256SUMS`. Releases from v0.18.0 carry the same bytes, SHA-256
 `e205a6e633784898e7db7b27ede00b572056c116f4a5cd62153a8ac869788baf`. Check any copy with:
 
 ```bash

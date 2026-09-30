@@ -41,7 +41,7 @@ and downloadable files. Start with a workflow below; no installation or
 model-service account is needed to explore.
 
 Install the CLI from [PyPI](https://pypi.org/project/robot-reel/) with
-`python -m pip install robot-reel==0.18.0` (Python 3.12+).
+`python -m pip install robot-reel==0.18.1` (Python 3.12+).
 See the [installation guide](https://github.com/noteflowai/robot-reel/blob/main/docs/distribution.md)
 for optional dependencies and verified downloads.
 
@@ -116,6 +116,7 @@ Space, then inspect the actual policy and asset snapshots behind its recordings.
 - [Complete project website](https://noteflowai.github.io/robot-reel/)
 - [SmolVLA protocol and limits](https://github.com/noteflowai/robot-reel/blob/main/docs/stress.md)
 - [Cloth data, checked samples and Blender workflow](https://github.com/noteflowai/robot-reel/blob/main/docs/cloth.md)
+- [Factory Twin tables on Hugging Face Datasets](https://huggingface.co/datasets/glayguo/robot-reel-factory-twin)
 - [Factory Twin model, loop and checks](https://github.com/noteflowai/robot-reel/blob/main/docs/factory-twin.md)
 - [Solver Lab equations, error measurements and reproduction](https://github.com/noteflowai/robot-reel/blob/main/docs/solver-lab.md)
 - [Newton release sweep](https://github.com/noteflowai/robot-reel/blob/main/docs/chaos.md)
