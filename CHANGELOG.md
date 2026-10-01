@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.18.3 — 2026-10-01
+
 - Check the 25 numbers written into the prose of 13 lab pages (LIBERO-Plus
   outcomes, cloth and pendulum setup, sample counts, rates) against their
   evidence files.

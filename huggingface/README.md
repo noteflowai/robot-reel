@@ -41,7 +41,7 @@ and downloadable files. Start with a workflow below; no installation or
 model-service account is needed to explore.
 
 Install the CLI from [PyPI](https://pypi.org/project/robot-reel/) with
-`python -m pip install robot-reel==0.18.2` (Python 3.12+).
+`python -m pip install robot-reel==0.18.3` (Python 3.12+).
 See the [installation guide](https://github.com/noteflowai/robot-reel/blob/main/docs/distribution.md)
 for optional dependencies and verified downloads.
 
