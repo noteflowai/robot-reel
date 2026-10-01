@@ -220,6 +220,97 @@ def scopes():
     )
 
 
+def stress_counts():
+    s, e = load("stress/summary.json"), load("stress/experiment.json")
+    return s, len(e["seeds"]), len(e["conditions"])
+
+
+def rerun():
+    return "{videos_checked} embedded videos · {observations_checked} observations · {inference_calls_checked} policy calls".format(
+        **load("rerun/manifest.json"))
+
+
+def per_condition():
+    names = {"reference": "Reference succeeds in", "dim": "reduced light in", "camera": "and the shifted camera in"}
+    parts = [f"{names[c['id']]} {c['successes']}/{c['trials']}" for c in load("stress/summary.json")["conditions"]]
+    return ", ".join(parts[:-1]) + ", " + parts[-1]
+
+
+def twin_pairs():
+    return len(load("factory-twin/seeds.json")["seeds"])
+
+
+# Headline numbers on the other public surfaces: (file, wording, recompute -> wording).
+SURFACES = (
+    ("huggingface/README.md", "30 trials on one task: 10 initial states × 3 conditions",
+     lambda: "{} trials on one task: {} initial states × {} conditions".format(
+         stress_counts()[0]["completed_trials"], *stress_counts()[1:])),
+    ("huggingface/README.md", "Download 366 positions and velocities",
+     lambda: f"Download {sum(len(v['samples']) for v in load('solver-lab/lab.json')['metrics'].values())} positions and velocities"),
+    ("huggingface/README.md", "42,471 vertex samples",
+     lambda: f"{load('cloth/blender-check.json')['checked_vertex_samples']:,} vertex samples"),
+    ("huggingface/README.md", "8,400 joint samples, 18,000 body transforms",
+     lambda: f"{microduck_samples().split()[0]} joint samples, "
+             f"{load('microduck-lab/kinematics-check.json')['checked_body_transforms']:,} body transforms"),
+    ("huggingface/README.md", "all 362 source frames", lambda: f"all {scene_frames()}"),
+    ("huggingface/README.md", "12 paired seeds", lambda: f"{twin_pairs()} paired seeds"),
+    ("huggingface/index.html", "42,471 original cloth vertex samples",
+     lambda: f"{load('cloth/blender-check.json')['checked_vertex_samples']:,} original cloth vertex samples"),
+    ("huggingface/index.html", "12 isolated Newton worlds",
+     lambda: f"{len(load('chaos/trace.json')['worlds'])} isolated Newton worlds"),
+    ("huggingface/index.html", "10 starts × 3 conditions",
+     lambda: "{} starts × {} conditions".format(*stress_counts()[1:])),
+    ("huggingface/index.html", "Compare 12 paired shifts", lambda: f"Compare {twin_pairs()} paired shifts"),
+    ("huggingface/index.html", "Microduck / ONNX / 14 joints",
+     lambda: f"Microduck / ONNX / {len(load('microduck-lab/data.json')['joints'])} joints"),
+    ("scripts/landing.html", "6.26 m gap", lambda: f"{load('chaos/trace.json')['summary']['peak']['distance_m']:.2f} m gap"),
+    ("scripts/landing.html", "all 362 frames", lambda: f"all {scene_frames().replace(' source', '')}"),
+    ("scripts/landing.html", "Microduck: 8,400 joint samples · Solver: 366 states · Cloth: 42,471 vertex samples · Stress: 30 trials",
+     lambda: "Microduck: {} joint samples · Solver: {} states · Cloth: {:,} vertex samples · Stress: {} trials".format(
+         microduck_samples().split()[0], sum(len(v["samples"]) for v in load("solver-lab/lab.json")["metrics"].values()),
+         load("cloth/blender-check.json")["checked_vertex_samples"], stress_counts()[0]["completed_trials"])),
+    ("scripts/landing.html", "SmolVLA · LIBERO · 76 actions",
+     lambda: f"SmolVLA · LIBERO · {load('vla/trace.json')['result']['actions']} actions"),
+    ("scripts/landing.html", "Newton · OpenUSD · 362 transforms",
+     lambda: f"Newton · OpenUSD · {load('newton/blender-check.json')['checked_body_samples']} transforms"),
+    ("scripts/landing.html", "6 embedded videos · 405 observations · 41 policy calls", rerun),
+    ("scripts/landing.html", "across 12 paired shifts", lambda: f"across {twin_pairs()} paired shifts"),
+    ("huggingface/results-card.md", "30 recorded simulated trials, 20 reference/condition pairs",
+     lambda: f"{stress_counts()[0]['completed_trials']} recorded simulated trials, "
+             f"{len(stress_counts()[0]['pairs'])} reference/condition pairs"),
+    ("huggingface/results-card.md", "All 30 planned trials completed in 30 attempts, with zero execution errors",
+     lambda: "All {planned_trials} planned trials completed in {attempts} attempts, with {e} execution errors".format(
+         **stress_counts()[0], e="zero" if stress_counts()[0]["execution_errors"] == 0 else stress_counts()[0]["execution_errors"])),
+    ("huggingface/results-card.md", "Reference succeeds in 5/10, reduced light in 4/10, and the shifted camera in 7/10",
+     per_condition),
+)
+
+
+def surface_text(name):
+    import html
+    import re
+    text = (ROOT / name).read_text()
+    if name.endswith(".html"):
+        text = re.sub(r"<(style|script)\b.*?</\1>", " ", text, flags=re.S)
+        text = html.unescape(re.sub(r"<[^>]+>", " ", text))
+    return " ".join(text.replace("**", "").split())
+
+
+def check_surfaces():
+    problems, texts = [], {}
+    for name, wording, compute in SURFACES:
+        texts.setdefault(name, surface_text(name))
+        try:
+            value = compute()
+        except (OSError, KeyError, ValueError) as exc:
+            value = f"error: {exc}"
+        if value != wording:
+            problems.append(f"{name}: evidence gives {value!r}, recorded wording is {wording!r}")
+        if wording not in texts[name]:
+            problems.append(f"{name}: no longer contains {wording!r}")
+    return problems
+
+
 def check():
     readme, chinese = flatten(ROOT / "README.md"), flatten(ROOT / "README.zh-CN.md")
     rows, problems = [], []
@@ -241,6 +332,7 @@ def check():
             if numbers(zh) != numbers(wording):
                 problems.append(f"{lab}: Chinese {zh!r} has numbers {numbers(zh)}, English has {numbers(wording)}")
         rows.append((lab, kind, wording, evidence))
+    problems += check_surfaces()
     return rows, problems
 
 
@@ -274,6 +366,16 @@ def render(rows):
     for lab, kind, wording, evidence in rows:
         link = evidence if "*" in evidence else f"[{evidence}]({evidence})"
         lines.append(f"| {lab} | `{kind}` | {wording} | {ZH.get(wording, '—')} | {link} |")
+    lines += [
+        "",
+        "## Other public surfaces",
+        "",
+        "The same check covers headline numbers on the website landing page and the Hugging Face cards.",
+        "",
+        "| Surface | Wording |",
+        "| --- | --- |",
+        *(f"| `{name}` | {wording} |" for name, wording, _ in SURFACES),
+    ]
     lines += [
         "",
         "Numbers establish what these recordings contain, not general performance. Each lab's",

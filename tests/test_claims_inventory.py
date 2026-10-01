@@ -20,7 +20,8 @@ class ClaimsInventoryTests(unittest.TestCase):
     def test_edited_readme_or_changed_evidence_is_reported(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / "docs").symlink_to(ROOT / "docs")
+            for name in ("docs", "scripts", "huggingface"):
+                (root / name).symlink_to(ROOT / name)
             (root / "README.md").write_text((ROOT / "README.md").read_text().replace(
                 "0 spindle failures (shadow: 11)", "0 spindle failures (shadow: 12)"))
             (root / "README.zh-CN.md").write_text((ROOT / "README.zh-CN.md").read_text())
@@ -30,7 +31,8 @@ class ClaimsInventoryTests(unittest.TestCase):
         self.assertIn("README no longer contains", problems[0])
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / "docs").symlink_to(ROOT / "docs")
+            for name in ("docs", "scripts", "huggingface"):
+                (root / name).symlink_to(ROOT / name)
             (root / "README.md").write_text((ROOT / "README.md").read_text())
             (root / "README.zh-CN.md").write_text((ROOT / "README.zh-CN.md").read_text().replace(
                 "影子模式 11 次", "影子模式 12 次"))
@@ -49,6 +51,28 @@ class ClaimsInventoryTests(unittest.TestCase):
         self.assertEqual(len(problems), 1)
         self.assertIn("evidence gives", problems[0])
 
+
+
+class SurfaceTests(unittest.TestCase):
+    def test_landing_and_hugging_face_numbers_follow_the_evidence(self):
+        self.assertEqual(inventory.check_surfaces(), [])
+        self.assertGreaterEqual(len({name for name, _, _ in inventory.SURFACES}), 4)
+
+    def test_an_edited_card_is_reported(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "docs").symlink_to(ROOT / "docs")
+            for name in ("scripts", "huggingface"):
+                (root / name).mkdir()
+            for name, _, _ in inventory.SURFACES:
+                text = (ROOT / name).read_text()
+                if name == "huggingface/results-card.md":
+                    text = text.replace("reduced light in 4/10", "reduced light in 5/10")
+                (root / name).write_text(text)
+            with mock.patch.object(inventory, "ROOT", root):
+                problems = inventory.check_surfaces()
+        self.assertEqual(problems, ["huggingface/results-card.md: no longer contains "
+                                    "'Reference succeeds in 5/10, reduced light in 4/10, and the shifted camera in 7/10'"])
 
 
 class NumberExtractionTests(unittest.TestCase):
