@@ -17,6 +17,12 @@ Factory Twin offline lab; `factory-twin-blender.zip` matched `SHA256SUMS`.
 | any4lerobot "Awesome LeRobot" | PR adding one Tutorial / Utils line, maintainer relationship disclosed | [Tavish9/any4lerobot#118](https://github.com/Tavish9/any4lerobot/pull/118) |
 | awesome-openusd | PR adding one Libraries & Tools line, disclosed | [matiascodesal/awesome-openusd#11](https://github.com/matiascodesal/awesome-openusd/pull/11) |
 
+RR-01 call for first-use trials: [Discussion #104](https://github.com/noteflowai/robot-reel/discussions/104)
+(Announcements, exact readback) and a marked section in the pinned HF
+introduction. GitHub's API cannot pin discussions; pin #104 in the web UI.
+Share the [trial guide](../docs/first-use-trial.md) with LeRobot users directly
+(Discord #show-and-tell, collaborators); count only reports filed through the form.
+
 Both list PRs await maintainer review; do not bump or duplicate them. Social and
 video posts (Bilibili, 知乎/掘金, Blender Artists, LinkedIn/X, Reddit) remain
 unposted drafts in [outreach/factory-twin.md](outreach/factory-twin.md): they

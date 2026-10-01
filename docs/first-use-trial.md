@@ -51,8 +51,9 @@ and measurement and links to their largest difference.
 ## 4. Report
 
 [Open a first-use trial report](https://github.com/noteflowai/robot-reel/issues/new?template=first_use_trial.yml).
-It takes about five minutes. If you prefer not to use GitHub, the same
-questions can go in the
+It takes about five minutes. Questions before you start: the
+[call for trials](https://github.com/noteflowai/robot-reel/discussions/104).
+If you prefer not to use GitHub, the same questions can go in the
 [pinned Hugging Face discussion](https://huggingface.co/spaces/glayguo/robot-reel/discussions/1).
 
 ## How reports are used
