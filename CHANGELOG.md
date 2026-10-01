@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Extend the claims inventory to the Chinese README (same numbers as the
+  English wording) and add a per-lab scope table: task, sample, seeds,
+  runtime and comparison, each read from the evidence files.
+
 ## 0.18.2 — 2026-10-01
 
 - Add a claims inventory (`docs/claims.md`, `scripts/claims_inventory.py`,

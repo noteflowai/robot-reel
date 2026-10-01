@@ -32,7 +32,7 @@ For RR-01/RR-02, compare the same permitted episode and debugging question again
 | RR-02 | A teammate can reproduce the diagnosis | Export a compact evidence bundle with input hashes, frame/time selection, configuration and limitations. Another clean environment must reopen it and locate the same failure; a tampered input must be identified. Reuse existing export/provenance code. |
 | RR-03 | Existing labs make appropriately limited claims | Inventory each lab's task, baseline, sample size, seed and measured result. Separate real recordings, synthetic fixtures and illustrative scenes. Link each public conclusion to its saved evidence and preserve failed runs. |
 
-RR-03 progress (2026-10-01): [docs/claims.md](docs/claims.md) links 23 README headline numbers across 10 labs to their evidence files and evidence kind; `scripts/claims_inventory.py` recomputes each value and runs in the standard test suite. Still open: per-lab task, baseline, sample size and seed inventory, the Chinese README, and pages beyond the README.
+RR-03 progress (2026-10-01): [docs/claims.md](docs/claims.md) links 23 README headline numbers across 10 labs to their evidence files and evidence kind, checks that the Chinese README states the same numbers, and lists each lab's task, sample, seeds, runtime and comparison read from its evidence. `scripts/claims_inventory.py` runs in the standard test suite. Still open: claims on the lab pages and Hugging Face cards beyond the READMEs.
 
 Prioritize blocking defects in this journey ahead of a new visualization or statistical variation.
 

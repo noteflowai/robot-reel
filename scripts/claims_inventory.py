@@ -136,8 +136,92 @@ CLAIMS = (
 )
 
 
+# Chinese README wording for each claim. Its numbers must equal the English
+# wording's numbers, which are themselves recomputed from the evidence.
+ZH = {
+    '30 real closed-loop trials': '30 次真实闭环运行',
+    'All 14 unsuccessful trials reached the action limit': '14 次未成功试次均达到动作预算上限',
+    '44.8 mm to 138.6 mm': '44.8–138.6 mm',
+    'three gains and one loss': '三次从未完成变为成功、一次从成功变为未完成',
+    '30 / 30 outcomes': '30 / 30 试次的结果',
+    '360 / 360 rendered frames': '360 / 360 个渲染帧一致',
+    'One of 3,195': '3,195 个仅用于记录的帧中有 1 帧不同',
+    '32.70 cm to 2.05 cm': '32.70 厘米降至 2.05 厘米',
+    '366 recorded position/velocity states': '366 个位置与速度状态',
+    '42,471 vertex samples': '42,471 个顶点样本',
+    '14,424 body poses': '14,424 个刚体姿态',
+    '6.26 m gap': '6.26 米摆端距离',
+    'at 12.5 s': '发生在 12.5 秒',
+    '0 spindle failures (shadow: 11)': '主轴故障为 0 次（影子模式 11 次）',
+    '0 billing intervals over the demand limit (shadow: 8)': '计费时段 为 0 个（影子模式 8 个）',
+    '10 pairs and fell in 2': '10 组增加、2 组减少',
+    '676,393 animated values': '676,393 个动画数值',
+    '362 checked body transforms': '全部 362 个刚体变换',
+    '76 actions · one completed simulation task': '76 次动作 · 一次已完成的仿真任务',
+    '8,400 measured joint samples': '8,400 个实测关节样本',
+    '18,000 body transforms': '18,000 个变换',
+    '362 source frames': '共 362 帧',
+    '420 vehicle samples': '全部 420 个车辆状态',
+}
+
+NUMBER_WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "一": 1, "两": 2, "二": 2, "三": 3, "四": 4}
+
+
+def numbers(text):
+    """Numbers in a phrase, ignoring thousands separators; English and Chinese number words count."""
+    import re
+    values = [float(v.replace(",", "")) for v in re.findall(r"\d[\d,]*(?:\.\d+)?", text)]
+    # A Chinese numeral counts only before a measure word (so the 一 in 一致 is not a number).
+    values += [float(n) for w, n in NUMBER_WORDS.items()
+               for _ in re.findall(rf"\b{w}\b" if w.isascii() else rf"{w}(?=[次个组帧])", text, flags=re.IGNORECASE)]
+    return sorted(values)
+
+
+def flatten(path):
+    return " ".join(path.read_text().replace("**", "").split())
+
+
+def scopes():
+    """Per-lab scope, read from the evidence: what ran, how many samples, which seeds, on what."""
+    e, summary = load("stress/experiment.json"), load("stress/summary.json")
+    solver = load("solver-lab/lab.json")
+    cloth, chaos, newton = load("cloth/trace.json"), load("chaos/trace.json"), load("newton/trace.json")
+    vla, duck = load("vla/trace.json"), load("microduck-lab/data.json")
+    twin = load("factory-twin/lab.json")
+    gpu = {r["source"]["gpu"] for r in solver["runs"]}
+    return (
+        ("Stress Lab", "real-recording",
+         f"SmolVLA, {e['suite']} task {e['task_id']}, conditions: {', '.join(c['id'] for c in e['conditions'])}",
+         f"{summary['completed_trials']} trials, {e['max_steps']}-action budget",
+         f"{len(e['seeds'])} paired seeds ({e['seeds'][0]}–{e['seeds'][-1]})", f"policy on {e['device']}",
+         "Reference lighting within each paired seed"),
+        ("Solver Lab", "real-recording", "Unconstrained ballistic flight, Genesis and Newton",
+         f"{len(solver['runs'])} runs × {len(solver['runs'][0]['frames'])} samples",
+         "Deterministic; one initial state", ", ".join(sorted(gpu)), "Analytic solution"),
+        ("Cloth Lab", "real-recording", f"Newton {cloth['source']['solver']} cloth, bending coefficient sweep",
+         f"{len(cloth['cases'])} cases × {cloth['frame_count']} frames × {cloth['vertex_count']} vertices",
+         "Deterministic", cloth["source"]["device_name"], "Between the three cases"),
+        ("Butterfly Lab", "real-recording", f"Newton {chaos['source']['solver']} double-pendulum release sweep",
+         f"{len(chaos['worlds'])} worlds × {len(chaos['frames'])} samples", "Deterministic; 0.05° release offsets",
+         chaos["source"]["device"], "Adjacent worlds"),
+        ("Newton", "real-recording", f"Newton {newton['source']['solver']} double pendulum",
+         f"{len(newton['frames'])} samples", "Deterministic", newton["source"]["device"], "None (one run)"),
+        ("VLA", "real-recording", f"SmolVLA, {vla['suite']}: {vla['task']}", "1 episode",
+         f"seed {vla['seed']}, initial state {vla['initial_state_id']}", f"policy on {vla['source']['device']}",
+         "None (one rollout)"),
+        ("Microduck Motion Lab", "real-recording", "Pollen Microduck ONNX walking policy in MuJoCo",
+         f"{len(duck['runs'])} runs × {len(duck['runs'][0]['frames'])} frames × {len(duck['joints'])} joints",
+         "Two speed commands: " + " / ".join(f"{r['speed']} m/s" for r in duck["runs"]), "CPU (per microduck-lab.md)",
+         "Between the two speeds"),
+        ("Factory Twin Lab", "procedural-simulation", "Simulated factory and campus with a digital twin",
+         f"{len(twin['seeds']['seeds'])} pairs × 2 modes × {twin['config']['samples']} samples",
+         f"seeds {twin['config']['seeds'][0]}–{twin['config']['seeds'][-1]}", "Python standard library",
+         "Shadow twin (same twin, commands not applied)"),
+    )
+
+
 def check():
-    readme = " ".join((ROOT / "README.md").read_text().split())
+    readme, chinese = flatten(ROOT / "README.md"), flatten(ROOT / "README.zh-CN.md")
     rows, problems = [], []
     for lab, kind, wording, evidence, compute in CLAIMS:
         try:
@@ -148,6 +232,14 @@ def check():
             problems.append(f"{lab}: evidence gives {value!r}, README says {wording!r}")
         if wording not in readme:
             problems.append(f"{lab}: README no longer contains {wording!r}")
+        zh = ZH.get(wording)
+        if zh is None:
+            problems.append(f"{lab}: no Chinese wording recorded for {wording!r}")
+        else:
+            if zh not in chinese:
+                problems.append(f"{lab}: README.zh-CN no longer contains {zh!r}")
+            if numbers(zh) != numbers(wording):
+                problems.append(f"{lab}: Chinese {zh!r} has numbers {numbers(zh)}, English has {numbers(wording)}")
         rows.append((lab, kind, wording, evidence))
     return rows, problems
 
@@ -156,7 +248,8 @@ def render(rows):
     lines = [
         "# Claims inventory",
         "",
-        "Every headline number in the [README](../README.md), the evidence file it comes from and how",
+        "Every headline number in the [README](../README.md) and its [Chinese version](../README.zh-CN.md),",
+        "the evidence file it comes from and how",
         "that evidence was produced. `python3 scripts/claims_inventory.py` recomputes each value from",
         "its file and fails if the README, the evidence or this table drift apart (roadmap RR-03).",
         "Generated; edit `scripts/claims_inventory.py`, then run it with `--write`.",
@@ -165,12 +258,22 @@ def render(rows):
         "| --- | --- |",
         *(f"| `{k}` | {v} |" for k, v in KINDS.items() if any(r[1] == k for r in rows)),
         "",
-        "| Lab | Evidence kind | README wording | Evidence |",
-        "| --- | --- | --- | --- |",
+        "## Scope of each lab",
+        "",
+        "Read from the evidence files. Comparisons are within each lab; none is a benchmark.",
+        "",
+        "| Lab | Evidence kind | What ran | Sample | Seeds / variation | Runtime | Compared against |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+        *(f"| {' | '.join(f'`{c}`' if i == 1 else c for i, c in enumerate(row))} |" for row in scopes()),
+        "",
+        "## Headline numbers",
+        "",
+        "| Lab | Evidence kind | README wording | 中文 README | Evidence |",
+        "| --- | --- | --- | --- | --- |",
     ]
     for lab, kind, wording, evidence in rows:
         link = evidence if "*" in evidence else f"[{evidence}]({evidence})"
-        lines.append(f"| {lab} | `{kind}` | {wording} | {link} |")
+        lines.append(f"| {lab} | `{kind}` | {wording} | {ZH.get(wording, '—')} | {link} |")
     lines += [
         "",
         "Numbers establish what these recordings contain, not general performance. Each lab's",
