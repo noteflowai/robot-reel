@@ -19,5 +19,10 @@
   },
   "targets_met": false,
   "trials": [],
-  "excluded": []
+  "excluded": [
+    {
+      "issue": 107,
+      "reason": "filed by a repository owner"
+    }
+  ]
 }
