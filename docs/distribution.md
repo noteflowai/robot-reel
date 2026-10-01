@@ -1,9 +1,9 @@
 # Installing and releasing Robot Reel
 
 Python 3.12 or newer is required. The browser demos need no installation.
-Version **0.18.3** is available from
-[PyPI](https://pypi.org/project/robot-reel/0.18.3/) and
-[GitHub Releases](https://github.com/noteflowai/robot-reel/releases/tag/v0.18.3).
+Version **0.18.4** is available from
+[PyPI](https://pypi.org/project/robot-reel/0.18.4/) and
+[GitHub Releases](https://github.com/noteflowai/robot-reel/releases/tag/v0.18.4).
 Both channels serve the same wheel and source distribution, checked by SHA-256.
 
 Install the CLI in a virtual environment:
@@ -11,12 +11,12 @@ Install the CLI in a virtual environment:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install robot-reel==0.18.3
+python -m pip install robot-reel==0.18.4
 robot-reel --help
 ```
 
 To read a LeRobot dataset, install its optional dependencies with
-`python -m pip install 'robot-reel[lerobot]==0.18.3'`.
+`python -m pip install 'robot-reel[lerobot]==0.18.4'`.
 
 The release also includes `robot-reel-seed-09.rrd`: the verified native
 [Rerun recording](telemetry.md#native-rerun-workspace), with six embedded videos
@@ -39,7 +39,7 @@ and `SHA256SUMS` from the same GitHub release, then install in a virtual environ
 sha256sum --check --ignore-missing SHA256SUMS
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install ./robot_reel-0.18.3-py3-none-any.whl
+python -m pip install ./robot_reel-0.18.4-py3-none-any.whl
 robot-reel --help
 ```
 

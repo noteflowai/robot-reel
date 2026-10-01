@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.18.4 — 2026-10-01
+
 - LeRobot replay: when `action` and `observation.state` have different channel
   names or counts, the page now says so and that no mapping is guessed; camera
   headers drop the `observation.images.` prefix. Found by a first-use sweep of
