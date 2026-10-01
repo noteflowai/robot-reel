@@ -1,5 +1,28 @@
 # Robot Reel publication record and next channels
 
+## 0.18.3 Factory Twin publication · 2026-10-01
+
+[Release 0.18.3](https://github.com/noteflowai/robot-reel/releases/tag/v0.18.3)
+and [PyPI 0.18.3](https://pypi.org/project/robot-reel/0.18.3/) are public; all
+release-workflow jobs passed. The published wheel re-executed the downloaded
+Factory Twin offline lab; `factory-twin-blender.zip` matched `SHA256SUMS`.
+
+| Channel | Action | Record |
+| --- | --- | --- |
+| Website, Space, PyPI, Release | Lab, film, claims inventory and 0.18.3 live | [Factory Twin](https://noteflowai.github.io/robot-reel/factory-twin/) |
+| HF Datasets | New `glayguo/robot-reel-factory-twin` (pairs, seeds, samples, decisions) | [Dataset](https://huggingface.co/datasets/glayguo/robot-reel-factory-twin) |
+| HF pinned introduction | Edited in place with a marked `factory-twin-0.18.3` section; title updated; exact readback | [Discussion #1](https://huggingface.co/spaces/glayguo/robot-reel/discussions/1) |
+| HF collection | Dataset added; description and Space note updated | [Collection](https://huggingface.co/collections/glayguo/robot-reel-physical-ai-replay-lab-6aa67e950ba650285033a4d0) |
+| GitHub topics | `digital-twin` replaces `python` (20-topic limit) | Repository settings |
+| any4lerobot "Awesome LeRobot" | PR adding one Tutorial / Utils line, maintainer relationship disclosed | [Tavish9/any4lerobot#118](https://github.com/Tavish9/any4lerobot/pull/118) |
+| awesome-openusd | PR adding one Libraries & Tools line, disclosed | [matiascodesal/awesome-openusd#11](https://github.com/matiascodesal/awesome-openusd/pull/11) |
+
+Both list PRs await maintainer review; do not bump or duplicate them. Social and
+video posts (Bilibili, 知乎/掘金, Blender Artists, LinkedIn/X, Reddit) remain
+unposted drafts in [outreach/factory-twin.md](outreach/factory-twin.md): they
+need the owner's own accounts and wording.
+
+
 ## 0.10.0 Solver Lab publication · 2026-09-14
 
 [PR #47](https://github.com/noteflowai/robot-reel/pull/47) adds six real
@@ -72,8 +95,8 @@ validate the supplied recordings; no new simulation was needed for publication.
 | Reddit robotics / Blender communities | A concrete recording or import example matched to the community | Rules could not be verified: Reddit returned 403. Read current sidebar and pinned threads while signed in before choosing a post type. |
 | Awesome Robotics Libraries | A portable inspection tool alongside existing robotics visualization software | Revisit after more usage evidence. The directory scores activity, documentation, popularity, maturity and uniqueness; this two-day-old project lacks the popularity/maturity points, and overlap with Foxglove needs a clear explanation. |
 | LeRobot community (Discord #show-and-tell, GitHub Discussions) | `robot-reel lerobot` on a public SO-101 dataset: offline replay, commanded vs. measured per joint, pinned source hashes | Owner posts in their own words with the [SO-101 example](https://noteflowai.github.io/robot-reel/lerobot/). Related open requests, checked 2026-09-25: local-dataset viewing ([lerobot-dataset-visualizer#12](https://github.com/huggingface/lerobot-dataset-visualizer/issues/12)) and showing the language task ([lerobot#4322](https://github.com/huggingface/lerobot/issues/4322)). Reply there only where the tool answers the request. |
-| any4lerobot "Awesome LeRobot" → Tutorial / Utils | One line beside the LeRobot Dataset Visualizer entry | Open a PR at [Tavish9/any4lerobot](https://github.com/Tavish9/any4lerobot) after the feature is on `main` and in a release. |
-| awesome-openusd → Libraries & Tools | Recorded Newton / cloth / solver motion exported to checked OpenUSD | No CONTRIBUTING file; a normal PR to [matiascodesal/awesome-openusd](https://github.com/matiascodesal/awesome-openusd). |
+| any4lerobot "Awesome LeRobot" → Tutorial / Utils | One line beside the LeRobot Dataset Visualizer entry | Submitted 2026-10-01: [#118](https://github.com/Tavish9/any4lerobot/pull/118). |
+| awesome-openusd → Libraries & Tools | Recorded Newton / cloth / solver motion exported to checked OpenUSD | Submitted 2026-10-01: [#11](https://github.com/matiascodesal/awesome-openusd/pull/11). |
 | awesome-mcp-servers | The stdio director server (`robot-reel mcp`) | The list's CI labels entries without a Glama score badge; list the server on glama.ai first, then PR [punkpeye/awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers). |
 | Hugging Face Blog Articles | A longer engineering article linked to the existing Space | Current account has no PRO subscription or qualifying organization. The current publishing rules require one of those; no subscription was purchased. |
 
