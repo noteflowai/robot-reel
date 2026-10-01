@@ -286,6 +286,95 @@ SURFACES = (
 )
 
 
+def libero(condition):
+    run = load(f"libero-plus/{condition}/run.json")
+    frames = run["frames"]
+    return run["steps"], frames[-1]["next_time_s"] - frames[0]["time_s"]
+
+
+def libero_row(condition, label):
+    plan = {c["name"]: c for c in load("libero-plus/plan.json")["conditions"]}
+    steps = libero(condition)[0]
+    status = "Success" if load(f"libero-plus/{condition}/run.json")["task_success"] else "Step limit"
+    return f"{label} {plan[condition]['official_task_id']} {status} {steps}"
+
+
+def chaos_sweep():
+    offsets = [w["angle_offset_deg"] for w in load("chaos/trace.json")["worlds"]]
+    steps = {round(b - a, 6) for a, b in zip(offsets, offsets[1:])}
+    assert len(steps) == 1
+    return f"differ by {steps.pop():.2f}°; the full sweep spans {offsets[-1] - offsets[0]:.2f}°"
+
+
+def cloth_sheet():
+    trace = load("cloth/trace.json")
+    setup = trace["setup"]
+    (nx, ny), (dx, dy) = setup["grid_cells"], setup["cell_size_m"]
+    return (f"{nx * dx:.2f} × {ny * dy:.2f} m sheet has {trace['vertex_count']} vertices and "
+            f"{len(trace['triangles'])} triangles")
+
+
+def stress_labels():
+    return " ".join(c["label"] for c in load("stress/experiment.json")["conditions"][1:])
+
+
+# Static prose inside the published lab pages (rendered text, scripts excluded).
+PAGES = (
+    ("docs/libero-plus/index.html", "Success · 77 actions",
+     lambda: f"Success · {libero('baseline')[0]} actions"),
+    ("docs/libero-plus/index.html", "Step limit · 220 actions",
+     lambda: f"Step limit · {libero('camera-viewpoints')[0]} actions"),
+    ("docs/libero-plus/index.html", "77 actions · 3.85 simulated seconds",
+     lambda: "{} actions · {:.2f} simulated seconds".format(*libero("baseline"))),
+    ("docs/libero-plus/index.html", "220 actions · 11.00 simulated seconds",
+     lambda: "{} actions · {:.2f} simulated seconds".format(*libero("camera-viewpoints"))),
+    ("docs/libero-plus/index.html", "Camera Viewpoints 609 Step limit 220",
+     lambda: libero_row("camera-viewpoints", "Camera Viewpoints")),
+    ("docs/libero-plus/index.html", "Light Conditions 2124 Success 87",
+     lambda: libero_row("light-conditions", "Light Conditions")),
+    ("docs/blender/index.html", "360 vehicle samples",
+     lambda: f"{load('blender/animation-check.json')['checked_vehicle_samples']} vehicle samples"),
+    ("docs/blender/index.html", "180 FRAMES · 2 TRIALS",
+     lambda: "{} FRAMES · {} TRIALS".format(load("blender/animation-check.json")["frames_per_trial"],
+                                           load("blender/animation-check.json")["checked_vehicle_samples"]
+                                           // load("blender/animation-check.json")["frames_per_trial"])),
+    ("docs/remix/index.html", "All 180 source samples",
+     lambda: f"All {load('blender/animation-check.json')['frames_per_trial']} source samples"),
+    ("docs/remix/index.html", "360 native vehicle checks",
+     lambda: f"{load('blender/animation-check.json')['checked_vehicle_samples']} native vehicle checks"),
+    ("docs/director/index.html", "180 source samples",
+     lambda: f"{load('director/film.json')['source_frame_count']} source samples"),
+    ("docs/chaos/index.html", "12 isolated worlds on CPU",
+     lambda: f"{load('chaos/trace.json')['source']['world_count']} isolated worlds on {load('chaos/trace.json')['source']['device'].upper()}"),
+    ("docs/chaos/index.html", "Two 1.6 m links per world",
+     lambda: f"Two {load('chaos/trace.json')['link_size_m'][0]} m links per world"),
+    ("docs/chaos/index.html", "differ by 0.05°; the full sweep spans 0.55°", chaos_sweep),
+    ("docs/cloth/index.html", "0.96 × 0.64 m sheet has 117 vertices and 192 triangles", cloth_sheet),
+    ("docs/cloth/index.html", "mass 0.01 kg; gravity is 9.81",
+     lambda: "mass {} kg; gravity is {}".format(load("cloth/trace.json")["setup"]["free_vertex_mass_kg"],
+                                               -load("cloth/trace.json")["setup"]["gravity_m_s2"][2])),
+    ("docs/newton/index.html", "30 samples/s · 300 physics steps/s",
+     lambda: f"{load('newton/trace.json')['fps']} samples/s · {round(1 / load('newton/trace.json')['source']['timestep'])} physics steps/s"),
+    ("docs/microduck-lab/index.html", "14 JOINTS 2 × 300 FRAMES",
+     lambda: "{} JOINTS {} × {} FRAMES".format(len(load("microduck-lab/data.json")["joints"]),
+                                              len(load("microduck-lab/data.json")["runs"]),
+                                              len(load("microduck-lab/data.json")["runs"][0]["frames"]))),
+    ("docs/microduck-lab/index.html", "All 18,000 body transforms",
+     lambda: f"All {load('microduck-lab/kinematics-check.json')['checked_body_transforms']:,} body transforms"),
+    ("docs/solver-lab/index.html", "366 recorded states",
+     lambda: f"{sum(len(v['samples']) for v in load('solver-lab/lab.json')['metrics'].values())} recorded states"),
+    ("docs/solver-lab/index.html", "all 61 samples per run",
+     lambda: f"all {len(load('solver-lab/lab.json')['runs'][0]['frames'])} samples per run"),
+    ("docs/stress/index.html", "25% light Camera +12 cm", stress_labels),
+    ("docs/vla/index.html", "in order at 20 Hz", lambda: f"in order at {load('vla/trace.json')['fps']} Hz"),
+    ("docs/scene-lab/index.html", "all 4,225 collision samples",
+     lambda: f"all {load('scene-lab/motion/baseline/trace.json')['initial']['compiled_heightfield_vertices']:,} collision samples"),
+    ("docs/scene-lab/index.html", "Heightfield proxy 65 × 65",
+     lambda: "Heightfield proxy {0} × {0}".format(
+         round(load("scene-lab/motion/baseline/trace.json")["initial"]["compiled_heightfield_vertices"] ** 0.5))),
+)
+
+
 def surface_text(name):
     import html
     import re
@@ -298,7 +387,7 @@ def surface_text(name):
 
 def check_surfaces():
     problems, texts = [], {}
-    for name, wording, compute in SURFACES:
+    for name, wording, compute in (*SURFACES, *PAGES):
         texts.setdefault(name, surface_text(name))
         try:
             value = compute()
@@ -375,6 +464,15 @@ def render(rows):
         "| Surface | Wording |",
         "| --- | --- |",
         *(f"| `{name}` | {wording} |" for name, wording, _ in SURFACES),
+        "",
+        "## Lab pages",
+        "",
+        "Numbers written into the prose of each lab page. Data panels render from embedded payloads",
+        "that each lab's own verifier compares with its source files.",
+        "",
+        "| Page | Wording |",
+        "| --- | --- |",
+        *(f"| `{name}` | {wording} |" for name, wording, _ in PAGES),
     ]
     lines += [
         "",

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Check the 25 numbers written into the prose of 13 lab pages (LIBERO-Plus
+  outcomes, cloth and pendulum setup, sample counts, rates) against their
+  evidence files.
 - Check headline numbers on the landing page, the Hugging Face Space card and
   page, and the results dataset card against the same evidence (21 phrases).
 - Extend the claims inventory to the Chinese README (same numbers as the

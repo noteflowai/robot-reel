@@ -75,6 +75,25 @@ class SurfaceTests(unittest.TestCase):
                                     "'Reference succeeds in 5/10, reduced light in 4/10, and the shifted camera in 7/10'"])
 
 
+class LabPageTests(unittest.TestCase):
+    def test_lab_page_prose_follows_the_evidence(self):
+        names = {name for name, _, _ in inventory.PAGES}
+        self.assertGreaterEqual(len(names), 12)
+        self.assertEqual(inventory.check_surfaces(), [])
+
+    def test_changed_evidence_behind_a_page_is_reported(self):
+        real = inventory.load
+        def changed(name):
+            data = real(name)
+            if name == "cloth/trace.json":
+                data["setup"]["free_vertex_mass_kg"] = 0.02
+            return data
+        with mock.patch.object(inventory, "load", changed):
+            problems = inventory.check_surfaces()
+        self.assertEqual(problems, ["docs/cloth/index.html: evidence gives 'mass 0.02 kg; gravity is 9.81', "
+                                    "recorded wording is 'mass 0.01 kg; gravity is 9.81'"])
+
+
 class NumberExtractionTests(unittest.TestCase):
     def test_english_and_chinese_numbers_compare_equal(self):
         self.assertEqual(inventory.numbers("three gains and one loss"),
