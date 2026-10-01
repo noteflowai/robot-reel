@@ -82,6 +82,39 @@ The same check covers headline numbers on the website landing page and the Huggi
 | `huggingface/results-card.md` | All 30 planned trials completed in 30 attempts, with zero execution errors |
 | `huggingface/results-card.md` | Reference succeeds in 5/10, reduced light in 4/10, and the shifted camera in 7/10 |
 
+## Lab pages
+
+Numbers written into the prose of each lab page. Data panels render from embedded payloads
+that each lab's own verifier compares with its source files.
+
+| Page | Wording |
+| --- | --- |
+| `docs/libero-plus/index.html` | Success · 77 actions |
+| `docs/libero-plus/index.html` | Step limit · 220 actions |
+| `docs/libero-plus/index.html` | 77 actions · 3.85 simulated seconds |
+| `docs/libero-plus/index.html` | 220 actions · 11.00 simulated seconds |
+| `docs/libero-plus/index.html` | Camera Viewpoints 609 Step limit 220 |
+| `docs/libero-plus/index.html` | Light Conditions 2124 Success 87 |
+| `docs/blender/index.html` | 360 vehicle samples |
+| `docs/blender/index.html` | 180 FRAMES · 2 TRIALS |
+| `docs/remix/index.html` | All 180 source samples |
+| `docs/remix/index.html` | 360 native vehicle checks |
+| `docs/director/index.html` | 180 source samples |
+| `docs/chaos/index.html` | 12 isolated worlds on CPU |
+| `docs/chaos/index.html` | Two 1.6 m links per world |
+| `docs/chaos/index.html` | differ by 0.05°; the full sweep spans 0.55° |
+| `docs/cloth/index.html` | 0.96 × 0.64 m sheet has 117 vertices and 192 triangles |
+| `docs/cloth/index.html` | mass 0.01 kg; gravity is 9.81 |
+| `docs/newton/index.html` | 30 samples/s · 300 physics steps/s |
+| `docs/microduck-lab/index.html` | 14 JOINTS 2 × 300 FRAMES |
+| `docs/microduck-lab/index.html` | All 18,000 body transforms |
+| `docs/solver-lab/index.html` | 366 recorded states |
+| `docs/solver-lab/index.html` | all 61 samples per run |
+| `docs/stress/index.html` | 25% light Camera +12 cm |
+| `docs/vla/index.html` | in order at 20 Hz |
+| `docs/scene-lab/index.html` | all 4,225 collision samples |
+| `docs/scene-lab/index.html` | Heightfield proxy 65 × 65 |
+
 Numbers establish what these recordings contain, not general performance. Each lab's
 methods page states its sample size and limits; the Factory Twin is a procedural
 simulation and none of its numbers are measurements of a real factory.
