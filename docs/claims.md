@@ -54,6 +54,34 @@ Read from the evidence files. Comparisons are within each lab; none is a benchma
 | Scene Lab | `real-recording` | 362 source frames | 共 362 帧 | scene-lab/motion/*/native-check.json |
 | Director | `real-recording` | 420 vehicle samples | 全部 420 个车辆状态 | [director/animation-check.json](director/animation-check.json) |
 
+## Other public surfaces
+
+The same check covers headline numbers on the website landing page and the Hugging Face cards.
+
+| Surface | Wording |
+| --- | --- |
+| `huggingface/README.md` | 30 trials on one task: 10 initial states × 3 conditions |
+| `huggingface/README.md` | Download 366 positions and velocities |
+| `huggingface/README.md` | 42,471 vertex samples |
+| `huggingface/README.md` | 8,400 joint samples, 18,000 body transforms |
+| `huggingface/README.md` | all 362 source frames |
+| `huggingface/README.md` | 12 paired seeds |
+| `huggingface/index.html` | 42,471 original cloth vertex samples |
+| `huggingface/index.html` | 12 isolated Newton worlds |
+| `huggingface/index.html` | 10 starts × 3 conditions |
+| `huggingface/index.html` | Compare 12 paired shifts |
+| `huggingface/index.html` | Microduck / ONNX / 14 joints |
+| `scripts/landing.html` | 6.26 m gap |
+| `scripts/landing.html` | all 362 frames |
+| `scripts/landing.html` | Microduck: 8,400 joint samples · Solver: 366 states · Cloth: 42,471 vertex samples · Stress: 30 trials |
+| `scripts/landing.html` | SmolVLA · LIBERO · 76 actions |
+| `scripts/landing.html` | Newton · OpenUSD · 362 transforms |
+| `scripts/landing.html` | 6 embedded videos · 405 observations · 41 policy calls |
+| `scripts/landing.html` | across 12 paired shifts |
+| `huggingface/results-card.md` | 30 recorded simulated trials, 20 reference/condition pairs |
+| `huggingface/results-card.md` | All 30 planned trials completed in 30 attempts, with zero execution errors |
+| `huggingface/results-card.md` | Reference succeeds in 5/10, reduced light in 4/10, and the shifted camera in 7/10 |
+
 Numbers establish what these recordings contain, not general performance. Each lab's
 methods page states its sample size and limits; the Factory Twin is a procedural
 simulation and none of its numbers are measurements of a real factory.

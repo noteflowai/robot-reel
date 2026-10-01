@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Check headline numbers on the landing page, the Hugging Face Space card and
+  page, and the results dataset card against the same evidence (21 phrases).
 - Extend the claims inventory to the Chinese README (same numbers as the
   English wording) and add a per-lab scope table: task, sample, seeds,
   runtime and comparison, each read from the evidence files.
