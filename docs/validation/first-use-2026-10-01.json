@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-01",
+  "kind": "single maintainer first-use sweep across independently sourced datasets; not an external trial or benchmark",
+  "roadmap": "RR-01",
+  "environment": {
+    "os": "Linux",
+    "python": "3.12.3",
+    "new_virtual_environment": true,
+    "pip_cache": "existing host cache",
+    "hub_cache": "empty at start",
+    "hub_authentication": "implicit token disabled"
+  },
+  "install": {
+    "requested_package": "robot-reel[lerobot]==0.18.3",
+    "seconds": 95.6,
+    "returncode": 0
+  },
+  "commands": [
+    "robot-reel lerobot REPO --episode 0 --output out/NAME",
+    "robot-reel lerobot out/NAME --verify --check-media --check-source"
+  ],
+  "datasets": [
+    {
+      "repo_id": "lerobot/pusht",
+      "revision": "7628202a2180972f291ba1bc6723834921e72c19",
+      "license": "mit",
+      "robot_type": "unknown",
+      "codebase_version": "v3.0",
+      "episode": 0,
+      "frames": 161,
+      "fps": 10,
+      "cameras": 1,
+      "action_channels": 2,
+      "state_channels": 2,
+      "command_measurement_overlay": true,
+      "export_exit_code": 0,
+      "export_seconds": 8.3,
+      "verify_exit_code": 0,
+      "checked_values": 1288,
+      "checked_video_frames": 161
+    },
+    {
+      "repo_id": "lerobot/xarm_lift_medium",
+      "revision": "79efb0e3cef0e530ddec4b8569b190966ab45808",
+      "license": "mit",
+      "robot_type": "unknown",
+      "codebase_version": "v3.0",
+      "episode": 0,
+      "frames": 25,
+      "fps": 15,
+      "cameras": 1,
+      "action_channels": 4,
+      "state_channels": 4,
+      "command_measurement_overlay": true,
+      "export_exit_code": 0,
+      "export_seconds": 8.7,
+      "verify_exit_code": 0,
+      "checked_values": 275,
+      "checked_video_frames": 25
+    },
+    {
+      "repo_id": "lerobot/aloha_sim_insertion_human",
+      "revision": "cc571a3c661df81b566dbfde3d5c1e85fcdf7884",
+      "license": "mit",
+      "robot_type": "aloha",
+      "codebase_version": "v3.0",
+      "episode": 0,
+      "frames": 500,
+      "fps": 50,
+      "cameras": 1,
+      "action_channels": 14,
+      "state_channels": 14,
+      "command_measurement_overlay": true,
+      "export_exit_code": 0,
+      "export_seconds": 14.3,
+      "verify_exit_code": 0,
+      "checked_values": 15000,
+      "checked_video_frames": 500
+    },
+    {
+      "repo_id": "lerobot/unitreeh1_fold_clothes",
+      "revision": "a0926b4dd672560fdc4e6c9d1e68cda17631d608",
+      "license": "apache-2.0",
+      "robot_type": "unknown",
+      "codebase_version": "v3.0",
+      "episode": 0,
+      "frames": 500,
+      "fps": 50,
+      "cameras": 2,
+      "action_channels": 40,
+      "state_channels": 19,
+      "command_measurement_overlay": false,
+      "export_exit_code": 0,
+      "export_seconds": 88.3,
+      "verify_exit_code": 0,
+      "checked_values": 30500,
+      "checked_video_frames": 1000
+    },
+    {
+      "repo_id": "lerobot/columbia_cairlab_pusht_real",
+      "revision": "66482aa15878b5362c98620f7f60ee23ef1d5a2c",
+      "license": "mit",
+      "robot_type": "unknown",
+      "codebase_version": "v3.0",
+      "episode": 0,
+      "frames": 272,
+      "fps": 10,
+      "cameras": 2,
+      "action_channels": 7,
+      "state_channels": 8,
+      "command_measurement_overlay": false,
+      "export_exit_code": 0,
+      "export_seconds": 17.9,
+      "verify_exit_code": 0,
+      "checked_values": 4896,
+      "checked_video_frames": 544
+    },
+    {
+      "repo_id": "lerobot/aloha_static_coffee",
+      "revision": "b144896feb1f37398a862927b22cd3abdf005a6b",
+      "license": "mit",
+      "robot_type": "aloha",
+      "codebase_version": "v3.0",
+      "episode": 0,
+      "frames": 1100,
+      "fps": 50,
+      "cameras": 4,
+      "action_channels": 14,
+      "state_channels": 14,
+      "command_measurement_overlay": true,
+      "export_exit_code": 0,
+      "export_seconds": 120.1,
+      "verify_exit_code": 0,
+      "checked_values": 48400,
+      "checked_video_frames": 4400
+    },
+    {
+      "repo_id": "lerobot/berkeley_autolab_ur5",
+      "revision": "c4e26a697fc4c04776b0558f83e563d14be0109f",
+      "license": "cc-by-4.0",
+      "robot_type": "unknown",
+      "codebase_version": "v3.0",
+      "episode": 0,
+      "frames": 71,
+      "fps": 5,
+      "cameras": 3,
+      "action_channels": 7,
+      "state_channels": 8,
+      "command_measurement_overlay": false,
+      "export_exit_code": 0,
+      "export_seconds": 39.9,
+      "verify_exit_code": 0,
+      "checked_values": 1278,
+      "checked_video_frames": 213
+    }
+  ],
+  "browser": {
+    "widths": [
+      1440,
+      390
+    ],
+    "page_errors": 0,
+    "network_requests": 0,
+    "horizontal_overflow": false,
+    "all_videos_ready": true
+  },
+  "findings": [
+    "All 7 episodes exported and passed --verify --check-media --check-source on first attempt; no error path was triggered.",
+    "3 of 7 datasets record action and observation.state with different channel counts (UR5 7/8, Columbia 7/8, Unitree H1 40/19). The viewer correctly shows them separately but did not say why; 0.18.3 listed only the counts.",
+    "Camera headers repeated the observation.images. prefix, truncating four-camera layouts."
+  ],
+  "changes": [
+    "The viewer now states when and why command and measurement are not overlaid and that no channel mapping is guessed.",
+    "Camera headers drop the observation.images. prefix; the full key remains in the tooltip."
+  ],
+  "limitations": [
+    "One maintainer, warm pip cache, episode 0 only.",
+    "Success means a replay that opens and verifies; it does not establish that a user can diagnose a failure faster than with Rerun or the LeRobot visualizer.",
+    "Still no external first-use trial or repeat-use evidence (RR-01 targets)."
+  ]
+}
