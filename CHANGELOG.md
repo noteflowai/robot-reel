@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Add an RR-01 first-use trial kit: a 20-minute guide that times install and
+  export (`docs/first-use-trial.md`), a structured issue form, and
+  `scripts/collect_first_use_trials.py`, which turns confirmed non-maintainer
+  reports into `docs/validation/external-trials.json` (0 reports so far).
+
 ## 0.18.4 — 2026-10-01
 
 - LeRobot replay: when `action` and `observation.state` have different channel

@@ -137,6 +137,11 @@ robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 数据来源：[`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace)
 第 0 个 episode（Apache-2.0），即 SmolVLA 微调所用的真实 SO-101 数据。
 
+**用你自己的 episode 试一试，并告诉我们结果。** 按
+[20 分钟试用指南](docs/first-use-trial.md)记录安装与导出耗时，再通过
+[试用反馈表](https://github.com/noteflowai/robot-reel/issues/new?template=first_use_trial.yml)
+说明你想查什么、卡在哪里。失败或中途放弃的尝试同样有价值。
+
 ## 同一班次，闭环运行。
 
 **工厂数字孪生实验室：工厂与园区 × Blender 5.2 × OpenUSD。** 一条仿真产线、AMR 车队、

@@ -176,6 +176,11 @@ robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 Source: episode 0 of [`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace)
 (Apache-2.0), the real SO-101 data SmolVLA was fine-tuned on.
 
+**Try it on your own episode and tell us how it went.** The
+[20-minute trial guide](docs/first-use-trial.md) times the install and export;
+the [trial report form](https://github.com/noteflowai/robot-reel/issues/new?template=first_use_trial.yml)
+asks what you were looking for and where you got stuck. Failed attempts help just as much.
+
 ## One shift. Close the loop.
 
 **Factory Twin Lab — factory & campus × Blender 5.2 × OpenUSD.** A simulated
