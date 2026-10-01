@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Reply to each first-use trial report with what was read from its form and
+  whether it counts (`.github/workflows/trial-receipt.yml`); excluded reports
+  now state their reason. Issue forms validated against the GitHub schema.
 - Add an RR-01 first-use trial kit: a 20-minute guide that times install and
   export (`docs/first-use-trial.md`), a structured issue form, and
   `scripts/collect_first_use_trials.py`, which turns confirmed non-maintainer

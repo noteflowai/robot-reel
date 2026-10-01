@@ -58,6 +58,9 @@ If you prefer not to use GitHub, the same questions can go in the
 
 ## How reports are used
 
+A bot replies to each report with exactly what it read from the form and whether
+the attempt counts, so you can correct a misread answer by editing the issue.
+
 `scripts/collect_first_use_trials.py` reads reports labelled `first-use-trial`
 whose author confirmed they are not a maintainer and agreed to a public summary.
 It writes [`validation/external-trials.json`](validation/external-trials.json):

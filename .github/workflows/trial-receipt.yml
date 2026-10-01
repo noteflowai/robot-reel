@@ -1,0 +1,39 @@
+# Acknowledge a first-use trial report (roadmap RR-01) with what was read from it.
+#
+# The issue body is untrusted input: it is only read from the event payload by
+# the standard-library collector and never interpolated into a shell command.
+# The job can write issue comments and nothing else.
+name: Trial receipt
+on:
+  issues:
+    types: [opened, edited, labeled]
+permissions: {}
+concurrency:
+  group: trial-receipt-${{ github.event.issue.number }}
+  cancel-in-progress: true
+jobs:
+  receipt:
+    if: contains(github.event.issue.labels.*.name, 'first-use-trial')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read the form
+        run: python scripts/collect_first_use_trials.py --explain "$GITHUB_EVENT_PATH" > receipt.md
+      - name: Post or update the single receipt comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          existing=$(gh api "repos/$GITHUB_REPOSITORY/issues/$ISSUE/comments" --paginate \
+            --jq '[.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- first-use-trial-receipt -->")))][0].id // empty')
+          if [ -n "$existing" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$existing" -F body=@receipt.md > /dev/null
+          else
+            gh api "repos/$GITHUB_REPOSITORY/issues/$ISSUE/comments" -F body=@receipt.md > /dev/null
+          fi

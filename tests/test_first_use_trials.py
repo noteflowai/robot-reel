@@ -51,7 +51,8 @@ class FirstUseTrialTests(unittest.TestCase):
             issue(3, user="carol"),
         ])
         self.assertEqual([t["issue"] for t in record["trials"]], [3])
-        self.assertEqual([e["issue"] for e in record["excluded"]], [1, 2])
+        self.assertEqual(record["excluded"], [{"issue": 1, "reason": "filed by a repository owner"},
+                                              {"issue": 2, "reason": "both confirmations were not ticked"}])
 
     def test_targets_need_three_participants_in_time_and_two_returning(self):
         reports = [issue(1, "a"), issue(2, "b"), issue(3, "c", **{
@@ -65,6 +66,14 @@ class FirstUseTrialTests(unittest.TestCase):
         record = summarize(reports)
         self.assertEqual(record["progress"]["returning_participants"], 2)
         self.assertTrue(record["targets_met"])
+
+    def test_receipt_tells_the_participant_what_was_read(self):
+        from scripts.collect_first_use_trials import explain
+        receipt = explain(issue(7))
+        self.assertIn("**Counted**", receipt)
+        self.assertIn("| Minutes to first useful replay | 11.0 |", receipt)
+        self.assertIn("filed by a repository owner", explain(issue(8, role="OWNER")))
+        self.assertTrue(receipt.startswith("<!-- first-use-trial-receipt -->"))
 
     def test_committed_record_is_well_formed(self):
         record = json.loads(RECORD.read_text())

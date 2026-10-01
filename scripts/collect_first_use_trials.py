@@ -53,19 +53,45 @@ def number(text):
     return float(match.group()) if match else None
 
 
-def eligible(issue, answers):
+def exclusion(issue, answers):
+    """Why a report does not count, or None if it counts."""
     confirmed = answers.get("confirmation") or ""
-    return (issue.get("author_association") not in MAINTAINER_ROLES
-            and confirmed.count("- [X]") + confirmed.count("- [x]") >= 2
-            and "pull_request" not in issue)
+    if "pull_request" in issue:
+        return "pull request, not a report"
+    if issue.get("author_association") in MAINTAINER_ROLES:
+        return f"filed by a repository {issue['author_association'].lower()}"
+    if confirmed.count("- [X]") + confirmed.count("- [x]") < 2:
+        return "both confirmations were not ticked"
+    if answers.get("opened") is None:
+        return "the form's answers could not be read"
+    return None
+
+
+def explain(issue):
+    """Markdown acknowledgment for a single report: what was read and whether it counts."""
+    answers = parse(issue.get("body"))
+    reason = exclusion(issue, answers)
+    status = ("**Counted** as an independent first-use attempt." if reason is None
+              else f"**Not counted:** {reason}.")
+    read = [("Replay opened", answers.get("opened")), ("Found the answer", answers.get("found")),
+            ("Minutes to first useful replay", number(answers.get("minutes_to_first_replay"))),
+            ("Compared with", answers.get("baseline")), ("Would reuse", answers.get("reuse"))]
+    lines = ["<!-- first-use-trial-receipt -->", "Thank you for reporting this attempt. " + status, "",
+             "| Read from the form | Value |", "| --- | --- |",
+             *(f"| {k} | {'—' if v is None else v} |" for k, v in read), "",
+             "Nothing is inferred beyond these answers. Edit the issue to correct them; this note updates. "
+             "Maintainers fold counted reports into "
+             "[docs/validation/external-trials.json](https://github.com/noteflowai/robot-reel/blob/main/docs/validation/external-trials.json)."]
+    return "\n".join(lines)
 
 
 def summarize(issues):
     trials, excluded = [], []
     for issue in sorted(issues, key=lambda i: i["number"]):
         answers = parse(issue.get("body"))
-        if not eligible(issue, answers):
-            excluded.append({"issue": issue["number"], "reason": "maintainer, unconfirmed or not an issue"})
+        reason = exclusion(issue, answers)
+        if reason:
+            excluded.append({"issue": issue["number"], "reason": reason})
             continue
         trials.append({
             "issue": issue["number"], "url": issue["html_url"], "participant": issue["user"]["login"],
@@ -123,7 +149,11 @@ def render(record):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--explain", type=Path, help="Print the receipt for one issue (a GitHub event payload)")
     args = parser.parse_args(argv)
+    if args.explain:
+        print(explain(json.loads(args.explain.read_text())["issue"]))
+        return 0
     text = render(summarize(fetch()))
     if args.check:
         if RECORD.read_text() != text:
