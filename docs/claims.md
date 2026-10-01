@@ -1,6 +1,7 @@
 # Claims inventory
 
-Every headline number in the [README](../README.md), the evidence file it comes from and how
+Every headline number in the [README](../README.md) and its [Chinese version](../README.zh-CN.md),
+the evidence file it comes from and how
 that evidence was produced. `python3 scripts/claims_inventory.py` recomputes each value from
 its file and fails if the README, the evidence or this table drift apart (roadmap RR-03).
 Generated; edit `scripts/claims_inventory.py`, then run it with `--write`.
@@ -10,31 +11,48 @@ Generated; edit `scripts/claims_inventory.py`, then run it with `--write`.
 | `real-recording` | Recorded run of a real simulator or policy in this project |
 | `procedural-simulation` | Deterministic model written for this project; not calibrated to a real system |
 
-| Lab | Evidence kind | README wording | Evidence |
-| --- | --- | --- | --- |
-| Stress Lab | `real-recording` | 30 real closed-loop trials | [stress/summary.json](stress/summary.json) |
-| Stress Lab | `real-recording` | All 14 unsuccessful trials reached the action limit | [stress/reliability.json](stress/reliability.json) |
-| Stress Lab | `real-recording` | 44.8 mm to 138.6 mm | [stress/reliability.json](stress/reliability.json) |
-| Stress Lab | `real-recording` | three gains and one loss | [stress/summary.json](stress/summary.json) |
-| Stress Lab | `real-recording` | 30 / 30 outcomes | [stress-reproducibility.json](stress-reproducibility.json) |
-| Stress Lab | `real-recording` | 360 / 360 rendered frames | [stress-reproducibility.json](stress-reproducibility.json) |
-| Stress Lab | `real-recording` | One of 3,195 | [stress-reproducibility.json](stress-reproducibility.json) |
-| Solver Lab | `real-recording` | 32.70 cm to 2.05 cm | [solver-lab/lab.json](solver-lab/lab.json) |
-| Solver Lab | `real-recording` | 366 recorded position/velocity states | [solver-lab/lab.json](solver-lab/lab.json) |
-| Cloth Lab | `real-recording` | 42,471 vertex samples | [cloth/blender-check.json](cloth/blender-check.json) |
-| Butterfly Lab | `real-recording` | 14,424 body poses | [chaos/blender-check.json](chaos/blender-check.json) |
-| Butterfly Lab | `real-recording` | 6.26 m gap | [chaos/trace.json](chaos/trace.json) |
-| Butterfly Lab | `real-recording` | at 12.5 s | [chaos/trace.json](chaos/trace.json) |
-| Factory Twin Lab | `procedural-simulation` | 0 spindle failures (shadow: 11) | [factory-twin/seeds.json](factory-twin/seeds.json) |
-| Factory Twin Lab | `procedural-simulation` | 0 billing intervals over the demand limit (shadow: 8) | [factory-twin/seeds.json](factory-twin/seeds.json) |
-| Factory Twin Lab | `procedural-simulation` | 10 pairs and fell in 2 | [factory-twin/seeds.json](factory-twin/seeds.json) |
-| Factory Twin Lab | `procedural-simulation` | 676,393 animated values | [factory-twin/blender-check.json](factory-twin/blender-check.json) |
-| Newton | `real-recording` | 362 checked body transforms | [newton/blender-check.json](newton/blender-check.json) |
-| VLA | `real-recording` | 76 actions · one completed simulation task | [vla/trace.json](vla/trace.json) |
-| Microduck Motion Lab | `real-recording` | 8,400 measured joint samples | [microduck-lab/data.json](microduck-lab/data.json) |
-| Microduck Motion Lab | `real-recording` | 18,000 body transforms | [microduck-lab/kinematics-check.json](microduck-lab/kinematics-check.json) |
-| Scene Lab | `real-recording` | 362 source frames | scene-lab/motion/*/native-check.json |
-| Director | `real-recording` | 420 vehicle samples | [director/animation-check.json](director/animation-check.json) |
+## Scope of each lab
+
+Read from the evidence files. Comparisons are within each lab; none is a benchmark.
+
+| Lab | Evidence kind | What ran | Sample | Seeds / variation | Runtime | Compared against |
+| --- | --- | --- | --- | --- | --- | --- |
+| Stress Lab | `real-recording` | SmolVLA, libero_spatial task 0, conditions: reference, dim, camera | 30 trials, 160-action budget | 10 paired seeds (0–9) | policy on cuda | Reference lighting within each paired seed |
+| Solver Lab | `real-recording` | Unconstrained ballistic flight, Genesis and Newton | 6 runs × 61 samples | Deterministic; one initial state | NVIDIA L40S | Analytic solution |
+| Cloth Lab | `real-recording` | Newton SolverVBD cloth, bending coefficient sweep | 3 cases × 121 frames × 117 vertices | Deterministic | NVIDIA L40S | Between the three cases |
+| Butterfly Lab | `real-recording` | Newton SolverXPBD double-pendulum release sweep | 12 worlds × 601 samples | Deterministic; 0.05° release offsets | cpu | Adjacent worlds |
+| Newton | `real-recording` | Newton SolverXPBD double pendulum | 181 samples | Deterministic | cpu | None (one run) |
+| VLA | `real-recording` | SmolVLA, libero_spatial: pick up the black bowl between the plate and the ramekin and place it on the plate | 1 episode | seed 0, initial state 0 | policy on cpu | None (one rollout) |
+| Microduck Motion Lab | `real-recording` | Pollen Microduck ONNX walking policy in MuJoCo | 2 runs × 300 frames × 14 joints | Two speed commands: 0.3 m/s / 0.5 m/s | CPU (per microduck-lab.md) | Between the two speeds |
+| Factory Twin Lab | `procedural-simulation` | Simulated factory and campus with a digital twin | 12 pairs × 2 modes × 2161 samples | seeds 1–12 | Python standard library | Shadow twin (same twin, commands not applied) |
+
+## Headline numbers
+
+| Lab | Evidence kind | README wording | 中文 README | Evidence |
+| --- | --- | --- | --- | --- |
+| Stress Lab | `real-recording` | 30 real closed-loop trials | 30 次真实闭环运行 | [stress/summary.json](stress/summary.json) |
+| Stress Lab | `real-recording` | All 14 unsuccessful trials reached the action limit | 14 次未成功试次均达到动作预算上限 | [stress/reliability.json](stress/reliability.json) |
+| Stress Lab | `real-recording` | 44.8 mm to 138.6 mm | 44.8–138.6 mm | [stress/reliability.json](stress/reliability.json) |
+| Stress Lab | `real-recording` | three gains and one loss | 三次从未完成变为成功、一次从成功变为未完成 | [stress/summary.json](stress/summary.json) |
+| Stress Lab | `real-recording` | 30 / 30 outcomes | 30 / 30 试次的结果 | [stress-reproducibility.json](stress-reproducibility.json) |
+| Stress Lab | `real-recording` | 360 / 360 rendered frames | 360 / 360 个渲染帧一致 | [stress-reproducibility.json](stress-reproducibility.json) |
+| Stress Lab | `real-recording` | One of 3,195 | 3,195 个仅用于记录的帧中有 1 帧不同 | [stress-reproducibility.json](stress-reproducibility.json) |
+| Solver Lab | `real-recording` | 32.70 cm to 2.05 cm | 32.70 厘米降至 2.05 厘米 | [solver-lab/lab.json](solver-lab/lab.json) |
+| Solver Lab | `real-recording` | 366 recorded position/velocity states | 366 个位置与速度状态 | [solver-lab/lab.json](solver-lab/lab.json) |
+| Cloth Lab | `real-recording` | 42,471 vertex samples | 42,471 个顶点样本 | [cloth/blender-check.json](cloth/blender-check.json) |
+| Butterfly Lab | `real-recording` | 14,424 body poses | 14,424 个刚体姿态 | [chaos/blender-check.json](chaos/blender-check.json) |
+| Butterfly Lab | `real-recording` | 6.26 m gap | 6.26 米摆端距离 | [chaos/trace.json](chaos/trace.json) |
+| Butterfly Lab | `real-recording` | at 12.5 s | 发生在 12.5 秒 | [chaos/trace.json](chaos/trace.json) |
+| Factory Twin Lab | `procedural-simulation` | 0 spindle failures (shadow: 11) | 主轴故障为 0 次（影子模式 11 次） | [factory-twin/seeds.json](factory-twin/seeds.json) |
+| Factory Twin Lab | `procedural-simulation` | 0 billing intervals over the demand limit (shadow: 8) | 计费时段 为 0 个（影子模式 8 个） | [factory-twin/seeds.json](factory-twin/seeds.json) |
+| Factory Twin Lab | `procedural-simulation` | 10 pairs and fell in 2 | 10 组增加、2 组减少 | [factory-twin/seeds.json](factory-twin/seeds.json) |
+| Factory Twin Lab | `procedural-simulation` | 676,393 animated values | 676,393 个动画数值 | [factory-twin/blender-check.json](factory-twin/blender-check.json) |
+| Newton | `real-recording` | 362 checked body transforms | 全部 362 个刚体变换 | [newton/blender-check.json](newton/blender-check.json) |
+| VLA | `real-recording` | 76 actions · one completed simulation task | 76 次动作 · 一次已完成的仿真任务 | [vla/trace.json](vla/trace.json) |
+| Microduck Motion Lab | `real-recording` | 8,400 measured joint samples | 8,400 个实测关节样本 | [microduck-lab/data.json](microduck-lab/data.json) |
+| Microduck Motion Lab | `real-recording` | 18,000 body transforms | 18,000 个变换 | [microduck-lab/kinematics-check.json](microduck-lab/kinematics-check.json) |
+| Scene Lab | `real-recording` | 362 source frames | 共 362 帧 | scene-lab/motion/*/native-check.json |
+| Director | `real-recording` | 420 vehicle samples | 全部 420 个车辆状态 | [director/animation-check.json](director/animation-check.json) |
 
 Numbers establish what these recordings contain, not general performance. Each lab's
 methods page states its sample size and limits; the Factory Twin is a procedural
