@@ -97,6 +97,7 @@ episode, in order.
   public datasets (PushT, xArm, ALOHA sim and real, Unitree H1, Columbia PushT,
   Berkeley UR5; one to four cameras, 25 to 1,100 frames) exported and passed all
   three checks with 0.18.3. [Record](validation/first-use-2026-10-01.json).
+- Tried it on your own data? [Report the attempt](first-use-trial.md), including failures.
 - The replay shows what the dataset recorded. It does not judge success,
   calibrate units or infer contacts.
 

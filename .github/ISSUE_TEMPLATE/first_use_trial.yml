@@ -1,0 +1,120 @@
+name: First-use trial report (RR-01)
+description: You tried Robot Reel on a LeRobot episode. Tell us what worked, how long it took and where you got stuck.
+title: "[trial]: "
+labels: ["first-use-trial"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for trying Robot Reel. Follow [the 20-minute trial guide](https://github.com/noteflowai/robot-reel/blob/main/docs/first-use-trial.md) first.
+        Report only what you are comfortable making public. Do not paste private data, credentials or file paths you would not share.
+        Failed or abandoned attempts are just as useful as successful ones.
+  - type: dropdown
+    id: source_kind
+    attributes:
+      label: Dataset source
+      options:
+        - My own dataset (kept private)
+        - My own dataset (public on the Hub)
+        - Someone else's public Hub dataset
+    validations:
+      required: true
+  - type: input
+    id: dataset
+    attributes:
+      label: Dataset and episode
+      description: Hub repo id and episode, or "private" if you prefer not to say.
+      placeholder: lerobot/svla_so101_pickplace, episode 0
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Robot Reel version and OS
+      placeholder: 0.18.4 on Ubuntu 24.04, Python 3.12
+    validations:
+      required: true
+  - type: input
+    id: install_seconds
+    attributes:
+      label: Install time (seconds)
+      description: From the guide's timing block, or your estimate.
+      placeholder: "95"
+  - type: input
+    id: export_seconds
+    attributes:
+      label: Export time (seconds)
+      placeholder: "30"
+  - type: dropdown
+    id: opened
+    attributes:
+      label: Did the replay open?
+      options:
+        - Yes, on the first attempt
+        - Yes, after fixing something
+        - "No"
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: What were you trying to find out?
+      description: For example "where the gripper closes late" or "whether the wrist camera is in sync".
+    validations:
+      required: true
+  - type: dropdown
+    id: found
+    attributes:
+      label: Did you find it?
+      options:
+        - "Yes"
+        - Partly
+        - "No"
+    validations:
+      required: true
+  - type: input
+    id: minutes_to_answer
+    attributes:
+      label: Minutes from starting the install to your first useful replay
+      placeholder: "12"
+  - type: dropdown
+    id: baseline
+    attributes:
+      label: What would you normally use for this?
+      options:
+        - Rerun
+        - LeRobot dataset visualizer
+        - Foxglove
+        - My own scripts or notebooks
+        - Nothing yet
+        - Other (explain below)
+    validations:
+      required: true
+  - type: textarea
+    id: comparison
+    attributes:
+      label: Compared with that, what was better or worse?
+  - type: textarea
+    id: stuck
+    attributes:
+      label: Where did you get stuck, confused or slowed down?
+      description: Error messages, missing information, anything you had to look up.
+  - type: dropdown
+    id: reuse
+    attributes:
+      label: Would you use it again on another episode?
+      options:
+        - "Yes"
+        - Maybe
+        - "No"
+    validations:
+      required: true
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Confirmation
+      options:
+        - label: I am not a Robot Reel maintainer.
+          required: true
+        - label: The maintainers may summarize this report publicly in docs/validation (no data from my dataset beyond what I wrote here).
+          required: true

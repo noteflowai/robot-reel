@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "roadmap": "RR-01",
+  "source": "https://github.com/noteflowai/robot-reel/issues?q=label%3Afirst-use-trial",
+  "rules": "Counts issues labelled first-use-trial from non-maintainers who ticked both confirmations. Answers are copied as reported; nothing is inferred or verified beyond that.",
+  "targets": {
+    "independent_attempts": 3,
+    "first_useful_replay_minutes": 15,
+    "returning_participants": 2
+  },
+  "progress": {
+    "independent_attempts": 0,
+    "independent_participants": 0,
+    "opened": 0,
+    "answered_question": 0,
+    "within_target_minutes": 0,
+    "median_minutes_to_first_replay": null,
+    "returning_participants": 0
+  },
+  "targets_met": false,
+  "trials": [],
+  "excluded": []
+}
