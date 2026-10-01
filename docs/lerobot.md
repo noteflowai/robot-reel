@@ -46,6 +46,9 @@ collaborator handoff, follow [First dataset review](first-dataset-review.md).
 - **Commanded versus measured.** When `action` and `observation.state` share
   channel names, as LeRobot follower arms do, each joint gets its own panel with
   both curves and a link to the frame with the largest recorded difference.
+  When the names or channel counts differ (for example an end-effector delta
+  `action` beside joint `observation.state`), both are plotted separately and
+  the page says why; Robot Reel never guesses which channels correspond.
   Other numeric features (rewards, `next.done`, extra sensors up to 64 values
   per frame) are plotted on their own.
 - **The language task**, episode length and frame rate, plus frame stepping,
@@ -90,6 +93,10 @@ episode, in order.
 - Clips are lossy H.264 viewing copies (`--crf 23` by default; lower values are
   larger and closer to the source). The source videos' hashes are recorded,
   not their pixels.
+- Checked beyond the SO-101 example on 2026-10-01: episode 0 of seven other
+  public datasets (PushT, xArm, ALOHA sim and real, Unitree H1, Columbia PushT,
+  Berkeley UR5; one to four cameras, 25 to 1,100 frames) exported and passed all
+  three checks with 0.18.3. [Record](validation/first-use-2026-10-01.json).
 - The replay shows what the dataset recorded. It does not judge success,
   calibrate units or infer contacts.
 

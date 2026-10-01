@@ -1038,6 +1038,25 @@ test('LeRobot episode replay keeps cameras, joint panels and largest command gap
     assert.deepEqual(errors,[]);
   }finally{await page.close();}
 });
+test('LeRobot replay explains when command and measurement cannot be overlaid',async()=>{
+  // Same published episode, with observation.state given one extra channel (as in UR5 or Unitree H1 exports).
+  const temp=await mkdtemp(join(tmpdir(),'robot-reel-lerobot-'));
+  const page=await browser.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    const html=await readFile('docs/lerobot/index.html','utf8'),marker='<script id="episode-data" type="application/json">';
+    const start=html.indexOf(marker)+marker.length,end=html.indexOf('</script>',start);
+    const data=JSON.parse(html.slice(start,end)),state=data.series.find(s=>s.key==='observation.state');
+    state.names=[...state.names,'extra'];state.values=state.values.map(row=>[...row,0]);
+    await writeFile(join(temp,'index.html'),html.slice(0,start)+JSON.stringify(data).replace(/</g,'\\u003c')+html.slice(end));
+    await page.route(/^https?:/,route=>route.abort());
+    await page.goto(pathToFileURL(join(temp,'index.html')).href);
+    const text=await page.locator('#explain-signals').textContent();
+    assert.match(text,/action has 6 channels and observation\.state has 7, so they are shown separately; Robot Reel does not guess which channels correspond\./);
+    assert.equal(await page.locator('.gap').count(),0);
+    assert.deepEqual(await page.locator('.camera .label span:first-child').allTextContents(),data.cameras.map(c=>c.key.replace(/^observation\.images\./,'').toUpperCase()));
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();await rm(temp,{recursive:true,force:true});}
+});
 test('LeRobot episode replay opens offline on mobile without overflow',async()=>{
   const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[];page.on('pageerror',error=>errors.push(error.message));
   try{
