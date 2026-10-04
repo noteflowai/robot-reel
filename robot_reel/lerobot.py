@@ -3,6 +3,10 @@
     robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
     robot-reel lerobot ~/datasets/my_so101_run --episode 3 --output artifacts/mine
     robot-reel lerobot artifacts/so101 --verify --check-media --check-source
+    robot-reel lerobot artifacts/so101 --mark 239 --signal action/shoulder_pan.pos --note "What you saw"
+
+--mark seals one frame/channel observation into a verified export as a hashed
+finding.json; --verify on any copy re-checks it against episode.json.
 
 Reading a dataset needs the `lerobot` extra (pyarrow, huggingface_hub); the
 LeRobot library itself is not imported. --verify alone uses only the standard
@@ -12,10 +16,13 @@ import argparse
 from importlib import metadata
 import json
 import math
+import os
 from pathlib import Path
 import re
 import shutil
 import subprocess
+import tempfile
+import unicodedata
 
 from .compare import digest
 
@@ -28,6 +35,14 @@ MAX_DIMS = 64
 MAX_FRAMES = 20_000
 HUB = "https://huggingface.co/datasets/"
 VISUALIZER = "https://huggingface.co/spaces/lerobot/visualize_dataset"
+# One sealed frame/channel observation per export (RR-02).
+FINDING = "finding.json"
+FINDING_SCHEMA = "robot-reel-lerobot-finding-1"
+FINDING_KEYS = ("schema", "episode", "frame", "timestamp", "signals", "note", "episode_sha256", "robot_reel", "limitations")
+FINDING_LIMITATIONS = ("An observation at one recorded frame. It is not a failure label, a calibrated threshold "
+                       "or a signature: the manifest hashes show the files are unchanged since marking, not who wrote them.")
+MAX_FINDING_SIGNALS = 8
+MAX_NOTE = 2000
 
 
 class Source:
@@ -388,8 +403,14 @@ def verify(directory):
     trace = json.loads((directory/"episode.json").read_text())
     result = validate_trace(trace)
     expected = {"episode.json", "index.html", *(c["file"] for c in trace["cameras"])}
-    if manifest.get("schema") != SCHEMA or set(manifest.get("sha256", {})) != expected:
+    listed = set(manifest.get("sha256", {}))
+    if manifest.get("schema") != SCHEMA or listed not in (expected, expected | {FINDING}):
         raise ValueError("Incomplete LeRobot replay manifest")
+    marked = FINDING in listed
+    if marked and not (directory/FINDING).is_file():
+        raise ValueError(f"manifest lists {FINDING} but the file is missing")
+    if not marked and os.path.lexists(directory/FINDING):
+        raise ValueError(f"{FINDING} is present but not listed in manifest.json; delete it or re-mark a fresh copy")
     for filename, value in manifest["sha256"].items():
         if digest(directory/filename) != value:
             raise ValueError(f"Hash mismatch: {filename}")
@@ -397,6 +418,161 @@ def verify(directory):
     marker = '<script id="episode-data" type="application/json">'
     if html.count(marker) != 1 or json.loads(html.split(marker)[1].split("</script>", 1)[0]) != trace:
         raise ValueError("Viewer differs from episode.json")
+    if marked:
+        result["finding"] = verify_finding(directory/FINDING, trace, manifest["sha256"]["episode.json"])
+    return result
+
+
+class FindingError(ValueError):
+    """A finding input rule failed; field names the finding.json key at fault."""
+
+    def __init__(self, field, message, disagrees=False):
+        super().__init__(message)
+        self.field = field
+        self.disagrees = disagrees
+
+
+def parse_signal(text):
+    """Split KEY/NAME at the last slash, e.g. observation.state/shoulder_pan.pos."""
+    key, slash, name = str(text).rpartition("/")
+    if not slash or not key or not name:
+        raise FindingError("signals", f"--signal {text!r} must be KEY/NAME, for example action/shoulder_pan.pos")
+    return key, name
+
+
+def validate_finding(trace, frame, signals, note):
+    """Apply the input rules shared by --mark and verify; return each signal's recorded value at frame."""
+    if not isinstance(note, str) or not 1 <= len(note) <= MAX_NOTE:
+        raise FindingError("note", f"the note must have 1 to {MAX_NOTE} characters")
+    if any(c != "\n" and unicodedata.category(c) == "Cc" for c in note):
+        raise FindingError("note", "the note may not contain control characters other than newline")
+    if not 1 <= len(signals) <= MAX_FINDING_SIGNALS:
+        raise FindingError("signals", f"choose 1 to {MAX_FINDING_SIGNALS} signals; got {len(signals)}")
+    for i, pair in enumerate(signals):
+        if pair in signals[:i]:
+            raise FindingError("signals", f"signal {pair[0]}/{pair[1]} is listed more than once")
+    length = trace["length"]
+    if type(frame) is not int:
+        raise FindingError("frame", "the frame must be a whole number")
+    if not 0 <= frame < length:
+        raise FindingError("frame", f"frame {frame} is outside episode {trace['episode']}; choose 0..{length-1}", True)
+    channels = {(s["key"], name): (s, i) for s in trace["series"] for i, name in enumerate(s["names"])}
+    recorded = []
+    for key, name in signals:
+        if (key, name) not in channels:
+            available = [f"{k}/{n}" for k, n in channels]
+            shown = ", ".join(available[:40])+(f", ... ({len(available)-40} more)" if len(available) > 40 else "")
+            raise FindingError("signals", f"{key}/{name} is not a channel in episode.json; available: {shown}", True)
+        series, index = channels[(key, name)]
+        recorded.append({"key": key, "name": name, "value": series["values"][frame][index]})
+    return recorded
+
+
+def verify_finding(path, trace, episode_sha256):
+    """Check a listed finding.json against the input rules and the episode it was sealed from."""
+    def invalid(field, detail):
+        return ValueError(f"Invalid finding: {field} ({detail})")
+
+    def disagrees(field, detail):
+        return ValueError(f"Finding disagrees with episode.json: {field} ({detail})")
+
+    try:
+        finding = json.loads(path.read_text(encoding="utf-8"))
+    except ValueError as exc:
+        raise invalid("document", f"{FINDING} is not readable JSON") from exc
+    if not isinstance(finding, dict):
+        raise invalid("document", "expected a JSON object")
+    odd = sorted(set(finding) ^ set(FINDING_KEYS))
+    if odd:
+        raise invalid(odd[0], "missing" if odd[0] in FINDING_KEYS else "unexpected key")
+    if finding["schema"] != FINDING_SCHEMA:
+        raise invalid("schema", f"expected {FINDING_SCHEMA}")
+    if finding["limitations"] != FINDING_LIMITATIONS:
+        raise invalid("limitations", "must be the fixed Robot Reel statement")
+    if finding["robot_reel"] is not None and not isinstance(finding["robot_reel"], str):
+        raise invalid("robot_reel", "must be a version string or null")
+    if type(finding["episode"]) is not int:
+        raise invalid("episode", "must be a whole number")
+    signals = finding["signals"]
+    if not isinstance(signals, list) or not all(
+            isinstance(s, dict) and set(s) == {"key", "name", "value"} and isinstance(s["key"], str)
+            and isinstance(s["name"], str) for s in signals):
+        raise invalid("signals", "expected a list of {key, name, value} entries")
+    try:
+        recorded = validate_finding(trace, finding["frame"], [(s["key"], s["name"]) for s in signals], finding["note"])
+    except FindingError as exc:
+        raise (disagrees if exc.disagrees else invalid)(exc.field, str(exc)) from None
+    frame = finding["frame"]
+    if finding["episode"] != trace["episode"]:
+        raise disagrees("episode", f"episode.json holds episode {trace['episode']}")
+    if finding["episode_sha256"] != episode_sha256:
+        raise disagrees("episode_sha256", "the finding was sealed against a different episode.json")
+    stamp = finding["timestamp"]
+    if type(stamp) not in (int, float) or stamp != trace["timestamps"][frame]:
+        raise disagrees("timestamp", f"frame {frame} is at {trace['timestamps'][frame]} s")
+    for given, expected in zip(signals, recorded):
+        value, actual = given["value"], expected["value"]
+        if (value is None) != (actual is None) or (
+                value is not None and (type(value) not in (int, float) or value != actual)):
+            raise disagrees("signals", f"{expected['key']}/{expected['name']} at frame {frame} is {actual} in episode.json")
+    return finding
+
+
+def package_version():
+    try:
+        return metadata.version("robot-reel")
+    except metadata.PackageNotFoundError:
+        return None
+
+
+def replace_beside(path, text, mode_source, temporary):
+    """Write text to a temporary file in path's folder, then rename it over path."""
+    handle, name = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
+    temporary.append(Path(name))
+    with os.fdopen(handle, "w", encoding="utf-8") as stream:
+        stream.write(text)
+    shutil.copymode(mode_source, name)
+    os.replace(name, path)
+
+
+def mark(directory, frame, signals, note):
+    """Seal one frame/channel observation into a verified, unmarked export as finding.json."""
+    directory = Path(directory)
+    verify(directory)
+    manifest_path, target = directory/"manifest.json", directory/FINDING
+    manifest = json.loads(manifest_path.read_text())
+    if FINDING in manifest["sha256"]:
+        raise ValueError(f"{target} already holds a finding and a bundle carries one; mark a fresh copy of the export instead")
+    trace = json.loads((directory/"episode.json").read_text())
+    recorded = validate_finding(trace, frame, [parse_signal(s) for s in signals], note)
+    finding = {
+        "schema": FINDING_SCHEMA, "episode": trace["episode"], "frame": frame,
+        "timestamp": trace["timestamps"][frame], "signals": recorded, "note": note,
+        "episode_sha256": manifest["sha256"]["episode.json"], "robot_reel": package_version(),
+        "limitations": FINDING_LIMITATIONS,
+    }
+    text = json.dumps(finding, indent=2, allow_nan=False)+"\n"
+    temporary, placed, sealed = [], False, False
+    try:
+        replace_beside(target, text, manifest_path, temporary)
+        placed = True
+        hashes = dict(manifest["sha256"])
+        hashes[FINDING] = digest(target)
+        manifest["sha256"] = dict(sorted(hashes.items()))
+        # The manifest is always replaced last; until then verify reports an unlisted finding.json.
+        replace_beside(manifest_path, json.dumps(manifest, indent=2)+"\n", manifest_path, temporary)
+        sealed = True
+    except BaseException:
+        for path in temporary:
+            path.unlink(missing_ok=True)
+        if placed and not sealed:
+            target.unlink(missing_ok=True)
+        raise
+    result = {"episode": finding["episode"], "frame": frame, "timestamp": finding["timestamp"],
+              "signals": recorded, "output": str(target)}
+    missing = [f"{s['key']}/{s['name']}" for s in recorded if s["value"] is None]
+    if missing:
+        result["no_recorded_value"] = missing
     return result
 
 
@@ -438,21 +614,42 @@ def main(argv=None):
     parser = argparse.ArgumentParser(prog="robot-reel lerobot", description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("source", help="Hub repo id (user/name), local dataset root, or an export with --verify")
-    parser.add_argument("--episode", type=int, default=0)
+    parser.add_argument("--episode", type=int, default=None, help="Episode index to export (default 0)")
     parser.add_argument("--revision", help="Hub branch, tag or commit; the export pins the resolved commit")
     parser.add_argument("--output", type=Path, help="Fresh directory for the replay (default artifacts/lerobot-<name>-<episode>)")
-    parser.add_argument("--crf", type=int, default=23, help="H.264 quality for camera clips (default 23; lower is larger)")
+    parser.add_argument("--crf", type=int, default=None, help="H.264 quality for camera clips (default 23; lower is larger)")
     parser.add_argument("--verify", action="store_true", help="Check an existing export's manifest, schema and viewer")
     parser.add_argument("--check-media", action="store_true", help="With --verify: count every camera frame")
     parser.add_argument("--check-source", action="store_true", help="With --verify: re-read the dataset and compare every value")
     parser.add_argument("--dataset", help="With --check-source: local dataset root for a local export")
+    parser.add_argument("--mark", type=int, metavar="FRAME",
+                        help="Seal one observation at this zero-based frame into a verified export as finding.json")
+    parser.add_argument("--signal", action="append", metavar="KEY/NAME",
+                        help="With --mark: a series key and channel, e.g. action/shoulder_pan.pos (repeat, 1 to 8)")
+    parser.add_argument("--note", metavar="TEXT", help="With --mark: what you observed (1 to 2000 characters)")
     args = parser.parse_args(argv)
+    if args.mark is not None:
+        combined = [flag for flag, given in (
+            ("--verify", args.verify), ("--output", args.output is not None), ("--revision", args.revision is not None),
+            ("--episode", args.episode is not None), ("--crf", args.crf is not None)) if given]
+        if combined:
+            parser.error(f"--mark edits an existing export in place; remove {', '.join(combined)}")
+        if not args.signal:
+            parser.error("--mark needs at least one --signal KEY/NAME, for example --signal action/shoulder_pan.pos")
+        if args.note is None:
+            parser.error("--mark needs --note TEXT describing what you observed (1 to 2000 characters)")
+    elif args.signal or args.note is not None:
+        parser.error("--signal and --note apply with --mark FRAME")
+    args.episode = 0 if args.episode is None else args.episode
+    args.crf = 23 if args.crf is None else args.crf
     if (args.check_media or args.check_source or args.dataset) and not args.verify:
         parser.error("--check-media, --check-source and --dataset apply with --verify")
     if not 0 <= args.crf <= 51:
         parser.error("--crf must be between 0 and 51")
     try:
-        if args.verify:
+        if args.mark is not None:
+            result = mark(args.source, args.mark, args.signal, args.note)
+        elif args.verify:
             result = verify(args.source)
             if args.check_media:
                 result = check_media(args.source)
@@ -470,7 +667,7 @@ def main(argv=None):
     except (ValueError, OSError, KeyError, TypeError) as exc:
         parser.error(str(exc))
     print(json.dumps(result, indent=2))
-    if not args.verify:
+    if not args.verify and args.mark is None:
         print(f"Open {result['output']} in a browser; the folder works offline.")
 
 

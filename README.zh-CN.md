@@ -85,13 +85,13 @@ Robot Reel 将策略仿真和三维场景编辑的记录整理为可交付的回
 [场景库](https://noteflowai.github.io/robot-reel/#demos)支持按策略运行、实验对照和
 三维创作筛选；预览点击后播放。
 
-使用 Python 3.12+，从 [PyPI](https://pypi.org/project/robot-reel/0.18.4/)
+使用 Python 3.12+，从 [PyPI](https://pypi.org/project/robot-reel/0.19.0/)
 安装已发布的命令行工具：
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install robot-reel==0.18.4
+python -m pip install robot-reel==0.19.0
 robot-reel --help
 ```
 
@@ -127,7 +127,7 @@ PyPI 与 GitHub Releases 提供相同的 wheel 和源码包，容器支持按宿
 SHA-256；`--check-source` 会重新读取数据集逐值比对。支持 v3.0 与 v2.x，无需安装 LeRobot。
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.18.4'
+python -m pip install 'robot-reel[lerobot]==0.19.0'
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
 robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 ```

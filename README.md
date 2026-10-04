@@ -91,13 +91,13 @@ compare a real paired outcome, inspect its native Rerun workspace, then verify
 the full experiment locally. The [demo gallery](https://noteflowai.github.io/robot-reel/#demos)
 filters policy runs, comparison experiments and 3D creation; previews play on request.
 
-Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.18.4/)
+Install the released CLI from [PyPI](https://pypi.org/project/robot-reel/0.19.0/)
 with Python 3.12+:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install robot-reel==0.18.4
+python -m pip install robot-reel==0.19.0
 robot-reel --help
 ```
 
@@ -163,7 +163,7 @@ the dataset and compares every value. Supports v3.0 and v2.x; LeRobot itself
 is not required.
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.18.4'
+python -m pip install 'robot-reel[lerobot]==0.19.0'
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
 robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 ```
