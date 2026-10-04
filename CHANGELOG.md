@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.19.0 — 2026-10-04
+
+- seal one frame/channel finding into a LeRobot replay bundle. robot-reel lerobot EXPORT_DIR --mark FRAME --signal KEY/NAME [--signal ...] --note TEXT adds one hashed finding.json to an existing LeRobot replay export. Before writing, it verifies the export. The finding records the episode, the zero-based frame, timestamps[frame], 1 to 8 key/name/value signals read from episode.json, the note, the episode.json hash, the package version and a fixed limitations statement. Only the finding.json hash is added to manifest.json; every other hash stays the same. --verify (also with --check-media, --check-source or both) prints the sealed finding in its result. It exits 2 and names the problem when finding.json was edited without re-hashing, when it is present but not listed in the manifest, when the manifest lists it but the file is missing, when episode.json or a clip changed, or when a re-hashed finding disagrees with episode.json or breaks the input rules. Invalid --mark arguments, an already-marked export and any verify failure exit 2 and leave every file unchanged. If replacing the manifest fails, the finding.json placed during that run is removed.
+
 ## Unreleased
 
 - Reply to each first-use trial report with what was read from its form and

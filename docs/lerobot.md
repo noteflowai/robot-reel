@@ -17,7 +17,7 @@ joints, 303 frames at 30 fps.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.18.4'
+python -m pip install 'robot-reel[lerobot]==0.19.0'
 
 # Any public Hub dataset; only the files this episode needs are downloaded.
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
@@ -82,6 +82,63 @@ CI runs all three checks against a fresh export of the published example, and
 the unit tests cut the second episode out of a shared v3.0 video and a v2.1
 per-episode video, then decode each clip frame to confirm it came from that
 episode, in order.
+
+### Seal one observation for a teammate
+
+Instead of a separate note beside the folder, record the frame and channels you
+examined inside the export. `--mark` needs robot-reel 0.19.0 or later, for the
+sender and the recipient.
+
+```bash
+# Sender: edits the verified export in place (mark a copy to keep the original).
+robot-reel lerobot artifacts/so101 --mark 239 \
+  --signal action/shoulder_pan.pos --signal observation.state/shoulder_pan.pos \
+  --note "Command and measurement diverge while the gripper approaches the box"
+
+# Recipient, on any machine and at any path:
+robot-reel lerobot received/so101 --verify --check-media
+```
+
+`--mark` first runs `--verify`, reads each value at that frame from
+`episode.json`, writes `finding.json` (episode, frame, timestamp, each
+`{key, name, value}`, the note, the `episode.json` hash and the Robot Reel
+version) and adds its SHA-256 to `manifest.json`; every other hash is unchanged.
+On the SO-101 example it records 45.14706 (`action`) and 61.75649
+(`observation.state`). The recipient's `--verify` output then contains a
+`finding` object with the same values and note. A recorded null is kept as
+null and listed under `no_recorded_value`.
+
+Rules: `FRAME` is zero-based (0..length-1); each `--signal` is a series key
+and channel name from `episode.json`, split at the last slash; 1 to 8 distinct
+signals; a note of 1 to 2000 characters without control characters other than
+newline. A wrong frame or channel exits with status 2, names the valid range or
+lists the available channels, and writes nothing. So do `--mark` combined with
+`--verify`, `--output`, `--revision`, `--episode` or `--crf`, a tampered
+export, and an export that already carries a finding (one per bundle).
+
+`--verify` exits with status 2 when:
+
+- `finding.json` changed without its manifest entry: `Hash mismatch: finding.json`.
+- `episode.json` or a clip changed: `Hash mismatch: FILE`.
+- A re-hashed finding disagrees with the episode: `Finding disagrees with episode.json: FIELD`.
+- A re-hashed finding breaks the rules above or the fixed schema: `Invalid finding: FIELD`.
+- `finding.json` exists but is not in the manifest, for example after an
+  interrupted `--mark`. Delete `finding.json` and mark again, or re-mark a fresh copy.
+
+A finding records an observation. It is not a failure label, a calibrated
+threshold or a signature. The hashes show the files are unchanged since marking,
+not who wrote them, and a rewrite that is re-hashed and stays consistent with
+`episode.json` (another valid note, another version string, or another frame
+with its matching values) is not detected. The viewer does not highlight the
+finding; step to the printed frame with the frame controls and confirm the
+position against the printed timestamp. `FRAME` is an index into
+`episode.json`, so check the timestamp and values printed by `--mark` against
+what you saw before handing off.
+
+robot-reel 0.18.x and earlier report a marked export as `Incomplete LeRobot
+replay manifest`; upgrade to 0.19.0 or later to read it. To return an export to
+its unmarked form, delete `finding.json` and its one entry in `manifest.json`;
+both old and new versions then verify it.
 
 ## Supported datasets and limits
 

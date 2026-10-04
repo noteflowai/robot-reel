@@ -16,7 +16,7 @@ checkout, GPU, model account and LeRobot installation are not required.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.17.1'
+python -m pip install 'robot-reel[lerobot]==0.19.0'
 
 robot-reel lerobot lerobot/svla_so101_pickplace \
   --revision f641879e22172be7e8161d5e6c1503c2d2feb657 \
@@ -49,36 +49,88 @@ Open `so101/index.html` in a browser.
 
 1. Step through the two camera views on the same frame timeline.
 2. Select a named command/measurement channel and inspect its largest
-   displayed difference. Record the channel, frame and two values.
-3. Check the image at that frame. Write what is visible, what the numeric
+   displayed difference. Note the channel, the frame position and the two
+   values. `--mark FRAME` takes a zero-based index into `episode.json`
+   (0..length-1). The `--mark` output prints that frame's recorded timestamp
+   and values, so compare them with what you saw before handing off.
+3. Check the image at that frame. Decide what is visible, what the numeric
    record says and what remains unknown. Do not infer task success from the
    joint curve alone.
-4. Use the frame link to preserve the selection. A local `file://` URL needs
-   the matching exported folder on the recipient's machine.
+4. Seal that selection into the export. `--mark` needs robot-reel 0.19.0 or
+   later. It edits the folder in place, so copy the folder first if the
+   unmarked version must stay readable by older robot-reel releases.
 
-Example note template:
-
-```text
-Dataset and pinned revision:
-Episode / frame:
-Channel and recorded units:
-Command / measurement:
-Visible observation:
-Question or proposed next check:
-Limitations:
+```bash
+robot-reel lerobot so101 --mark 239 \
+  --signal action/shoulder_pan.pos --signal observation.state/shoulder_pan.pos \
+  --note "Visible: gripper approaching the box. Command and measurement diverge in recorded units. Unknown: whether contact occurred. Next check: side camera around this frame."
 ```
+
+`--mark` first runs the same checks as `--verify`. It then reads each value at
+that frame from `episode.json` and writes `finding.json` with the episode,
+frame, recorded timestamp, each `{key, name, value}`, your note, the
+`episode.json` hash and the Robot Reel version. Finally it adds the
+`finding.json` hash to `manifest.json`. No other manifest entry changes. At
+this revision the printed values are 45.14706 (`action`) and 61.75649
+(`observation.state`).
+
+Use the note (1 to 2000 characters) for what the numbers cannot say: the
+visible observation, your question and its limitations. Each `--signal` is a
+series key and channel name from `episode.json`, split at the last slash. You
+can give 1 to 8 distinct signals.
+
+`--mark` exits with status 2 and writes nothing in these cases:
+
+- The frame is out of range. The message gives the valid range.
+- A channel is unknown. The message lists the available channels.
+- The note is empty or invalid.
+- The export fails verification.
+- The export already carries a finding. Each bundle holds one finding.
 
 ## Hand off the complete folder
 
 Copy or archive all of `so101/`, including `index.html`, `episode.json`,
-`manifest.json` and the camera clips. Send the note alongside it.
+`finding.json`, `manifest.json` and the camera clips. You do not need a
+separate note or a `file://` link.
 
-The recipient can open the folder from a different path and check the saved
-files without contacting the Hub:
+The recipient installs the same release and checks the folder from any path,
+without contacting the Hub:
 
 ```bash
+python -m pip install 'robot-reel[lerobot]==0.19.0'
 robot-reel lerobot received/so101 --verify --check-media
 ```
+
+The JSON output contains a `finding` object with the sealed episode, frame,
+timestamp, signal values and note. To see the frame, open
+`received/so101/index.html`, step to the printed frame with the frame
+controls and confirm the position against the printed timestamp. The viewer
+does not highlight the finding.
+
+robot-reel 0.18.x and earlier, including 0.17.1, report a marked folder as
+`Incomplete LeRobot replay manifest`. Upgrading to 0.19.0 or later fixes this.
+
+`--verify` exits with status 2 and names the problem in these cases:
+
+- `finding.json` was edited without updating the manifest: `Hash mismatch: finding.json`.
+- `episode.json` or a clip changed: `Hash mismatch: FILE`.
+- A re-hashed finding contradicts the recorded data:
+  `Finding disagrees with episode.json: FIELD`.
+- A re-hashed finding breaks the input rules or the fixed schema:
+  `Invalid finding: FIELD`.
+- `finding.json` exists but is not listed in `manifest.json`, for example
+  after an interrupted `--mark`. Delete `finding.json` and mark again, or
+  re-mark a fresh copy of the export.
+
+A finding records an observation. It is not a failure label, a calibrated
+threshold or a signature. The hashes show that the files are unchanged since
+they were marked. They do not show who wrote them. A rewrite that is re-hashed
+and stays consistent with `episode.json` is not detected. Examples are another
+valid note, another version string, or another frame with its matching
+recorded values.
+
+To return a folder to its unmarked form, delete `finding.json` and remove its
+one entry from `manifest.json`. Old and new releases then both verify it.
 
 `--check-source` additionally needs access to the pinned source files, through
 the Hub/cache or a supplied local dataset. It compares exported values against
