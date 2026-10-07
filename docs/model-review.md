@@ -39,6 +39,16 @@ or an unassessed claim; exit 2 means invalid input or an output error.
 A real frame number does not prove that the image supports a claim. The trace is
 supplied evidence, not independently authenticated physical truth.
 
+## Run the protocol against a model on Amazon Bedrock
+
+`examples/model-review/bedrock_claims.py` sends the same frozen system text, prompt and contact sheet through the
+Bedrock Converse API. It writes a receipt (model, Region, request id, exact inputs and hashes, settings actually
+sent, raw text, tokens) and the parsed claims, and refuses to overwrite either. Check the claims with
+`review-claims` as above. Two recorded Claude generations on the 25 % light episode, with their reviews, are in
+[`examples/model-review/bedrock/`](../examples/model-review/bedrock/README.md). They are one model, one episode
+and one generation per mode: an example of the workflow, not a comparison with the Qwen outputs. Each call is
+billable; ordinary tests use a fake client.
+
 ## What the model received
 
 The protocol was committed before generation. `examples/model-review/sources.json`
@@ -78,6 +88,8 @@ Keep `NOTICE.txt` with all media; Robot Reel's code license does not relicense t
 upstream robot assets.
 
 ## 中文
+
+用 Amazon Bedrock 上的模型跑同一协议：`examples/model-review/bedrock_claims.py` 通过 Converse API 发送同样的冻结提示词和接触表，保存回执（模型、区域、请求 id、实际发送的参数、原始回答、token）和解析出的声明，不覆盖已有记录；再用 `review-claims` 核对。Claude 在 25 % 光照片段上的两次记录见 [`examples/model-review/bedrock/`](../examples/model-review/bedrock/README.md)。仅为工作流示例，不与 Qwen 结果构成对照；每次调用计费，普通测试使用假客户端。
 
 先看原始双相机回放，再读模型解释。三个已发布的 seed-09 仿真片段，各有“只看抽帧”
 和“抽帧加结果记录”两种输入，共六次真实生成。命令 `review-claims` 仅核对结果标签、

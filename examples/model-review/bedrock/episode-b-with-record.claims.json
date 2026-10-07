@@ -1,0 +1,12 @@
+{
+ "outcome": "step_limit",
+ "action_count": 160,
+ "cited_frames": [
+  0,
+  40,
+  80,
+  120,
+  160
+ ],
+ "explanation": "Record: step_limit after 160 actions (max 160), 8.0 s, dim condition. Visually, the arm moves to the left bowl group by frame 40. Frames 80–160 show the wrist view centered over a bowl overlapping the plate's rim. The bowl appears partly over the plate, but it is unclear whether it was grasped, released, or fully placed. The sampled frames cannot establish the success criterion or explain why the episode reached the step limit."
+}

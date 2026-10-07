@@ -1,0 +1,43 @@
+{
+  "schema": "robot-reel-claim-review-1",
+  "checks": [
+    {
+      "claim": "outcome",
+      "claimed": "unknown",
+      "recorded": "step_limit",
+      "status": "unassessed"
+    },
+    {
+      "claim": "action_count",
+      "claimed": null,
+      "recorded": 160,
+      "status": "unassessed"
+    },
+    {
+      "claim": "cited_frame_labels_exist",
+      "claimed": [
+        0,
+        40,
+        80,
+        120,
+        160
+      ],
+      "missing": [],
+      "status": "matched"
+    }
+  ],
+  "facts_match": false,
+  "explanation": "Frame 0 shows the bowls beside the plate. By frames 40-80 the gripper is over a black bowl that seems moved toward the plate. In frames 120-160 both views show a black bowl overlapping or resting on the plate, with the gripper above it. Visually this looks like placement. No outcome record was supplied, so success under the simulator's criterion is not established. Intermediate frames are missing, and this may not be the intended bowl. The action count is unknown.",
+  "explanation_status": "not_assessed",
+  "scope": "Checks agreement with the supplied recorded outcome and action count, and whether cited frame labels exist. It does not authenticate the trace, judge visual explanations, establish causality, or rerun a physical success test.",
+  "inputs": {
+    "trace": {
+      "name": "trace.json",
+      "sha256": "0cbf0b757761b6cfaca22465055c834c2e720f972b3f8da8924b7850c341182d"
+    },
+    "claims": {
+      "name": "episode-b-images-only.claims.json",
+      "sha256": "0c7740e4e2c7368a42ffec4745faa0f7394f1847858752f0beaa0e17d7aa1250"
+    }
+  }
+}

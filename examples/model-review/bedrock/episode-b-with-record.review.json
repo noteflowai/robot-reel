@@ -1,0 +1,43 @@
+{
+  "schema": "robot-reel-claim-review-1",
+  "checks": [
+    {
+      "claim": "outcome",
+      "claimed": "step_limit",
+      "recorded": "step_limit",
+      "status": "matched"
+    },
+    {
+      "claim": "action_count",
+      "claimed": 160,
+      "recorded": 160,
+      "status": "matched"
+    },
+    {
+      "claim": "cited_frame_labels_exist",
+      "claimed": [
+        0,
+        40,
+        80,
+        120,
+        160
+      ],
+      "missing": [],
+      "status": "matched"
+    }
+  ],
+  "facts_match": true,
+  "explanation": "Record: step_limit after 160 actions (max 160), 8.0 s, dim condition. Visually, the arm moves to the left bowl group by frame 40. Frames 80–160 show the wrist view centered over a bowl overlapping the plate's rim. The bowl appears partly over the plate, but it is unclear whether it was grasped, released, or fully placed. The sampled frames cannot establish the success criterion or explain why the episode reached the step limit.",
+  "explanation_status": "not_assessed",
+  "scope": "Checks agreement with the supplied recorded outcome and action count, and whether cited frame labels exist. It does not authenticate the trace, judge visual explanations, establish causality, or rerun a physical success test.",
+  "inputs": {
+    "trace": {
+      "name": "trace.json",
+      "sha256": "0cbf0b757761b6cfaca22465055c834c2e720f972b3f8da8924b7850c341182d"
+    },
+    "claims": {
+      "name": "episode-b-with-record.claims.json",
+      "sha256": "6825408a03458cb0779edc7b9b65005ad8e42d23bcae48a12703c38e40e99add"
+    }
+  }
+}

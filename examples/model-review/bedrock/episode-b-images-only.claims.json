@@ -1,0 +1,12 @@
+{
+ "outcome": "unknown",
+ "action_count": null,
+ "cited_frames": [
+  0,
+  40,
+  80,
+  120,
+  160
+ ],
+ "explanation": "Frame 0 shows the bowls beside the plate. By frames 40-80 the gripper is over a black bowl that seems moved toward the plate. In frames 120-160 both views show a black bowl overlapping or resting on the plate, with the gripper above it. Visually this looks like placement. No outcome record was supplied, so success under the simulator's criterion is not established. Intermediate frames are missing, and this may not be the intended bowl. The action count is unknown."
+}
