@@ -1,0 +1,34 @@
+{
+ "schema": "robot-reel-bedrock-review-1",
+ "at": "2026-10-07T05:05:53+00:00",
+ "case": "episode-b-images-only",
+ "model_id": "jp.anthropic.claude-opus-5-5",
+ "region": "ap-northeast-1",
+ "api": "bedrock-runtime Converse",
+ "request_id": "32404a0c-4d7e-47cb-a8fb-f1fd99bd93cd",
+ "protocol_sha256": "87719738bef8021cb646de399be4987185d1eddc78de1eb35e1c8f44183e3d04",
+ "system": "Review a recorded robot episode using the supplied contact sheet. Return ONLY one JSON object with outcome (\"success\", \"step_limit\", or \"unknown\"), action_count (integer or null), cited_frames (an array of integer frame labels from this sheet), and explanation (at most 90 words). Explain observed behavior and uncertainty. Do not claim that images alone establish the simulator's success criterion or a causal failure mechanism. If a machine-readable record is supplied, distinguish its facts from your visual interpretation. Never invent a measurement.",
+ "prompt": "Task: pick up the black bowl between the plate and the ramekin and place it on the plate. Five sampled frames from each of two cameras are shown; frames between them are not supplied. No outcome record is supplied. Use unknown/null when not established.",
+ "image": {
+  "file": "episode-b.png",
+  "sha256": "3f5b2cbea4dd8f0329beec0b4ff2f2634dabed15dc1e13263d6f632293e917fc"
+ },
+ "inference_config": {
+  "maxTokens": 512
+ },
+ "deviations": [
+  "seed, top_p, top_k and enable_thinking are not Converse inferenceConfig fields and were not sent",
+  "temperature not sent (use --send-sampling for models that accept it)"
+ ],
+ "raw_text": "```json\n{\"outcome\": \"unknown\", \"action_count\": null, \"cited_frames\": [0, 40, 80, 120, 160], \"explanation\": \"Frame 0 shows the bowls beside the plate. By frames 40-80 the gripper is over a black bowl that seems moved toward the plate. In frames 120-160 both views show a black bowl overlapping or resting on the plate, with the gripper above it. Visually this looks like placement. No outcome record was supplied, so success under the simulator's criterion is not established. Intermediate frames are missing, and this may not be the intended bowl. The action count is unknown.\"}\n```",
+ "parsed": true,
+ "usage": {
+  "inputTokens": 1669,
+  "outputTokens": 309,
+  "totalTokens": 1978,
+  "cacheReadInputTokens": 0,
+  "cacheWriteInputTokens": 0
+ },
+ "stop_reason": "end_turn",
+ "latency_s": 6.23
+}
