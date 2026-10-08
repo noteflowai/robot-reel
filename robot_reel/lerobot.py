@@ -6,7 +6,7 @@
     robot-reel lerobot artifacts/so101 --mark 239 --signal action/shoulder_pan.pos --note "What you saw"
 
 --mark seals one frame/channel observation into a verified export as a hashed
-finding.json; --verify on any copy re-checks it against episode.json.
+finding.json and shows it in the page; --verify on any copy re-checks it against episode.json.
 
 Reading a dataset needs the `lerobot` extra (pyarrow, huggingface_hub); the
 LeRobot library itself is not imported. --verify alone uses only the standard
@@ -43,6 +43,22 @@ FINDING_LIMITATIONS = ("An observation at one recorded frame. It is not a failur
                        "or a signature: the manifest hashes show the files are unchanged since marking, not who wrote them.")
 MAX_FINDING_SIGNALS = 8
 MAX_NOTE = 2000
+# --mark also embeds the finding in index.html (offline pages cannot fetch finding.json).
+EPISODE_MARKER = '<script id="episode-data" type="application/json">'
+FINDING_MARKER = '<script id="finding-data" type="application/json">'
+
+
+def finding_element(finding):
+    """The one line --mark inserts into index.html: the finding as inert JSON, '<' escaped."""
+    payload = json.dumps(finding, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
+    return f"{FINDING_MARKER}{payload}</script>\n"
+
+
+def embed_finding(html, finding):
+    """Insert the finding line directly after the episode-data element; removing it restores html exactly."""
+    start = html.index(EPISODE_MARKER)
+    end = html.index("</script>\n", start)+len("</script>\n")
+    return html[:end]+finding_element(finding)+html[end:]
 
 
 class Source:
@@ -415,11 +431,25 @@ def verify(directory):
         if digest(directory/filename) != value:
             raise ValueError(f"Hash mismatch: {filename}")
     html = (directory/"index.html").read_text()
-    marker = '<script id="episode-data" type="application/json">'
+    marker = EPISODE_MARKER
     if html.count(marker) != 1 or json.loads(html.split(marker)[1].split("</script>", 1)[0]) != trace:
         raise ValueError("Viewer differs from episode.json")
+    embedded = html.count(FINDING_MARKER)
+    if embedded > 1:
+        raise ValueError("index.html embeds more than one finding; re-mark a fresh copy of the export")
+    if embedded and not marked:
+        raise ValueError(f"index.html embeds a finding but manifest.json lists no {FINDING}; re-mark a fresh copy of the export")
     if marked:
         result["finding"] = verify_finding(directory/FINDING, trace, manifest["sha256"]["episode.json"])
+        if embedded:
+            try:
+                shown = json.loads(html.split(FINDING_MARKER)[1].split("</script>", 1)[0])
+            except ValueError:
+                raise ValueError("The finding embedded in index.html is not readable JSON") from None
+            if shown != result["finding"]:
+                raise ValueError(f"The finding embedded in index.html differs from {FINDING}")
+        # Folders marked by 0.19.0 carry finding.json only; their page does not show it.
+        result["finding_in_viewer"] = bool(embedded)
     return result
 
 
@@ -552,12 +582,17 @@ def mark(directory, frame, signals, note):
         "limitations": FINDING_LIMITATIONS,
     }
     text = json.dumps(finding, indent=2, allow_nan=False)+"\n"
-    temporary, placed, sealed = [], False, False
+    viewer_path = directory/"index.html"
+    viewer = viewer_path.read_text()
+    temporary, placed, rewritten, sealed = [], False, False, False
     try:
         replace_beside(target, text, manifest_path, temporary)
         placed = True
+        replace_beside(viewer_path, embed_finding(viewer, finding), viewer_path, temporary)
+        rewritten = True
         hashes = dict(manifest["sha256"])
         hashes[FINDING] = digest(target)
+        hashes["index.html"] = digest(viewer_path)
         manifest["sha256"] = dict(sorted(hashes.items()))
         # The manifest is always replaced last; until then verify reports an unlisted finding.json.
         replace_beside(manifest_path, json.dumps(manifest, indent=2)+"\n", manifest_path, temporary)
@@ -565,11 +600,15 @@ def mark(directory, frame, signals, note):
     except BaseException:
         for path in temporary:
             path.unlink(missing_ok=True)
+        if rewritten and not sealed:
+            replace_beside(viewer_path, viewer, viewer_path, [])
         if placed and not sealed:
             target.unlink(missing_ok=True)
         raise
     result = {"episode": finding["episode"], "frame": frame, "timestamp": finding["timestamp"],
-              "signals": recorded, "output": str(target)}
+              "signals": recorded, "output": str(target),
+              # An export made before the viewer could show findings keeps its older page script.
+              "viewer_shows_finding": "#finding-data" in viewer}
     missing = [f"{s['key']}/{s['name']}" for s in recorded if s["value"] is None]
     if missing:
         result["no_recorded_value"] = missing

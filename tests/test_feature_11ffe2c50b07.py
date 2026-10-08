@@ -111,7 +111,13 @@ class FindingTest(unittest.TestCase):
         hashes_after = json.loads((self.bundle/"manifest.json").read_text())["sha256"]
         self.assertEqual(finding["episode_sha256"], hashes_before["episode.json"])
         self.assertEqual(hashes_after["finding.json"], digest(self.bundle/"finding.json"))
-        self.assertEqual({k: v for k, v in hashes_after.items() if k != "finding.json"}, hashes_before)
+        # Only finding.json is added and index.html gains one embedded line; removing it restores the page exactly.
+        self.assertEqual({k: v for k, v in hashes_after.items() if k not in ("finding.json", "index.html")},
+                         {k: v for k, v in hashes_before.items() if k != "index.html"})
+        page = (self.bundle/"index.html").read_text()
+        self.assertEqual(page.replace(lerobot.finding_element(finding), "", 1), (EXAMPLE/"index.html").read_text())
+        self.assertEqual(hashes_after["index.html"], digest(self.bundle/"index.html"))
+        self.assertTrue(printed["viewer_shows_finding"])
         self.assertEqual(snapshot(EXAMPLE), example_before)
         self.assertEqual(list(self.bundle.glob(".*.tmp")), [])
 
@@ -120,6 +126,7 @@ class FindingTest(unittest.TestCase):
         shutil.rmtree(self.bundle)
         result = lerobot.verify(moved)
         self.assertEqual(result["finding"], finding)
+        self.assertIs(result.pop("finding_in_viewer"), True)
         self.assertEqual({k: v for k, v in result.items() if k != "finding"}, unmarked)
         code, out, err = run_cli(moved, "--verify")
         self.assertEqual(code, 0, err)
@@ -165,6 +172,65 @@ class FindingTest(unittest.TestCase):
                 rehash(case, edit)
                 self.assert_rejected(case, message)
 
+    def test_embedded_finding_must_match_finding_json(self):
+        marked = self.copy(EXAMPLE, "marked")
+        self.mark(marked)
+        finding = json.loads((marked/"finding.json").read_text())
+
+        def rewrite_page(directory, edit):
+            """Edit index.html and re-hash it, as a careful tamperer would."""
+            path, manifest_path = directory/"index.html", directory/"manifest.json"
+            path.write_text(edit(path.read_text()))
+            manifest = json.loads(manifest_path.read_text())
+            manifest["sha256"]["index.html"] = digest(path)
+            manifest_path.write_text(json.dumps(manifest, indent=2))
+
+        other = dict(finding, note="A different story shown in the page")
+        cases = [
+            ("differs", lambda html: html.replace(lerobot.finding_element(finding), lerobot.finding_element(other)),
+             "The finding embedded in index.html differs from finding.json"),
+            ("unreadable", lambda html: html.replace(lerobot.finding_element(finding),
+                                                     lerobot.FINDING_MARKER+"{not json</script>\n"),
+             "The finding embedded in index.html is not readable JSON"),
+            ("twice", lambda html: html.replace(lerobot.finding_element(finding), lerobot.finding_element(finding)*2),
+             "index.html embeds more than one finding"),
+        ]
+        for name, edit, message in cases:
+            with self.subTest(name):
+                case = self.copy(marked, f"page-{name}")
+                rewrite_page(case, edit)
+                self.assert_rejected(case, message)
+
+        # A page that shows a finding the manifest does not list is not a valid unmarked export.
+        orphan = self.copy(marked, "orphan")
+        (orphan/"finding.json").unlink()
+        manifest = json.loads((orphan/"manifest.json").read_text())
+        del manifest["sha256"]["finding.json"]
+        (orphan/"manifest.json").write_text(json.dumps(manifest, indent=2))
+        self.assert_rejected(orphan, "index.html embeds a finding but manifest.json lists no finding.json")
+
+    def test_a_folder_marked_by_0_19_0_still_verifies(self):
+        """0.19.0 wrote finding.json and its manifest entry but left index.html unchanged."""
+        legacy = self.copy(EXAMPLE, "legacy")
+        self.mark(legacy)
+        manifest = json.loads((legacy/"manifest.json").read_text())
+        shutil.copyfile(EXAMPLE/"index.html", legacy/"index.html")
+        manifest["sha256"]["index.html"] = digest(legacy/"index.html")
+        (legacy/"manifest.json").write_text(json.dumps(manifest, indent=2))
+        result = lerobot.verify(legacy)
+        self.assertIs(result["finding_in_viewer"], False)
+        self.assertEqual(result["finding"]["frame"], 239)
+
+    def test_hostile_note_and_names_stay_inert_text(self):
+        hostile = "</script><script>window.pwned=1</script><img src=x onerror=alert(1)> https://evil.example/?$(rm -rf ~)"
+        code, out, err = run_cli(*mark_args(self.bundle, note=hostile))
+        self.assertEqual(code, 0, err)
+        page = (self.bundle/"index.html").read_text()
+        self.assertEqual(page.count("</script>"), (EXAMPLE/"index.html").read_text().count("</script>")+1)
+        self.assertNotIn("<script>window.pwned", page)
+        self.assertNotIn("<img src=x", page)
+        self.assertEqual(lerobot.verify(self.bundle)["finding"]["note"], hostile)
+
     def test_cli_errors_write_nothing(self):
         pairs = [f"{s['key']}/{n}" for s in self.trace["series"] for n in s["names"]]
         self.assertGreaterEqual(len(pairs), 9)
@@ -199,6 +265,7 @@ class FindingTest(unittest.TestCase):
                 self.assertIn(message, err)
                 self.assertFalse((case/"finding.json").exists())
                 self.assertEqual((case/"manifest.json").read_bytes(), manifest)
+                self.assertEqual((case/"index.html").read_bytes(), (EXAMPLE/"index.html").read_bytes())
                 self.assertEqual(list(case.glob(".*.tmp")), [])
 
     def test_an_already_marked_copy_is_not_marked_again(self):
@@ -315,6 +382,7 @@ class FindingTest(unittest.TestCase):
         self.assertIn("simulated failure", err)
         self.assertFalse((self.bundle/"finding.json").exists())
         self.assertEqual((self.bundle/"manifest.json").read_bytes(), manifest)
+        self.assertEqual((self.bundle/"index.html").read_bytes(), (EXAMPLE/"index.html").read_bytes())
         self.assertEqual(list(self.bundle.glob(".*.tmp")), [])
         self.assertEqual(lerobot.verify(self.bundle), unmarked)
 

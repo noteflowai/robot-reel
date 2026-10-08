@@ -1,7 +1,7 @@
 const {test, before, after} = require('node:test');
 const assert = require('node:assert/strict');
 const {createServer} = require('node:http');
-const {readFile, writeFile, mkdtemp, rm} = require('node:fs/promises');
+const {readFile, writeFile, mkdtemp, rm, cp} = require('node:fs/promises');
 const {existsSync} = require('node:fs');
 const {tmpdir} = require('node:os');
 const {join, resolve, extname} = require('node:path');
@@ -1036,6 +1036,72 @@ test('LeRobot episode replay keeps cameras, joint panels and largest command gap
     assert.match(page.url(),/#frame=\d+$/);
     assert.equal(await page.locator('#visualizer').getAttribute('href'),'https://huggingface.co/spaces/lerobot/visualize_dataset?path=/lerobot/svla_so101_pickplace/episode_0');
     assert.deepEqual(errors,[]);
+  }finally{await page.close();}
+});
+// Mark a copy of the published example with the real CLI, then open it from another path with the network blocked.
+async function markedCopy(note){
+  const temp=await mkdtemp(join(tmpdir(),'robot-reel-finding-')),folder=join(temp,'received','so101');
+  await cp(resolve('docs/lerobot'),folder,{recursive:true});
+  const marked=spawnSync('python3',['-S','-m','robot_reel.cli','lerobot',folder,'--mark','239','--signal','action/shoulder_pan.pos',
+    '--signal','observation.state/shoulder_pan.pos','--note',note],{encoding:'utf8',timeout:30000});
+  assert.equal(marked.status,0,marked.stderr);
+  return {temp,folder};
+}
+test('LeRobot replay shows a sealed finding and jumps to its exact frame offline',async()=>{
+  const note='Visible: gripper approaching the box.\nCommand and measurement diverge in recorded units.';
+  const {temp,folder}=await markedCopy(note);
+  const page=await browser.newPage(),errors=[],requests=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
+    await page.goto(pathToFileURL(join(folder,'index.html')).href);
+    const finding=JSON.parse(await readFile(join(folder,'finding.json'),'utf8'));
+    const panel=page.locator('#finding');
+    assert.equal(await panel.locator('.note').textContent(),note);
+    assert.equal(await panel.locator('h2').textContent(),`Frame 239 · ${finding.timestamp.toFixed(3)} s · episode 0`);
+    assert.deepEqual(await panel.locator('tbody tr').evaluateAll(rows=>rows.map(r=>[...r.cells].map(c=>c.textContent))),
+      finding.signals.map(s=>[`${s.key}/${s.name}`,String(s.value)]));
+    assert.match(await panel.textContent(),/did not run robot-reel --verify/);
+    assert.doesNotMatch(await panel.textContent(),/\bverified\b/i);
+    assert.equal(await page.locator('#counter').textContent(),'Frame 0 / 302');
+    await page.locator('#finding-go').focus();await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#counter').textContent(),'Frame 239 / 302');
+    assert.equal(await page.locator('#time').textContent(),finding.timestamp.toFixed(3));
+    // Existing frame links still win on load.
+    await page.goto(pathToFileURL(join(folder,'index.html')).href+'#frame=40');
+    assert.equal(await page.locator('#counter').textContent(),'Frame 40 / 302');
+    assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+  }finally{await page.close();await rm(temp,{recursive:true,force:true});}
+});
+test('LeRobot replay keeps hostile finding text inert and refuses an inconsistent finding',async()=>{
+  const hostile='</script><script>window.pwned=1</script><img src=x onerror="window.pwned=2"> javascript:alert(1)';
+  const {temp,folder}=await markedCopy(hostile);
+  const page=await browser.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await page.route(/^https?:/,route=>route.abort());
+    await page.goto(pathToFileURL(join(folder,'index.html')).href);
+    assert.equal(await page.locator('#finding .note').textContent(),hostile);
+    assert.equal(await page.evaluate(()=>window.pwned),undefined);
+    assert.equal(await page.locator('#finding img, #finding script, #finding a').count(),0);
+    // A finding whose value no longer matches this page's episode data is shown as an error, with no jump.
+    const html=await readFile(join(folder,'index.html'),'utf8');
+    await writeFile(join(folder,'index.html'),html.replace(/("value":)45\.14706/,'$10.5'));
+    await page.reload();
+    assert.equal(await page.locator('#finding').count(),0);
+    assert.equal(await page.locator('#finding-go').count(),0);
+    const alert=page.locator('section.finding.error[role=alert]');
+    assert.match(await alert.textContent(),/action\/shoulder_pan\.pos at frame 239 is 45\.14706 in this episode, not 0\.5/);
+    const cli=spawnSync('python3',['-S','-m','robot_reel.cli','lerobot',folder,'--verify'],{encoding:'utf8',timeout:30000});
+    assert.equal(cli.status,2);assert.match(cli.stderr,/Hash mismatch: index\.html/);
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();await rm(temp,{recursive:true,force:true});}
+});
+test('LeRobot replay without a finding is unchanged',async()=>{
+  const page=await browser.newPage();
+  try{
+    await page.route(/^https?:/,route=>route.abort());
+    await page.goto(pathToFileURL(resolve('docs/lerobot/index.html')).href+'#frame=12');
+    assert.equal(await page.locator('section.finding').count(),0);
+    assert.equal(await page.locator('#counter').textContent(),'Frame 12 / 302');
   }finally{await page.close();}
 });
 test('LeRobot replay explains when command and measurement cannot be overlaid',async()=>{
