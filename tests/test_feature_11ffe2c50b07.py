@@ -117,7 +117,8 @@ class FindingTest(unittest.TestCase):
         page = (self.bundle/"index.html").read_text()
         self.assertEqual(page.replace(lerobot.finding_element(finding), "", 1), (EXAMPLE/"index.html").read_text())
         self.assertEqual(hashes_after["index.html"], digest(self.bundle/"index.html"))
-        self.assertTrue(printed["viewer_shows_finding"])
+        self.assertEqual((printed["finding_embedded"], printed["viewer_reader_signature"]), (True, True))
+        self.assertNotIn("viewer_shows_finding", printed)
         self.assertEqual(snapshot(EXAMPLE), example_before)
         self.assertEqual(list(self.bundle.glob(".*.tmp")), [])
 
@@ -126,8 +127,9 @@ class FindingTest(unittest.TestCase):
         shutil.rmtree(self.bundle)
         result = lerobot.verify(moved)
         self.assertEqual(result["finding"], finding)
-        self.assertIs(result.pop("finding_in_viewer"), True)
+        self.assertIs(result.pop("viewer_reader_signature"), True)
         self.assertIs(result.pop("finding_embedded"), True)
+        self.assertNotIn("finding_in_viewer", result)
         self.assertEqual({k: v for k, v in result.items() if k != "finding"}, unmarked)
         code, out, err = run_cli(moved, "--verify")
         self.assertEqual(code, 0, err)
@@ -218,9 +220,10 @@ class FindingTest(unittest.TestCase):
         shutil.copyfile(EXAMPLE/"index.html", legacy/"index.html")
         manifest["sha256"]["index.html"] = digest(legacy/"index.html")
         (legacy/"manifest.json").write_text(json.dumps(manifest, indent=2))
+        self.old_page(legacy)  # 0.19.0 pages also lack the reader script
         result = lerobot.verify(legacy)
         self.assertIs(result["finding_embedded"], False)
-        self.assertIs(result["finding_in_viewer"], False)
+        self.assertIs(result["viewer_reader_signature"], False)
         self.assertEqual(result["finding"]["frame"], 239)
 
     def old_page(self, directory):
@@ -234,7 +237,7 @@ class FindingTest(unittest.TestCase):
         manifest_path.write_text(json.dumps(manifest, indent=2))
 
     def test_mark_and_verify_agree_on_an_old_page(self):
-        # Even a note quoting the reader must not make an old page count as showing the finding.
+        # A note quoting the reader sits in the embedded JSON, outside the script, and cannot match.
         quoting = f"Note mentions {lerobot.FINDING_READER} on purpose"
         for name, note in (("plain", NOTE), ("quoting", quoting)):
             with self.subTest(name):
@@ -242,14 +245,40 @@ class FindingTest(unittest.TestCase):
                 self.old_page(old)
                 code, out, err = run_cli(*mark_args(old, note=note))
                 self.assertEqual(code, 0, err)
-                self.assertIs(json.loads(out)["viewer_shows_finding"], False)
+                printed = json.loads(out)
                 result = lerobot.verify(old)
-                self.assertIs(result["finding_embedded"], True)
-                self.assertIs(result["finding_in_viewer"], False)
+                for fields in (printed, result):
+                    self.assertEqual((fields["finding_embedded"], fields["viewer_reader_signature"]), (True, False))
         current = self.mark(self.bundle)
         result = lerobot.verify(self.bundle)
-        self.assertEqual((current["viewer_shows_finding"], result["finding_embedded"], result["finding_in_viewer"]),
+        self.assertEqual((current["viewer_reader_signature"], result["finding_embedded"], result["viewer_reader_signature"]),
                          (True, True, True))
+
+    def test_reader_signature_is_only_a_static_text_check(self):
+        """R2 review probe: an inert comment quoting the reader matches the signature without adding a reader.
+
+        The output must therefore not claim display: no finding_in_viewer / viewer_shows_finding key,
+        and the docs must call the field a static check. The browser test shows such a page has no panel."""
+        old = self.copy(EXAMPLE, "old-page-comment")
+        self.old_page(old)
+        path, manifest_path = old/"index.html", old/"manifest.json"
+        page = path.read_text()
+        path.write_text(page.replace("<script>\n", f"<script>\n/* {lerobot.FINDING_READER} */\n", 1))
+        manifest = json.loads(manifest_path.read_text())
+        manifest["sha256"]["index.html"] = digest(path)
+        manifest_path.write_text(json.dumps(manifest, indent=2))
+        code, out, err = run_cli(*mark_args(old))
+        self.assertEqual(code, 0, err)
+        printed, result = json.loads(out), lerobot.verify(old)
+        for fields in (printed, result):
+            self.assertIs(fields["viewer_reader_signature"], True)
+            self.assertFalse({"finding_in_viewer", "viewer_shows_finding"} & set(fields))
+        docs = (Path(__file__).resolve().parents[1]/"docs"/"lerobot.md").read_text()
+        self.assertIn("`viewer_reader_signature`", docs)
+        self.assertIn("does not show that the reader runs", docs)
+        # The draft names appear only in the sentence explaining their replacement.
+        self.assertEqual(docs.count("finding_in_viewer"), 1)
+        self.assertIn("were replaced because they implied display", docs)
 
     def crlf(self, directory):
         """Convert the page to CRLF line endings, a valid export as far as the manifest is concerned."""
@@ -270,7 +299,7 @@ class FindingTest(unittest.TestCase):
         self.assertEqual(page.count(inserted), 1)
         self.assertEqual(page.replace(inserted, b"", 1), original)
         self.assertNotIn(b"\n", page.replace(b"\r\n", b""))
-        self.assertIs(lerobot.verify(self.bundle)["finding_in_viewer"], True)
+        self.assertIs(lerobot.verify(self.bundle)["viewer_reader_signature"], True)
 
     def test_failed_mark_restores_a_crlf_page_byte_for_byte(self):
         original = self.crlf(self.bundle)

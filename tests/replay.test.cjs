@@ -1095,6 +1095,26 @@ test('LeRobot replay keeps hostile finding text inert and refuses an inconsisten
     assert.deepEqual(errors,[]);
   }finally{await page.close();await rm(temp,{recursive:true,force:true});}
 });
+test('LeRobot reader signature is not display: an inert comment matches but no panel appears',async()=>{
+  const temp=await mkdtemp(join(tmpdir(),'robot-reel-signature-')),folder=join(temp,'old');
+  const page=await browser.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+  try{
+    await cp(resolve('docs/lerobot'),folder,{recursive:true});
+    // A page without the reader (as exported by 0.19.0) plus a comment quoting it; re-hash so it is valid input.
+    const reader="document.querySelector('#finding-data')",html=await readFile(join(folder,'index.html'),'utf8');
+    await writeFile(join(folder,'index.html'),html.replace(reader,'null').replace('<script>\n',`<script>\n/* ${reader} */\n`));
+    const manifest=JSON.parse(await readFile(join(folder,'manifest.json'),'utf8'));
+    manifest.sha256['index.html']=createHash('sha256').update(await readFile(join(folder,'index.html'))).digest('hex');
+    await writeFile(join(folder,'manifest.json'),JSON.stringify(manifest,null,2));
+    const marked=spawnSync('python3',['-S','-m','robot_reel.cli','lerobot',folder,'--mark','239','--signal','action/shoulder_pan.pos','--note','signature probe'],{encoding:'utf8',timeout:30000});
+    assert.equal(marked.status,0,marked.stderr);
+    assert.equal(JSON.parse(marked.stdout).viewer_reader_signature,true);
+    await page.route(/^https?:/,route=>route.abort());
+    await page.goto(pathToFileURL(join(folder,'index.html')).href);
+    assert.equal(await page.locator('section.finding').count(),0);
+    assert.deepEqual(errors,[]);
+  }finally{await page.close();await rm(temp,{recursive:true,force:true});}
+});
 test('LeRobot replay without a finding is unchanged',async()=>{
   const page=await browser.newPage();
   try{

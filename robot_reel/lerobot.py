@@ -69,11 +69,12 @@ def embed_finding(html, finding):
     return html[:end]+finding_element(finding, newline)+html[end:]
 
 
-def page_reads_finding(html):
-    """Whether the page's own inline script renders an embedded finding.
+def reader_signature(html):
+    """Static check: the page's attribute-free inline script contains the finding reader's text.
 
-    Only the script element without attributes is searched, so text inside the
-    embedded episode or finding JSON (for example a note quoting the reader) cannot count."""
+    This is a substring match, not proof that the reader runs or that a panel is visible: a
+    comment quoting the text also matches. Text inside the embedded episode or finding JSON
+    cannot match. Rendering is established separately, by the browser tests."""
     start = html.find("<script>")
     end = html.find("</script>", start)
     return start >= 0 and end > start and FINDING_READER in html[start:end]
@@ -467,10 +468,10 @@ def verify(directory):
             if shown != result["finding"]:
                 raise ValueError(f"The finding embedded in index.html differs from {FINDING}")
         # finding_embedded: index.html carries a copy equal to finding.json (0.19.0 never wrote one).
-        # finding_in_viewer: that copy is present AND this page's script renders it. A page exported
-        # by 0.19.0 or earlier and marked later is embedded but does not show the finding.
+        # viewer_reader_signature: static substring check of the page script (see reader_signature);
+        # it does not establish that the finding is displayed.
         result["finding_embedded"] = bool(embedded)
-        result["finding_in_viewer"] = bool(embedded) and page_reads_finding(html)
+        result["viewer_reader_signature"] = reader_signature(html)
     return result
 
 
@@ -631,9 +632,8 @@ def mark(directory, frame, signals, note):
         raise
     result = {"episode": finding["episode"], "frame": frame, "timestamp": finding["timestamp"],
               "signals": recorded, "output": str(target),
-              # Same rule as --verify's finding_in_viewer: the finding is embedded (always, after --mark)
-              # and the export's own page script renders it. Pages from 0.19.0 and earlier do not.
-              "viewer_shows_finding": page_reads_finding(marked_page.decode("utf-8"))}
+              # Same two fields as --verify. The signature is a static text check, not a display check.
+              "finding_embedded": True, "viewer_reader_signature": reader_signature(marked_page.decode("utf-8"))}
     missing = [f"{s['key']}/{s['name']}" for s in recorded if s["value"] is None]
     if missing:
         result["no_recorded_value"] = missing
