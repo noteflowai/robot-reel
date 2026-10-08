@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased
+
+- LeRobot replay: a folder marked with `--mark` now shows its sealed finding in
+  the offline page. The panel gives the note, frame, timestamp and recorded
+  values, plus a keyboard-accessible **Go to frame N** button that uses the
+  existing seek. A dashed marker appears on the signal charts. The finding is
+  embedded in `index.html` as one inert JSON line (`<` escaped) and displayed
+  only as text; a finding that disagrees with the page's episode data is shown
+  as an error. `--verify` requires the embedded copy to equal `finding.json`,
+  rejects an embedded finding without a listed `finding.json`, and reports
+  `finding_embedded` (a copy is in the page) and `viewer_reader_signature` (the
+  page script contains the reader's text: a static substring check, not proof of
+  display); `--mark` prints the same two fields. Folders marked by 0.19.0 still
+  verify, with both false.
+  Unmarked exports and `#frame=N` links are unchanged. Marking now also updates
+  the `index.html` hash; it edits the page as bytes, keeping its line endings, and
+  a failed mark restores the original bytes.
+- First-use trial guide installs the current release, 0.19.0.
+
 ## 0.19.0 — 2026-10-04
 
 - seal one frame/channel finding into a LeRobot replay bundle. robot-reel lerobot EXPORT_DIR --mark FRAME --signal KEY/NAME [--signal ...] --note TEXT adds one hashed finding.json to an existing LeRobot replay export. Before writing, it verifies the export. The finding records the episode, the zero-based frame, timestamps[frame], 1 to 8 key/name/value signals read from episode.json, the note, the episode.json hash, the package version and a fixed limitations statement. Only the finding.json hash is added to manifest.json; every other hash stays the same. --verify (also with --check-media, --check-source or both) prints the sealed finding in its result. It exits 2 and names the problem when finding.json was edited without re-hashing, when it is present but not listed in the manifest, when the manifest lists it but the file is missing, when episode.json or a clip changed, or when a re-hashed finding disagrees with episode.json or breaks the input rules. Invalid --mark arguments, an already-marked export and any verify failure exit 2 and leave every file unchanged. If replacing the manifest fails, the finding.json placed during that run is removed.

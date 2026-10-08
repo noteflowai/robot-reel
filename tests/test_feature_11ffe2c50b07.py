@@ -111,7 +111,14 @@ class FindingTest(unittest.TestCase):
         hashes_after = json.loads((self.bundle/"manifest.json").read_text())["sha256"]
         self.assertEqual(finding["episode_sha256"], hashes_before["episode.json"])
         self.assertEqual(hashes_after["finding.json"], digest(self.bundle/"finding.json"))
-        self.assertEqual({k: v for k, v in hashes_after.items() if k != "finding.json"}, hashes_before)
+        # Only finding.json is added and index.html gains one embedded line; removing it restores the page exactly.
+        self.assertEqual({k: v for k, v in hashes_after.items() if k not in ("finding.json", "index.html")},
+                         {k: v for k, v in hashes_before.items() if k != "index.html"})
+        page = (self.bundle/"index.html").read_text()
+        self.assertEqual(page.replace(lerobot.finding_element(finding), "", 1), (EXAMPLE/"index.html").read_text())
+        self.assertEqual(hashes_after["index.html"], digest(self.bundle/"index.html"))
+        self.assertEqual((printed["finding_embedded"], printed["viewer_reader_signature"]), (True, True))
+        self.assertNotIn("viewer_shows_finding", printed)
         self.assertEqual(snapshot(EXAMPLE), example_before)
         self.assertEqual(list(self.bundle.glob(".*.tmp")), [])
 
@@ -120,6 +127,9 @@ class FindingTest(unittest.TestCase):
         shutil.rmtree(self.bundle)
         result = lerobot.verify(moved)
         self.assertEqual(result["finding"], finding)
+        self.assertIs(result.pop("viewer_reader_signature"), True)
+        self.assertIs(result.pop("finding_embedded"), True)
+        self.assertNotIn("finding_in_viewer", result)
         self.assertEqual({k: v for k, v in result.items() if k != "finding"}, unmarked)
         code, out, err = run_cli(moved, "--verify")
         self.assertEqual(code, 0, err)
@@ -165,6 +175,163 @@ class FindingTest(unittest.TestCase):
                 rehash(case, edit)
                 self.assert_rejected(case, message)
 
+    def test_embedded_finding_must_match_finding_json(self):
+        marked = self.copy(EXAMPLE, "marked")
+        self.mark(marked)
+        finding = json.loads((marked/"finding.json").read_text())
+
+        def rewrite_page(directory, edit):
+            """Edit index.html and re-hash it, as a careful tamperer would."""
+            path, manifest_path = directory/"index.html", directory/"manifest.json"
+            path.write_text(edit(path.read_text()))
+            manifest = json.loads(manifest_path.read_text())
+            manifest["sha256"]["index.html"] = digest(path)
+            manifest_path.write_text(json.dumps(manifest, indent=2))
+
+        other = dict(finding, note="A different story shown in the page")
+        cases = [
+            ("differs", lambda html: html.replace(lerobot.finding_element(finding), lerobot.finding_element(other)),
+             "The finding embedded in index.html differs from finding.json"),
+            ("unreadable", lambda html: html.replace(lerobot.finding_element(finding),
+                                                     lerobot.FINDING_MARKER+"{not json</script>\n"),
+             "The finding embedded in index.html is not readable JSON"),
+            ("twice", lambda html: html.replace(lerobot.finding_element(finding), lerobot.finding_element(finding)*2),
+             "index.html embeds more than one finding"),
+        ]
+        for name, edit, message in cases:
+            with self.subTest(name):
+                case = self.copy(marked, f"page-{name}")
+                rewrite_page(case, edit)
+                self.assert_rejected(case, message)
+
+        # A page that shows a finding the manifest does not list is not a valid unmarked export.
+        orphan = self.copy(marked, "orphan")
+        (orphan/"finding.json").unlink()
+        manifest = json.loads((orphan/"manifest.json").read_text())
+        del manifest["sha256"]["finding.json"]
+        (orphan/"manifest.json").write_text(json.dumps(manifest, indent=2))
+        self.assert_rejected(orphan, "index.html embeds a finding but manifest.json lists no finding.json")
+
+    def test_a_folder_marked_by_0_19_0_still_verifies(self):
+        """0.19.0 wrote finding.json and its manifest entry but left index.html unchanged."""
+        legacy = self.copy(EXAMPLE, "legacy")
+        self.mark(legacy)
+        manifest = json.loads((legacy/"manifest.json").read_text())
+        shutil.copyfile(EXAMPLE/"index.html", legacy/"index.html")
+        manifest["sha256"]["index.html"] = digest(legacy/"index.html")
+        (legacy/"manifest.json").write_text(json.dumps(manifest, indent=2))
+        self.old_page(legacy)  # 0.19.0 pages also lack the reader script
+        result = lerobot.verify(legacy)
+        self.assertIs(result["finding_embedded"], False)
+        self.assertIs(result["viewer_reader_signature"], False)
+        self.assertEqual(result["finding"]["frame"], 239)
+
+    def old_page(self, directory):
+        """An export whose page script predates the finding reader (as from 0.19.0), re-hashed in its manifest."""
+        path, manifest_path = directory/"index.html", directory/"manifest.json"
+        page = path.read_text()
+        self.assertEqual(page.count(lerobot.FINDING_READER), 1)
+        path.write_text(page.replace(lerobot.FINDING_READER, "null"))
+        manifest = json.loads(manifest_path.read_text())
+        manifest["sha256"]["index.html"] = digest(path)
+        manifest_path.write_text(json.dumps(manifest, indent=2))
+
+    def test_mark_and_verify_agree_on_an_old_page(self):
+        # A note quoting the reader sits in the embedded JSON, outside the script, and cannot match.
+        quoting = f"Note mentions {lerobot.FINDING_READER} on purpose"
+        for name, note in (("plain", NOTE), ("quoting", quoting)):
+            with self.subTest(name):
+                old = self.copy(EXAMPLE, f"old-page-{name}")
+                self.old_page(old)
+                code, out, err = run_cli(*mark_args(old, note=note))
+                self.assertEqual(code, 0, err)
+                printed = json.loads(out)
+                result = lerobot.verify(old)
+                for fields in (printed, result):
+                    self.assertEqual((fields["finding_embedded"], fields["viewer_reader_signature"]), (True, False))
+        current = self.mark(self.bundle)
+        result = lerobot.verify(self.bundle)
+        self.assertEqual((current["viewer_reader_signature"], result["finding_embedded"], result["viewer_reader_signature"]),
+                         (True, True, True))
+
+    def test_reader_signature_is_only_a_static_text_check(self):
+        """R2 review probe: an inert comment quoting the reader matches the signature without adding a reader.
+
+        The output must therefore not claim display: no finding_in_viewer / viewer_shows_finding key,
+        and the docs must call the field a static check. The browser test shows such a page has no panel."""
+        old = self.copy(EXAMPLE, "old-page-comment")
+        self.old_page(old)
+        path, manifest_path = old/"index.html", old/"manifest.json"
+        page = path.read_text()
+        path.write_text(page.replace("<script>\n", f"<script>\n/* {lerobot.FINDING_READER} */\n", 1))
+        manifest = json.loads(manifest_path.read_text())
+        manifest["sha256"]["index.html"] = digest(path)
+        manifest_path.write_text(json.dumps(manifest, indent=2))
+        code, out, err = run_cli(*mark_args(old))
+        self.assertEqual(code, 0, err)
+        printed, result = json.loads(out), lerobot.verify(old)
+        for fields in (printed, result):
+            self.assertIs(fields["viewer_reader_signature"], True)
+            self.assertFalse({"finding_in_viewer", "viewer_shows_finding"} & set(fields))
+        docs = (Path(__file__).resolve().parents[1]/"docs"/"lerobot.md").read_text()
+        self.assertIn("`viewer_reader_signature`", docs)
+        self.assertIn("does not show that the reader runs", docs)
+        # The draft names appear only in the sentence explaining their replacement.
+        self.assertEqual(docs.count("finding_in_viewer"), 1)
+        self.assertIn("were replaced because they implied display", docs)
+
+    def crlf(self, directory):
+        """Convert the page to CRLF line endings, a valid export as far as the manifest is concerned."""
+        path, manifest_path = directory/"index.html", directory/"manifest.json"
+        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+        manifest = json.loads(manifest_path.read_text())
+        manifest["sha256"]["index.html"] = digest(path)
+        manifest_path.write_text(json.dumps(manifest, indent=2))
+        lerobot.verify(directory)
+        return path.read_bytes()
+
+    def test_crlf_page_is_marked_in_its_own_line_endings(self):
+        original = self.crlf(self.bundle)
+        self.mark(self.bundle)
+        page = (self.bundle/"index.html").read_bytes()
+        finding = json.loads((self.bundle/"finding.json").read_text())
+        inserted = lerobot.finding_element(finding, "\r\n").encode("utf-8")
+        self.assertEqual(page.count(inserted), 1)
+        self.assertEqual(page.replace(inserted, b"", 1), original)
+        self.assertNotIn(b"\n", page.replace(b"\r\n", b""))
+        self.assertIs(lerobot.verify(self.bundle)["viewer_reader_signature"], True)
+
+    def test_failed_mark_restores_a_crlf_page_byte_for_byte(self):
+        original = self.crlf(self.bundle)
+        manifest = (self.bundle/"manifest.json").read_bytes()
+        unmarked = lerobot.verify(self.bundle)
+        real_replace = os.replace
+
+        def failing_replace(src, dst, *args, **kwargs):
+            if Path(dst).name == "manifest.json":
+                raise OSError("simulated failure while replacing manifest.json")
+            return real_replace(src, dst, *args, **kwargs)
+
+        with mock.patch.object(lerobot.os, "replace", failing_replace):
+            code, _, err = run_cli(*mark_args(self.bundle))
+        self.assertNotEqual(code, 0)
+        self.assertIn("simulated failure", err)
+        self.assertEqual((self.bundle/"index.html").read_bytes(), original)
+        self.assertEqual((self.bundle/"manifest.json").read_bytes(), manifest)
+        self.assertFalse((self.bundle/"finding.json").exists())
+        self.assertEqual(list(self.bundle.glob(".*.tmp")), [])
+        self.assertEqual(lerobot.verify(self.bundle), unmarked)
+
+    def test_hostile_note_and_names_stay_inert_text(self):
+        hostile = "</script><script>window.pwned=1</script><img src=x onerror=alert(1)> https://evil.example/?$(rm -rf ~)"
+        code, out, err = run_cli(*mark_args(self.bundle, note=hostile))
+        self.assertEqual(code, 0, err)
+        page = (self.bundle/"index.html").read_text()
+        self.assertEqual(page.count("</script>"), (EXAMPLE/"index.html").read_text().count("</script>")+1)
+        self.assertNotIn("<script>window.pwned", page)
+        self.assertNotIn("<img src=x", page)
+        self.assertEqual(lerobot.verify(self.bundle)["finding"]["note"], hostile)
+
     def test_cli_errors_write_nothing(self):
         pairs = [f"{s['key']}/{n}" for s in self.trace["series"] for n in s["names"]]
         self.assertGreaterEqual(len(pairs), 9)
@@ -199,6 +366,7 @@ class FindingTest(unittest.TestCase):
                 self.assertIn(message, err)
                 self.assertFalse((case/"finding.json").exists())
                 self.assertEqual((case/"manifest.json").read_bytes(), manifest)
+                self.assertEqual((case/"index.html").read_bytes(), (EXAMPLE/"index.html").read_bytes())
                 self.assertEqual(list(case.glob(".*.tmp")), [])
 
     def test_an_already_marked_copy_is_not_marked_again(self):
@@ -315,6 +483,7 @@ class FindingTest(unittest.TestCase):
         self.assertIn("simulated failure", err)
         self.assertFalse((self.bundle/"finding.json").exists())
         self.assertEqual((self.bundle/"manifest.json").read_bytes(), manifest)
+        self.assertEqual((self.bundle/"index.html").read_bytes(), (EXAMPLE/"index.html").read_bytes())
         self.assertEqual(list(self.bundle.glob(".*.tmp")), [])
         self.assertEqual(lerobot.verify(self.bundle), unmarked)
 

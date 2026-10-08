@@ -46,11 +46,38 @@ if(!data.series.length)$('signals').hidden=true;
 // Say why command and measurement are not overlaid; never guess a channel mapping.
 const unpaired=!action||!state?'':action.names.length!==state.names.length?` action has ${action.names.length} channels and observation.state has ${state.names.length}, so they are shown separately; Robot Reel does not guess which channels correspond.`:` action and observation.state channel names differ, so they are shown separately; Robot Reel does not guess which channels correspond.`;
 $('explain-signals').textContent=paired?`action and observation.state share channel names, so each panel overlays the command with the measurement and links to its largest recorded difference. Units are the dataset's own.`:`${data.series.map(s=>s.key+' ('+s.names.length+')').join(', ')||'No numeric signals'}.${unpaired} Click or drag a chart to move to that frame. Units are the dataset's own.`;
+// A sealed finding (robot-reel lerobot --mark) arrives as inert JSON beside the episode data.
+// Every value is display text: it is shown with textContent and checked against this page's own episode data.
+function readFinding(){const node=document.querySelector('#finding-data');if(!node)return null;let f;
+ try{f=JSON.parse(node.textContent);}catch{return {error:'its data is not readable JSON'};}
+ if(!f||typeof f!=='object'||Array.isArray(f))return {error:'its data is not a JSON object'};
+ if(f.schema!=='robot-reel-lerobot-finding-1')return {error:'its schema is not robot-reel-lerobot-finding-1'};
+ if(f.episode!==data.episode)return {error:`it names episode ${String(f.episode)}, but this page holds episode ${data.episode}`};
+ if(!Number.isInteger(f.frame)||f.frame<0||f.frame>=n)return {error:`its frame is outside 0..${n-1}`};
+ if(f.timestamp!==stamps[f.frame])return {error:`frame ${f.frame} is at ${stamps[f.frame]} s in this episode, not ${String(f.timestamp)} s`};
+ if(typeof f.note!=='string'||!f.note)return {error:'its note is missing'};
+ if(!Array.isArray(f.signals)||!f.signals.length||f.signals.length>8)return {error:'it lists no signals, or more than 8'};
+ for(const s of f.signals){const series=s&&data.series.find(x=>x.key===s.key),i=series?series.names.indexOf(s.name):-1;
+  if(i<0)return {error:`${String(s&&s.key)}/${String(s&&s.name)} is not a channel in this episode`};
+  if(series.values[f.frame][i]!==s.value)return {error:`${s.key}/${s.name} at frame ${f.frame} is ${series.values[f.frame][i]} in this episode, not ${String(s.value)}`};}
+ return {finding:f};}
+const sealed=readFinding(),findingFrame=sealed&&sealed.finding?sealed.finding.frame:null;
+if(sealed){const box=document.createElement('section'),eyebrow=document.createElement('div'),title=document.createElement('h2'),note=document.createElement('p'),limits=document.createElement('p');
+ box.setAttribute('aria-labelledby','finding-title');eyebrow.className='eyebrow';title.id='finding-title';limits.className='quiet';box.append(eyebrow,title);
+ if(sealed.error){box.className='finding error';box.setAttribute('role','alert');eyebrow.textContent='Sealed finding / cannot be shown';title.textContent='This page carries a finding that does not match its episode.';
+  note.textContent=`Do not rely on it: ${sealed.error}. Run robot-reel lerobot FOLDER --verify on the received folder for the exact problem.`;box.append(note);}
+ else{const f=sealed.finding;box.className='finding';box.id='finding';eyebrow.textContent='Sealed finding / recorded observation';title.textContent=`Frame ${f.frame} · ${stamps[f.frame].toFixed(3)} s · episode ${data.episode}`;note.className='note';note.textContent=f.note;
+  const table=document.createElement('table'),head=table.createTHead().insertRow(),body=table.createTBody();for(const label of ['Signal','Recorded value at this frame']){const th=document.createElement('th');th.scope='col';th.textContent=label;head.append(th);}
+  for(const s of f.signals){const row=body.insertRow();row.insertCell().textContent=`${s.key}/${s.name}`;row.insertCell().textContent=s.value===null?'not recorded':String(s.value);}
+  const go=document.createElement('button');go.className='primary';go.id='finding-go';go.textContent=`Go to frame ${f.frame}`;go.onclick=()=>{seek(f.frame);$('status').textContent=`Showing the sealed frame ${f.frame}.`;};
+  limits.textContent='An observation, not a failure label or signature. This page compared it with its own episode data only; it did not run robot-reel --verify, check file hashes or identify who wrote it. Run robot-reel lerobot FOLDER --verify on the received folder.';
+  box.append(note,table,go,limits);}
+ document.querySelector('.workspace').before(box);}
 function paint(item){const c=item.canvas,dpr=devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;if(!w)return;if(c.width!==Math.round(w*dpr)||c.height!==Math.round(h*dpr)){c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);item.cache=null;}const g=c.getContext('2d');
  if(!item.cache){g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,w,h);g.strokeStyle='#293946';g.lineWidth=1;g.beginPath();g.moveTo(0,h-.5);g.lineTo(w,h-.5);g.stroke();const y=v=>h-4-(v-item.lo)/(item.hi-item.lo)*(h-8),x=f=>f/(n-1)*w;
   for(const line of item.lines){g.strokeStyle=line.color;g.lineWidth=1.4;g.setLineDash(line.dash?[4,3]:[]);g.beginPath();let pen=false;for(let f=0;f<n;f++){const v=line.rows[f][line.index];if(v===null){pen=false;continue;}if(pen)g.lineTo(x(f),y(v));else g.moveTo(x(f),y(v));pen=true;}g.stroke();}
   g.setLineDash([]);item.cache=g.getImageData(0,0,c.width,c.height);}
- g.putImageData(item.cache,0,0);g.setTransform(dpr,0,0,dpr,0,0);const x=current/(n-1)*w;g.strokeStyle='#eef4f3';g.globalAlpha=.7;g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke();g.globalAlpha=1;
+ g.putImageData(item.cache,0,0);g.setTransform(dpr,0,0,dpr,0,0);if(findingFrame!==null){const fx=findingFrame/(n-1)*w;g.strokeStyle='#ffbe7f';g.setLineDash([3,3]);g.beginPath();g.moveTo(fx,0);g.lineTo(fx,h);g.stroke();g.setLineDash([]);}const x=current/(n-1)*w;g.strokeStyle='#eef4f3';g.globalAlpha=.7;g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke();g.globalAlpha=1;
  item.lines.forEach((line,i)=>{const v=line.rows[current][line.index];item.cells[i].textContent=v===null?'—':Math.abs(v)>=1e4||(v!==0&&Math.abs(v)<1e-3)?v.toExponential(2):v.toFixed(3);});}
 function draw(index){current=Math.max(0,Math.min(n-1,index));$('counter').textContent=`Frame ${current} / ${n-1}`;$('timeline').value=current;$('time').textContent=stamps[current].toFixed(3);$('frame').textContent=String(current);charts.forEach(paint);}
 function seek(index){pause();index=Math.max(0,Math.min(n-1,index));clock=index/fps;for(const v of videos)if(v.readyState>=1)v.currentTime=(index+.5)/fps;draw(index);}

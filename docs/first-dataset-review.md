@@ -102,10 +102,16 @@ robot-reel lerobot received/so101 --verify --check-media
 ```
 
 The JSON output contains a `finding` object with the sealed episode, frame,
-timestamp, signal values and note. To see the frame, open
+timestamp, signal values and note. To see the frame with 0.19.0, open
 `received/so101/index.html`, step to the printed frame with the frame
-controls and confirm the position against the printed timestamp. The viewer
-does not highlight the finding.
+controls and confirm the position against the printed timestamp; the 0.19.0
+page does not show the finding.
+
+Releases after 0.19.0 show it: a folder marked with one opens with a *Sealed
+finding* panel giving the note, frame, timestamp and recorded values, and a
+**Go to frame 239** button that moves both cameras and the charts to that frame,
+offline. The panel compares the finding only with the page's own data; it is not
+a substitute for the `--verify` run above.
 
 robot-reel 0.18.x and earlier, including 0.17.1, report a marked folder as
 `Incomplete LeRobot replay manifest`. Upgrading to 0.19.0 or later fixes this.
@@ -129,8 +135,10 @@ and stays consistent with `episode.json` is not detected. Examples are another
 valid note, another version string, or another frame with its matching
 recorded values.
 
-To return a folder to its unmarked form, delete `finding.json` and remove its
-one entry from `manifest.json`. Old and new releases then both verify it.
+To return a folder marked by 0.19.0 to its unmarked form, delete
+`finding.json` and remove its one entry from `manifest.json`. Old and new
+releases then both verify it. Later releases also embed the finding in
+`index.html`, so keep an unmarked copy from before marking.
 
 `--check-source` additionally needs access to the pinned source files, through
 the Hub/cache or a supplied local dataset. It compares exported values against

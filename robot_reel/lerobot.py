@@ -6,7 +6,7 @@
     robot-reel lerobot artifacts/so101 --mark 239 --signal action/shoulder_pan.pos --note "What you saw"
 
 --mark seals one frame/channel observation into a verified export as a hashed
-finding.json; --verify on any copy re-checks it against episode.json.
+finding.json and shows it in the page; --verify on any copy re-checks it against episode.json.
 
 Reading a dataset needs the `lerobot` extra (pyarrow, huggingface_hub); the
 LeRobot library itself is not imported. --verify alone uses only the standard
@@ -43,6 +43,41 @@ FINDING_LIMITATIONS = ("An observation at one recorded frame. It is not a failur
                        "or a signature: the manifest hashes show the files are unchanged since marking, not who wrote them.")
 MAX_FINDING_SIGNALS = 8
 MAX_NOTE = 2000
+# --mark also embeds the finding in index.html (offline pages cannot fetch finding.json).
+EPISODE_MARKER = '<script id="episode-data" type="application/json">'
+FINDING_MARKER = '<script id="finding-data" type="application/json">'
+
+
+# The page script that renders an embedded finding; pages without it (0.19.0 and earlier) ignore the data.
+FINDING_READER = "document.querySelector('#finding-data')"
+
+
+def finding_element(finding, newline="\n"):
+    """The one line --mark inserts into index.html: the finding as inert JSON, '<' escaped."""
+    payload = json.dumps(finding, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
+    return f"{FINDING_MARKER}{payload}</script>{newline}"
+
+
+def embed_finding(html, finding):
+    """Insert the finding line directly after the episode-data element, keeping that line's own
+    ending (LF or CRLF); removing the inserted line restores html exactly."""
+    start = html.index(EPISODE_MARKER)
+    end = html.index("</script>", start)+len("</script>")
+    newline = "\r\n" if html.startswith("\r\n", end) else "\n"
+    if html.startswith(newline, end):
+        end += len(newline)
+    return html[:end]+finding_element(finding, newline)+html[end:]
+
+
+def reader_signature(html):
+    """Static check: the page's attribute-free inline script contains the finding reader's text.
+
+    This is a substring match, not proof that the reader runs or that a panel is visible: a
+    comment quoting the text also matches. Text inside the embedded episode or finding JSON
+    cannot match. Rendering is established separately, by the browser tests."""
+    start = html.find("<script>")
+    end = html.find("</script>", start)
+    return start >= 0 and end > start and FINDING_READER in html[start:end]
 
 
 class Source:
@@ -415,11 +450,28 @@ def verify(directory):
         if digest(directory/filename) != value:
             raise ValueError(f"Hash mismatch: {filename}")
     html = (directory/"index.html").read_text()
-    marker = '<script id="episode-data" type="application/json">'
+    marker = EPISODE_MARKER
     if html.count(marker) != 1 or json.loads(html.split(marker)[1].split("</script>", 1)[0]) != trace:
         raise ValueError("Viewer differs from episode.json")
+    embedded = html.count(FINDING_MARKER)
+    if embedded > 1:
+        raise ValueError("index.html embeds more than one finding; re-mark a fresh copy of the export")
+    if embedded and not marked:
+        raise ValueError(f"index.html embeds a finding but manifest.json lists no {FINDING}; re-mark a fresh copy of the export")
     if marked:
         result["finding"] = verify_finding(directory/FINDING, trace, manifest["sha256"]["episode.json"])
+        if embedded:
+            try:
+                shown = json.loads(html.split(FINDING_MARKER)[1].split("</script>", 1)[0])
+            except ValueError:
+                raise ValueError("The finding embedded in index.html is not readable JSON") from None
+            if shown != result["finding"]:
+                raise ValueError(f"The finding embedded in index.html differs from {FINDING}")
+        # finding_embedded: index.html carries a copy equal to finding.json (0.19.0 never wrote one).
+        # viewer_reader_signature: static substring check of the page script (see reader_signature);
+        # it does not establish that the finding is displayed.
+        result["finding_embedded"] = bool(embedded)
+        result["viewer_reader_signature"] = reader_signature(html)
     return result
 
 
@@ -526,11 +578,11 @@ def package_version():
 
 
 def replace_beside(path, text, mode_source, temporary):
-    """Write text to a temporary file in path's folder, then rename it over path."""
+    """Write text (str, UTF-8) or exact bytes to a temporary file in path's folder, then rename it over path."""
     handle, name = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
     temporary.append(Path(name))
-    with os.fdopen(handle, "w", encoding="utf-8") as stream:
-        stream.write(text)
+    with os.fdopen(handle, "wb") as stream:
+        stream.write(text if isinstance(text, bytes) else text.encode("utf-8"))
     shutil.copymode(mode_source, name)
     os.replace(name, path)
 
@@ -552,12 +604,20 @@ def mark(directory, frame, signals, note):
         "limitations": FINDING_LIMITATIONS,
     }
     text = json.dumps(finding, indent=2, allow_nan=False)+"\n"
-    temporary, placed, sealed = [], False, False
+    viewer_path = directory/"index.html"
+    # Bytes in, bytes out: no newline or encoding normalisation, so rollback restores the hashed page exactly.
+    original = viewer_path.read_bytes()
+    viewer = original.decode("utf-8")
+    marked_page = embed_finding(viewer, finding).encode("utf-8")
+    temporary, placed, rewritten, sealed = [], False, False, False
     try:
         replace_beside(target, text, manifest_path, temporary)
         placed = True
+        replace_beside(viewer_path, marked_page, viewer_path, temporary)
+        rewritten = True
         hashes = dict(manifest["sha256"])
         hashes[FINDING] = digest(target)
+        hashes["index.html"] = digest(viewer_path)
         manifest["sha256"] = dict(sorted(hashes.items()))
         # The manifest is always replaced last; until then verify reports an unlisted finding.json.
         replace_beside(manifest_path, json.dumps(manifest, indent=2)+"\n", manifest_path, temporary)
@@ -565,11 +625,15 @@ def mark(directory, frame, signals, note):
     except BaseException:
         for path in temporary:
             path.unlink(missing_ok=True)
+        if rewritten and not sealed:
+            replace_beside(viewer_path, original, viewer_path, [])
         if placed and not sealed:
             target.unlink(missing_ok=True)
         raise
     result = {"episode": finding["episode"], "frame": frame, "timestamp": finding["timestamp"],
-              "signals": recorded, "output": str(target)}
+              "signals": recorded, "output": str(target),
+              # Same two fields as --verify. The signature is a static text check, not a display check.
+              "finding_embedded": True, "viewer_reader_signature": reader_signature(marked_page.decode("utf-8"))}
     missing = [f"{s['key']}/{s['name']}" for s in recorded if s["value"] is None]
     if missing:
         result["no_recorded_value"] = missing

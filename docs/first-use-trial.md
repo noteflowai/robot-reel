@@ -26,7 +26,7 @@ or a local dataset path, and `0` with your episode.
 ```bash
 start=$(date +%s)
 python3 -m venv rr-trial && . rr-trial/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.18.4'
+python -m pip install 'robot-reel[lerobot]==0.19.0'
 installed=$(date +%s)
 robot-reel lerobot YOUR/DATASET --episode 0 --output my-episode
 exported=$(date +%s)
