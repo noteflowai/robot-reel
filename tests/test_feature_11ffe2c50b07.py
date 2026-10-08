@@ -127,6 +127,7 @@ class FindingTest(unittest.TestCase):
         result = lerobot.verify(moved)
         self.assertEqual(result["finding"], finding)
         self.assertIs(result.pop("finding_in_viewer"), True)
+        self.assertIs(result.pop("finding_embedded"), True)
         self.assertEqual({k: v for k, v in result.items() if k != "finding"}, unmarked)
         code, out, err = run_cli(moved, "--verify")
         self.assertEqual(code, 0, err)
@@ -218,8 +219,79 @@ class FindingTest(unittest.TestCase):
         manifest["sha256"]["index.html"] = digest(legacy/"index.html")
         (legacy/"manifest.json").write_text(json.dumps(manifest, indent=2))
         result = lerobot.verify(legacy)
+        self.assertIs(result["finding_embedded"], False)
         self.assertIs(result["finding_in_viewer"], False)
         self.assertEqual(result["finding"]["frame"], 239)
+
+    def old_page(self, directory):
+        """An export whose page script predates the finding reader (as from 0.19.0), re-hashed in its manifest."""
+        path, manifest_path = directory/"index.html", directory/"manifest.json"
+        page = path.read_text()
+        self.assertEqual(page.count(lerobot.FINDING_READER), 1)
+        path.write_text(page.replace(lerobot.FINDING_READER, "null"))
+        manifest = json.loads(manifest_path.read_text())
+        manifest["sha256"]["index.html"] = digest(path)
+        manifest_path.write_text(json.dumps(manifest, indent=2))
+
+    def test_mark_and_verify_agree_on_an_old_page(self):
+        # Even a note quoting the reader must not make an old page count as showing the finding.
+        quoting = f"Note mentions {lerobot.FINDING_READER} on purpose"
+        for name, note in (("plain", NOTE), ("quoting", quoting)):
+            with self.subTest(name):
+                old = self.copy(EXAMPLE, f"old-page-{name}")
+                self.old_page(old)
+                code, out, err = run_cli(*mark_args(old, note=note))
+                self.assertEqual(code, 0, err)
+                self.assertIs(json.loads(out)["viewer_shows_finding"], False)
+                result = lerobot.verify(old)
+                self.assertIs(result["finding_embedded"], True)
+                self.assertIs(result["finding_in_viewer"], False)
+        current = self.mark(self.bundle)
+        result = lerobot.verify(self.bundle)
+        self.assertEqual((current["viewer_shows_finding"], result["finding_embedded"], result["finding_in_viewer"]),
+                         (True, True, True))
+
+    def crlf(self, directory):
+        """Convert the page to CRLF line endings, a valid export as far as the manifest is concerned."""
+        path, manifest_path = directory/"index.html", directory/"manifest.json"
+        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+        manifest = json.loads(manifest_path.read_text())
+        manifest["sha256"]["index.html"] = digest(path)
+        manifest_path.write_text(json.dumps(manifest, indent=2))
+        lerobot.verify(directory)
+        return path.read_bytes()
+
+    def test_crlf_page_is_marked_in_its_own_line_endings(self):
+        original = self.crlf(self.bundle)
+        self.mark(self.bundle)
+        page = (self.bundle/"index.html").read_bytes()
+        finding = json.loads((self.bundle/"finding.json").read_text())
+        inserted = lerobot.finding_element(finding, "\r\n").encode("utf-8")
+        self.assertEqual(page.count(inserted), 1)
+        self.assertEqual(page.replace(inserted, b"", 1), original)
+        self.assertNotIn(b"\n", page.replace(b"\r\n", b""))
+        self.assertIs(lerobot.verify(self.bundle)["finding_in_viewer"], True)
+
+    def test_failed_mark_restores_a_crlf_page_byte_for_byte(self):
+        original = self.crlf(self.bundle)
+        manifest = (self.bundle/"manifest.json").read_bytes()
+        unmarked = lerobot.verify(self.bundle)
+        real_replace = os.replace
+
+        def failing_replace(src, dst, *args, **kwargs):
+            if Path(dst).name == "manifest.json":
+                raise OSError("simulated failure while replacing manifest.json")
+            return real_replace(src, dst, *args, **kwargs)
+
+        with mock.patch.object(lerobot.os, "replace", failing_replace):
+            code, _, err = run_cli(*mark_args(self.bundle))
+        self.assertNotEqual(code, 0)
+        self.assertIn("simulated failure", err)
+        self.assertEqual((self.bundle/"index.html").read_bytes(), original)
+        self.assertEqual((self.bundle/"manifest.json").read_bytes(), manifest)
+        self.assertFalse((self.bundle/"finding.json").exists())
+        self.assertEqual(list(self.bundle.glob(".*.tmp")), [])
+        self.assertEqual(lerobot.verify(self.bundle), unmarked)
 
     def test_hostile_note_and_names_stay_inert_text(self):
         hostile = "</script><script>window.pwned=1</script><img src=x onerror=alert(1)> https://evil.example/?$(rm -rf ~)"

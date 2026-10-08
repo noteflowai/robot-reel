@@ -48,17 +48,35 @@ EPISODE_MARKER = '<script id="episode-data" type="application/json">'
 FINDING_MARKER = '<script id="finding-data" type="application/json">'
 
 
-def finding_element(finding):
+# The page script that renders an embedded finding; pages without it (0.19.0 and earlier) ignore the data.
+FINDING_READER = "document.querySelector('#finding-data')"
+
+
+def finding_element(finding, newline="\n"):
     """The one line --mark inserts into index.html: the finding as inert JSON, '<' escaped."""
     payload = json.dumps(finding, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c")
-    return f"{FINDING_MARKER}{payload}</script>\n"
+    return f"{FINDING_MARKER}{payload}</script>{newline}"
 
 
 def embed_finding(html, finding):
-    """Insert the finding line directly after the episode-data element; removing it restores html exactly."""
+    """Insert the finding line directly after the episode-data element, keeping that line's own
+    ending (LF or CRLF); removing the inserted line restores html exactly."""
     start = html.index(EPISODE_MARKER)
-    end = html.index("</script>\n", start)+len("</script>\n")
-    return html[:end]+finding_element(finding)+html[end:]
+    end = html.index("</script>", start)+len("</script>")
+    newline = "\r\n" if html.startswith("\r\n", end) else "\n"
+    if html.startswith(newline, end):
+        end += len(newline)
+    return html[:end]+finding_element(finding, newline)+html[end:]
+
+
+def page_reads_finding(html):
+    """Whether the page's own inline script renders an embedded finding.
+
+    Only the script element without attributes is searched, so text inside the
+    embedded episode or finding JSON (for example a note quoting the reader) cannot count."""
+    start = html.find("<script>")
+    end = html.find("</script>", start)
+    return start >= 0 and end > start and FINDING_READER in html[start:end]
 
 
 class Source:
@@ -448,8 +466,11 @@ def verify(directory):
                 raise ValueError("The finding embedded in index.html is not readable JSON") from None
             if shown != result["finding"]:
                 raise ValueError(f"The finding embedded in index.html differs from {FINDING}")
-        # Folders marked by 0.19.0 carry finding.json only; their page does not show it.
-        result["finding_in_viewer"] = bool(embedded)
+        # finding_embedded: index.html carries a copy equal to finding.json (0.19.0 never wrote one).
+        # finding_in_viewer: that copy is present AND this page's script renders it. A page exported
+        # by 0.19.0 or earlier and marked later is embedded but does not show the finding.
+        result["finding_embedded"] = bool(embedded)
+        result["finding_in_viewer"] = bool(embedded) and page_reads_finding(html)
     return result
 
 
@@ -556,11 +577,11 @@ def package_version():
 
 
 def replace_beside(path, text, mode_source, temporary):
-    """Write text to a temporary file in path's folder, then rename it over path."""
+    """Write text (str, UTF-8) or exact bytes to a temporary file in path's folder, then rename it over path."""
     handle, name = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
     temporary.append(Path(name))
-    with os.fdopen(handle, "w", encoding="utf-8") as stream:
-        stream.write(text)
+    with os.fdopen(handle, "wb") as stream:
+        stream.write(text if isinstance(text, bytes) else text.encode("utf-8"))
     shutil.copymode(mode_source, name)
     os.replace(name, path)
 
@@ -583,12 +604,15 @@ def mark(directory, frame, signals, note):
     }
     text = json.dumps(finding, indent=2, allow_nan=False)+"\n"
     viewer_path = directory/"index.html"
-    viewer = viewer_path.read_text()
+    # Bytes in, bytes out: no newline or encoding normalisation, so rollback restores the hashed page exactly.
+    original = viewer_path.read_bytes()
+    viewer = original.decode("utf-8")
+    marked_page = embed_finding(viewer, finding).encode("utf-8")
     temporary, placed, rewritten, sealed = [], False, False, False
     try:
         replace_beside(target, text, manifest_path, temporary)
         placed = True
-        replace_beside(viewer_path, embed_finding(viewer, finding), viewer_path, temporary)
+        replace_beside(viewer_path, marked_page, viewer_path, temporary)
         rewritten = True
         hashes = dict(manifest["sha256"])
         hashes[FINDING] = digest(target)
@@ -601,14 +625,15 @@ def mark(directory, frame, signals, note):
         for path in temporary:
             path.unlink(missing_ok=True)
         if rewritten and not sealed:
-            replace_beside(viewer_path, viewer, viewer_path, [])
+            replace_beside(viewer_path, original, viewer_path, [])
         if placed and not sealed:
             target.unlink(missing_ok=True)
         raise
     result = {"episode": finding["episode"], "frame": frame, "timestamp": finding["timestamp"],
               "signals": recorded, "output": str(target),
-              # An export made before the viewer could show findings keeps its older page script.
-              "viewer_shows_finding": "#finding-data" in viewer}
+              # Same rule as --verify's finding_in_viewer: the finding is embedded (always, after --mark)
+              # and the export's own page script renders it. Pages from 0.19.0 and earlier do not.
+              "viewer_shows_finding": page_reads_finding(marked_page.decode("utf-8"))}
     missing = [f"{s['key']}/{s['name']}" for s in recorded if s["value"] is None]
     if missing:
         result["no_recorded_value"] = missing

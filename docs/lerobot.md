@@ -145,10 +145,17 @@ that frame. `#frame=N` links still open at their own frame. The page treats the
 note and names as plain text. It compares the finding with its own embedded
 episode data and shows an error instead of the panel if they disagree. It does
 not run `--verify`, check hashes or identify the author; run `--verify` for that.
-A folder marked by 0.19.0 has no embedded copy: `--verify` reports
-`"finding_in_viewer": false`, so step to the printed frame with the frame controls.
-If the export's page predates this viewer, `--mark` prints
-`"viewer_shows_finding": false`; re-export with the newer release to get the panel.
+For a marked folder `--verify` reports two fields, and `--mark` prints the second
+one as `viewer_shows_finding`:
+
+- `finding_embedded`: `index.html` carries a copy equal to `finding.json`.
+  It is false for folders marked by 0.19.0.
+- `finding_in_viewer`: that copy is present **and** the page's own script renders
+  it. It is false for folders marked by 0.19.0, and for exports made by 0.19.0 or
+  earlier and marked later: their older page ignores the embedded copy.
+
+When it is false, step to the printed frame with the frame controls, or re-export
+with the newer release and mark again to get the panel.
 
 robot-reel 0.18.x and earlier report a marked export as `Incomplete LeRobot
 replay manifest`; upgrade to 0.19.0 or later to read it. To return an export to

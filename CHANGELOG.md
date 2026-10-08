@@ -10,9 +10,12 @@
   only as text; a finding that disagrees with the page's episode data is shown
   as an error. `--verify` requires the embedded copy to equal `finding.json`,
   rejects an embedded finding without a listed `finding.json`, and reports
-  `finding_in_viewer`. Folders marked by 0.19.0 still verify
-  (`finding_in_viewer: false`). Unmarked exports and `#frame=N` links are
-  unchanged. Marking now also updates the `index.html` hash.
+  `finding_embedded` (a copy is in the page) and `finding_in_viewer` (embedded and
+  the page's own script renders it); `--mark` prints the same rule as
+  `viewer_shows_finding`. Folders marked by 0.19.0 still verify, with both false.
+  Unmarked exports and `#frame=N` links are unchanged. Marking now also updates
+  the `index.html` hash; it edits the page as bytes, keeping its line endings, and
+  a failed mark restores the original bytes.
 - First-use trial guide installs the current release, 0.19.0.
 
 ## 0.19.0 — 2026-10-04
