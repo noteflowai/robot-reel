@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.19.1 — 2026-10-09
+
 - LeRobot replay: a folder marked with `--mark` now shows its sealed finding in
   the offline page. The panel gives the note, frame, timestamp and recorded
   values, plus a keyboard-accessible **Go to frame N** button that uses the
@@ -15,9 +17,11 @@
   display); `--mark` prints the same two fields. Folders marked by 0.19.0 still
   verify, with both false.
   Unmarked exports and `#frame=N` links are unchanged. Marking now also updates
-  the `index.html` hash; it edits the page as bytes, keeping its line endings, and
-  a failed mark restores the original bytes.
-- First-use trial guide installs the current release, 0.19.0.
+  the `index.html` hash; it edits the page as bytes, keeping its line endings. A
+  failed mark removes `finding.json` and restores the original page bytes; this
+  is best effort, not crash atomicity: after a second I/O failure files can
+  remain, and `--verify` rejects the folder (exit 2).
+- First-use trial and dataset-review guides install 0.19.1.
 
 ## 0.19.0 — 2026-10-04
 

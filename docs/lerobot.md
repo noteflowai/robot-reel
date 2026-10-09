@@ -17,7 +17,7 @@ joints, 303 frames at 30 fps.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.19.0'
+python -m pip install 'robot-reel[lerobot]==0.19.1'
 
 # Any public Hub dataset; only the files this episode needs are downloaded.
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
@@ -103,7 +103,7 @@ robot-reel lerobot received/so101 --verify --check-media
 `episode.json`, writes `finding.json` (episode, frame, timestamp, each
 `{key, name, value}`, the note, the `episode.json` hash and the Robot Reel
 version) and adds its SHA-256 to `manifest.json`. In 0.19.0 every other hash is
-unchanged. Releases after 0.19.0 also insert the finding into `index.html` as one
+unchanged. 0.19.1 and later also insert the finding into `index.html` as one
 inert JSON line and update that hash, so the page can show it (see below).
 On the SO-101 example it records 45.14706 (`action`) and 61.75649
 (`observation.state`). The recipient's `--verify` output then contains a
@@ -126,7 +126,7 @@ export, and an export that already carries a finding (one per bundle).
 - A re-hashed finding breaks the rules above or the fixed schema: `Invalid finding: FIELD`.
 - `finding.json` exists but is not in the manifest, for example after an
   interrupted `--mark`. Delete `finding.json` and mark again, or re-mark a fresh copy.
-- After 0.19.0: the finding embedded in `index.html` differs from `finding.json`,
+- From 0.19.1: the finding embedded in `index.html` differs from `finding.json`,
   is unreadable, appears twice, or appears without a listed `finding.json`.
 
 A finding records an observation. It is not a failure label, a calibrated
@@ -137,7 +137,7 @@ with its matching values) is not detected. `FRAME` is an index into
 `episode.json`, so check the timestamp and values printed by `--mark` against
 what you saw before handing off.
 
-**In the page.** A folder marked by a release after 0.19.0 opens with a *Sealed
+**In the page.** A folder marked by 0.19.1 or later opens with a *Sealed
 finding* panel above the cameras. It shows the note, frame, timestamp and each
 recorded value, and a **Go to frame N** button that uses the normal frame
 seek, so it works from the keyboard. The signal charts get a dashed marker at
@@ -158,9 +158,9 @@ checks of the files; neither opens a browser:
 That the panel actually renders and the button reaches the frame is covered by
 the browser tests, not by these fields. If the page has no panel, step to the
 printed frame with the frame controls, or re-export with the newer release and
-mark again. Released 0.19.0 output has neither field; the unreleased names
-`finding_in_viewer` and `viewer_shows_finding` from earlier drafts of this change
-were replaced because they implied display.
+mark again. 0.19.0 output has neither field; the names
+`finding_in_viewer` and `viewer_shows_finding`, which appeared only in unreleased
+drafts, were replaced because they implied display.
 
 robot-reel 0.18.x and earlier report a marked export as `Incomplete LeRobot
 replay manifest`; upgrade to 0.19.0 or later to read it. To return an export to
@@ -168,6 +168,14 @@ its unmarked form, keep a copy from before marking. For a folder marked by
 0.19.0, deleting `finding.json` and its one entry in `manifest.json` is enough.
 Later releases also add one line to `index.html` (`<script id="finding-data" …>`);
 removing that line restores the original page bytes and its original hash.
+
+If `--mark` fails while writing, it removes `finding.json` and restores the
+original `index.html` bytes before exiting. This is best effort, not crash
+atomicity: if the restore itself fails (a second I/O error) or the process is
+killed mid-way, changed files can remain. `--verify` then rejects the folder
+with exit status 2 and names the first problem it finds, for example
+`finding.json is present but not listed in manifest.json`. Use the unmarked copy
+you kept, or re-export.
 
 ## Supported datasets and limits
 
