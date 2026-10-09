@@ -81,6 +81,9 @@ class ReleaseTests(unittest.TestCase):
             with self.subTest(guide=guide):
                 self.assertEqual(wheels, {version})
         self.assertTrue((root/"docs/offline-lab.md").read_text().startswith(f"# Robot Reel {version} — "))
+        # The Space card is published separately; its install pin must follow the package version too.
+        pins = set(re.findall(r"robot-reel==([0-9][^`' ]*)", (root/"huggingface/README.md").read_text()))
+        self.assertEqual(pins, {version})
 
 
 if __name__ == "__main__":

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Hugging Face Space card installs the current release (its pin had stayed at
+  0.18.4 through 0.19.0 and 0.19.1); a release test now checks it.
+
 ## 0.19.1 — 2026-10-09
 
 - LeRobot replay: a folder marked with `--mark` now shows its sealed finding in
