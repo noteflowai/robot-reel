@@ -280,6 +280,30 @@ class FindingTest(unittest.TestCase):
         self.assertEqual(docs.count("finding_in_viewer"), 1)
         self.assertIn("were replaced because they implied display", docs)
 
+    def test_a_second_io_failure_can_leave_files_that_verify_rejects(self):
+        """Documented limit: rollback is best effort, not crash atomicity."""
+        real_replace = os.replace
+
+        def failing_replace(src, dst, *args, **kwargs):
+            # Writing the marked page succeeds; the manifest and the page restore both fail.
+            if Path(dst).name == "manifest.json" or (Path(dst).name == "index.html" and failing_replace.page_written):
+                raise OSError("simulated I/O failure")
+            if Path(dst).name == "index.html":
+                failing_replace.page_written = True
+            return real_replace(src, dst, *args, **kwargs)
+        failing_replace.page_written = False
+
+        with mock.patch.object(lerobot.os, "replace", failing_replace):
+            code, _, err = run_cli(*mark_args(self.bundle))
+        self.assertEqual(code, 2)
+        self.assertIn("simulated I/O failure", err)
+        # finding.json and the marked page remain; the manifest is the old one.
+        self.assertTrue((self.bundle/"finding.json").exists())
+        self.assertNotEqual((self.bundle/"index.html").read_bytes(), (EXAMPLE/"index.html").read_bytes())
+        self.assert_rejected(self.bundle, "finding.json is present but not listed in manifest.json")
+        (self.bundle/"finding.json").unlink()
+        self.assert_rejected(self.bundle, "Hash mismatch: index.html")
+
     def crlf(self, directory):
         """Convert the page to CRLF line endings, a valid export as far as the manifest is concerned."""
         path, manifest_path = directory/"index.html", directory/"manifest.json"

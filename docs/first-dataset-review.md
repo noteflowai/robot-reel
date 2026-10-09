@@ -16,7 +16,7 @@ checkout, GPU, model account and LeRobot installation are not required.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.19.0'
+python -m pip install 'robot-reel[lerobot]==0.19.1'
 
 robot-reel lerobot lerobot/svla_so101_pickplace \
   --revision f641879e22172be7e8161d5e6c1503c2d2feb657 \
@@ -97,7 +97,7 @@ The recipient installs the same release and checks the folder from any path,
 without contacting the Hub:
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.19.0'
+python -m pip install 'robot-reel[lerobot]==0.19.1'
 robot-reel lerobot received/so101 --verify --check-media
 ```
 
@@ -107,7 +107,7 @@ timestamp, signal values and note. To see the frame with 0.19.0, open
 controls and confirm the position against the printed timestamp; the 0.19.0
 page does not show the finding.
 
-Releases after 0.19.0 show it: a folder marked with one opens with a *Sealed
+0.19.1 and later show it: a folder marked with one opens with a *Sealed
 finding* panel giving the note, frame, timestamp and recorded values, and a
 **Go to frame 239** button that moves both cameras and the charts to that frame,
 offline. The panel compares the finding only with the page's own data; it is not
