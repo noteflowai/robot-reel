@@ -16,7 +16,7 @@ checkout, GPU, model account and LeRobot installation are not required.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.19.1'
+python -m pip install 'robot-reel[lerobot]==0.19.2'
 
 robot-reel lerobot lerobot/svla_so101_pickplace \
   --revision f641879e22172be7e8161d5e6c1503c2d2feb657 \
@@ -97,7 +97,7 @@ The recipient installs the same release and checks the folder from any path,
 without contacting the Hub:
 
 ```bash
-python -m pip install 'robot-reel[lerobot]==0.19.1'
+python -m pip install 'robot-reel[lerobot]==0.19.2'
 robot-reel lerobot received/so101 --verify --check-media
 ```
 
