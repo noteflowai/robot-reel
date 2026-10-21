@@ -2,8 +2,17 @@
 
 ## Unreleased
 
+## 0.19.2 — 2026-10-21
+
+- Recording: `Capture` reads the MuJoCo model and data through strands-robots'
+  public read-only accessors (`mj_model`, `mj_data`) instead of its private
+  `_world` object, so the recorder no longer depends on that library's internals.
+  The objects are identical (checked for `so100` and `unitree_g1` with
+  strands-robots 0.5.1); recordings are unchanged. A missing MuJoCo world now
+  fails with a clear error.
 - Hugging Face Space card installs the current release (its pin had stayed at
   0.18.4 through 0.19.0 and 0.19.1); a release test now checks it.
+- Install guides and the citation point to 0.19.2.
 
 ## 0.19.1 — 2026-10-09
 
