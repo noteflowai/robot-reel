@@ -34,8 +34,12 @@ class Capture:
 
         self.name, self.output = name, output
         self.robot = Robot(name, mode="sim", backend="mujoco")
-        # This adapter intentionally pins strands-robots: the backend access is private.
-        self.model, self.data = self.robot._world._model, self.robot._world._data
+        # strands-robots' public read-only accessors (mj_model / mj_data) instead of its private
+        # world object. Capture owns this simulation and drives it on a single thread, so the
+        # engine's lock is not contended; nothing else steps it.
+        self.model, self.data = self.robot.mj_model, self.robot.mj_data
+        if self.model is None or self.data is None:
+            raise RuntimeError(f"strands-robots created no MuJoCo world for {name}")
         m = self.model
         self.ids = [int(m.actuator_trnid[i, 0]) for i in range(m.nu)]
         self.names = [m.joint(i).name.split("/")[-1] for i in self.ids]
