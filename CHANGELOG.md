@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.19.4 — 2026-11-05
 
 - LeRobot replay: the frame slider now carries `aria-valuetext` ("Frame 10 of 26,
   1.000 s"), so a screen reader reads the frame and time instead of a bare number,
