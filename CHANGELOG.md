@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- LeRobot replay: the frame slider now carries `aria-valuetext` ("Frame 10 of 26,
+  1.000 s"), so a screen reader reads the frame and time instead of a bare number,
+  and **Previous** / **Next** put the new frame in the page's status line
+  (`role="status"`). Playback and slider drags do not announce every frame.
+  Found in a VoiceOver check of the offline page (macOS, Chrome); axe-core 4.14.0
+  reported no violations before the change.
+
 ## 0.19.3 — 2026-10-25
 
 - fix: name the camera in LeRobot v3 camera export errors. robot-reel lerobot now reports three LeRobot v3.0 camera failures in one line on stderr, with exit status 2 and no traceback. Each message names the camera key, the dataset-relative file and a repair step. (1) A corrupt or unreadable camera video gives 'KEY: cannot read camera video SRC (CAUSE). Check that the file plays in a video player; re-download the dataset or re-encode this camera.' Any absolute input path or output path in ffmpeg's last error line is replaced by the dataset-relative source and the cameras/NAME.mp4 clip name. (2) An episodes parquet row without videos/KEY/chunk_index, file_index or from_timestamp gives 'KEY: meta/episodes/... has no videos/KEY/COLUMN for episode E', with a hint to re-run the v3.0 conversion. Before, this was a bare KeyError column name. (3) An image feature declared in meta/info.json but missing from the data file is now reported before any output is written. Before, this was a raw pyarrow field error. Cases 2 and 3 fail before the output folder is created. ffmpeg now always gets a closed or piped stdin, so a failed decode returns at once. Successful exports, episode.json, manifest.json, the viewer, --verify and the existing 'Missing dataset file: videos/...' message are unchanged.

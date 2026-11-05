@@ -1022,6 +1022,13 @@ test('LeRobot episode replay keeps cameras, joint panels and largest command gap
     await page.locator('body').click({position:{x:5,y:5}});
     await page.keyboard.press('Home');await page.keyboard.press('ArrowRight');
     assert.equal(await page.locator('#counter').textContent(),'Frame 1 / 302');
+    // Assistive technology gets a unit with the slider value and a spoken message when Next or Previous moves the frame.
+    assert.equal(await page.locator('#timeline').getAttribute('aria-valuetext'),'Frame 1 of 302, 0.033 s');
+    await page.locator('#next').click();
+    assert.equal(await page.locator('#status').textContent(),'Frame 2 of 302, 0.067 s');
+    await page.locator('#prev').click();
+    assert.equal(await page.locator('#status').textContent(),'Frame 1 of 302, 0.033 s');
+    assert.equal(await page.locator('#timeline').getAttribute('aria-valuetext'),'Frame 1 of 302, 0.033 s');
     const canvas=page.locator('canvas').first(),box=await canvas.boundingBox();
     await canvas.click({position:{x:box.width/2,y:box.height/2}});
     assert.equal(await page.locator('#counter').textContent(),'Frame 151 / 302');
