@@ -176,6 +176,14 @@ def locate(source, info, episode):
                 break
         if row is None:
             raise ValueError(f"Episode {episode} is not in this dataset ({info.get('total_episodes')} episodes)")
+        # name is still the episodes file whose row matched (the loop broke on it).
+        for k in cameras:
+            for column in ("chunk_index", "file_index", "from_timestamp"):
+                if row.get(f"videos/{k}/{column}") is None:
+                    raise ValueError(
+                        f"{k}: {name} has no videos/{k}/{column} for episode {episode}; LeRobot v3.0 needs a "
+                        "chunk_index, file_index and from_timestamp per video camera. Re-run LeRobot's v3.0 "
+                        f"conversion, or remove {k} from meta/info.json features.")
         data = info["data_path"].format(chunk_index=row["data/chunk_index"], file_index=row["data/file_index"])
         videos = {k: (info["video_path"].format(video_key=k, chunk_index=row[f"videos/{k}/chunk_index"],
                                                 file_index=row[f"videos/{k}/file_index"]),
@@ -265,6 +273,9 @@ def read_episode(source, episode):
         dtype = feature.get("dtype")
         if key in CLOCK:
             continue
+        if dtype == "image" and key not in columns:
+            raise ValueError(f"{key}: meta/info.json declares an image feature but {data} has no {key} column; "
+                             "remove the feature from meta/info.json or re-record the episode with images embedded.")
         if dtype in ("video", "image"):
             cameras.append({"key": key, "kind": dtype, "file": "cameras/"+re.sub(r"[^\w.-]+", "_", key.removeprefix("observation.images."))+".mp4",
                             "shape": feature.get("shape")})
@@ -311,10 +322,21 @@ def encode_video(source, camera, length, fps, output, crf):
     # Seek half a frame early: accurate input seeking keeps frames at or after
     # the target, so the first frame at from_timestamp survives float rounding.
     start = max(0., camera["from_timestamp"]-.5/fps)
-    run([ffmpeg(), "-v", "error", "-y", "-ss", f"{start:.6f}", "-i", str(source.file(camera["source"])),
-         "-map", "0:v:0", "-frames:v", str(length), "-an", "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
-         "-r", repr(fps), "-c:v", "libx264", "-preset", "medium", "-crf", str(crf), "-pix_fmt", "yuv420p",
-         "-movflags", "+faststart", str(output)])
+    path = source.file(camera["source"])
+    try:
+        run([ffmpeg(), "-v", "error", "-y", "-ss", f"{start:.6f}", "-i", str(path),
+             "-map", "0:v:0", "-frames:v", str(length), "-an", "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
+             "-r", repr(fps), "-c:v", "libx264", "-preset", "medium", "-crf", str(crf), "-pix_fmt", "yuv420p",
+             "-movflags", "+faststart", str(output)])
+    except ValueError as exc:
+        cause = str(exc).removeprefix("ffmpeg failed: ")
+        # Show dataset-relative names only: never a host, temporary or Hub cache path.
+        names = {(str(path), camera["source"]), (str(Path(path).resolve()), camera["source"]),
+                 (str(output), camera["file"]), (str(Path(output).resolve()), camera["file"])}
+        for local, shown in sorted(names, key=lambda pair: -len(pair[0])):
+            cause = cause.replace(local, shown)
+        raise ValueError(f"{camera['key']}: cannot read camera video {camera['source']} ({cause}). Check that the "
+                         "file plays in a video player; re-download the dataset or re-encode this camera.") from exc
 
 
 def encode_images(source, camera, length, fps, output, crf, episode):
@@ -343,7 +365,12 @@ IMAGE_MAGIC = ((b"\x89PNG\r\n\x1a\n", "png"), (b"\xff\xd8\xff", "mjpeg"))
 
 
 def run(command, stdin=None):
-    result = subprocess.run(command, input=stdin, capture_output=True)
+    # ffmpeg never reads the caller's terminal: it gets the piped bytes or an empty stdin,
+    # so a failing decode returns at once instead of waiting for keyboard input.
+    if stdin is None:
+        result = subprocess.run(command, stdin=subprocess.DEVNULL, capture_output=True)
+    else:
+        result = subprocess.run(command, input=stdin, capture_output=True)
     if result.returncode:
         lines = result.stderr.decode(errors="replace").strip().splitlines()
         raise ValueError("ffmpeg failed: "+(lines or ["no output"])[-1])

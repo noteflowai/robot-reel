@@ -17,7 +17,7 @@ joints, 303 frames at 30 fps.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.19.2'
+python -m pip install 'robot-reel[lerobot]==0.19.3'
 
 # Any public Hub dataset; only the files this episode needs are downloaded.
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
@@ -218,6 +218,29 @@ is reported. Each of these messages ends with `Robot Reel does not reorder, fill
 or interpolate frames; repair or re-export the episode.` Robot Reel refuses a
 damaged episode; it never repairs one. Timestamp columns with more than one
 value per frame keep the generic `Timestamps are missing or not increasing`.
+
+### Camera errors
+
+For LeRobotDataset v3.0, a camera problem stops the export with exit status 2
+and one message that starts with the camera key and names the file relative to
+the dataset root. It never prints an absolute host path or a Hub cache directory:
+
+- `KEY: meta/episodes/chunk-000/file-000.parquet has no videos/KEY/from_timestamp for episode E; …`
+  The episode row lacks a `chunk_index`, `file_index` or `from_timestamp` for
+  that video camera (the first missing column is named). Re-run LeRobot's v3.0
+  conversion, or remove the camera from `meta/info.json` features. Nothing is written.
+- `KEY: meta/info.json declares an image feature but DATA has no KEY column; …`
+  Remove the feature from `meta/info.json` or re-record the episode with images
+  embedded. Nothing is written.
+- `KEY: cannot read camera video videos/KEY/chunk-000/file-000.mp4 (CAUSE). …`
+  The video exists but ffmpeg cannot decode it (truncated download, wrong file).
+  `CAUSE` is ffmpeg's last error line. Check that the file plays in a video
+  player, then re-download the dataset or re-encode that camera. The partly
+  written output folder stays; export again into a fresh `--output` directory.
+
+A video that is absent is still reported as `Missing dataset file: videos/…`
+before any file is written. Per-frame image errors (`frame i has no embedded
+image bytes`, `is not a PNG or JPEG like the other frames`) are unchanged.
 
 Rerun 0.38 added a reader that streams LeRobot datasets into its native viewer; use that
 for live, multi-episode exploration, and this export when you need a single
