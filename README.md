@@ -176,6 +176,10 @@ robot-reel lerobot artifacts/so101 --verify --check-media --check-source
 Source: episode 0 of [`lerobot/svla_so101_pickplace`](https://huggingface.co/datasets/lerobot/svla_so101_pickplace)
 (Apache-2.0), the real SO-101 data SmolVLA was fine-tuned on.
 
+A small, standalone version of this export and offline check is published as an AWS sample:
+[aws-samples/sample-physical-ai-robot-reel](https://github.com/aws-samples/sample-physical-ai-robot-reel)
+(MIT-0; replay one episode, verify the folder with SHA-256 checksums, seal one observation).
+
 **Try it on your own episode and tell us how it went.** The
 [20-minute trial guide](docs/first-use-trial.md) times the install and export;
 the [trial report form](https://github.com/noteflowai/robot-reel/issues/new?template=first_use_trial.yml)
