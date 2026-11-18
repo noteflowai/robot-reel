@@ -735,6 +735,8 @@ def main(argv=None):
     args.crf = 23 if args.crf is None else args.crf
     if (args.check_media or args.check_source or args.dataset) and not args.verify:
         parser.error("--check-media, --check-source and --dataset apply with --verify")
+    if args.dataset is not None and not args.check_source:
+        parser.error("--dataset applies with --check-source; add --check-source to compare the export with that dataset")
     if not 0 <= args.crf <= 51:
         parser.error("--crf must be between 0 and 51")
     try:
