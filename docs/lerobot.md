@@ -17,7 +17,7 @@ joints, 303 frames at 30 fps.
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-python -m pip install 'robot-reel[lerobot]==0.19.4'
+python -m pip install 'robot-reel[lerobot]==0.19.5'
 
 # Any public Hub dataset; only the files this episode needs are downloaded.
 robot-reel lerobot lerobot/svla_so101_pickplace --episode 0 --output artifacts/so101
@@ -77,6 +77,10 @@ robot-reel lerobot artifacts/so101 --verify --check-media
 robot-reel lerobot artifacts/so101 --verify --check-source
 robot-reel lerobot artifacts/mine --verify --check-source --dataset ~/path/to/your_dataset
 ```
+
+`--dataset` is read only by the source check, so it requires `--check-source`.
+`--verify --dataset DIR` without it exits with status 2 before any file is read:
+`robot-reel lerobot: error: --dataset applies with --check-source; add --check-source to compare the export with that dataset`.
 
 CI runs all three checks against a fresh export of the published example, and
 the unit tests cut the second episode out of a shared v3.0 video and a v2.1

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.19.5 — 2026-11-18
+
+- fix: reject --dataset in robot-reel lerobot --verify unless --check-source is also given. robot-reel lerobot now rejects --dataset during --verify unless --check-source is also given. Before this fix, 'EXPORT --verify --dataset D' and 'EXPORT --verify --check-media --dataset D' exited 0 and never read the source dataset, so a changed source went unnoticed. Both commands now fail at argument parsing with exit status 2. stderr gets the usage line plus 'robot-reel lerobot: error: --dataset applies with --check-source; add --check-source to compare the export with that dataset'. Nothing is printed to stdout, and no export or dataset file is opened. The new rule runs after the existing check, so '--dataset' without --verify still gives the old message '--check-media, --check-source and --dataset apply with --verify'. All other commands behave as before, including '--verify --check-source --dataset D' with or without --check-media. docs/lerobot.md now says that --dataset requires --check-source and quotes the error. The install pin in the Space card (huggingface/README.md) now reads robot-reel==0.19.5, matching the package version that test_release checks.
+
 ## 0.19.4 — 2026-11-05
 
 - LeRobot replay: the frame slider now carries `aria-valuetext` ("Frame 10 of 26,
